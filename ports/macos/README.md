@@ -1,5 +1,7 @@
 # ModAVD macOS ARM64 移植
 
+2026-11-01 清理检查点：代码已同步到 `codex/macos-port-checkpoint`。随后按用户要求删除了本机全部 ModAVD 生成资源，包括 SDK、构建目录、全部实例和虚拟盘（含原游戏实例）。下文运行结果属于清理前的历史验收，本机现无可直接启动的 ModAVD 包；原始本地 evidence 链接已失效，保留[验收摘要](qa/validation-summary-20261101.json)与[清理回执](qa/local-resource-cleanup-20261101.json)。后续官方 AVD 基线需单独准备。
+
 目标是 Apple Silicon 上的一套本地开发目录：原生 ARM64 emulator、HVF、Android 14 ARM64 客体、原有 Qt 模拟器窗口，以及复用原网页的 AppKit/WKWebView 管理器。CLI、MCP、私有 ADB 端口、实例编号和截图协议保留原契约。游戏验收只包含 B 服《明日方舟》；用户暂缓登录后的实战回归。MAA Verge 当前截图方式已按用户要求测试，增强消费链路尚未确认，未修改 MAA。
 
 2026-11-01 的[完整对齐审计及补齐](../../macOS-compatibility-report.md)已修复固定 Google/AOSP 基线继承的 HVF Q30→Q20 映射、Darwin 活动日志保护及 native EGL 绑定失败检测；补齐维护工具和真实本地更新/恢复。ARM64 Vulkan 修复已在正式 Manager 启动流程自动生成/挂载，并通过真实 GPU 读回；idle-poll 已接入 ARM64 动态启动。D0007/D0008又修复视频所有权/生命周期，D0009补SHM启停，G2补截图cache初始化及失败不发布；新包双引擎通过，详情见[G2验证](qa/framebuffer-readback/G2-VALIDATION.md)。私有v7已有驻留页释放证据，生产净RAM收益、完整Cocoa IME及其余故障/性能验收仍未闭合，未宣称全功能全优化对齐。原89补丁逐项结果见[核心审计](qa/CORE-PARITY-AUDIT.md)。

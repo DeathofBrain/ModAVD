@@ -1,5 +1,7 @@
 # ModAVD macOS 与原版对齐审计
 
+清理状态（2026-11-01）：代码已同步至 `codex/macos-port-checkpoint`；随后按用户要求删除全部本地 ModAVD 生成资源、实例及虚拟盘。本报告中的包路径和原始本地日志链接现为历史记录，不代表本机仍有这些文件。保留[验收摘要](ports/macos/qa/validation-summary-20261101.json)及[清理回执](ports/macos/qa/local-resource-cleanup-20261101.json)，官方 AVD 基线尚需单独准备。
+
 审计及补齐日期：2026-11-01（Asia/Shanghai）。**尚未达到全功能、全优化对齐。** 已修复 HVF SIMD 映射、Darwin 活动日志保护、视频所有权/生命周期和SHM启停；补齐维护工具、真实本地更新事务与ARM Vulkan自动修复。后续G2又补齐截图cache初始化及失败不发布，独立新包双引擎已通过。私有v7已有Android驻留页释放证据，生产内存净收益及其余验收仍未闭合。
 
 本报告对照原版的最终行为，不按“补丁应用成功数”计算完成率。代码保留、能力枚举、功能实测和性能对照是不同层次的证据。

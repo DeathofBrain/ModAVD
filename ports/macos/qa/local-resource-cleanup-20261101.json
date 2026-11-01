@@ -1,0 +1,371 @@
+{
+  "schema": 1,
+  "requested_scope": "Delete all local ModAVD generated resources, including every emulator instance and virtual disk, after code was pushed to a new branch. Preserve source repository and committed documentation.",
+  "started_utc": "2026-11-01T01:30:42.275995+00:00",
+  "branch": "codex/macos-port-checkpoint",
+  "code_and_validation_summary_commit": "2c71032ea423392e21d9e8668ebadc78ba49efb3",
+  "remote_commit_verified_before_delete": "2c71032ea423392e21d9e8668ebadc78ba49efb3",
+  "free_bytes_before": 51220803584,
+  "stopped_adb": [
+    {
+      "pid": 6806,
+      "port": 20150,
+      "exe": "/Users/azuki/ModAVD/.macos-work/reclaim-runtime/sdk/platform-tools/adb",
+      "before": "6806 Sun Nov  1 02:10:06 2026     /Users/azuki/ModAVD/.macos-work/reclaim-runtime/sdk/platform-tools/adb --one-device emulator-20160 -L tcp:20150 server nodaemon",
+      "command": [
+        "/Users/azuki/ModAVD/.macos-work/reclaim-runtime/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "20150",
+        "kill-server"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "after": "",
+      "ps_exit": 1
+    },
+    {
+      "pid": 14414,
+      "port": 20650,
+      "exe": "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-media/sdk/platform-tools/adb",
+      "before": "14414 Sun Nov  1 04:13:25 2026     adb -L tcp:20650 fork-server server --reply-fd 4",
+      "command": [
+        "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-media/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "20650",
+        "kill-server"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "after": "",
+      "ps_exit": 1
+    },
+    {
+      "pid": 15266,
+      "port": 20450,
+      "exe": "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-integrated/sdk/platform-tools/adb",
+      "before": "15266 Sun Nov  1 02:18:34 2026     adb -L tcp:20450 fork-server server --reply-fd 4",
+      "command": [
+        "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-integrated/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "20450",
+        "kill-server"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "after": "",
+      "ps_exit": 1
+    },
+    {
+      "pid": 25467,
+      "port": 20550,
+      "exe": "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-1955/sdk/platform-tools/adb",
+      "before": "25467 Sun Nov  1 02:30:38 2026     adb -L tcp:20550 fork-server server --reply-fd 4",
+      "command": [
+        "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-1955/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "20550",
+        "kill-server"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "after": "",
+      "ps_exit": 1
+    },
+    {
+      "pid": 34146,
+      "port": 20680,
+      "exe": "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-readback/sdk/platform-tools/adb",
+      "before": "34146 Sun Nov  1 06:30:07 2026     adb -L tcp:20680 fork-server server --reply-fd 4",
+      "command": [
+        "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-readback/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "20680",
+        "kill-server"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "after": "",
+      "ps_exit": 1
+    },
+    {
+      "pid": 53259,
+      "port": 20050,
+      "exe": "/Users/azuki/ModAVD/.macos-work/package/ModAVD-validated/sdk/platform-tools/adb",
+      "before": "53259 Sat Oct 31 23:45:27 2026     adb -L tcp:20050 fork-server server --reply-fd 4",
+      "command": [
+        "/Users/azuki/ModAVD/.macos-work/package/ModAVD-validated/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "20050",
+        "kill-server"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "after": "",
+      "ps_exit": 1
+    },
+    {
+      "pid": 79812,
+      "port": 20350,
+      "exe": "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-native/sdk/platform-tools/adb",
+      "before": "79812 Sun Nov  1 01:46:10 2026     adb -L tcp:20350 fork-server server --reply-fd 4",
+      "command": [
+        "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-native/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "20350",
+        "kill-server"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "after": "",
+      "ps_exit": 1
+    },
+    {
+      "pid": 80179,
+      "port": 20670,
+      "exe": "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-shm/sdk/platform-tools/adb",
+      "before": "80179 Sun Nov  1 05:29:17 2026     adb -L tcp:20670 fork-server server --reply-fd 4",
+      "command": [
+        "/Users/azuki/ModAVD/.macos-work/package/ModAVD-gapfix-shm/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "20670",
+        "kill-server"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "after": "",
+      "ps_exit": 1
+    }
+  ],
+  "removed": [
+    {
+      "path": "/Users/azuki/ModAVD/.macos-work",
+      "kind": "generated_modavd_tree",
+      "du_kib_before": 166685944,
+      "seconds": 13.912,
+      "absent_after": true
+    },
+    {
+      "path": "/Users/azuki/ModAVD/incoming/macos-qemu/experimental/evidence",
+      "kind": "generated_modavd_tree",
+      "du_kib_before": 2940984,
+      "seconds": 0.267,
+      "absent_after": true
+    },
+    {
+      "path": "/Users/azuki/ModAVD/.local-check",
+      "kind": "generated_modavd_tree",
+      "du_kib_before": 552,
+      "seconds": 0.003,
+      "absent_after": true
+    },
+    {
+      "path": "/Users/azuki/Library/Application Support/ModAVD",
+      "kind": "verified_modavd_external_data",
+      "existed_before": true,
+      "absent_after": true
+    },
+    {
+      "path": "/private/var/folders/nf/pqlcsjlx3b5bwf1qrv_vrxnc0000gn/T/modavd-guest",
+      "kind": "verified_modavd_external_data",
+      "existed_before": true,
+      "absent_after": true
+    },
+    {
+      "path": "/private/var/folders/nf/pqlcsjlx3b5bwf1qrv_vrxnc0000gn/T/modavd-ui",
+      "kind": "verified_modavd_external_data",
+      "existed_before": true,
+      "absent_after": true
+    },
+    {
+      "path": "/private/tmp/android-azuki/emu-crash-37.2.10-mas.db",
+      "kind": "verified_modavd_external_data",
+      "existed_before": true,
+      "absent_after": true
+    },
+    {
+      "path": "/Users/azuki/Library/Preferences/org.modavd.manager.plist",
+      "kind": "verified_modavd_external_data",
+      "existed_before": true,
+      "absent_after": true
+    }
+  ],
+  "shared_memory": [
+    {
+      "name": "videmulator20000",
+      "removed": true,
+      "absent": false
+    },
+    {
+      "name": "videmulator20030",
+      "removed": true,
+      "absent": false
+    },
+    {
+      "name": "videmulator20060",
+      "removed": true,
+      "absent": false
+    },
+    {
+      "name": "videmulator962123",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator962145",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator962205",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator962206",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator962207",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator962209",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator962210",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator962211",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator962213",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963686",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963708",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963748",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963751",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963752",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963754",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963755",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963757",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963758",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963791",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963813",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963814",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963816",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963817",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963819",
+      "removed": false,
+      "absent": true
+    },
+    {
+      "name": "videmulator963820",
+      "removed": false,
+      "absent": true
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Free-space change is the measured filesystem delta, not the sum of APFS clone sizes.",
+    "Historical links into .macos-work and experimental/evidence no longer resolve after deletion. Validation summaries and source/patches remain in Git.",
+    "Shared non-ModAVD Android settings and the user-provided APK in Downloads are outside this cleanup."
+  ],
+  "removed_generated_cache_entries": 13,
+  "free_bytes_after": 136427249664,
+  "measured_free_bytes_increase": 85206446080,
+  "finished_utc": "2026-11-01T01:31:00.790454+00:00",
+  "all_requested_targets_absent": true,
+  "source_git_present": true,
+  "ok": true
+}
