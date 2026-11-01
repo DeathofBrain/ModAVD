@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "recorded_utc": "2026-11-01T01:29:37.519809+00:00",
+  "scope": "Historical validation summary retained before user-requested deletion of all local ModAVD generated resources. This summary cannot replace the deleted raw logs/binaries or reproduce a runtime check by itself.",
+  "code_commit": "f189a66195cd63dd015ba22dae6f68a123212b56",
+  "reviews": [
+    {
+      "historical_path": ".macos-work/qa/g2-package-independent-review-20261101/assessment.json",
+      "sha256": "b77e347ad8b373eba353b8cd88a2509cd280d2599a23b229cb634e948b1b6ff6",
+      "checks_passed": 706,
+      "all_passed": true,
+      "scope": "Independent G2 build/install/static package and frozen Qt/headless integration evidence review. No guest/ADB/SHM/GPU/build or source mutation. D9 reviews remain unchanged."
+    },
+    {
+      "historical_path": ".macos-work/qa/g2-cross-doc-final-review-20261101/assessment.json",
+      "sha256": "1489f576f9e6917f28feee1576fc2d67af5f0213a132795d8dcc809f7413b905",
+      "checks_passed": 169,
+      "all_passed": true,
+      "scope": "Independent 15-document G2 frozen checkpoint audit. Root main docs and four delegated docs frozen; future private reporting-order A/B conclusions excluded. D9 receipt and prior evidence unchanged. No guest/ADB/SHM/GPU/build or production source/doc mutation."
+    },
+    {
+      "historical_path": ".macos-work/qa/reporting-order-comparison-independent-review-20261101/assessment.json",
+      "sha256": "e5e750df71518473b7aeb55dbb7180bc54c6d7713e29f70730b920acea07e2c4",
+      "checks_passed": 497,
+      "all_passed": true,
+      "scope": "Read-only final frozen A9/B6 evidence review, independent raw byte-offset parser and statistical recount; no guest/ADB/GPU/build/source change."
+    },
+    {
+      "historical_path": ".macos-work/qa/reporting-order-comparison-independent-review-20261101/final-table-review.json",
+      "sha256": "8292bbc83df30c6411b3c02b7e293412fd52957d57140c17f6f28427cadce0c2",
+      "checks_passed": 408,
+      "all_passed": true,
+      "scope": "Read-only files and own arithmetic; no guest/ADB/GPU/build/source changes. G2 snapshot and original raw review preserved."
+    },
+    {
+      "historical_path": ".macos-work/qa/reporting-order-comparison-independent-review-20261101/errata-review.json",
+      "sha256": "962263bda5bd44c25b9a8131e1f9dbd9c2d5bb62adbfffcc1216efee7d4cc96b",
+      "checks_passed": 10,
+      "all_passed": true,
+      "scope": null
+    }
+  ],
+  "hvf_upstream_recheck": {
+    "retrieved_utc": "2026-10-31T22:46:56.596821+00:00",
+    "pinned_google_base": {
+      "commit": "f0c183f1cc7456ecd6f3607f2f47893768ae4334",
+      "source_sha256": "dc30320646cc1d3e10e90358737a7c32b3d9bc93076908987d1fe07556eb7ae4",
+      "q30_maps_to": "HV_SIMD_FP_REG_Q20",
+      "case_line": 749
+    },
+    "examined_google_emu_main_dev": {
+      "commit": "cf0f40a0aad1aa3fca68f2f89372525c8d28ca68",
+      "url": "https://android.googlesource.com/platform/external/qemu/+/cf0f40a0aad1aa3fca68f2f89372525c8d28ca68/target/arm/hvf.c",
+      "source_sha256": "dc30320646cc1d3e10e90358737a7c32b3d9bc93076908987d1fe07556eb7ae4",
+      "q30_maps_to": "HV_SIMD_FP_REG_Q20",
+      "case_line": 749
+    },
+    "current_darwin": {
+      "source_sha256": "569a33ec463e1d735c8f9538e90736c338bc5d35b8721f41b9249db529b5fbe4",
+      "q30_maps_to": "HV_SIMD_FP_REG_Q30",
+      "case_line": 749
+    },
+    "scope": "No introducing commit or all release branches established; inherited Google integration mapping typo, not Apple HVF API behavior."
+  },
+  "limits": [
+    "Physical reclaim stays private opt-in; no net-RAM benefit or kernel-metadata cost established.",
+    "A9/B6 was one fresh-boot pair; B6 has 4 nonexact resident and 1 nonexact cold global-counter windows.",
+    "G2 video was not re-tested; Android GuestVulkanOnly-to-SHM and MAA consuming enhanced capture were not established.",
+    "Game login and post-login regression were deferred by the user."
+  ]
+}
