@@ -1,0 +1,4745 @@
+diff --git a/android-qemu2-glue/emulation/DmaMap.cpp b/android-qemu2-glue/emulation/DmaMap.cpp
+index d63e0735..d7212954 100644
+--- a/android-qemu2-glue/emulation/DmaMap.cpp
++++ b/android-qemu2-glue/emulation/DmaMap.cpp
+@@ -25,6 +25,7 @@ extern "C" {
+ extern "C" {
+ #include "qemu/osdep.h"
+ #include "exec/cpu-common.h"
++#include "exec/memory.h"
+ }  // extern "C"
+ 
+ #include <stdio.h>
+@@ -44,6 +45,9 @@ void* DmaMap::doMap(uint64_t addr, uint64_t sz) {
+         }
+         return nullptr;
+     }
++    /* Registration maps and permanently exposes its complete sized extent.
++     * The legacy getHostAddr export separately excludes the entire RAMBlock;
++     * checked renderer borrows validate each command against bufferSize. */
+     return res;
+ }
+ 
+diff --git a/android-qemu2-glue/qemu-vm-operations-impl.cpp b/android-qemu2-glue/qemu-vm-operations-impl.cpp
+index c302244b..258138a7 100644
+--- a/android-qemu2-glue/qemu-vm-operations-impl.cpp
++++ b/android-qemu2-glue/qemu-vm-operations-impl.cpp
+@@ -47,6 +47,8 @@ extern "C" {
+ #include "host-common/snapshot_interface.h"  // for androidSnapshot...
+ #include "host-common/vm_operations.h"       // for SnapshotCallbacks
+ #include "host-common/crash-handler.h"
++#include "../include/sysemu/address-space-sized.h"
++#include "../include/sysemu/dma-sized.h"
+ 
+ extern "C" {
+ 
+@@ -60,6 +62,7 @@ extern "C" {
+ 
+ #include "block/block.h"                              // for bdrv_get_aio_co...
+ #include "exec/cpu-common.h"                          // for qemu_ram_block_...
++#include "exec/memory.h"
+ #include "exec/memory-remap.h"                        // for ram_blocks_rema...
+ #include "migration/qemu-file.h"                      // for migrate_set_fil...
+ #include "qapi/error.h"                               // for error_get_pretty
+@@ -956,6 +959,15 @@ static void set_snapshot_callbacks(void* opaque,
+         switch (android::GetCurrentCpuAccelerator()) {
+             case android::CPU_ACCELERATOR_HVF:
+                 set_address_translation_funcs(hvf_hva2gpa, hvf_gpa2hva);
++#if defined(__APPLE__) && defined(__aarch64__)
++                modavd_dma_set_audit_borrow(qemu_ram_audit_host_pointer);
++                modavd_dma_set_external_lifetime(qemu_ram_reclaim_external_lifetime);
++                address_space_set_sized_borrow([](uint64_t gpa, uint64_t length) {
++                    bool found = false;
++                    void *host = hvf_gpa2hva_sized(gpa, length, &found);
++                    return found ? host : nullptr;
++                });
++#endif
+                 set_memory_mapping_funcs(hvf_map_safe, hvf_unmap_safe,
+                                          hvf_protect_safe, hvf_remap_safe,
+                                          NULL);
+diff --git a/android/android-emu/android/base/async/CallbackRegistry.cpp b/android/android-emu/android/base/async/CallbackRegistry.cpp
+index 132b4370..cf622aef 100644
+--- a/android/android-emu/android/base/async/CallbackRegistry.cpp
++++ b/android/android-emu/android/base/async/CallbackRegistry.cpp
+@@ -54,23 +54,21 @@ void CallbackRegistry::registerCallback(
+ }
+ 
+ void CallbackRegistry::unregisterCallback(void* opaque) {
+-    ForwarderMessage msg = {
+-            .cmd = MESSAGE_FORWARDER_REMOVE,
+-            .data = opaque,
+-            .callback = {},
+-    };
+-    mMessages.send(msg);
+-    AutoLock removeLock(mLock);
+-    mCvRemoval.wait(&mLock, [=]() {
+-        return !mProcessing || mStoredForwarders.count(msg.data) == 0;
+-    });
++    // Wait for callbacks already in flight, then consume pending registrations
++    // before erasing this key. Do not enqueue REMOVE: when no frames arrive,
++    // repeated register/unregister pairs must not fill the message channel.
++    AutoLock processingLock(mProcessingLock);
++    updateForwarders();
++    AutoLock lock(mLock);
++    mStoredForwarders.erase(opaque);
+ }
+ 
+-void CallbackRegistry::invokeCallbacks() {
+-    AutoLock processingLock(mProcessingLock);
+-    mProcessing = true;
++void CallbackRegistry::updateForwarders() {
++    // Bound a caller's work to the pending prefix. Registrations concurrent
++    // with unregister may be processed by the next invocation instead.
++    const size_t pending = mMessages.size();
+     ForwarderMessage msg;
+-    while (mMessages.tryReceive(&msg)) {
++    for (size_t i = 0; i < pending && mMessages.tryReceive(&msg); ++i) {
+         switch (msg.cmd) {
+             case MESSAGE_FORWARDER_ADD: {
+                 AutoLock lock(mLock);
+@@ -90,6 +88,14 @@ void CallbackRegistry::invokeCallbacks() {
+                 break;
+         }
+     }
++}
++
++void CallbackRegistry::invokeCallbacks() {
++    AutoLock processingLock(mProcessingLock);
++    mProcessing = true;
++    while (mMessages.size() != 0) {
++        updateForwarders();
++    }
+ 
+     {
+         AutoLock lock(mLock);
+diff --git a/android/android-emu/android/console_unittest.cpp b/android/android-emu/android/console_unittest.cpp
+index 4e9be584..d28edf2e 100644
+--- a/android/android-emu/android/console_unittest.cpp
++++ b/android/android-emu/android/console_unittest.cpp
+@@ -20,6 +20,13 @@
+ 
+ #include "android/emulation/testing/MockAndroidEmulatorWindowAgent.h"
+ 
++// This console test binary has no Qt window system. Keep the window-control
++// dependency explicit and exercise the unavailable-window response below.
++extern "C" int skin_winsys_set_window_visible(bool visible) {
++    (void)visible;
++    return -1;
++}
++
+ #ifdef __APPLE__
+ // Mac linker has a lot of problems determining that modem_driver.o is
+ // a dependency, even though we use |android_modem| throughout console.c.
+@@ -41,6 +48,40 @@ namespace console {
+ // the help printout.
+ static const int STUDIO_BUFF_SIZE = 1024;
+ 
++TEST(Console, WindowCommandsRejectUnavailableUI) {
++    const char expected[] = "KO: Qt window is not ready or has closed\r\n";
++    for (const char* command : {"window show", "window hide"}) {
++        int sock[2];
++        ASSERT_EQ(0, socketCreatePair(&sock[0], &sock[1]));
++        void* client = test_control_client_create(sock[1]);
++        ASSERT_NE(nullptr, client);
++        send_test_string(client, command);
++        char response[sizeof(expected)] = {};
++        socketRecvAll(sock[0], response, sizeof(expected) - 1);
++        EXPECT_STREQ(expected, response);
++        test_control_client_close(client);
++        socketClose(sock[1]);
++        socketClose(sock[0]);
++    }
++}
++
++TEST(Console, WindowCommandsRejectExtraArguments) {
++    const char expected[] = "KO: window show|hide takes no arguments\r\n";
++    for (const char* command : {"window show extra", "window hide extra"}) {
++        int sock[2];
++        ASSERT_EQ(0, socketCreatePair(&sock[0], &sock[1]));
++        void* client = test_control_client_create(sock[1]);
++        ASSERT_NE(nullptr, client);
++        send_test_string(client, command);
++        char response[sizeof(expected)] = {};
++        socketRecvAll(sock[0], response, sizeof(expected) - 1);
++        EXPECT_STREQ(expected, response);
++        test_control_client_close(client);
++        socketClose(sock[1]);
++        socketClose(sock[0]);
++    }
++}
++
+ TEST(Console, postauth_help_size_max) {
+ #ifdef __APPLE__
+     // The compiler may still optimize the modem_driver.o dependency out, so
+diff --git a/android/android-emu/android/emulation/DmaMap.cpp b/android/android-emu/android/emulation/DmaMap.cpp
+index 7edea8b8..3bf3d439 100644
+--- a/android/android-emu/android/emulation/DmaMap.cpp
++++ b/android/android-emu/android/emulation/DmaMap.cpp
+@@ -12,7 +12,11 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ #include "host-common/DmaMap.h"
++#include "../../../../include/sysemu/dma-sized.h"
+ 
++#include <atomic>
++#include <mutex>
++#include <unordered_set>
+ #include <inttypes.h>
+ #include <stdio.h>
+ #include <type_traits>
+@@ -41,6 +45,63 @@
+ 
+ #define E(fmt, ...) derror("DmaMap error %s: " fmt, __func__, ##__VA_ARGS__);
+ 
++static std::atomic<ModavdDmaAuditBorrow> sDmaAuditBorrow{nullptr};
++static std::atomic<ModavdAsgExternalOwned> sAsgExternalOwned{nullptr};
++static std::atomic<bool> sExternalTrackingReady{false};
++static std::mutex sExternalLifetimeLock;
++static std::unordered_set<const void *> sExternalLifetimes;
++static ModavdExternalLifetime sExternalLifetime = nullptr;
++
++extern "C" void modavd_dma_set_asg_external_owned_v1(ModavdAsgExternalOwned callback) {
++    sAsgExternalOwned.store(callback, std::memory_order_release);
++}
++
++extern "C" bool modavd_dma_asg_external_owned_v1(uint32_t handle, const void *base,
++                                               uint64_t size) {
++    auto callback = sAsgExternalOwned.load(std::memory_order_acquire);
++    return callback && callback(handle, base, size);
++}
++
++extern "C" bool modavd_dma_set_external_lifetime(ModavdExternalLifetime callback) {
++    std::lock_guard<std::mutex> lock(sExternalLifetimeLock);
++    if (!callback || (sExternalLifetime && sExternalLifetime != callback)) {
++        sExternalTrackingReady.store(false, std::memory_order_release);
++        return false;
++    }
++    if (!sExternalLifetime) {
++        sExternalLifetime = callback;
++        for (const void *identity : sExternalLifetimes) callback(identity, true);
++    }
++    sExternalTrackingReady.store(true, std::memory_order_release);
++    return true;
++}
++
++extern "C" bool modavd_dma_external_tracking_ready(void) {
++    return sExternalTrackingReady.load(std::memory_order_acquire);
++}
++
++extern "C" void modavd_reclaim_external_enter(const void *identity) {
++    std::lock_guard<std::mutex> lock(sExternalLifetimeLock);
++    if (!sExternalLifetimes.insert(identity).second) abort();
++    if (sExternalLifetime) sExternalLifetime(identity, true);
++}
++
++extern "C" void modavd_reclaim_external_leave(const void *identity) {
++    std::lock_guard<std::mutex> lock(sExternalLifetimeLock);
++    if (!sExternalLifetimes.erase(identity)) abort();
++    if (sExternalLifetime) sExternalLifetime(identity, false);
++}
++
++extern "C" void modavd_dma_set_audit_borrow(ModavdDmaAuditBorrow callback) {
++    sDmaAuditBorrow.store(callback, std::memory_order_release);
++}
++
++extern "C" void modavd_dma_audit_borrow(void* host, uint64_t length,
++                                        const char* reason) {
++    auto callback = sDmaAuditBorrow.load(std::memory_order_acquire);
++    if (host && callback) callback(host, length, reason);
++}
++
+ namespace android {
+ 
+ static DmaMap* sInstance = nullptr;
+@@ -80,26 +141,28 @@ void DmaMap::removeBuffer(uint64_t guest_paddr) {
+ }
+ 
+ void* DmaMap::getHostAddr(uint64_t guest_paddr) {
+-    DD("guest paddr 0x%llx", (unsigned long long)guest_paddr);
+-    android::base::AutoReadLock rlock(mLock);
+-    if (auto info = android::base::find(mDmaBuffers, guest_paddr)) {
+-        if (info->currHostAddr) {
+-            DD("guest paddr 0x%llx -> host 0x%llx valid",
+-               (unsigned long long)guest_paddr,
+-               (unsigned long long)(*info->currHostAddr));
+-            return *(info->currHostAddr);
+-        } else {
+-            rlock.unlockRead();
+-            android::base::AutoWriteLock wlock(mLock);
+-            createMappingLocked(info);
+-            D("guest paddr 0x%llx -> host 0x%llx valid (new)",
+-              (unsigned long long)guest_paddr,
+-              (unsigned long long)*(info->currHostAddr));
+-            return *(info->currHostAddr);
+-        }
+-    } else {
+-        return 0;
++    void* host = getHostAddrSized(guest_paddr, 1);
++    modavd_dma_audit_borrow(host, 0, "unsized-dma-map-export");
++    return host;
++}
++
++void* DmaMap::getHostAddrSized(uint64_t guest_paddr, uint64_t length) {
++    if (!length || length > UINT64_MAX - guest_paddr) return nullptr;
++    /* The write lock also covers recreation. Never retain an info pointer
++     * across a read-to-write unlock, where removeBuffer could erase it. */
++    android::base::AutoWriteLock lock(mLock);
++    auto info = android::base::find(mDmaBuffers, guest_paddr);
++    if (!info || info->guestAddr != guest_paddr ||
++        length > info->bufferSize || info->bufferSize > UINT64_MAX - guest_paddr) {
++        return nullptr;
++    }
++    if (!info->currHostAddr) createMappingLocked(info);
++    void* host = info->currHostAddr ? *info->currHostAddr : nullptr;
++    if (!host || length > UINTPTR_MAX - reinterpret_cast<uintptr_t>(host)) {
++        return nullptr;
+     }
++    modavd_dma_audit_borrow(host, length, "sized-dma-map-export");
++    return host;
+ }
+ 
+ void DmaMap::invalidateHostMappings() {
+diff --git a/android/android-emu/android/emulation/GoldfishDma.cpp b/android/android-emu/android/emulation/GoldfishDma.cpp
+index d4583b8e..13ac935b 100644
+--- a/android/android-emu/android/emulation/GoldfishDma.cpp
++++ b/android/android-emu/android/emulation/GoldfishDma.cpp
+@@ -3,6 +3,8 @@
+ 
+ #include "host-common/GoldfishDma.h"
+ #include "host-common/DmaMap.h"
++#include "../../../../include/sysemu/dma-sized.h"
++#include <atomic>
+ 
+ #include "host-common/address_space_device.h"
+ #include "host-common/android_pipe_host.h"
+@@ -10,6 +12,25 @@
+ #include "android/utils/debug.h"
+ #include "android/utils/system.h"
+ 
++static std::atomic<bool> sDmaRendererReady{false};
++
++extern "C" void modavd_dma_set_renderer_ready(bool ready) {
++    sDmaRendererReady.store(ready, std::memory_order_release);
++}
++
++extern "C" bool modavd_dma_renderer_borrow_ready(void) {
++    return sDmaRendererReady.load(std::memory_order_acquire);
++}
++
++extern "C" void* modavd_goldfish_dma_borrow_v1(uint64_t gpa, uint64_t length) {
++    if (!length || length > UINT64_MAX - gpa) return nullptr;
++    bool found = false;
++    void* host = modavd_address_space_dma_borrow(gpa, length, &found);
++    if (found) return host; // An out-of-bounds mapping must not fall through.
++    auto map = android::DmaMap::get();
++    return map ? map->getHostAddrSized(gpa, length) : nullptr;
++}
++
+ static void android_goldfish_dma_add_buffer(void* pipe, uint64_t guest_paddr, uint64_t sz) {
+     android::DmaMap::get()->addBuffer(pipe, guest_paddr, sz);
+ }
+diff --git a/android/android-emu/android/emulation/address_space_device.cpp b/android/android-emu/android/emulation/address_space_device.cpp
+index 506edb44..5075bc11 100644
+--- a/android/android-emu/android/emulation/address_space_device.cpp
++++ b/android/android-emu/android/emulation/address_space_device.cpp
+@@ -21,6 +21,8 @@
+ #include "host-common/address_space_host_memory_allocator.h"
+ #include "host-common/address_space_shared_slots_host_memory_allocator.h"
+ #include "host-common/vm_operations.h"
++#include "../../../../include/sysemu/address-space-sized.h"
++#include "../../../../include/sysemu/dma-sized.h"
+ 
+ #include "aemu/base/memory/LazyInstance.h"
+ #include "aemu/base/synchronization/Lock.h"
+@@ -28,6 +30,7 @@
+ #include <map>
+ #include <unordered_map>
+ #include <memory>
++#include <atomic>
+ 
+ using android::base::AutoLock;
+ using android::base::LazyInstance;
+@@ -46,6 +49,18 @@ using namespace android::emulation;
+ #endif
+ 
+ const QAndroidVmOperations* sVmOps = nullptr;
++static std::atomic<AddressSpaceSizedBorrow> sSizedBorrow{nullptr};
++
++extern "C" void address_space_set_sized_borrow(AddressSpaceSizedBorrow callback) {
++    sSizedBorrow.store(callback, std::memory_order_release);
++}
++
++static AddressSpaceDevicePingInfo* borrowPingInfo(uint64_t gpa) {
++    auto callback = sSizedBorrow.load(std::memory_order_acquire);
++    return static_cast<AddressSpaceDevicePingInfo*>(callback ?
++        callback(gpa, sizeof(AddressSpaceDevicePingInfo)) :
++        sVmOps->physicalMemoryGetAddr(gpa));
++}
+ 
+ namespace {
+ 
+@@ -93,9 +108,7 @@ public:
+     void tellPingInfo(uint32_t handle, uint64_t gpa) {
+         AutoLock lock(mContextsLock);
+         auto& contextDesc = mContexts[handle];
+-        contextDesc.pingInfo =
+-            (AddressSpaceDevicePingInfo*)
+-            sVmOps->physicalMemoryGetAddr(gpa);
++        contextDesc.pingInfo = borrowPingInfo(gpa);
+         contextDesc.pingInfoGpa = gpa;
+         AS_DEVICE_DPRINT("Ping info: gpa 0x%llx @ %p\n", (unsigned long long)gpa,
+                          contextDesc.pingInfo);
+@@ -111,6 +124,10 @@ public:
+         AutoLock lock(mContextsLock);
+         auto& contextDesc = mContexts[handle];
+         AddressSpaceDevicePingInfo* pingInfo = contextDesc.pingInfo;
++        if (!pingInfo) {
++            dwarning("%s: invalid ping info extent", __func__);
++            return;
++        }
+ 
+         const uint64_t phys_addr = pingInfo->phys_addr;
+         const uint64_t size = pingInfo->size;
+@@ -312,8 +329,10 @@ public:
+             if (desc.pingInfoGpa == ~0ULL) {
+                 dwarning("%s: warning: restoring hva-only ping", __func__);
+             } else {
+-                desc.pingInfo = (AddressSpaceDevicePingInfo*)
+-                    sVmOps->physicalMemoryGetAddr(pingInfoGpa);
++                desc.pingInfo = borrowPingInfo(pingInfoGpa);
++                if (!desc.pingInfo) {
++                    return false;
++                }
+             }
+             desc.device_context = std::move(context);
+         }
+@@ -356,7 +375,28 @@ public:
+ 
+     void *getHostPtr(uint64_t gpa) const {
+         AutoLock lock(mMemoryMappingsLock);
+-        return getHostPtrLocked(gpa);
++        void *host = getHostPtrLocked(gpa);
++        modavd_dma_audit_borrow(host, 0, "unsized-address-space-export");
++        return host;
++    }
++
++    void *getHostPtrSized(uint64_t gpa, uint64_t length, bool *found) const {
++        AutoLock lock(mMemoryMappingsLock);
++        *found = false;
++        auto it = mMemoryMappings.upper_bound(gpa);
++        if (it == mMemoryMappings.begin()) return nullptr;
++        --it;
++        uint64_t offset = gpa - it->first;
++        if (offset >= it->second.second) return nullptr;
++        *found = true;
++        uintptr_t base = reinterpret_cast<uintptr_t>(it->second.first);
++        if (!length || length > it->second.second - offset ||
++            offset > UINTPTR_MAX - base || length > UINTPTR_MAX - (base + offset)) {
++            return nullptr;
++        }
++        void *host = reinterpret_cast<void *>(base + offset);
++        modavd_dma_audit_borrow(host, length, "sized-address-space-export");
++        return host;
+     }
+ 
+ private:
+@@ -405,6 +445,16 @@ private:
+     }
+ 
+     bool addMemoryMappingLocked(uint64_t gpa, void *ptr, uint64_t size) {
++        uintptr_t host = reinterpret_cast<uintptr_t>(ptr);
++        if (!ptr || !size || size > UINT64_MAX - gpa || size > UINTPTR_MAX - host) {
++            return false;
++        }
++        auto next = mMemoryMappings.lower_bound(gpa);
++        if ((next != mMemoryMappings.end() && next->first < gpa + size) ||
++            (next != mMemoryMappings.begin() &&
++             gpa - std::prev(next)->first < std::prev(next)->second.second)) {
++            return false;
++        }
+         if (mMemoryMappings.insert({gpa, {ptr, size}}).second) {
+             sVmOps->mapUserBackedRam(gpa, ptr, size);
+             return true;
+@@ -539,6 +589,10 @@ static const struct AddressSpaceHwFuncs* sAddressSpaceDeviceControlGetHwFuncs()
+ 
+ extern "C" {
+ 
++void *modavd_address_space_dma_borrow(uint64_t gpa, uint64_t length, bool *found) {
++    return sAddressSpaceDeviceState->getHostPtrSized(gpa, length, found);
++}
++
+ static struct address_space_device_control_ops sAddressSpaceDeviceOps = {
+     &sAddressSpaceDeviceGenHandle,                     // gen_handle
+     &sAddressSpaceDeviceDestroyHandle,                 // destroy_handle
+diff --git a/android/android-emu/android/emulation/address_space_graphics.cpp b/android/android-emu/android/emulation/address_space_graphics.cpp
+index eb46b40e..6ed683d4 100644
+--- a/android/android-emu/android/emulation/address_space_graphics.cpp
++++ b/android/android-emu/android/emulation/address_space_graphics.cpp
+@@ -13,6 +13,7 @@
+ // limitations under the License.
+ 
+ #include "host-common/address_space_graphics.h"
++#include "sysemu/dma-sized.h"
+ 
+ #include <memory>
+ #include <optional>
+@@ -597,6 +598,16 @@ AddressSpaceGraphicsContext::AddressSpaceGraphicsContext(
+           },
+       }),
+       mConsumerInterface(sGlobals->getConsumerInterface()) {
++    /* Only a synchronous producer certificate for a retained, bounded RingBlob
++     * may bypass this guard. Guest declared sizes and raw Vulkan mappings do
++     * not establish ownership. Enter before allocation or worker publication. */
++    if (create.fromSnapshot ||
++        (create.externalAddr &&
++         !modavd_dma_asg_external_owned_v1(create.handle, create.externalAddr,
++                                          create.externalAddrSize))) {
++        modavd_reclaim_external_enter(this);
++        mExternalReclaimGuard = true;
++    }
+     if (create.fromSnapshot) {
+         // Use load() instead to initialize
+         return;
+@@ -662,6 +673,10 @@ AddressSpaceGraphicsContext::~AddressSpaceGraphicsContext() {
+     sGlobals->freeBuffer(mBufferAllocation);
+     sGlobals->freeRingStorage(mRingAllocation);
+     sGlobals->freeRingAndBuffer(mCombinedAllocation);
++    if (mExternalReclaimGuard) {
++        /* destroy() has joined the renderer consumer before storage teardown. */
++        modavd_reclaim_external_leave(this);
++    }
+ }
+ 
+ void AddressSpaceGraphicsContext::perform(AddressSpaceDevicePingInfo* info) {
+diff --git a/android/android-emu/android/emulation/address_space_host_media.cpp b/android/android-emu/android/emulation/address_space_host_media.cpp
+index 50a887c6..65c59056 100644
+--- a/android/android-emu/android/emulation/address_space_host_media.cpp
++++ b/android/android-emu/android/emulation/address_space_host_media.cpp
+@@ -15,6 +15,7 @@
+ #include "host-common/address_space_host_media.h"
+ #include "host-common/vm_operations.h"
+ #include "aemu/base/AlignedBuf.h"
++#include "../../../../include/sysemu/dma-sized.h"
+ 
+ #define AS_DEVICE_DEBUG 0
+ 
+@@ -36,6 +37,10 @@ enum class DecoderType : uint8_t {
+ AddressSpaceHostMediaContext::AddressSpaceHostMediaContext(
+     const struct AddressSpaceCreateInfo& create, const address_space_device_control_ops* ops)
+     : mControlOps(ops) {
++    /* Decoder requests may derive unbounded offsets from a custom HVA. Keep
++     * replacement inhibited for the full context/consumer lifetime, beginning
++     * before the first mapping or pointer export. This is reversible. */
++    modavd_reclaim_external_enter(this);
+     // The memory is allocated in the snapshot load if called from a snapshot load().
+     if (!create.fromSnapshot) {
+         mGuestAddr = create.physAddr;
+@@ -44,7 +49,13 @@ AddressSpaceHostMediaContext::AddressSpaceHostMediaContext(
+ }
+ 
+ AddressSpaceHostMediaContext::~AddressSpaceHostMediaContext() {
++    /* Dispatchers destroy every plugin; VT decode is synchronous (flags=0),
++     * followed by explicit helper teardown before the guest alias is freed. */
++    mVpxDecoder.reset();
++    mH264Decoder.reset();
++    mHevcDecoder.reset();
+     deallocatePages(mGuestAddr, kNumPages);
++    modavd_reclaim_external_leave(this);
+ }
+ 
+ void AddressSpaceHostMediaContext::perform(AddressSpaceDevicePingInfo *info) {
+@@ -65,6 +76,9 @@ void AddressSpaceHostMediaContext::save(base::Stream* stream) const {
+     if (mH264Decoder != nullptr) {
+         ++ numActiveDecoders;
+     }
++    if (mHevcDecoder != nullptr) {
++        ++ numActiveDecoders;
++    }
+ 
+     stream->putBe32(numActiveDecoders);
+     if (mVpxDecoder != nullptr) {
+@@ -85,6 +99,9 @@ void AddressSpaceHostMediaContext::save(base::Stream* stream) const {
+ }
+ 
+ bool AddressSpaceHostMediaContext::load(base::Stream* stream) {
++    mVpxDecoder.reset();
++    mH264Decoder.reset();
++    mHevcDecoder.reset();
+     deallocatePages(mGuestAddr, kNumPages);
+     AS_DEVICE_DPRINT("Loading Host Media snapshot");
+     mGuestAddr = stream->getBe64();
+diff --git a/android/android-emu/android/opengles.cpp b/android/android-emu/android/opengles.cpp
+index 65ccdd16..a288cc16 100644
+--- a/android/android-emu/android/opengles.cpp
++++ b/android/android-emu/android/opengles.cpp
+@@ -36,6 +36,7 @@
+ #include "host-common/FeatureControl.h"
+ #include "host-common/GfxstreamFatalError.h"
+ #include "host-common/GoldfishDma.h"
++#include "../../../include/sysemu/dma-sized.h"
+ #include "host-common/RefcountPipe.h"
+ #include "host-common/address_space_device.h"
+ #include "host-common/address_space_graphics.h"
+@@ -140,6 +141,25 @@ static int initOpenglesEmulationFuncs(ADynamicLibrary* rendererLib) {
+     LIST_GFXSTREAM_MISC_FUNCTIONS(FUNCTION_)
+ #undef LIST_GFXSTREAM_MISC_FUNCTIONS
+ #undef FUNCTION_
++    /* Optional extension: missing support preserves graphics compatibility
++     * but never authorizes the reclaim ingress gate. */
++    using RegisterDmaBorrow = bool (*)(void *(*)(uint64_t, uint64_t));
++    using DmaBorrowReady = bool (*)(void);
++    char *borrowError = nullptr;
++    auto registerBorrow = reinterpret_cast<RegisterDmaBorrow>(
++        adynamicLibrary_findSymbol(rendererLib, "modavd_register_dma_borrow_v1", &borrowError));
++    free(borrowError);
++    borrowError = nullptr;
++    auto borrowReady = reinterpret_cast<DmaBorrowReady>(
++        adynamicLibrary_findSymbol(rendererLib, "modavd_dma_sized_borrow_ready", &borrowError));
++    free(borrowError);
++    modavd_dma_set_renderer_ready(registerBorrow && borrowReady &&
++        registerBorrow(modavd_goldfish_dma_borrow_v1) && borrowReady());
++    borrowError = nullptr;
++    auto externalOwned = reinterpret_cast<ModavdAsgExternalOwned>(
++        adynamicLibrary_findSymbol(rendererLib, "modavd_asg_external_owned_v1", &borrowError));
++    free(borrowError);
++    modavd_dma_set_asg_external_owned_v1(externalOwned);
+     return 0;
+ }
+ 
+diff --git a/android/android-ui/modules/aemu-recording/src/android/recording/screen-recorder.cpp b/android/android-ui/modules/aemu-recording/src/android/recording/screen-recorder.cpp
+index 54d536c5..59629d44 100644
+--- a/android/android-ui/modules/aemu-recording/src/android/recording/screen-recorder.cpp
++++ b/android/android-ui/modules/aemu-recording/src/android/recording/screen-recorder.cpp
+@@ -474,13 +474,15 @@ bool screen_recorder_stop(bool async) {
+ const char* start_shared_memory_module(int fps) {
+     auto& globals = *sGlobals;
+ 
++    AutoLock lock(globals.lock);
++
+     // emulator name --> shared memory handle.
+     // 1. Discovery is easier.
+     // 2. If we accidentally leak a region on posix, we can reclaim an clean up
+     // on 2nd run.
+-    globals.sharedMemoryHandle = std::string("videmulator") +
+-                                 std::to_string(android_serial_number_port);
+     if (!globals.webrtc_module) {
++        globals.sharedMemoryHandle = std::string("videmulator") +
++                                     std::to_string(android_serial_number_port);
+         globals.webrtc_module.reset(
+                 new VideoFrameSharer(globals.fbWidth, globals.fbHeight,
+                                      globals.sharedMemoryHandle.c_str()));
+@@ -494,14 +496,18 @@ const char* start_shared_memory_module(int fps) {
+     }
+ 
+     globals.webrtc_module->start();
+-    gpu_frame_set_record_mode(true);
+     const char* handle = globals.sharedMemoryHandle.c_str();
+     D("%s(handle=%s, fps=%d)", __func__, handle, fps);
+     return handle;
+ }
+ 
+ bool stop_shared_memory_module() {
+-    gpu_frame_set_record_mode(false);
++    auto& globals = *sGlobals;
++    AutoLock lock(globals.lock);
++    if (globals.webrtc_module) {
++        // Stop forwarding, but keep the region mapped for existing readers.
++        globals.webrtc_module->stop();
++    }
+     return true;
+ }
+ 
+diff --git a/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.cpp b/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.cpp
+index 6ac48282..90c316d4 100644
+--- a/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.cpp
++++ b/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.cpp
+@@ -86,11 +86,22 @@ void VideoFrameSharer::frameCallbackForwarder(void* opaque) {
+ }
+ 
+ void VideoFrameSharer::start() {
++    std::lock_guard<std::mutex> lock(mLifecycleLock);
++    if (mStarted) {
++        return;
++    }
+     gpu_register_shared_memory_callback(&VideoFrameSharer::frameCallbackForwarder, this);
++    mStarted = true;
+ }
+ 
+ void VideoFrameSharer::stop() {
++    std::lock_guard<std::mutex> lock(mLifecycleLock);
++    if (!mStarted) {
++        return;
++    }
++    // unregister waits for in-flight callbacks before the memory can be closed.
+     gpu_unregister_shared_memory_callback(this);
++    mStarted = false;
+ }
+ 
+ void VideoFrameSharer::frameAvailable() {
+diff --git a/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.h b/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.h
+index 8c3dccaa..0cc402f3 100644
+--- a/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.h
++++ b/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.h
+@@ -17,6 +17,7 @@
+ #include <stddef.h>                            // for size_t
+ #include <stdint.h>                            // for uint32_t, uint64_t
+ #include <atomic>                              // for atomic
++#include <mutex>
+ #include <memory>                              // for unique_ptr
+ #include <string>                              // for string, basic_string
+ #include "aemu/base/memory/SharedMemory.h"  // for SharedMemory
+@@ -79,6 +80,11 @@ private:
+     std::unique_ptr<Producer> mVideoProducer;
+     size_t mPixelBufferSize;
+ 
++    // Only start/stop take this lock. The frame callback must not take it:
++    // stop waits for that callback while holding the lifecycle lock.
++    std::mutex mLifecycleLock;
++    bool mStarted = false;
++
+     static std::atomic<uint64_t> sFrameCounter;
+ };
+ }  // namespace recording
+diff --git a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp
+index f3454b0c..0c92f10c 100644
+--- a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp
++++ b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp
+@@ -4918,7 +4918,13 @@ bool EmulatorQtWindow::addMultiDisplayWindow(uint32_t id,
+         mMultiDisplayWindow[id]->setMouseTracking(true);
+         mMultiDisplayWindow[id]->setFixedSize(
+                 QSize((int)(w * scale), (int)(h * scale)));
+-        mMultiDisplayWindow[id]->show();
++        if (mHostWindowHidden ||
++            (!mHostVisibilityOverridden && getConsoleAgents()
++                     ->settings->android_cmdLineOptions()->qt_hide_window)) {
++            mMultiDisplayWindow[id]->hide();
++        } else {
++            mMultiDisplayWindow[id]->show();
++        }
+     } else {
+         auto iter = mMultiDisplayWindow.find(id);
+         if (iter == mMultiDisplayWindow.end()) {
+diff --git a/android/emu/media/src/android/emulation/MediaH264DecoderDefault.cpp b/android/emu/media/src/android/emulation/MediaH264DecoderDefault.cpp
+index 4fa82dc1..9231d911 100644
+--- a/android/emu/media/src/android/emulation/MediaH264DecoderDefault.cpp
++++ b/android/emu/media/src/android/emulation/MediaH264DecoderDefault.cpp
+@@ -44,6 +44,18 @@ MediaH264DecoderPlugin* makeDecoderPlugin(uint64_t pluginid,
+ }; // anon namespace
+ 
+ 
++MediaH264DecoderDefault::~MediaH264DecoderDefault() {
++    std::unordered_map<uint64_t, MediaH264DecoderPlugin*> decoders;
++    {
++        std::lock_guard<std::mutex> g(mMapLock);
++        decoders.swap(mDecoders);
++    }
++    // Plugin teardown can enter the renderer; do not hold the map lock there.
++    for (const auto& decoder : decoders) {
++        delete decoder.second;
++    }
++}
++
+ uint64_t MediaH264DecoderDefault::readId(void* ptr) {
+     if (nullptr == ptr)
+         return 0;
+diff --git a/android/emu/media/src/android/emulation/MediaH264DecoderVideoToolBox.cpp b/android/emu/media/src/android/emulation/MediaH264DecoderVideoToolBox.cpp
+index 0ffd2d6b..15ccd14d 100644
+--- a/android/emu/media/src/android/emulation/MediaH264DecoderVideoToolBox.cpp
++++ b/android/emu/media/src/android/emulation/MediaH264DecoderVideoToolBox.cpp
+@@ -432,7 +432,7 @@ void MediaH264DecoderVideoToolBox::handleIDRFrame(const uint8_t* ptr, size_t szB
+     // gone through validation in H264NaluParser.
+     uint8_t startHeaderSz = fptr[2] == 1 ? 3 : 4;
+     uint32_t dataSz = szBytes - startHeaderSz;
+-    std::unique_ptr<uint8_t> idr(new uint8_t[dataSz + 4]);
++    std::unique_ptr<uint8_t[]> idr(new uint8_t[dataSz + 4]);
+     uint32_t dataSzNl = htonl(dataSz);
+ 
+     // AVCC format requires us to replace the start code header on this NALU
+diff --git a/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.cpp b/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.cpp
+index 0485ca78..a5f4d647 100644
+--- a/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.cpp
++++ b/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.cpp
+@@ -45,6 +45,18 @@ MediaHevcDecoderPlugin* makeDecoderPlugin(uint64_t pluginid,
+ 
+ };  // namespace
+ 
++MediaHevcDecoderDefault::~MediaHevcDecoderDefault() {
++    std::unordered_map<uint64_t, MediaHevcDecoderPlugin*> decoders;
++    {
++        std::lock_guard<std::mutex> g(mMapLock);
++        decoders.swap(mDecoders);
++    }
++    // Plugin teardown can enter the renderer; do not hold the map lock there.
++    for (const auto& decoder : decoders) {
++        delete decoder.second;
++    }
++}
++
+ uint64_t MediaHevcDecoderDefault::readId(void* ptr) {
+     if (nullptr == ptr)
+         return 0;
+diff --git a/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.h b/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.h
+index 3f387206..86504d0f 100644
+--- a/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.h
++++ b/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.h
+@@ -28,7 +28,7 @@ namespace emulation {
+ class MediaHevcDecoderDefault : public MediaHevcDecoder {
+ public:
+     MediaHevcDecoderDefault() = default;
+-    virtual ~MediaHevcDecoderDefault() = default;
++    ~MediaHevcDecoderDefault() override;
+ 
+     // This is the entry point
+     virtual void handlePing(MediaCodecType type,
+diff --git a/android/emu/media/src/android/emulation/MediaVideoToolBoxHevcVideoHelper.cpp b/android/emu/media/src/android/emulation/MediaVideoToolBoxHevcVideoHelper.cpp
+index e61d3842..58baa9dd 100644
+--- a/android/emu/media/src/android/emulation/MediaVideoToolBoxHevcVideoHelper.cpp
++++ b/android/emu/media/src/android/emulation/MediaVideoToolBoxHevcVideoHelper.cpp
+@@ -220,7 +220,7 @@ void MediaVideoToolBoxHevcVideoHelper::handleIDRFrame(const uint8_t* ptr,
+     // gone through validation in HevcNaluParser.
+     uint8_t startHeaderSz = fptr[2] == 1 ? 3 : 4;
+     uint32_t dataSz = szBytes - startHeaderSz;
+-    std::unique_ptr<uint8_t> idr(new uint8_t[dataSz + 4]);
++    std::unique_ptr<uint8_t[]> idr(new uint8_t[dataSz + 4]);
+     uint32_t dataSzNl = htonl(dataSz);
+ 
+     // AVCC format requires us to replace the start code header on this NALU
+diff --git a/android/emu/media/src/android/emulation/MediaVideoToolBoxVideoHelper.cpp b/android/emu/media/src/android/emulation/MediaVideoToolBoxVideoHelper.cpp
+index 5c4772c7..211bc42c 100644
+--- a/android/emu/media/src/android/emulation/MediaVideoToolBoxVideoHelper.cpp
++++ b/android/emu/media/src/android/emulation/MediaVideoToolBoxVideoHelper.cpp
+@@ -209,7 +209,7 @@ void MediaVideoToolBoxVideoHelper::handleIDRFrame(const uint8_t* ptr,
+     // gone through validation in H264NaluParser.
+     uint8_t startHeaderSz = fptr[2] == 1 ? 3 : 4;
+     uint32_t dataSz = szBytes - startHeaderSz;
+-    std::unique_ptr<uint8_t> idr(new uint8_t[dataSz + 4]);
++    std::unique_ptr<uint8_t[]> idr(new uint8_t[dataSz + 4]);
+     uint32_t dataSzNl = htonl(dataSz);
+ 
+     // AVCC format requires us to replace the start code header on this NALU
+diff --git a/android/emu/media/src/android/emulation/MediaVpxDecoder.cpp b/android/emu/media/src/android/emulation/MediaVpxDecoder.cpp
+index 09026bfc..89cc7d06 100644
+--- a/android/emu/media/src/android/emulation/MediaVpxDecoder.cpp
++++ b/android/emu/media/src/android/emulation/MediaVpxDecoder.cpp
+@@ -42,7 +42,7 @@ namespace {
+ class MediaVpxDecoderImpl : public MediaVpxDecoder {
+ public:
+     MediaVpxDecoderImpl() = default;
+-    virtual ~MediaVpxDecoderImpl() = default;
++    ~MediaVpxDecoderImpl() override;
+     virtual void handlePing(MediaCodecType type, MediaOperation op, void* ptr) override;
+ 
+ public:
+@@ -69,6 +69,18 @@ MediaVpxDecoderPlugin* makeDecoderPlugin(uint64_t pluginid,
+ }
+ };  // namespace
+ 
++MediaVpxDecoderImpl::~MediaVpxDecoderImpl() {
++    std::unordered_map<uint64_t, MediaVpxDecoderPlugin*> decoders;
++    {
++        std::lock_guard<std::mutex> g(mMapLock);
++        decoders.swap(mDecoders);
++    }
++    // Plugin teardown can enter the renderer; do not hold the map lock there.
++    for (const auto& decoder : decoders) {
++        delete decoder.second;
++    }
++}
++
+ uint64_t MediaVpxDecoderImpl::readId(void* ptr) {
+     if (nullptr == ptr)
+         return 0;
+diff --git a/cpus.c b/cpus.c
+index ee8b7426..2a416daa 100644
+--- a/cpus.c
++++ b/cpus.c
+@@ -1881,12 +1881,49 @@ static bool all_vcpus_paused(void)
+     return true;
+ }
+ 
+-void pause_all_vcpus(void)
++typedef struct ReclaimPausedCpu {
++    CPUState *cpu;
++    bool resume;
++    bool original_stop;
++} ReclaimPausedCpu;
++
++/* BQL protects this temporary pause owner. A VM operation may run while the
++ * stop acknowledgement drops BQL; record its intent without allowing a vCPU
++ * back into HVF until the owner has finished or canceled its transaction. */
++static GArray *reclaim_paused_cpus;
++
++bool qemu_reclaim_pause_active(void)
++{
++    assert(qemu_mutex_iothread_locked());
++    return reclaim_paused_cpus != NULL;
++}
++
++static ReclaimPausedCpu *reclaim_paused_cpu(CPUState *cpu)
++{
++    for (unsigned i = 0; i < reclaim_paused_cpus->len; i++) {
++        ReclaimPausedCpu *entry = &g_array_index(reclaim_paused_cpus,
++                                                ReclaimPausedCpu, i);
++        if (entry->cpu == cpu) {
++            return entry;
++        }
++    }
++    ReclaimPausedCpu entry = {cpu, false, cpu->stop};
++    object_ref(OBJECT(cpu));
++    g_array_append_val(reclaim_paused_cpus, entry);
++    return &g_array_index(reclaim_paused_cpus, ReclaimPausedCpu,
++                         reclaim_paused_cpus->len - 1);
++}
++
++static void pause_all_vcpus_internal(bool reclaim)
+ {
+     CPUState *cpu;
+ 
+     qemu_clock_enable(QEMU_CLOCK_VIRTUAL, false);
+     CPU_FOREACH(cpu) {
++        if (reclaim_paused_cpus && !reclaim) {
++            /* A separate pause/stop supersedes the previous resume intent. */
++            reclaim_paused_cpu(cpu)->resume = false;
++        }
+         if (qemu_cpu_is_self(cpu)) {
+             qemu_cpu_stop(cpu, true);
+         } else {
+@@ -1903,6 +1940,12 @@ void pause_all_vcpus(void)
+     while (!all_vcpus_paused()) {
+         qemu_cond_wait(&qemu_pause_cond, &qemu_global_mutex);
+         CPU_FOREACH(cpu) {
++            /* A concurrent VM operation can clear stop while BQL is dropped.
++             * Finish obtaining an acknowledgement; the report caller then
++             * rejects the changed VM epoch before popping any element. */
++            if (reclaim_paused_cpus && !cpu->stopped) {
++                cpu->stop = true;
++            }
+             qemu_cpu_kick(cpu);
+         }
+     }
+@@ -1912,8 +1955,32 @@ void pause_all_vcpus(void)
+     qemu_mutex_lock_iothread();
+ }
+ 
++void pause_all_vcpus(void)
++{
++    pause_all_vcpus_internal(false);
++}
++
++void pause_all_vcpus_for_reclaim(void)
++{
++    CPUState *cpu;
++    assert(qemu_mutex_iothread_locked() && !qemu_in_vcpu_thread());
++    assert(!reclaim_paused_cpus);
++    reclaim_paused_cpus = g_array_new(false, false, sizeof(ReclaimPausedCpu));
++    CPU_FOREACH(cpu) {
++        ReclaimPausedCpu *entry = reclaim_paused_cpu(cpu);
++        entry->resume = !cpu->stopped && !cpu->stop;
++    }
++    pause_all_vcpus_internal(true);
++}
++
+ void cpu_resume(CPUState *cpu)
+ {
++    if (reclaim_paused_cpus) {
++        reclaim_paused_cpu(cpu)->resume = true;
++        cpu->stop = true;
++        qemu_cpu_kick(cpu);
++        return;
++    }
+     cpu->stop = false;
+     cpu->stopped = false;
+     qemu_cpu_kick(cpu);
+@@ -1923,12 +1990,40 @@ void resume_all_vcpus(void)
+ {
+     CPUState *cpu;
+ 
+-    qemu_clock_enable(QEMU_CLOCK_VIRTUAL, true);
++    qemu_clock_enable(QEMU_CLOCK_VIRTUAL, !reclaim_paused_cpus);
+     CPU_FOREACH(cpu) {
+         cpu_resume(cpu);
+     }
+ }
+ 
++void resume_vcpus_after_reclaim(void)
++{
++    CPUState *cpu;
++    GArray *entries = reclaim_paused_cpus;
++    bool running = qemu_vm_reclaim_running();
++    assert(qemu_mutex_iothread_locked() && entries);
++    reclaim_paused_cpus = NULL;
++    CPU_FOREACH(cpu) {
++        for (unsigned i = 0; i < entries->len; i++) {
++            ReclaimPausedCpu *entry = &g_array_index(entries, ReclaimPausedCpu, i);
++            if (entry->cpu == cpu) {
++                if (running && entry->resume && !cpu->unplug) {
++                    cpu_resume(cpu);
++                } else {
++                    cpu->stopped = true;
++                    cpu->stop = running ? entry->original_stop : true;
++                }
++                break;
++            }
++        }
++    }
++    qemu_clock_enable(QEMU_CLOCK_VIRTUAL, running);
++    for (unsigned i = 0; i < entries->len; i++) {
++        object_unref(OBJECT(g_array_index(entries, ReclaimPausedCpu, i).cpu));
++    }
++    g_array_free(entries, true);
++}
++
+ void cpu_remove_sync(CPUState *cpu)
+ {
+     cpu->stop = true;
+diff --git a/exec.c b/exec.c
+index bc5faa69..cfc2789c 100644
+--- a/exec.c
++++ b/exec.c
+@@ -62,12 +62,25 @@
+ 
+ #include "exec/memory-internal.h"
+ #include "exec/ram_addr.h"
++#include "exec/ram-reclaim-audit-model.h"
++#if defined(__APPLE__) && defined(__aarch64__)
++#include <sys/mman.h>
++#include "sysemu/hvf.h"
++#include "sysemu/hvf-reclaim.h"
++#include "sysemu/dma-sized.h"
++#include "sysemu/cpus.h"
++#include "sysemu/sysemu.h"
++#endif
+ #include "exec/log.h"
+ 
+ #include "migration/vmstate.h"
+ 
+ #include "qemu/range.h"
+ #include "qemu/mmap-alloc.h"
++#if defined(__APPLE__) && defined(__aarch64__)
++#include "qemu/darwin-chunked-ram.h"
++#include "qemu/darwin-ram-receipt.h"
++#endif
+ 
+ #include "monitor/monitor.h"
+ 
+@@ -120,6 +133,586 @@ static bool ram_blocks_exiting = false;
+ /* RAM backing is managed by user */
+ #define RAM_USER_BACKED (1 << 4)
+ 
++/* A transaction retains this lock through native replacement and restoration.
++ * Normal pointer exports acquire it before their caller may use the pointer. */
++static QemuMutex ram_audit_lock;
++static gsize ram_audit_once;
++static bool ram_audit_enabled;
++static bool ram_reclaim_requested;
++static bool ram_reclaim_residency;
++static int ram_reclaim_fault;
++static const char *ram_audit_inhibited;
++static uint64_t ram_reclaim_external_users;
++
++static bool ram_audit_active(void)
++{
++    if (g_once_init_enter(&ram_audit_once)) {
++#if defined(__APPLE__) && defined(__aarch64__)
++        const char *value = getenv("MODAVD_HVF_RAM_AUDIT");
++        const char *reclaim = getenv("MODAVD_HVF_RAM_RECLAIM");
++        const char *fault = getenv("MODAVD_HVF_RAM_RECLAIM_FAULT");
++        const char *residency = getenv("MODAVD_HVF_RAM_RECLAIM_RESIDENCY");
++#endif
++        qemu_mutex_init(&ram_audit_lock);
++#if defined(__APPLE__) && defined(__aarch64__)
++        ram_reclaim_requested = reclaim && !strcmp(reclaim, "1");
++        ram_reclaim_residency = residency && !strcmp(residency, "1");
++        ram_audit_enabled = ram_reclaim_requested || (value && !strcmp(value, "1"));
++        /* Exact native component fault enum, used only by an explicit private
++         * development launch. An absent/unknown value never injects a fault. */
++        ram_reclaim_fault = fault && !strcmp(fault, "unmap") ? 1 :
++                            fault && !strcmp(fault, "map") ? 2 :
++                            fault && !strcmp(fault, "replace") ? 3 : 0;
++#endif
++        g_once_init_leave(&ram_audit_once, 1);
++    }
++    return ram_audit_enabled;
++}
++
++bool qemu_ram_audit_is_enabled(void)
++{
++    return ram_audit_active();
++}
++
++bool qemu_ram_reclaim_requested(void)
++{
++    ram_audit_active();
++    return ram_reclaim_requested;
++}
++
++static bool ram_reclaim_ingress_ready(void)
++{
++#if defined(__APPLE__) && defined(__aarch64__)
++    /* The optional renderer capability certifies installed checked commands;
++     * every remaining legacy pointer export permanently excludes its block.
++     * The environment requests a mode and cannot override this capability. */
++    return hvf_enabled() && modavd_dma_renderer_borrow_ready() &&
++           modavd_dma_external_tracking_ready();
++#else
++    return false;
++#endif
++}
++
++static bool ram_reclaim_permissions_ready(void)
++{
++#if defined(__APPLE__) && defined(__aarch64__)
++    return hvf_enabled() && hvf_reclaim_permissions_ready();
++#else
++    return false;
++#endif
++}
++
++void qemu_ram_reclaim_external_lifetime(const void *identity, bool enter)
++{
++    if (!ram_audit_active()) return;
++    qemu_mutex_lock(&ram_audit_lock);
++    if (enter && ram_reclaim_external_users != UINT64_MAX) {
++        ram_reclaim_external_users++;
++    } else if (!enter && ram_reclaim_external_users) {
++        ram_reclaim_external_users--;
++    } else {
++        ram_audit_inhibited = "external-lifetime-counter-invalid";
++    }
++    info_report("hvf-ram-reclaim: event=external-lifetime action=%s active=%" PRIu64,
++                enter ? "enter" : "leave", ram_reclaim_external_users);
++    qemu_mutex_unlock(&ram_audit_lock);
++}
++
++static void ram_audit_log_locked(RAMBlock *rb, const char *event,
++                                 uint64_t offset, uint64_t length,
++                                 uint64_t candidates)
++{
++    RraState *s = rb->reclaim_audit;
++    info_report("hvf-ram-audit: event=%s block=%s kind=%d generation=%" PRIu64
++                " size=%" PRIu64 " host_page=%" PRIu64
++                " exposed_pages=%" PRIu64 "/%" PRIu64
++                " whole_reason=%s exposures=%" PRIu64
++                " exposure_bytes_total=%" PRIu64 " report_maps=%" PRIu64
++                " report_map_bytes_total=%" PRIu64 " reports_skipped=%" PRIu64
++                " report_sg_total=%" PRIu64 " report_bytes_total=%" PRIu64
++                " candidate_bytes_total=%" PRIu64
++                " range=%" PRIu64 "+%" PRIu64 " range_upper_bound=%" PRIu64
++                " allocation_serial=%" PRIu64
++                " ingress_complete=%d permissions_complete=%d coverage_tainted=%d"
++                " strict_eligible_bytes=0 strict_bytes_total=%" PRIu64
++                " committed_bytes_total=%" PRIu64 " reclaim_enabled=%d",
++                event, memory_region_name(rb->mr), (int)s->backing,
++                s->generation, s->size, s->page_size, s->tainted_pages, s->pages,
++                s->whole_reason ? s->whole_reason : "none", s->exposures,
++                s->exposure_bytes, s->report_maps, s->report_map_bytes,
++                s->reports_skipped,
++                s->reports, s->report_bytes, s->candidate_bytes,
++                offset, length, candidates, rb->reclaim_allocation_serial,
++                ram_reclaim_ingress_ready(),
++                ram_reclaim_permissions_ready(), !ram_reclaim_ingress_ready(),
++                s->strict_bytes, s->committed_bytes,
++                ram_reclaim_requested && !ram_audit_inhibited && !ram_reclaim_external_users &&
++                ram_reclaim_ingress_ready() && ram_reclaim_permissions_ready());
++}
++
++static void ram_audit_causes_locked(RAMBlock *rb)
++{
++    RraState *s = rb->reclaim_audit;
++    unsigned i;
++    for (i = 0; i < s->causes_used; i++) {
++        RraCause *c = &s->causes[i];
++        info_report("hvf-ram-audit: event=cause block=%s cause=%s"
++                    " calls=%" PRIu64 " bytes=%" PRIu64 " invalid=%" PRIu64,
++                    memory_region_name(rb->mr), c->name,
++                    c->calls, c->bytes, c->invalid);
++    }
++}
++
++static void ram_audit_note(RAMBlock *rb, uint64_t offset, uint64_t length,
++                           const char *reason)
++{
++    RraState *s = rb->reclaim_audit;
++    bool whole_before, noted;
++    unsigned causes_before;
++    if (!s) {
++        return;
++    }
++    qemu_mutex_lock(&ram_audit_lock);
++    whole_before = s->whole_reason != NULL;
++    causes_before = s->causes_used;
++    /* A transaction holds this same mutex, so a reservation cannot overlap
++     * an exposure that has already escaped into a caller. */
++    noted = rra_map(s, offset, length, false, reason);
++    assert(noted);
++    if ((!whole_before && s->whole_reason) || s->exposures <= 8 ||
++        causes_before != s->causes_used) {
++        ram_audit_log_locked(rb, reason, offset, length, 0);
++    }
++    qemu_mutex_unlock(&ram_audit_lock);
++}
++
++static void ram_audit_report_map(RAMBlock *rb, uint64_t offset, uint64_t length)
++{
++    RraState *s = rb->reclaim_audit;
++    bool noted;
++    if (!s) {
++        return;
++    }
++    qemu_mutex_lock(&ram_audit_lock);
++    noted = rra_map(s, offset, length, true, "report-owner");
++    assert(noted);
++    qemu_mutex_unlock(&ram_audit_lock);
++}
++
++static void ram_audit_invalidate(RAMBlock *rb, const char *reason)
++{
++    if (rb->reclaim_audit) {
++        qemu_mutex_lock(&ram_audit_lock);
++        rra_invalidate(rb->reclaim_audit, reason);
++        ram_audit_log_locked(rb, reason, 0, 0, 0);
++        qemu_mutex_unlock(&ram_audit_lock);
++    }
++}
++
++void qemu_ram_audit_inhibit(const char *reason)
++{
++    RAMBlock *rb;
++    if (!ram_audit_active()) {
++        return;
++    }
++    rcu_read_lock();
++    qemu_mutex_lock(&ram_audit_lock);
++    ram_audit_inhibited = reason;
++    RAMBLOCK_FOREACH(rb) {
++        if (rb->reclaim_audit) {
++            rra_taint_all(rb->reclaim_audit, reason);
++            ram_audit_log_locked(rb, reason, 0, 0, 0);
++        }
++    }
++    qemu_mutex_unlock(&ram_audit_lock);
++    rcu_read_unlock();
++}
++
++void qemu_ram_audit_host_pointer(void *host, uint64_t length, const char *reason)
++{
++    RAMBlock *rb;
++    uintptr_t address = (uintptr_t)host;
++    if (!host || !ram_audit_active()) {
++        return;
++    }
++    if (length > UINTPTR_MAX - address) {
++        qemu_ram_audit_inhibit("overflowing-host-pointer");
++        return;
++    }
++    rcu_read_lock();
++    RAMBLOCK_FOREACH(rb) {
++        uintptr_t base = (uintptr_t)rb->host;
++        uint64_t offset;
++        if (!base || rb->max_length > UINTPTR_MAX - base) {
++            continue;
++        }
++        if (!length) {
++            if (address >= base && address - base < rb->max_length) {
++                ram_audit_note(rb, 0, 0, reason);
++            }
++        } else if (address < base + rb->max_length && base < address + length) {
++            uintptr_t first = MAX(address, base);
++            uintptr_t last = MIN(address + length, base + rb->max_length);
++            offset = first - base;
++            ram_audit_note(rb, offset, last - first, reason);
++        }
++    }
++    rcu_read_unlock();
++}
++
++bool qemu_ram_borrow_host_sized(void *host, uint64_t length, const char *reason)
++{
++    RAMBlock *rb;
++    ram_addr_t offset;
++    bool valid = false;
++
++    if (!host || !length || length > UINTPTR_MAX - (uintptr_t)host) {
++        return false;
++    }
++    rcu_read_lock();
++    rb = qemu_ram_block_from_host(host, false, &offset);
++    if (rb && offset < rb->used_length &&
++        length <= rb->used_length - offset) {
++        ram_audit_note(rb, offset, length, reason);
++        valid = true;
++    }
++    rcu_read_unlock();
++    return valid;
++}
++
++void qemu_ram_audit_report(RAMBlock *rb, uint64_t offset, uint64_t length,
++                           const char *skip_reason)
++{
++    RraState *s = rb->reclaim_audit;
++    uint64_t candidates;
++    if (!s) {
++        return;
++    }
++    qemu_mutex_lock(&ram_audit_lock);
++    if (!skip_reason && !rra_range(s, offset, length)) {
++        skip_reason = "report-invalid-range";
++    }
++    if (!skip_reason && ((offset | length) & (s->page_size - 1))) {
++        skip_reason = "report-host-page-unaligned";
++    }
++    candidates = skip_reason ? 0 : rra_candidates(s, offset, length);
++    s->reports = rra_add(s->reports, 1);
++    s->report_bytes = rra_add(s->report_bytes, length);
++    s->candidate_bytes = rra_add(s->candidate_bytes, candidates);
++    s->reports_skipped = rra_add(s->reports_skipped, skip_reason != NULL);
++    if (ram_reclaim_residency || s->reports == 1 || !(s->reports % 64)) {
++        ram_audit_log_locked(rb, skip_reason ? skip_reason : "report",
++                             offset, length, candidates);
++    }
++    if (s->reports == 1 || !(s->reports % 64)) {
++        ram_audit_causes_locked(rb);
++    }
++    qemu_mutex_unlock(&ram_audit_lock);
++}
++
++void qemu_ram_audit_untracked_report(uint64_t length)
++{
++    static uint64_t reports, bytes;
++    if (!ram_audit_active()) {
++        return;
++    }
++    qemu_mutex_lock(&ram_audit_lock);
++    reports = rra_add(reports, 1);
++    bytes = rra_add(bytes, length);
++    info_report("hvf-ram-audit: event=report-untracked report_sg_total=%" PRIu64
++                " report_bytes_total=%" PRIu64 " strict_eligible_bytes=0"
++                " reclaim_enabled=0", reports, bytes);
++    qemu_mutex_unlock(&ram_audit_lock);
++}
++
++#if defined(__APPLE__) && defined(__aarch64__)
++static void ram_reclaim_note_eligibility(RAMBlock *rb, uint64_t offset,
++                                         uint64_t gpa, uint64_t length,
++                                         const char *reason, uint64_t candidates)
++{
++    if (ram_reclaim_residency) {
++        info_report("hvf-ram-eligibility: block=%s allocation_serial=%" PRIu64
++                    " offset=%" PRIu64 " gpa=%" PRIu64 " length=%" PRIu64
++                    " host_base_mod_chunk=%" PRIu64
++                    " offset_mod_chunk=%" PRIu64 " length_mod_chunk=%" PRIu64
++                    " gpa_mod_chunk=%" PRIu64 " reason=%s candidates=%" PRIu64,
++                    memory_region_name(rb->mr), rb->reclaim_allocation_serial,
++                    offset, gpa, length, (uint64_t)((uintptr_t)rb->host % DCR_CHUNK_SIZE),
++                    offset % DCR_CHUNK_SIZE, length % DCR_CHUNK_SIZE,
++                    gpa % DCR_CHUNK_SIZE, reason, candidates);
++    }
++}
++
++/* Observation only: never fault/touch guest bytes. A target mapping becoming
++ * nonresident does not prove old VM-object or system physical pages released. */
++static uint64_t ram_reclaim_target_resident(void *host, uint64_t length, int *error)
++{
++    char states[1024]; /* bounded 4 MiB transaction, minimum Darwin page 4 KiB */
++    long page = sysconf(_SC_PAGESIZE);
++    uint64_t resident = 0;
++    *error = 0;
++    if (page <= 0 || !length || length > 4 * 1024 * 1024 ||
++        length % page || length / page > sizeof(states)) {
++        *error = EINVAL;
++        return 0;
++    }
++    if (mincore(host, length, states)) {
++        *error = errno;
++        return 0;
++    }
++    for (uint64_t i = 0; i < length / page; i++) {
++        if (states[i] & MINCORE_INCORE) resident += page;
++    }
++    return resident;
++}
++
++/* Counterfactual metadata only: these subranges remain inside the existing
++ * backing object and are never passed to the replacement transaction.
++ * PRESENT is an upper bound on resident candidate pages, not freed memory or
++ * a proof of the native mapping/alias gates for a future allocator granule. */
++static void ram_reclaim_note_subobjects(RAMBlock *rb, RraState *s,
++                                        uint64_t offset, uint64_t gpa,
++                                        uint64_t length, uint64_t *query_budget)
++{
++    const uint64_t granule = 128 * 1024;
++    struct {
++        uint64_t candidates, queried, present, paged_out, reusable, errors, budget_skipped;
++    } parts[16] = {0};
++    if (!ram_reclaim_residency || !length || length > sizeof(parts) / sizeof(parts[0]) * granule ||
++        (offset | length) % granule || !s->page_size || granule % s->page_size) {
++        return;
++    }
++    int64_t started = g_get_monotonic_time();
++    uint64_t count = length / granule;
++    for (uint64_t i = 0; i < count; i++) {
++        parts[i].candidates = rra_candidates(s, offset + i * granule, granule);
++        if (parts[i].candidates != granule) continue;
++        if (*query_budget < granule / s->page_size) {
++            parts[i].budget_skipped = 1;
++            continue;
++        }
++        for (uint64_t page = 0; page < granule; page += s->page_size) {
++            vm_page_info_basic_data_t info;
++            mach_msg_type_number_t info_count = VM_PAGE_INFO_BASIC_COUNT;
++            kern_return_t result = mach_vm_page_info(mach_task_self(),
++                (mach_vm_address_t)rb->host + offset + i * granule + page,
++                VM_PAGE_INFO_BASIC, (vm_page_info_t)&info, &info_count);
++            (*query_budget)--;
++            if (result != KERN_SUCCESS || info_count != VM_PAGE_INFO_BASIC_COUNT) {
++                parts[i].errors++;
++                continue;
++            }
++            parts[i].queried++;
++            parts[i].present += !!(info.disposition & VM_PAGE_QUERY_PAGE_PRESENT);
++            parts[i].paged_out += !!(info.disposition & VM_PAGE_QUERY_PAGE_PAGED_OUT);
++            parts[i].reusable += !!(info.disposition & VM_PAGE_QUERY_PAGE_REUSABLE);
++        }
++    }
++    int64_t query_us = g_get_monotonic_time() - started;
++    for (uint64_t width = 1; width <= 2; width++) {
++        for (uint64_t i = 0; i + width <= count; i += width) {
++            uint64_t candidates = 0, queried = 0, present = 0;
++            uint64_t paged_out = 0, reusable = 0, errors = 0, budget_skipped = 0;
++            for (uint64_t j = i; j < i + width; j++) {
++                candidates += parts[j].candidates;
++                queried += parts[j].queried;
++                present += parts[j].present;
++                paged_out += parts[j].paged_out;
++                reusable += parts[j].reusable;
++                errors += parts[j].errors;
++                budget_skipped += parts[j].budget_skipped;
++            }
++            bool whole = candidates == width * granule;
++            bool complete = whole && !errors &&
++                queried == width * granule / s->page_size;
++            /* Partial groups may contain queried 128 KiB children. Suppress
++             * their totals so they cannot be mistaken for a complete object. */
++            info_report("hvf-ram-subobject: allocation_serial=%" PRIu64
++                        " offset=%" PRIu64 " gpa=%" PRIu64 " granule=%" PRIu64
++                        " parent_length=%" PRIu64 " candidates=%" PRIu64
++                        " whole=%d host_page_size=%" PRIu64
++                        " queried_pages=%" PRIu64 " present_pages=%" PRIu64
++                        " paged_out_pages=%" PRIu64 " reusable_pages=%" PRIu64
++                        " query_errors=%" PRIu64 " metadata_complete=%d"
++                        " query_budget_skipped=%" PRIu64 " query_us=%" PRIi64,
++                        rb->reclaim_allocation_serial, offset + i * granule,
++                        gpa + i * granule, width * granule, length, candidates,
++                        whole, s->page_size, whole ? queried : 0,
++                        whole ? present : 0, whole ? paged_out : 0,
++                        whole ? reusable : 0, whole ? errors : 0, complete,
++                        whole ? budget_skipped : 0, query_us);
++        }
++    }
++}
++#endif
++
++uint64_t qemu_ram_reclaim_report(RAMBlock *rb, uint64_t offset, uint64_t gpa,
++                                 uint64_t length)
++{
++#if defined(__APPLE__) && defined(__aarch64__)
++    RraState *s = rb->reclaim_audit;
++    uint64_t end, reclaimed = 0, attempted = 0, inspected = 0;
++    uint64_t attempted_objects = 0, inspected_objects = 0;
++    const uint64_t max_transaction_bytes = 4 * 1024 * 1024;
++    const uint64_t max_inspected_bytes = 64 * 1024 * 1024;
++    const uint64_t max_attempted_objects = 2, max_inspected_objects = 32;
++    uint64_t subobject_query_budget = 256; /* diagnostic Mach calls per report */
++    int64_t started = ram_reclaim_residency ? g_get_monotonic_time() : 0;
++    assert(qemu_mutex_iothread_locked() && !qemu_in_vcpu_thread());
++    if (!qemu_ram_reclaim_requested() || !s) return 0;
++    const char *skip = !ram_reclaim_ingress_ready() ? "ingress" :
++        !qemu_reclaim_pause_active() ? "pause-not-owned" :
++        !qemu_vm_reclaim_running() ? "vm-not-running" : NULL;
++    if (!skip && (!length ||
++        offset >= rb->used_length || length > rb->used_length - offset ||
++        length > UINT64_MAX - gpa ||
++        ((offset | gpa | length) & (s->page_size - 1)))) skip = "invalid-range-or-host-page";
++    /* Guest ownership of a partial object cannot release that object.
++     * Do not combine fragments from independent report lifetimes. */
++    if (!skip && ((offset | length) & (DCR_CHUNK_SIZE - 1))) skip = "report-not-whole-chunk";
++    if (skip) {
++        ram_reclaim_note_eligibility(rb, offset, gpa, length, skip, 0);
++        return 0;
++    }
++    end = offset + length;
++    qemu_mutex_lock(&ram_audit_lock);
++    skip = ram_audit_inhibited ? "global-inhibit" :
++        ram_reclaim_external_users ? "external-lifetime" :
++        s->backing != RRA_PRIVATE ? "backing-kind" :
++        s->whole_reason ? "whole-block-exposure" :
++        !rb->reclaim_allocation_serial ? "receipt-missing" :
++        rb->reclaim_chunk_size != DCR_CHUNK_SIZE ? "receipt-granule-mismatch" :
++        rb->reclaim_allocation_serial != qemu_anon_ram_allocation_serial(
++            rb->host, rb->max_length, rb->reclaim_chunk_size) ? "receipt-mismatch" :
++        rb->fd >= 0 || (rb->flags & (RAM_PREALLOC | RAM_USER_BACKED | RAM_MAPPED |
++                                    RAM_RESIZEABLE)) ? "block-flags" :
++        rb->mr->readonly ? "readonly" : NULL;
++    if (skip) {
++        ram_reclaim_note_eligibility(rb, offset, gpa, length, skip, 0);
++        goto done;
++    }
++    while (offset < end && attempted < max_transaction_bytes &&
++           inspected < max_inspected_bytes &&
++           attempted_objects < max_attempted_objects &&
++           inspected_objects < max_inspected_objects) {
++        uint64_t run = DCR_CHUNK_SIZE;
++        inspected += run;
++        inspected_objects++;
++        uint64_t candidates = rra_candidates(s, offset, run);
++        if (candidates != run) {
++            ram_reclaim_note_eligibility(rb, offset, gpa, run, "chunk-exposure", candidates);
++            ram_reclaim_note_subobjects(rb, s, offset, gpa, run, &subobject_query_budget);
++            offset += run;
++            gpa += run;
++            continue;
++        }
++        RraReservation reservation;
++        if (!rra_reserve(s, offset, run, s->generation, &reservation)) {
++            ram_reclaim_note_eligibility(rb, offset, gpa, run, "reservation", candidates);
++            break;
++        }
++        int resident_before_error = 0, resident_after_error = 0;
++        uint64_t resident_before = 0, resident_after = 0;
++        if (ram_reclaim_residency) {
++            resident_before = ram_reclaim_target_resident((char *)rb->host + offset,
++                                                          run, &resident_before_error);
++        }
++        HvfReclaimOutcome outcome = hvf_reclaim_private_range(
++            (char *)rb->host + offset, gpa, run, ram_reclaim_fault);
++        if (outcome.result == HVF_RECLAIM_SKIPPED) {
++            ram_reclaim_note_eligibility(rb, offset, gpa, run, "native-permission-or-alias", candidates);
++        }
++        if (outcome.result == HVF_RECLAIM_FATAL) {
++            error_report("hvf-ram-reclaim: fatal stage=%d hv=0x%x mach=%u "
++                         "restore_hv=0x%x restore_mach=%u; guest remains stopped",
++                         outcome.stage, outcome.hv_error, outcome.mach_error,
++                         outcome.restore_hv_error, outcome.restore_mach_error);
++            /* No report push, lock release, or vCPU resume is safe here. */
++            abort();
++        }
++        if (ram_reclaim_residency) {
++            /* Native alias cleanup has completed or cleanup_failed records its
++             * failure. CPUs, report ownership and audit remain held. */
++            resident_after = ram_reclaim_target_resident((char *)rb->host + offset,
++                                                         run, &resident_after_error);
++        }
++        if (outcome.result == HVF_RECLAIM_COMMITTED ||
++            outcome.result == HVF_RECLAIM_ROLLED_BACK) {
++            s->strict_bytes = rra_add(s->strict_bytes, run);
++        }
++        if (outcome.result == HVF_RECLAIM_COMMITTED) {
++            s->committed_bytes = rra_add(s->committed_bytes, run);
++            s->committed_ranges = rra_add(s->committed_ranges, 1);
++            reclaimed += run;
++        } else if (outcome.result == HVF_RECLAIM_ROLLED_BACK) {
++            s->rolled_back_ranges = rra_add(s->rolled_back_ranges, 1);
++        }
++        rra_release(s, &reservation);
++        info_report("hvf-ram-reclaim: result=%d stage=%d block=%s "
++                    "offset=%" PRIu64 " gpa=%" PRIu64 " length=%" PRIu64
++                    " flags=%" PRIu64 " mapping_generation=%" PRIu64
++                    " fault=%d hv=0x%x mach=%u strict_bytes_total=%" PRIu64
++                    " committed_bytes_total=%" PRIu64 " committed_ranges=%" PRIu64
++                    " rolled_back_ranges=%" PRIu64 " cleanup_failed=%d"
++                    " residency_enabled=%d target_resident_before=%" PRIu64
++                    " target_resident_after=%" PRIu64
++                    " resident_before_error=%d resident_after_error=%d",
++                    outcome.result, outcome.stage, memory_region_name(rb->mr),
++                    offset, gpa, run, outcome.flags, outcome.generation,
++                    ram_reclaim_fault, outcome.hv_error, outcome.mach_error,
++                    s->strict_bytes, s->committed_bytes, s->committed_ranges,
++                    s->rolled_back_ranges, outcome.cleanup_failed,
++                    ram_reclaim_residency, resident_before, resident_after,
++                    resident_before_error, resident_after_error);
++        if (outcome.observation_enabled) {
++            info_report("hvf-ram-physical: allocation_serial=%" PRIu64
++                        " offset=%" PRIu64 " length=%" PRIu64 " result=%d"
++                        " old_object_id=%" PRIu64 " old_ref_min=%" PRIu64
++                        " old_ref_max=%" PRIu64 " old_present_pages=%" PRIu64
++                        " old_paged_out_pages=%" PRIu64 " old_reusable_pages=%" PRIu64
++                        " old_page_query_errors=%" PRIu64
++                        " free_pages_before=%" PRIu64 " free_pages_after=%" PRIu64
++                        " speculative_pages_before=%" PRIu64
++                        " speculative_pages_after=%" PRIu64 " query_error=%d",
++                        rb->reclaim_allocation_serial, offset, run, outcome.result,
++                        outcome.old_object_id, outcome.old_ref_min, outcome.old_ref_max,
++                        outcome.old_present_pages, outcome.old_paged_out_pages,
++                        outcome.old_reusable_pages, outcome.old_page_query_errors,
++                        outcome.free_pages_before, outcome.free_pages_after,
++                        outcome.speculative_pages_before, outcome.speculative_pages_after,
++                        outcome.physical_query_error);
++        }
++        attempted += run;
++        attempted_objects++;
++        offset += run;
++        gpa += run;
++        if (outcome.cleanup_failed) {
++            /* A leaked internal alias invalidates future no-alias proofs. */
++            ram_audit_inhibited = "transaction-cleanup-failure";
++            rra_invalidate(s, ram_audit_inhibited);
++            break;
++        }
++    }
++done:
++    qemu_mutex_unlock(&ram_audit_lock);
++    if (ram_reclaim_residency) {
++        info_report("hvf-ram-budget: allocation_serial=%" PRIu64
++                    " chunk_size=%zu attempted_objects=%" PRIu64
++                    " inspected_objects=%" PRIu64 " attempted_bytes=%" PRIu64
++                    " inspected_bytes=%" PRIu64 " attempt_limit=%" PRIu64
++                    " inspect_limit=%" PRIu64 " remaining_bytes=%" PRIu64
++                    " report_work_us=%" PRIi64,
++                    rb->reclaim_allocation_serial, rb->reclaim_chunk_size,
++                    attempted_objects, inspected_objects, attempted, inspected,
++                    max_attempted_objects, max_inspected_objects,
++                    end - offset, g_get_monotonic_time() - started);
++    }
++    return reclaimed;
++#else
++    return 0;
++#endif
++}
++
+ /* UFFDIO_ZEROPAGE is available on this RAMBlock to atomically
+  * zero the page and wake waiting processes.
+  * (Set during postcopy)
+@@ -1434,6 +2027,55 @@ static subpage_t *subpage_init(FlatView *fv, hwaddr base);
+ static void *(*phys_mem_alloc)(size_t size, uint64_t *align, bool shared) =
+                                qemu_anon_ram_alloc;
+ 
++static void ram_audit_allocate(RAMBlock *rb, bool shared)
++{
++    RraBacking kind;
++    if (!ram_audit_active()) {
++        return;
++    }
++    if (rb->fd >= 0 || (rb->flags & RAM_MAPPED)) {
++        kind = RRA_FILE;
++    } else if (rb->flags & (RAM_PREALLOC | RAM_USER_BACKED)) {
++        kind = RRA_EXTERNAL;
++    } else if (rb->flags & RAM_RESIZEABLE) {
++        kind = RRA_RESIZABLE;
++    } else if (phys_mem_alloc != qemu_anon_ram_alloc) {
++        kind = RRA_CUSTOM;
++    } else {
++        kind = shared ? RRA_SHARED : RRA_PRIVATE;
++    }
++    rb->reclaim_audit = g_new0(RraState, 1);
++#if defined(__APPLE__) && defined(__aarch64__)
++    if (kind == RRA_PRIVATE && ram_reclaim_requested) {
++        rb->reclaim_allocation_serial =
++            qemu_anon_ram_allocation_serial(rb->host, rb->max_length, DCR_CHUNK_SIZE);
++        if (rb->reclaim_allocation_serial) rb->reclaim_chunk_size = DCR_CHUNK_SIZE;
++    }
++#endif
++    qemu_mutex_lock(&ram_audit_lock);
++    rra_init(rb->reclaim_audit, rb->max_length, rb->page_size, kind);
++    if (ram_audit_inhibited || rb->mr->readonly) {
++        rra_taint_all(rb->reclaim_audit,
++                      ram_audit_inhibited ? ram_audit_inhibited : "readonly");
++    }
++    ram_audit_log_locked(rb, "allocate", 0, 0, 0);
++    qemu_mutex_unlock(&ram_audit_lock);
++}
++
++static void ram_audit_published(RAMBlock *rb)
++{
++    if (!rb->reclaim_audit) {
++        return;
++    }
++    /* Close the gap between initialization and RCU list publication: an
++     * inhibit that did not see this block must still apply to it. */
++    qemu_mutex_lock(&ram_audit_lock);
++    if (ram_audit_inhibited) {
++        rra_taint_all(rb->reclaim_audit, ram_audit_inhibited);
++        ram_audit_log_locked(rb, "inhibit-at-publication", 0, 0, 0);
++    }
++    qemu_mutex_unlock(&ram_audit_lock);
++}
+ /*
+  * Set a custom physical guest memory alloator.
+  * Accelerators with unusual needs may need this.  Hopefully, we can
+@@ -2083,6 +2725,7 @@ int qemu_ram_resize(RAMBlock *block, ram_addr_t newsize, Error **errp)
+     }
+ 
+     cpu_physical_memory_clear_dirty_range(block->offset, block->used_length);
++    ram_audit_invalidate(block, "resize");
+     block->used_length = newsize;
+     cpu_physical_memory_set_dirty_range(block->offset, block->used_length,
+                                         DIRTY_CLIENTS_ALL);
+@@ -2175,6 +2818,8 @@ static void ram_block_add(RAMBlock *new_block, Error **errp, bool shared)
+         }
+     }
+ 
++    ram_audit_allocate(new_block, shared);
++
+     new_ram_size = MAX(old_ram_size,
+               (new_block->offset + new_block->max_length) >> TARGET_PAGE_BITS);
+     if (new_ram_size > old_ram_size) {
+@@ -2197,6 +2842,7 @@ static void ram_block_add(RAMBlock *new_block, Error **errp, bool shared)
+     } else { /* list is empty */
+         QLIST_INSERT_HEAD_RCU(&ram_list.blocks, new_block, next);
+     }
++    ram_audit_published(new_block);
+     ram_list.mru_block = NULL;
+ 
+     /* Write list before version */
+@@ -2331,6 +2977,7 @@ RAMBlock *qemu_ram_alloc_internal(ram_addr_t size, ram_addr_t max_size,
+     new_block->page_size = getpagesize();
+     new_block->host = host;
+     if (host) {
++        qemu_ram_audit_host_pointer(host, max_size, "external-ram-hva-alias");
+         new_block->flags |= RAM_PREALLOC;
+     }
+     if (resizeable) {
+@@ -2487,6 +3134,7 @@ void qemu_set_user_backed_mapping_funcs(QemuUserBackedRamMapFunc mapFunc,
+ 
+ void qemu_user_backed_ram_map(uint64_t gpa, void *hva, uint64_t size, int flags)
+ {
++    qemu_ram_audit_host_pointer(hva, size, "user-backed-alias");
+     goldfish_address_space_map_hook(gpa, size);
+     s_user_backed_ram_map(gpa, hva, size, flags);
+ }
+@@ -2512,6 +3160,14 @@ qemu_get_address_space_device_control_ops() {
+ 
+ static void reclaim_ramblock(RAMBlock *block)
+ {
++    if (block->reclaim_audit) {
++        qemu_mutex_lock(&ram_audit_lock);
++        ram_audit_log_locked(block, "free", 0, 0, 0);
++        ram_audit_causes_locked(block);
++        rra_destroy(block->reclaim_audit);
++        g_free(block->reclaim_audit);
++        qemu_mutex_unlock(&ram_audit_lock);
++    }
+     if (block->flags & RAM_PREALLOC) {
+         ;
+     } else if (xen_enabled()) {
+@@ -2569,6 +3225,7 @@ void qemu_ram_remap(ram_addr_t addr, ram_addr_t length)
+     RAMBLOCK_FOREACH(block) {
+         offset = addr - block->offset;
+         if (offset < block->max_length) {
++            ram_audit_invalidate(block, "ram-remap");
+             vaddr = ramblock_ptr(block, offset);
+             if (block->flags & RAM_PREALLOC) {
+                 ;
+@@ -2608,6 +3265,7 @@ void qemu_ram_remap(ram_addr_t addr, ram_addr_t length)
+ #endif /* !_WIN32 */
+ 
+ static void ram_block_teardown_backing(RAMBlock* block) {
++    ram_audit_invalidate(block, "backing-teardown");
+ 
+     if (block->fd >= 0) {
+         qemu_ram_munmap(block->host, block->max_length);
+@@ -2727,7 +3385,8 @@ void ram_blocks_remap_shared(int shared)
+  *
+  * Called within RCU critical section.
+  */
+-void *qemu_map_ram_ptr(RAMBlock *ram_block, ram_addr_t addr)
++static void *qemu_map_ram_ptr_internal(RAMBlock *ram_block, ram_addr_t addr,
++                                        uint64_t length, bool internal)
+ {
+     RAMBlock *block = ram_block;
+ 
+@@ -2747,16 +3406,35 @@ void *qemu_map_ram_ptr(RAMBlock *ram_block, ram_addr_t addr)
+ 
+         block->host = xen_map_cache(block->offset, block->max_length, 1, false);
+     }
++    if (!internal) {
++        ram_audit_note(block, length ? addr : 0, length,
++                       length ? "sized-ram-pointer" : "unsized-ram-pointer");
++    }
+     return ramblock_ptr(block, addr);
+ }
+ 
++void *qemu_map_ram_ptr(RAMBlock *block, ram_addr_t addr)
++{
++    return qemu_map_ram_ptr_internal(block, addr, 0, false);
++}
++
++void *qemu_map_ram_ptr_sized(RAMBlock *block, ram_addr_t addr, hwaddr length)
++{
++    return qemu_map_ram_ptr_internal(block, addr, length, false);
++}
++
++void *qemu_map_ram_ptr_for_accel(RAMBlock *block, ram_addr_t addr)
++{
++    return qemu_map_ram_ptr_internal(block, addr, 0, true);
++}
++
+ /* Return a host pointer to guest's ram. Similar to qemu_map_ram_ptr
+  * but takes a size argument.
+  *
+  * Called within RCU critical section.
+  */
+ static void *qemu_ram_ptr_length(RAMBlock *ram_block, ram_addr_t addr,
+-                                 hwaddr *size, bool lock)
++                                 hwaddr *size, bool lock, bool report_owner)
+ {
+     RAMBlock *block = ram_block;
+     if (*size == 0) {
+@@ -2781,6 +3459,11 @@ static void *qemu_ram_ptr_length(RAMBlock *ram_block, ram_addr_t addr,
+         block->host = xen_map_cache(block->offset, block->max_length, 1, lock);
+     }
+ 
++    if (!report_owner) {
++        ram_audit_note(block, addr, *size, "sized-ram-access");
++    } else {
++        ram_audit_report_map(block, addr, *size);
++    }
+     return ramblock_ptr(block, addr);
+ }
+ 
+@@ -2943,16 +3626,16 @@ static void notdirty_mem_write(void *opaque, hwaddr ram_addr,
+ 
+     switch (size) {
+     case 1:
+-        stb_p(qemu_map_ram_ptr(NULL, ram_addr), val);
++        stb_p(qemu_map_ram_ptr_sized(NULL, ram_addr, size), val);
+         break;
+     case 2:
+-        stw_p(qemu_map_ram_ptr(NULL, ram_addr), val);
++        stw_p(qemu_map_ram_ptr_sized(NULL, ram_addr, size), val);
+         break;
+     case 4:
+-        stl_p(qemu_map_ram_ptr(NULL, ram_addr), val);
++        stl_p(qemu_map_ram_ptr_sized(NULL, ram_addr, size), val);
+         break;
+     case 8:
+-        stq_p(qemu_map_ram_ptr(NULL, ram_addr), val);
++        stq_p(qemu_map_ram_ptr_sized(NULL, ram_addr, size), val);
+         break;
+     default:
+         abort();
+@@ -3570,7 +4253,7 @@ static MemTxResult flatview_write_continue(FlatView *fv, hwaddr addr,
+                         " ignored. Offset = 0x%llx, size = %llx\n",
+                         GOLDFISH_ADDRESS_SPACE_AREA_NAME, addr1, l);
+             } else {
+-                ptr = qemu_ram_ptr_length(mr->ram_block, addr1, &l, false);
++                ptr = qemu_ram_ptr_length(mr->ram_block, addr1, &l, false, false);
+                 memcpy(ptr, buf, l);
+                 invalidate_and_set_dirty(mr, addr1, l);
+             }
+@@ -3677,7 +4360,7 @@ MemTxResult flatview_read_continue(FlatView *fv, hwaddr addr,
+                         GOLDFISH_ADDRESS_SPACE_AREA_NAME, addr1, l);
+                 memset(buf, 0xFF, l);
+             } else {
+-                ptr = qemu_ram_ptr_length(mr->ram_block, addr1, &l, false);
++                ptr = qemu_ram_ptr_length(mr->ram_block, addr1, &l, false, false);
+                 memcpy(buf, ptr, l);
+             }
+         }
+@@ -3789,7 +4472,7 @@ static inline void cpu_physical_memory_write_rom_internal(AddressSpace *as,
+             l = memory_access_size(mr, l, addr1);
+         } else {
+             /* ROM/RAM case */
+-            ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++            ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+             switch (type) {
+             case WRITE_DATA:
+                 memcpy(ptr, buf, l);
+@@ -3988,10 +4671,10 @@ flatview_extend_translation(FlatView *fv, hwaddr addr,
+  * Use cpu_register_map_client() to know when retrying the map operation is
+  * likely to succeed.
+  */
+-void *address_space_map(AddressSpace *as,
++static void *address_space_map_internal(AddressSpace *as,
+                         hwaddr addr,
+                         hwaddr *plen,
+-                        bool is_write)
++                        bool is_write, bool report_owner)
+ {
+     hwaddr len = *plen;
+     hwaddr l, xlat;
+@@ -4035,12 +4718,24 @@ void *address_space_map(AddressSpace *as,
+     memory_region_ref(mr);
+     *plen = flatview_extend_translation(fv, addr, len, mr, xlat,
+                                              l, is_write);
+-    ptr = qemu_ram_ptr_length(mr->ram_block, xlat, plen, true);
++    ptr = qemu_ram_ptr_length(mr->ram_block, xlat, plen, true, report_owner);
+     rcu_read_unlock();
+ 
+     return ptr;
+ }
+ 
++void *address_space_map(AddressSpace *as, hwaddr addr, hwaddr *plen,
++                         bool is_write)
++{
++    return address_space_map_internal(as, addr, plen, is_write, false);
++}
++
++void *address_space_map_report(AddressSpace *as, hwaddr addr, hwaddr *plen,
++                                bool is_write)
++{
++    return address_space_map_internal(as, addr, plen, is_write, true);
++}
++
+ /* Unmaps a memory region previously mapped by address_space_map().
+  * Will also mark the memory as dirty if is_write == 1.  access_len gives
+  * the amount of memory that was actually read or written by the caller.
+@@ -4091,6 +4786,7 @@ void *cpu_physical_memory_get_addr(hwaddr addr) {
+     hwaddr len = 4096;
+     void* hva = cpu_physical_memory_map(addr, &len, 1);
+     cpu_physical_memory_unmap(hva, len, 1, len);
++    qemu_ram_audit_host_pointer(hva, 0, "unsized-physical-memory-lookup");
+     return hva;
+ }
+ 
+@@ -4229,6 +4925,7 @@ int qemu_ram_foreach_block(RAMBlockIterFunc func, void *opaque)
+ 
+     rcu_read_lock();
+     RAMBLOCK_FOREACH(block) {
++        ram_audit_note(block, 0, 0, "ram-iterator");
+         ret = func(block->idstr, block->host, block->offset,
+                    block->used_length, opaque);
+         if (ret) {
+@@ -4244,11 +4941,15 @@ int qemu_ram_foreach_migrate_block_with_file_info(RAMBlockIterFuncWithFileInfo f
+     RAMBlock *block;
+     int ret = 0;
+ 
++    /* Actual registration hands whole-block host pointers to snapshot workers.
++     * Future allocations must also remain excluded after this transition. */
++    qemu_ram_audit_inhibit("snapshot-ram-registration");
+     rcu_read_lock();
+     RAMBLOCK_FOREACH(block) {
+         ret = 0;
+ 
+         if (block->migrate) {
++            ram_audit_note(block, 0, 0, "snapshot-ram-iterator");
+             ret = func(block->idstr, block->host, block->offset,
+                        block->used_length,
+                        block->flags,
+diff --git a/hw/display/framebuffer.c b/hw/display/framebuffer.c
+index 7ab0f0cd..d41ca230 100644
+--- a/hw/display/framebuffer.c
++++ b/hw/display/framebuffer.c
+@@ -74,34 +74,45 @@ void framebuffer_update_display(
+     int dirty;
+     int i;
+     ram_addr_t addr;
++    uint64_t span, row_offset;
+     MemoryRegion *mem;
+ 
+     i = *first_row;
+     *first_row = -1;
+ 
+     mem = mem_section->mr;
+-    if (!mem) {
++    if (!mem || rows <= 0 || cols <= 0 || src_width <= 0 ||
++        i < 0 || i >= rows) {
+         return;
+     }
+ 
+     addr = mem_section->offset_within_region;
+-    src = memory_region_get_ram_ptr(mem) + addr;
++    row_offset = (uint64_t)i * src_width;
++    span = (uint64_t)(rows - i) * src_width;
++    if (row_offset > UINT64_MAX - addr ||
++        int128_gt(int128_make64((uint64_t)rows * src_width),
++                  mem_section->size)) {
++        return;
++    }
++    addr += row_offset;
++    src = memory_region_get_ram_ptr_sized(mem, addr, span);
++    if (!src) {
++        return;
++    }
+ 
+     dest = surface_data(ds);
+     if (dest_col_pitch < 0) {
+-        dest -= dest_col_pitch * (cols - 1);
++        dest -= (ptrdiff_t)dest_col_pitch * (cols - 1);
+     }
+     if (dest_row_pitch < 0) {
+-        dest -= dest_row_pitch * (rows - 1);
++        dest -= (ptrdiff_t)dest_row_pitch * (rows - 1);
+     }
+ 
+     first = -1;
+ 
+-    addr += i * src_width;
+-    src += i * src_width;
+-    dest += i * dest_row_pitch;
++    dest += (ptrdiff_t)i * dest_row_pitch;
+ 
+-    snap = memory_region_snapshot_and_clear_dirty(mem, addr, src_width * rows,
++    snap = memory_region_snapshot_and_clear_dirty(mem, addr, span,
+                                                   DIRTY_MEMORY_VGA);
+     for (; i < rows; i++) {
+         dirty = memory_region_snapshot_get_dirty(mem, snap, addr, src_width);
+diff --git a/hw/virtio/virtio-balloon.c b/hw/virtio/virtio-balloon.c
+index d928b2c1..ea6a9845 100644
+--- a/hw/virtio/virtio-balloon.c
++++ b/hw/virtio/virtio-balloon.c
+@@ -22,6 +22,10 @@
+ #include "sysemu/balloon.h"
+ #include "hw/virtio/virtio-balloon.h"
+ #include "sysemu/kvm.h"
++#include "sysemu/hvf.h"
++#include "sysemu/cpus.h"
++#include "sysemu/sysemu.h"
++#include "exec/report-pause-lifecycle.h"
+ #include "exec/address-spaces.h"
+ #include "qapi/error.h"
+ #include "qapi/qapi-events-misc.h"
+@@ -218,13 +222,56 @@ static void balloon_stats_set_poll_interval(Object *obj, Visitor *v,
+  * the host backing of each block; the guest then puts the pages back on its
+  * free lists and may reuse them at any time.
+  */
+-static void virtio_balloon_handle_report(VirtIODevice *vdev, VirtQueue *vq)
++typedef struct BalloonReportObservation {
++    uint64_t popped_elements, acked_elements, input_sgs, reclaim_calls;
++} BalloonReportObservation;
++
++static void virtio_balloon_drain_report(VirtIODevice *vdev, VirtQueue *vq,
++                                        unsigned budget,
++                                        BalloonReportObservation *observation)
+ {
+     VirtIOBalloon *dev = VIRTIO_BALLOON(vdev);
+     VirtQueueElement *elem;
+ 
+-    while ((elem = virtqueue_pop(vq, sizeof(VirtQueueElement)))) {
++    while (budget-- &&
++           (elem = virtqueue_pop_report(vq, sizeof(VirtQueueElement)))) {
+         unsigned int i;
++        if (observation) {
++            observation->popped_elements++;
++            observation->input_sgs += elem->in_num;
++        }
++        const char *audit_skip = qemu_balloon_is_inhibited() ?
++            "report-inhibited" : dev->poison_val ? "report-guest-poison" : NULL;
++        bool malformed = elem->out_num || !elem->in_num;
++        /* A report is an input-only list of disjoint complete extents. Reject
++         * ambiguous ownership before replacing any part of this element. */
++        for (i = 0; !malformed && i < elem->in_num; i++) {
++            uint64_t address = elem->in_addr[i], length = elem->in_sg[i].iov_len;
++            uintptr_t host = (uintptr_t)elem->in_sg[i].iov_base;
++            malformed = !length || length > UINT64_MAX - address ||
++                        length > UINTPTR_MAX - host;
++            for (unsigned j = 0; !malformed && j < i; j++) {
++                uint64_t other = elem->in_addr[j], other_len = elem->in_sg[j].iov_len;
++                uintptr_t other_host = (uintptr_t)elem->in_sg[j].iov_base;
++                malformed = (address < other + other_len && other < address + length) ||
++                            (host < other_host + other_len && other_host < host + length);
++            }
++        }
++        if (!audit_skip && malformed) audit_skip = "report-malformed-owner";
++
++        /* Observe even skipped reports. The original discard path below is
++         * unchanged; these counters are not permission to replace memory. */
++        for (i = 0; qemu_ram_audit_is_enabled() && i < elem->in_num; i++) {
++            ram_addr_t offset;
++            RAMBlock *block = qemu_ram_block_from_host(elem->in_sg[i].iov_base,
++                                                       false, &offset);
++            if (block) {
++                qemu_ram_audit_report(block, offset, elem->in_sg[i].iov_len,
++                                      audit_skip);
++            } else {
++                qemu_ram_audit_untracked_report(elem->in_sg[i].iov_len);
++            }
++        }
+ 
+         /*
+          * When we discard the page it has the effect of removing the page
+@@ -237,7 +284,8 @@ static void virtio_balloon_handle_report(VirtIODevice *vdev, VirtQueue *vq)
+          * contents or zero-filled, so the poison_val == 0 (init_on_free)
+          * case is still safe there: both outcomes read as zero.
+          */
+-        if (qemu_balloon_is_inhibited() || dev->poison_val) {
++        if (qemu_balloon_is_inhibited() || dev->poison_val ||
++            (qemu_ram_reclaim_requested() && malformed)) {
+             goto skip_element;
+         }
+ 
+@@ -269,11 +317,18 @@ static void virtio_balloon_handle_report(VirtIODevice *vdev, VirtQueue *vq)
+              * regions that overrun the end of the RAMBlock.
+              */
+             if (!QEMU_IS_ALIGNED(ram_offset | size, qemu_ram_pagesize(rb)) ||
+-                (ram_offset + size) > qemu_ram_get_used_length(rb)) {
++                ram_offset >= qemu_ram_get_used_length(rb) ||
++                size > qemu_ram_get_used_length(rb) - ram_offset) {
+                 continue;
+             }
+ 
+-            if (ram_block_discard_range(rb, ram_offset, size) == 0) {
++            if (qemu_ram_reclaim_requested()) {
++                if (observation) {
++                    observation->reclaim_calls++;
++                }
++                dev->reported_bytes += qemu_ram_reclaim_report(rb, ram_offset,
++                                                              elem->in_addr[i], size);
++            } else if (ram_block_discard_range(rb, ram_offset, size) == 0) {
+                 dev->reported_bytes += size;
+             }
+         }
+@@ -288,11 +343,208 @@ static void virtio_balloon_handle_report(VirtIODevice *vdev, VirtQueue *vq)
+ 
+ skip_element:
+         virtqueue_push(vq, elem, 0);
++        if (observation) {
++            observation->acked_elements++;
++        }
+         virtio_notify(vdev, vq);
+         g_free(elem);
+     }
+ }
+ 
++static bool balloon_pause_audit_enabled(void)
++{
++#if defined(__APPLE__) && defined(__aarch64__)
++    const char *value = getenv("MODAVD_HVF_RAM_PAUSE_AUDIT");
++    return hvf_enabled() && qemu_ram_audit_is_enabled() &&
++           (qemu_ram_reclaim_requested() || (value && !strcmp(value, "1")));
++#else
++    return false;
++#endif
++}
++
++static RplSnapshot balloon_report_snapshot(VirtIOBalloon *s)
++{
++    VirtIODevice *vdev = VIRTIO_DEVICE(s);
++    bool realized = DEVICE(vdev)->realized && s->report_bh;
++    RplSnapshot result = {
++        .vm_epoch = qemu_vm_reclaim_epoch(), .queue_epoch = vdev->reclaim_epoch,
++        .device_epoch = s->report_device_epoch, .features = vdev->guest_features,
++        .status = vdev->status, .poison = s->poison_val,
++        .realized = realized, .running = qemu_vm_reclaim_running(),
++    };
++    /* The queue is reacquired only after realization is checked. No queue
++     * pointer, SG, RCU section, or popped element survives the CPU pause. */
++    if (realized && s->report_queue_index < virtio_get_num_queues(vdev)) {
++        result.queue_ready = virtio_queue_ready(virtio_get_queue(vdev,
++                                                   s->report_queue_index));
++    }
++    return result;
++}
++
++typedef struct BalloonPausedCpu {
++    CPUState *cpu;
++    bool stopped, stop;
++} BalloonPausedCpu;
++
++static void virtio_balloon_handle_report(VirtIODevice *vdev, VirtQueue *vq);
++
++static void balloon_report_bh(void *opaque)
++{
++    VirtIOBalloon *s = opaque;
++    VirtIODevice *vdev = VIRTIO_DEVICE(s);
++    /* A conforming Linux guest clears PAGE_POISON when neither init_on_free
++     * nor page poisoning is active. REPORTING remains valid in that case.
++     * Keep poison==0 and the complete negotiated feature snapshot checks. */
++    const uint64_t required = 1ULL << VIRTIO_BALLOON_F_REPORTING;
++    RplSnapshot before = balloon_report_snapshot(s), after;
++    GArray *paused_cpus = g_array_new(false, false, sizeof(BalloonPausedCpu));
++    CPUState *cpu;
++    bool paused = false, valid = false, topology_same = true;
++    const char *timing_env = getenv("MODAVD_HVF_RAM_PAUSE_AUDIT");
++    const bool timing_enabled = timing_env && !strcmp(timing_env, "1");
++    const int64_t bh_enter_us = timing_enabled ? g_get_monotonic_time() : 0;
++    int64_t pause_requested_us = 0, all_paused_us = 0;
++    int64_t resume_requested_us = 0, resume_returned_us = 0;
++    uint64_t sequence = s->report_pause_batches + s->report_pause_canceled + 1;
++    uint64_t timing_batches = 0, timing_canceled = 0;
++    BalloonReportObservation observation = {0};
++    unsigned paused_count = 0, index = 0;
++    assert(qemu_mutex_iothread_locked() && !qemu_in_vcpu_thread());
++    s->report_active = true;
++    if (timing_enabled) {
++        info_report("hvf-ram-pause-begin: sequence=%" PRIu64, sequence);
++    }
++    if (!rpl_ready(&before, required, VIRTIO_CONFIG_S_DRIVER_OK) ||
++        before.vm_epoch != s->report_scheduled_vm_epoch ||
++        before.queue_epoch != s->report_scheduled_queue_epoch ||
++        before.device_epoch != s->report_scheduled_device_epoch) {
++        goto done;
++    }
++    CPU_FOREACH(cpu) {
++        BalloonPausedCpu entry = {cpu, cpu->stopped, cpu->stop};
++        object_ref(OBJECT(cpu));
++        g_array_append_val(paused_cpus, entry);
++    }
++    /* No exposure registry or HVF lock is held. pause_all_vcpus temporarily
++     * releases BQL, so every value above is untrusted until revalidated. */
++    if (timing_enabled) {
++        pause_requested_us = g_get_monotonic_time();
++    }
++    pause_all_vcpus_for_reclaim();
++    if (timing_enabled) {
++        all_paused_us = g_get_monotonic_time();
++    }
++    paused = true;
++    after = balloon_report_snapshot(s);
++    CPU_FOREACH(cpu) {
++        if (index >= paused_cpus->len ||
++            g_array_index(paused_cpus, BalloonPausedCpu, index).cpu != cpu ||
++            !cpu->stopped) {
++            topology_same = false;
++        }
++        index++;
++    }
++    topology_same &= index == paused_cpus->len;
++    valid = topology_same && rpl_unchanged(&before, &after, required,
++                                           VIRTIO_CONFIG_S_DRIVER_OK);
++    if (valid) {
++        VirtQueue *current = virtio_get_queue(vdev, s->report_queue_index);
++        /* No operation in this bounded synchronous drain may release BQL. */
++        virtio_balloon_drain_report(vdev, current, 32,
++                                    timing_enabled ? &observation : NULL);
++        s->report_pause_batches++;
++    }
++done:
++    if (!valid) {
++        s->report_pause_canceled++;
++    }
++    if (paused) {
++        /* CPU code retained stop/resume requests issued while BQL was dropped.
++         * A changed epoch cancels the report but does not lose a later start. */
++        if (timing_enabled) {
++            resume_requested_us = g_get_monotonic_time();
++        }
++        resume_vcpus_after_reclaim();
++        if (timing_enabled) {
++            resume_returned_us = g_get_monotonic_time();
++        }
++    }
++    paused_count = paused_cpus->len;
++    for (unsigned i = 0; i < paused_cpus->len; i++) {
++        object_unref(OBJECT(g_array_index(paused_cpus, BalloonPausedCpu, i).cpu));
++    }
++    g_array_free(paused_cpus, true);
++    if (!valid || s->report_pause_batches == 1 || !(s->report_pause_batches % 32)) {
++        info_report("hvf-ram-pause: batches=%" PRIu64 " canceled=%" PRIu64
++                    " popped_after_pause=%d topology_same=%d",
++                    s->report_pause_batches, s->report_pause_canceled,
++                    valid, topology_same);
++    }
++    s->report_active = false;
++    s->report_pending = false;
++    /* A notify while BQL was released may have described a fresh queue epoch.
++     * Read the current queue only; the old queue pointer was never retained. */
++    if (DEVICE(vdev)->realized && s->report_bh && qemu_vm_reclaim_running() &&
++        (vdev->status & VIRTIO_CONFIG_S_DRIVER_OK) &&
++        s->report_queue_index < virtio_get_num_queues(vdev)) {
++        VirtQueue *current = virtio_get_queue(vdev, s->report_queue_index);
++        if (virtio_queue_ready(current) && !virtio_queue_empty(current)) {
++            virtio_balloon_handle_report(vdev, current);
++        }
++    }
++    timing_batches = s->report_pause_batches;
++    timing_canceled = s->report_pause_canceled;
++    object_unref(OBJECT(s));
++    if (timing_enabled) {
++        const int64_t bh_finished_us = g_get_monotonic_time();
++        /* This host interval includes pause acquisition, bounded drain, and
++         * resume bookkeeping. It is not each vCPU's exact off-run duration.
++         * Final timestamp/log formatting is outside this measured interval.
++         * Native attempts are summed from intervening per-SG budget records. */
++        info_report("hvf-ram-pause-timing: sequence=%" PRIu64
++                    " batches=%" PRIu64 " canceled=%" PRIu64
++                    " paused=%d valid=%d vcpus=%u"
++                    " popped_elements=%" PRIu64 " acked_elements=%" PRIu64
++                    " input_sgs=%" PRIu64 " reclaim_calls=%" PRIu64
++                    " pre_pause_us=%" PRIi64
++                    " acquire_us=%" PRIi64 " quiescent_work_us=%" PRIi64
++                    " resume_call_us=%" PRIi64 " post_resume_us=%" PRIi64
++                    " request_to_resume_return_us=%" PRIi64
++                    " bh_to_before_final_log_us=%" PRIi64,
++                    sequence, timing_batches, timing_canceled,
++                    paused, valid, paused_count, observation.popped_elements,
++                    observation.acked_elements, observation.input_sgs,
++                    observation.reclaim_calls,
++                    paused ? pause_requested_us - bh_enter_us :
++                             bh_finished_us - bh_enter_us,
++                    all_paused_us - pause_requested_us,
++                    resume_requested_us - all_paused_us,
++                    resume_returned_us - resume_requested_us,
++                    paused ? bh_finished_us - resume_returned_us : 0,
++                    resume_returned_us - pause_requested_us,
++                    bh_finished_us - bh_enter_us);
++    }
++}
++
++static void virtio_balloon_handle_report(VirtIODevice *vdev, VirtQueue *vq)
++{
++    VirtIOBalloon *s = VIRTIO_BALLOON(vdev);
++    if (!balloon_pause_audit_enabled() || s->poison_val) {
++        virtio_balloon_drain_report(vdev, vq, UINT_MAX, NULL);
++        return;
++    }
++    assert(qemu_mutex_iothread_locked());
++    if (s->report_bh && !s->report_pending) {
++        s->report_queue_index = virtio_get_queue_index(vq);
++        s->report_scheduled_vm_epoch = qemu_vm_reclaim_epoch();
++        s->report_scheduled_queue_epoch = vdev->reclaim_epoch;
++        s->report_scheduled_device_epoch = s->report_device_epoch;
++        s->report_pending = true;
++        object_ref(OBJECT(s));
++        qemu_bh_schedule(s->report_bh);
++    }
++}
++
+ static void virtio_balloon_handle_output(VirtIODevice *vdev, VirtQueue *vq)
+ {
+     VirtIOBalloon *s = VIRTIO_BALLOON(vdev);
+@@ -466,6 +718,9 @@ static void virtio_balloon_set_config(VirtIODevice *vdev,
+                                       const uint8_t *config_data)
+ {
+     VirtIOBalloon *dev = VIRTIO_BALLOON(vdev);
++    if (dev->report_device_epoch != UINT64_MAX) {
++        dev->report_device_epoch++;
++    }
+     struct virtio_balloon_config config = {};
+     uint32_t oldactual = dev->actual;
+     ram_addr_t vm_ram_size = get_current_ram_size();
+@@ -588,6 +843,7 @@ static void virtio_balloon_device_realize(DeviceState *dev, Error **errp)
+         s->reporting_vq = virtio_add_queue(vdev, 32,
+                                            virtio_balloon_handle_report);
+         info_report("virtio-balloon: free page reporting enabled");
++        s->report_bh = qemu_bh_new(balloon_report_bh, s);
+     }
+ 
+     reset_stats(s);
+@@ -598,6 +854,18 @@ static void virtio_balloon_device_unrealize(DeviceState *dev, Error **errp)
+     VirtIODevice *vdev = VIRTIO_DEVICE(dev);
+     VirtIOBalloon *s = VIRTIO_BALLOON(dev);
+ 
++    if (s->report_device_epoch != UINT64_MAX) {
++        s->report_device_epoch++;
++    }
++    if (s->report_bh) {
++        qemu_bh_delete(s->report_bh);
++        s->report_bh = NULL;
++        if (s->report_pending && !s->report_active) {
++            s->report_pending = false;
++            object_unref(OBJECT(s));
++        }
++    }
++
+     balloon_stats_destroy_timer(s);
+     qemu_remove_balloon_handler(s);
+     virtio_cleanup(vdev);
+@@ -607,6 +875,10 @@ static void virtio_balloon_device_reset(VirtIODevice *vdev)
+ {
+     VirtIOBalloon *s = VIRTIO_BALLOON(vdev);
+ 
++    if (s->report_device_epoch != UINT64_MAX) {
++        s->report_device_epoch++;
++    }
++
+     if (s->stats_vq_elem != NULL) {
+         virtqueue_unpop(s->svq, s->stats_vq_elem, 0);
+         g_free(s->stats_vq_elem);
+diff --git a/hw/virtio/virtio.c b/hw/virtio/virtio.c
+index 31e9b99b..08a7037c 100644
+--- a/hw/virtio/virtio.c
++++ b/hw/virtio/virtio.c
+@@ -734,7 +734,7 @@ int virtqueue_avail_bytes(VirtQueue *vq, unsigned int in_bytes,
+ static bool virtqueue_map_desc(VirtIODevice *vdev, unsigned int *p_num_sg,
+                                hwaddr *addr, struct iovec *iov,
+                                unsigned int max_num_sg, bool is_write,
+-                               hwaddr pa, size_t sz)
++                               hwaddr pa, size_t sz, bool report_owner)
+ {
+     bool ok = false;
+     unsigned num_sg = *p_num_sg;
+@@ -754,10 +754,15 @@ static bool virtqueue_map_desc(VirtIODevice *vdev, unsigned int *p_num_sg,
+             goto out;
+         }
+ 
+-        iov[num_sg].iov_base = dma_memory_map(vdev->dma_as, pa, &len,
++        if (report_owner && is_write) {
++            iov[num_sg].iov_base = address_space_map_report(vdev->dma_as,
++                                                           pa, &len, true);
++        } else {
++            iov[num_sg].iov_base = dma_memory_map(vdev->dma_as, pa, &len,
+                                               is_write ?
+                                               DMA_DIRECTION_FROM_DEVICE :
+                                               DMA_DIRECTION_TO_DEVICE);
++        }
+         if (!iov[num_sg].iov_base) {
+             virtio_error(vdev, "virtio: bogus descriptor or out of resources");
+             goto out;
+@@ -849,7 +854,7 @@ static void *virtqueue_alloc_element(size_t sz, unsigned out_num, unsigned in_nu
+     return elem;
+ }
+ 
+-void *virtqueue_pop(VirtQueue *vq, size_t sz)
++static void *virtqueue_pop_internal(VirtQueue *vq, size_t sz, bool report_owner)
+ {
+     unsigned int i, head, max;
+     VRingMemoryRegionCaches *caches;
+@@ -931,7 +936,7 @@ void *virtqueue_pop(VirtQueue *vq, size_t sz)
+             map_ok = virtqueue_map_desc(vdev, &in_num, addr + out_num,
+                                         iov + out_num,
+                                         VIRTQUEUE_MAX_SIZE - out_num, true,
+-                                        desc.addr, desc.len);
++                                        desc.addr, desc.len, report_owner);
+         } else {
+             if (in_num) {
+                 virtio_error(vdev, "Incorrect order for descriptors");
+@@ -939,7 +944,7 @@ void *virtqueue_pop(VirtQueue *vq, size_t sz)
+             }
+             map_ok = virtqueue_map_desc(vdev, &out_num, addr, iov,
+                                         VIRTQUEUE_MAX_SIZE, false,
+-                                        desc.addr, desc.len);
++                                        desc.addr, desc.len, false);
+         }
+         if (!map_ok) {
+             goto err_undo_map;
+@@ -984,6 +989,16 @@ err_undo_map:
+     goto done;
+ }
+ 
++void *virtqueue_pop(VirtQueue *vq, size_t sz)
++{
++    return virtqueue_pop_internal(vq, sz, false);
++}
++
++void *virtqueue_pop_report(VirtQueue *vq, size_t sz)
++{
++    return virtqueue_pop_internal(vq, sz, true);
++}
++
+ /* virtqueue_drop_all:
+  * @vq: The #VirtQueue
+  * Drops all queued buffers and indicates them to the guest
+@@ -1151,8 +1166,16 @@ static int virtio_validate_features(VirtIODevice *vdev)
+     }
+ }
+ 
++static void virtio_reclaim_transition(VirtIODevice *vdev)
++{
++    if (vdev->reclaim_epoch != UINT64_MAX) {
++        vdev->reclaim_epoch++;
++    }
++}
++
+ int virtio_set_status(VirtIODevice *vdev, uint8_t val)
+ {
++    virtio_reclaim_transition(vdev);
+     VirtioDeviceClass *k = VIRTIO_DEVICE_GET_CLASS(vdev);
+     trace_virtio_set_status(vdev, val);
+ 
+@@ -1197,6 +1220,7 @@ static enum virtio_device_endian virtio_current_cpu_endian(void)
+ void virtio_reset(void *opaque)
+ {
+     VirtIODevice *vdev = opaque;
++    virtio_reclaim_transition(vdev);
+     VirtioDeviceClass *k = VIRTIO_DEVICE_GET_CLASS(vdev);
+     int i;
+ 
+@@ -1429,6 +1453,7 @@ void virtio_config_modern_writel(VirtIODevice *vdev,
+ 
+ void virtio_queue_set_addr(VirtIODevice *vdev, int n, hwaddr addr)
+ {
++    virtio_reclaim_transition(vdev);
+     if (!vdev->vq[n].vring.num) {
+         return;
+     }
+@@ -1444,6 +1469,7 @@ hwaddr virtio_queue_get_addr(VirtIODevice *vdev, int n)
+ void virtio_queue_set_rings(VirtIODevice *vdev, int n, hwaddr desc,
+                             hwaddr avail, hwaddr used)
+ {
++    virtio_reclaim_transition(vdev);
+     if (!vdev->vq[n].vring.num) {
+         return;
+     }
+@@ -1455,6 +1481,7 @@ void virtio_queue_set_rings(VirtIODevice *vdev, int n, hwaddr desc,
+ 
+ void virtio_queue_set_num(VirtIODevice *vdev, int n, int num)
+ {
++    virtio_reclaim_transition(vdev);
+     /* Don't allow guest to flip queue between existent and
+      * nonexistent states, or to set it to an invalid size.
+      */
+@@ -1501,6 +1528,7 @@ int virtio_get_num_queues(VirtIODevice *vdev)
+ 
+ void virtio_queue_set_align(VirtIODevice *vdev, int n, int align)
+ {
++    virtio_reclaim_transition(vdev);
+     BusState *qbus = qdev_get_parent_bus(DEVICE(vdev));
+     VirtioBusClass *k = VIRTIO_BUS_GET_CLASS(qbus);
+ 
+@@ -1617,6 +1645,7 @@ VirtQueue *virtio_add_queue(VirtIODevice *vdev, int queue_size,
+ 
+ void virtio_del_queue(VirtIODevice *vdev, int n)
+ {
++    virtio_reclaim_transition(vdev);
+     if (n < 0 || n >= VIRTIO_QUEUE_MAX) {
+         abort();
+     }
+@@ -2012,6 +2041,7 @@ const VMStateInfo  virtio_vmstate_info = {
+ 
+ static int virtio_set_features_nocheck(VirtIODevice *vdev, uint64_t val)
+ {
++    virtio_reclaim_transition(vdev);
+     VirtioDeviceClass *k = VIRTIO_DEVICE_GET_CLASS(vdev);
+     bool bad = (val & ~(vdev->host_features)) != 0;
+ 
+@@ -2037,6 +2067,7 @@ int virtio_set_features(VirtIODevice *vdev, uint64_t val)
+ 
+ int virtio_load(VirtIODevice *vdev, QEMUFile *f, int version_id)
+ {
++    virtio_reclaim_transition(vdev);
+     int i, ret;
+     int32_t config_len;
+     uint32_t num;
+@@ -2336,6 +2367,7 @@ uint16_t virtio_queue_get_last_avail_idx(VirtIODevice *vdev, int n)
+ 
+ void virtio_queue_set_last_avail_idx(VirtIODevice *vdev, int n, uint16_t idx)
+ {
++    virtio_reclaim_transition(vdev);
+     vdev->vq[n].last_avail_idx = idx;
+     vdev->vq[n].shadow_avail_idx = idx;
+ }
+@@ -2542,6 +2574,7 @@ static void virtio_device_realize(DeviceState *dev, Error **errp)
+ static void virtio_device_unrealize(DeviceState *dev, Error **errp)
+ {
+     VirtIODevice *vdev = VIRTIO_DEVICE(dev);
++    virtio_reclaim_transition(vdev);
+     VirtioDeviceClass *vdc = VIRTIO_DEVICE_GET_CLASS(dev);
+     Error *err = NULL;
+ 
+diff --git a/include/exec/darwin-hvf-reclaim-transaction.h b/include/exec/darwin-hvf-reclaim-transaction.h
+new file mode 100644
+index 00000000..cea1b33c
+--- /dev/null
++++ b/include/exec/darwin-hvf-reclaim-transaction.h
+@@ -0,0 +1,293 @@
++/* Native Darwin transaction component. It does not authorize a RAM range.
++ * Caller must prove private backing, no escaped pointers or aliases, a current
++ * report owner, exact effective HVF flags, and stopped vCPUs before calling.
++ * Caller holds the exposure registry and HVF mapping locks through return.
++ * DHRT_FATAL forbids guest/report completion or resumption: fail-stop. */
++#ifndef MODAVD_DARWIN_HVF_RECLAIM_TRANSACTION_H
++#define MODAVD_DARWIN_HVF_RECLAIM_TRANSACTION_H
++#if defined(__APPLE__) && defined(__aarch64__)
++#include <Hypervisor/Hypervisor.h>
++#include <errno.h>
++#include <mach/mach.h>
++#include <mach/mach_vm.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/mman.h>
++#include <sys/sysctl.h>
++#include <unistd.h>
++#include "qemu/darwin-chunked-ram.h"
++
++typedef enum DhrtResult {
++    DHRT_SKIPPED, DHRT_COMMITTED, DHRT_ROLLED_BACK, DHRT_FATAL,
++} DhrtResult;
++typedef enum DhrtFault {
++    DHRT_NO_FAULT, DHRT_FAIL_UNMAP, DHRT_FAIL_MAP, DHRT_FAIL_REPLACE,
++    /* Native verifier only: exercise the real-error fail-stop branch. */
++    DHRT_FAIL_UNMAP_UNCERTAIN,
++} DhrtFault;
++typedef struct DhrtAttributes {
++    vm_prot_t current, maximum;
++    vm_inherit_t inheritance;
++    bool shared;
++} DhrtAttributes;
++typedef struct DhrtOutcome {
++    DhrtResult result;
++    int stage; /* 1 validation, 2 resources, 3 unmap, 4 replace, 5 map, 6 restore */
++    hv_return_t hv_error;
++    kern_return_t mach_error;
++    hv_return_t restore_hv_error;
++    kern_return_t restore_mach_error;
++    bool cleanup_failed;
++    mach_vm_address_t retained_old_alias, retained_fresh;
++    uint64_t retained_fresh_length;
++    bool observation_enabled;
++    uint64_t old_object_id, old_ref_min, old_ref_max;
++    uint64_t old_present_pages, old_paged_out_pages, old_reusable_pages;
++    uint64_t old_page_query_errors;
++    uint64_t free_pages_before, free_pages_after;
++    uint64_t speculative_pages_before, speculative_pages_after;
++    int physical_query_error;
++} DhrtOutcome;
++
++/* Kernel metadata only. Never read, fault, zero or add a diagnostic alias to
++ * guest data. Direct sysctl counters avoid host_statistics64's sample cache. */
++static inline int dhrt_page_counter(const char *name, uint64_t *value)
++{
++    size_t size = sizeof(*value);
++    *value = 0;
++    if (sysctlbyname(name, value, &size, NULL, 0)) return errno;
++    return (size == sizeof(uint32_t) || size == sizeof(uint64_t)) ? 0 : EINVAL;
++}
++
++static inline void dhrt_observe_old(mach_vm_address_t alias, uint64_t length,
++                                     DhrtOutcome *outcome)
++{
++    uint64_t page = getpagesize();
++    outcome->old_ref_min = UINT64_MAX;
++    for (uint64_t offset = 0; offset < length; offset += page) {
++        vm_page_info_basic_data_t info;
++        mach_msg_type_number_t count = VM_PAGE_INFO_BASIC_COUNT;
++        kern_return_t error = mach_vm_page_info(mach_task_self(), alias + offset,
++            VM_PAGE_INFO_BASIC, (vm_page_info_t)&info, &count);
++        if (error != KERN_SUCCESS) {
++            outcome->old_page_query_errors++;
++            continue;
++        }
++        if (!offset) outcome->old_object_id = info.object_id;
++        if (info.object_id != outcome->old_object_id || info.offset != offset) {
++            outcome->old_page_query_errors++;
++        }
++        if ((uint64_t)info.ref_count < outcome->old_ref_min) outcome->old_ref_min = info.ref_count;
++        if ((uint64_t)info.ref_count > outcome->old_ref_max) outcome->old_ref_max = info.ref_count;
++        outcome->old_present_pages += !!(info.disposition & VM_PAGE_QUERY_PAGE_PRESENT);
++        outcome->old_paged_out_pages += !!(info.disposition & VM_PAGE_QUERY_PAGE_PAGED_OUT);
++        outcome->old_reusable_pages += !!(info.disposition & VM_PAGE_QUERY_PAGE_REUSABLE);
++    }
++}
++
++static inline bool dhrt_attributes(void *address, uint64_t length,
++                                    DhrtAttributes *attributes)
++{
++    mach_vm_address_t region = (mach_vm_address_t)address;
++    mach_vm_size_t region_size = 0;
++    vm_region_basic_info_data_64_t info;
++    mach_msg_type_number_t count = VM_REGION_BASIC_INFO_COUNT_64;
++    mach_port_t object = MACH_PORT_NULL;
++    kern_return_t result = mach_vm_region(mach_task_self(), &region, &region_size,
++        VM_REGION_BASIC_INFO_64, (vm_region_info_t)&info, &count, &object);
++    if (object != MACH_PORT_NULL) {
++        mach_port_deallocate(mach_task_self(), object);
++    }
++    uint64_t target = (uintptr_t)address;
++    if (result != KERN_SUCCESS || region > target ||
++        target - region >= region_size || length > region_size - (target - region)) {
++        return false;
++    }
++    attributes->current = info.protection;
++    attributes->maximum = info.max_protection;
++    attributes->inheritance = info.inheritance;
++    attributes->shared = info.shared;
++    return true;
++}
++
++static inline bool dhrt_attributes_match(void *address, uint64_t length,
++                                          const DhrtAttributes *expected)
++{
++    DhrtAttributes actual;
++    return dhrt_attributes(address, length, &actual) &&
++           actual.current == expected->current &&
++           actual.maximum == expected->maximum &&
++           actual.inheritance == expected->inheritance;
++}
++
++static inline kern_return_t dhrt_replace_alias(void *target, uint64_t length,
++                                                mach_vm_address_t source,
++                                                const DhrtAttributes *expected)
++{
++    mach_vm_address_t destination = (mach_vm_address_t)target;
++    vm_prot_t current, maximum;
++    kern_return_t result = mach_vm_remap(mach_task_self(), &destination, length,
++        0, VM_FLAGS_FIXED | VM_FLAGS_OVERWRITE, mach_task_self(), source, false,
++        &current, &maximum, expected->inheritance);
++    if (result == KERN_SUCCESS &&
++        (destination != (mach_vm_address_t)target || current != expected->current ||
++         maximum != expected->maximum || !dhrt_attributes_match(target, length, expected))) {
++        result = KERN_PROTECTION_FAILURE;
++    }
++    return result;
++}
++
++static inline DhrtOutcome dhrt_replace_private(void *target, uint64_t gpa,
++                                                uint64_t length,
++                                                hv_memory_flags_t effective_flags,
++                                                DhrtFault fault)
++{
++    DhrtOutcome outcome;
++    DhrtAttributes original;
++    vm_prot_t alias_current, alias_maximum;
++    mach_vm_address_t old_alias = 0;
++    DcrMapping fresh_mapping = {0};
++    void *fresh = MAP_FAILED;
++    uint64_t page = getpagesize();
++    bool attempted_map = false;
++    memset(&outcome, 0, sizeof(outcome));
++    outcome.result = DHRT_SKIPPED;
++    outcome.stage = 1;
++    const char *observe = getenv("MODAVD_HVF_RAM_RECLAIM_RESIDENCY");
++    outcome.observation_enabled = observe && !strcmp(observe, "1");
++    if (!page || (page & (page - 1)) || !target || !length || length > SIZE_MAX ||
++        length != DCR_CHUNK_SIZE ||
++        length > UINT64_MAX - gpa || length > UINTPTR_MAX - (uintptr_t)target ||
++        ((gpa | (uintptr_t)target | length) & (page - 1)) ||
++        (effective_flags & ~(HV_MEMORY_READ | HV_MEMORY_WRITE | HV_MEMORY_EXEC)) ||
++        /* VM_REGION_BASIC_INFO.shared is true for an anonymous allocation
++         * pinned by HVF too. The caller's allocation provenance, registry and
++         * no-alias proof authorize private ownership; this bit cannot. */
++        !dhrt_attributes(target, length, &original) ||
++        original.current != (VM_PROT_READ | VM_PROT_WRITE) ||
++        original.inheritance == VM_INHERIT_SHARE) {
++        return outcome;
++    }
++    outcome.stage = 2;
++    if (!dcr_allocate_fresh(length, &fresh_mapping)) {
++        goto cleanup;
++    }
++    fresh = fresh_mapping.base;
++    DhrtAttributes fresh_attributes;
++    if (!dhrt_attributes(fresh, length, &fresh_attributes)) {
++        goto cleanup;
++    }
++    /* mmap RW commonly has max=RWX. Reapplying that unchanged maximum with
++     * vm_protect may fail W^X policy; only narrow a differing maximum. */
++    if (fresh_attributes.maximum != original.maximum) {
++        outcome.mach_error = mach_vm_protect(mach_task_self(), (uintptr_t)fresh,
++            length, true, original.maximum);
++        if (outcome.mach_error != KERN_SUCCESS) {
++            goto cleanup;
++        }
++    }
++    if (fresh_attributes.current != original.current) {
++        outcome.mach_error = mach_vm_protect(mach_task_self(), (uintptr_t)fresh,
++            length, false, original.current);
++        if (outcome.mach_error != KERN_SUCCESS) {
++            goto cleanup;
++        }
++    }
++    outcome.mach_error = mach_vm_inherit(mach_task_self(), (uintptr_t)fresh,
++        length, original.inheritance);
++    if (outcome.mach_error != KERN_SUCCESS) {
++        goto cleanup;
++    }
++    outcome.mach_error = mach_vm_remap(mach_task_self(), &old_alias, length, 0,
++        VM_FLAGS_ANYWHERE, mach_task_self(), (uintptr_t)target, false,
++        &alias_current, &alias_maximum, VM_INHERIT_NONE);
++    if (outcome.mach_error != KERN_SUCCESS || alias_current != original.current ||
++        alias_maximum != original.maximum) {
++        goto cleanup;
++    }
++    outcome.stage = 3;
++    outcome.hv_error = (fault == DHRT_FAIL_UNMAP ||
++                        fault == DHRT_FAIL_UNMAP_UNCERTAIN) ?
++        hv_vm_unmap(gpa + 1, length) : hv_vm_unmap(gpa, length);
++    if (outcome.hv_error != HV_SUCCESS) {
++        if (fault == DHRT_FAIL_UNMAP) {
++            /* The explicit invalid-alignment probe cannot have reached a
++             * valid mapping. No such atomicity is assumed for real errors. */
++            outcome.result = DHRT_ROLLED_BACK;
++            goto cleanup;
++        }
++        /* A real unmap error has an uncertain postcondition. Retain both VM
++         * objects and fail-stop; never assert that the original map survived. */
++        goto fatal;
++    }
++    outcome.stage = 4;
++    outcome.mach_error = fault == DHRT_FAIL_REPLACE ? KERN_FAILURE :
++        dhrt_replace_alias(target, length, (uintptr_t)fresh, &original);
++    if (outcome.mach_error != KERN_SUCCESS) {
++        goto rollback;
++    }
++    outcome.stage = 5;
++    attempted_map = true;
++    outcome.hv_error = hv_vm_map(target, gpa,
++        fault == DHRT_FAIL_MAP ? length - 1 : length, effective_flags);
++    if (outcome.hv_error != HV_SUCCESS) {
++        goto rollback;
++    }
++    outcome.result = DHRT_COMMITTED;
++    goto cleanup;
++
++rollback:
++    outcome.stage = 6;
++    /* Do not assume an unsuccessful mapping syscall left no partial entry.
++     * Remove the entire attempted extent before restoring its VM object. */
++    if (attempted_map) {
++        outcome.restore_hv_error = hv_vm_unmap(gpa, length);
++        if (outcome.restore_hv_error != HV_SUCCESS) {
++            goto fatal;
++        }
++    }
++    /* Even a failed fixed Mach remap must restore from the retained VM object;
++     * do not assume its failure left the previous HVA mapping intact. */
++    outcome.restore_mach_error = dhrt_replace_alias(target, length, old_alias, &original);
++    if (outcome.restore_mach_error != KERN_SUCCESS) {
++        goto fatal;
++    }
++    outcome.restore_hv_error = hv_vm_map(target, gpa, length, effective_flags);
++    if (outcome.restore_hv_error != HV_SUCCESS) {
++        goto fatal;
++    }
++    outcome.result = DHRT_ROLLED_BACK;
++cleanup:
++    if (!dcr_release(&fresh_mapping)) outcome.cleanup_failed = true;
++    if (old_alias) {
++        if (outcome.observation_enabled) {
++            dhrt_observe_old(old_alias, length, &outcome);
++            int error = dhrt_page_counter("vm.page_free_count", &outcome.free_pages_before);
++            if (error) outcome.physical_query_error = error;
++            error = dhrt_page_counter("vm.page_speculative_count", &outcome.speculative_pages_before);
++            if (error) outcome.physical_query_error = error;
++        }
++        /* Between these direct counters, only destruction of the already
++         * required rollback alias occurs. No allocation or guest access. */
++        if (mach_vm_deallocate(mach_task_self(), old_alias, length) != KERN_SUCCESS) {
++            outcome.cleanup_failed = true;
++        }
++        if (outcome.observation_enabled) {
++            int error = dhrt_page_counter("vm.page_free_count", &outcome.free_pages_after);
++            if (error) outcome.physical_query_error = error;
++            error = dhrt_page_counter("vm.page_speculative_count", &outcome.speculative_pages_after);
++            if (error) outcome.physical_query_error = error;
++        }
++    }
++    return outcome;
++fatal:
++    outcome.result = DHRT_FATAL;
++    outcome.retained_old_alias = old_alias;
++    outcome.retained_fresh = (uintptr_t)fresh_mapping.reservation;
++    outcome.retained_fresh_length = fresh_mapping.reserved_length;
++    return outcome;
++}
++#endif
++#endif
+diff --git a/include/exec/hvf-map-registry.h b/include/exec/hvf-map-registry.h
+new file mode 100644
+index 00000000..eead9ba5
+--- /dev/null
++++ b/include/exec/hvf-map-registry.h
+@@ -0,0 +1,152 @@
++/* Exact successful HVF mapping intervals. Caller holds mem_lock throughout. */
++#ifndef MODAVD_HVF_MAP_REGISTRY_H
++#define MODAVD_HVF_MAP_REGISTRY_H
++#include <stdbool.h>
++#include <stddef.h>
++#include <stdint.h>
++#include <string.h>
++
++#define HMR_CAPACITY 2048
++typedef struct HmrMap {
++    uint64_t gpa, hva, size, flags;
++} HmrMap;
++typedef struct HmrRegistry {
++    HmrMap maps[HMR_CAPACITY];
++    unsigned count;
++    uint64_t generation;
++    bool complete;
++} HmrRegistry;
++
++static inline bool hmr_range(uint64_t start, uint64_t size)
++{
++    return size && size <= UINT64_MAX - start;
++}
++
++static inline void hmr_init(HmrRegistry *r)
++{
++    memset(r, 0, sizeof(*r));
++    r->generation = 1;
++    r->complete = true;
++}
++
++static inline bool hmr_append(HmrRegistry *r, HmrMap m)
++{
++    if (!m.size) {
++        return true;
++    }
++    if (r->count == HMR_CAPACITY || !hmr_range(m.gpa, m.size) ||
++        !hmr_range(m.hva, m.size)) {
++        return false;
++    }
++    r->maps[r->count++] = m;
++    return true;
++}
++
++/* Called only AFTER a successful kernel mutation. Any lost metadata makes
++ * all subsequent mutation proofs fail closed for the life of the VM. */
++static inline bool hmr_update(HmrRegistry *r, uint64_t start, uint64_t size,
++                               uint64_t hva, uint64_t flags,
++                               bool mapping, bool protect)
++{
++    HmrRegistry next;
++    uint64_t end, covered = 0;
++    unsigned i, j;
++    bool ok = r->complete && hmr_range(start, size) &&
++              (!mapping || hmr_range(hva, size));
++    if (!ok || r->generation == UINT64_MAX) {
++        r->complete = false;
++        return false;
++    }
++    hmr_init(&next);
++    end = start + size;
++    for (i = 0; i < r->count && ok; i++) {
++        HmrMap m = r->maps[i];
++        uint64_t mend = m.gpa + m.size;
++        if (m.gpa >= end || mend <= start) {
++            ok = hmr_append(&next, m);
++            continue;
++        }
++        uint64_t first = m.gpa > start ? m.gpa : start;
++        uint64_t last = mend < end ? mend : end;
++        covered += last - first;
++        ok = hmr_append(&next, (HmrMap){m.gpa, m.hva,
++                        first - m.gpa, m.flags});
++        if (ok && protect) {
++            ok = hmr_append(&next, (HmrMap){first,
++                            m.hva + first - m.gpa, last - first, flags});
++        }
++        if (ok) {
++            ok = hmr_append(&next, (HmrMap){last, m.hva + last - m.gpa,
++                            mend - last, m.flags});
++        }
++    }
++    if (protect && covered != size) {
++        ok = false;
++    }
++    if (ok && mapping) {
++        ok = hmr_append(&next, (HmrMap){start, hva, size, flags});
++    }
++    if (!ok) {
++        r->complete = false;
++        r->generation++;
++        return false;
++    }
++    /* Insertion sort, then merge only intervals with identical permissions
++     * and a contiguous one-to-one HVA/GPA correspondence. */
++    for (i = 1; i < next.count; i++) {
++        HmrMap m = next.maps[i];
++        for (j = i; j && next.maps[j - 1].gpa > m.gpa; j--) {
++            next.maps[j] = next.maps[j - 1];
++        }
++        next.maps[j] = m;
++    }
++    unsigned count = 0;
++    for (i = 0; i < next.count; i++) {
++        HmrMap m = next.maps[i];
++        if (count && next.maps[count - 1].gpa + next.maps[count - 1].size == m.gpa &&
++            next.maps[count - 1].hva + next.maps[count - 1].size == m.hva &&
++            next.maps[count - 1].flags == m.flags) {
++            next.maps[count - 1].size += m.size;
++        } else {
++            next.maps[count++] = m;
++        }
++    }
++    next.count = count;
++    next.generation = r->generation + 1;
++    *r = next;
++    return true;
++}
++
++static inline const HmrMap *hmr_lookup(const HmrRegistry *r, uint64_t gpa,
++                                       uint64_t size)
++{
++    unsigned i;
++    if (!r->complete || !hmr_range(gpa, size)) {
++        return NULL;
++    }
++    for (i = 0; i < r->count; i++) {
++        const HmrMap *m = &r->maps[i];
++        if (gpa >= m->gpa && gpa - m->gpa < m->size &&
++            size <= m->size - (gpa - m->gpa)) {
++            return m;
++        }
++    }
++    return NULL;
++}
++
++static inline bool hmr_no_alias(const HmrRegistry *r, const HmrMap *owner,
++                                 uint64_t hva, uint64_t size)
++{
++    unsigned i;
++    if (!r->complete || !hmr_range(hva, size)) {
++        return false;
++    }
++    for (i = 0; i < r->count; i++) {
++        const HmrMap *m = &r->maps[i];
++        if (m != owner && hva < m->hva + m->size && m->hva < hva + size) {
++            return false;
++        }
++    }
++    return true;
++}
++#endif
+diff --git a/include/exec/memory.h b/include/exec/memory.h
+index bb0d04d8..31065139 100644
+--- a/include/exec/memory.h
++++ b/include/exec/memory.h
+@@ -1113,6 +1113,10 @@ MemoryRegion *memory_region_from_host(void *ptr, ram_addr_t *offset);
+  * @mr: the memory region being queried.
+  */
+ void *memory_region_get_ram_ptr(MemoryRegion *mr);
++/* Permanent host borrow of exactly this extent. Invalid/overflowing aliases
++ * return NULL without handing an unbounded pointer to the caller. */
++void *memory_region_get_ram_ptr_sized(MemoryRegion *mr, uint64_t offset,
++                                      uint64_t length);
+ 
+ /* memory_region_ram_resize: Resize a RAM region.
+  *
+@@ -1959,6 +1963,25 @@ MemTxResult flatview_read_continue(FlatView *fv, hwaddr addr,
+                                    int len, hwaddr addr1, hwaddr l,
+                                    MemoryRegion *mr);
+ void *qemu_map_ram_ptr(RAMBlock *ram_block, ram_addr_t addr);
++void *qemu_map_ram_ptr_sized(RAMBlock *ram_block, ram_addr_t addr, hwaddr length);
++/* Internal accelerator mapping, not a host pointer escape. */
++void *qemu_map_ram_ptr_for_accel(RAMBlock *ram_block, ram_addr_t addr);
++void *memory_region_get_ram_ptr_for_accel(MemoryRegion *mr);
++/* Experimental audit only; these APIs never replace or discard memory.
++ * Diagnostic reason strings must have static storage duration. */
++bool qemu_ram_audit_is_enabled(void);
++void qemu_ram_audit_host_pointer(void *host, uint64_t length, const char *reason);
++bool qemu_ram_borrow_host_sized(void *host, uint64_t length, const char *reason);
++void qemu_ram_audit_inhibit(const char *reason);
++void qemu_ram_audit_report(RAMBlock *rb, uint64_t offset, uint64_t length,
++                           const char *skip_reason);
++void qemu_ram_audit_untracked_report(uint64_t length);
++bool qemu_ram_reclaim_requested(void);
++void qemu_ram_reclaim_external_lifetime(const void *identity, bool enter);
++uint64_t qemu_ram_reclaim_report(RAMBlock *rb, uint64_t offset, uint64_t gpa,
++                                 uint64_t length);
++void *address_space_map_report(AddressSpace *as, hwaddr addr, hwaddr *plen,
++                               bool is_write);
+ 
+ static inline bool memory_access_is_direct(MemoryRegion *mr, bool is_write)
+ {
+@@ -2001,7 +2024,7 @@ MemTxResult address_space_read(AddressSpace *as, hwaddr addr,
+             l = len;
+             mr = flatview_translate(fv, addr, &addr1, &l, false);
+             if (len == l && memory_access_is_direct(mr, false)) {
+-                ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++                ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, len);
+                 memcpy(buf, ptr, len);
+             } else {
+                 result = flatview_read_continue(fv, addr, attrs, buf, len,
+diff --git a/include/exec/ram-reclaim-audit-model.h b/include/exec/ram-reclaim-audit-model.h
+new file mode 100644
+index 00000000..6a725080
+--- /dev/null
++++ b/include/exec/ram-reclaim-audit-model.h
+@@ -0,0 +1,211 @@
++/* Experimental metadata only. No host memory replacement or discard API. */
++#ifndef RAM_RECLAIM_AUDIT_MODEL_H
++#define RAM_RECLAIM_AUDIT_MODEL_H
++
++#include <stdbool.h>
++#include <stddef.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++
++typedef enum RraBacking {
++    RRA_UNKNOWN, RRA_PRIVATE, RRA_SHARED, RRA_FILE, RRA_EXTERNAL,
++    RRA_RESIZABLE, RRA_CUSTOM,
++} RraBacking;
++
++typedef struct RraCause {
++    const char *name; /* Caller supplies a static string. */
++    uint64_t calls, bytes, invalid;
++} RraCause;
++
++/* All access, including reads, requires the caller's registry mutex. */
++typedef struct RraState {
++    uint64_t size, page_size, pages, generation;
++    uint64_t tainted_pages, exposures, exposure_bytes;
++    uint64_t reports, report_bytes, candidate_bytes, reports_skipped;
++    uint64_t report_maps, report_map_bytes;
++    uint64_t strict_bytes, committed_bytes, committed_ranges, rolled_back_ranges;
++    uint64_t reservation_id, next_id, reserved_start, reserved_length;
++    uint8_t *bits;
++    RraBacking backing;
++    const char *whole_reason;
++    RraCause causes[16];
++    unsigned causes_used;
++} RraState;
++
++typedef struct RraReservation {
++    uint64_t id, generation, start, length;
++} RraReservation;
++
++static inline uint64_t rra_add(uint64_t a, uint64_t b)
++{
++    return b > UINT64_MAX - a ? UINT64_MAX : a + b;
++}
++
++static inline bool rra_range(const RraState *s, uint64_t start, uint64_t length)
++{
++    return length && start < s->size && length <= s->size - start;
++}
++
++static inline bool rra_init(RraState *s, uint64_t size, uint64_t page_size,
++                            RraBacking backing)
++{
++    uint64_t bytes;
++    memset(s, 0, sizeof(*s));
++    s->size = size;
++    s->page_size = page_size;
++    s->generation = s->next_id = 1;
++    s->backing = backing;
++    if (!size || !page_size || (page_size & (page_size - 1))) {
++        s->whole_reason = "invalid-metadata";
++        return false;
++    }
++    s->pages = size / page_size + (size % page_size != 0);
++    bytes = s->pages / 8 + (s->pages % 8 != 0);
++    if (bytes > SIZE_MAX || !(s->bits = calloc((size_t)bytes, 1))) {
++        s->whole_reason = "bitmap-allocation-failed";
++        s->tainted_pages = s->pages;
++        return false;
++    }
++    return true;
++}
++
++static inline bool rra_taint_all(RraState *s, const char *reason)
++{
++    if (s->reservation_id) {
++        return false;
++    }
++    if (!s->whole_reason) {
++        s->whole_reason = reason;
++    }
++    s->tainted_pages = s->pages;
++    return true;
++}
++
++/* Unknown or overflowing extents exclude the whole block. A future mutating
++ * backend would wait/retry before returning any pointer on false. */
++static inline bool rra_expose(RraState *s, uint64_t start, uint64_t length,
++                              const char *reason)
++{
++    uint64_t first, last, page;
++    unsigned cause;
++    bool valid = rra_range(s, start, length);
++    if (s->reservation_id && (!valid ||
++        (start < s->reserved_start + s->reserved_length &&
++         s->reserved_start < start + length))) {
++        return false;
++    }
++    s->exposures = rra_add(s->exposures, 1);
++    s->exposure_bytes = rra_add(s->exposure_bytes, length);
++    for (cause = 0; cause < s->causes_used; cause++) {
++        if (!strcmp(s->causes[cause].name, reason)) {
++            break;
++        }
++    }
++    if (cause == s->causes_used) {
++        if (cause == sizeof(s->causes) / sizeof(s->causes[0])) {
++            return rra_taint_all(s, "unclassified-ingress");
++        }
++        s->causes[cause].name = reason;
++        s->causes_used++;
++    }
++    s->causes[cause].calls = rra_add(s->causes[cause].calls, 1);
++    s->causes[cause].bytes = rra_add(s->causes[cause].bytes, length);
++    s->causes[cause].invalid = rra_add(s->causes[cause].invalid, !valid);
++    if (!valid) {
++        return rra_taint_all(s, reason);
++    }
++    if (s->whole_reason) {
++        return true;
++    }
++    first = start / s->page_size;
++    last = (start + length - 1) / s->page_size;
++    for (page = first; page <= last; page++) {
++        uint8_t mask = (uint8_t)(1u << (page % 8));
++        if (!(s->bits[page / 8] & mask)) {
++            s->bits[page / 8] |= mask;
++            s->tainted_pages++;
++        }
++    }
++    return true;
++}
++
++/* Only balloon report data receives this exemption; ring/descriptor reads
++ * remain normal exposures. This does not assert that other users are absent. */
++static inline bool rra_map(RraState *s, uint64_t start, uint64_t length,
++                           bool report_owner, const char *reason)
++{
++    if (!report_owner) {
++        return rra_expose(s, start, length, reason);
++    }
++    s->report_maps = rra_add(s->report_maps, 1);
++    s->report_map_bytes = rra_add(s->report_map_bytes, length);
++    return rra_range(s, start, length) ||
++           rra_taint_all(s, "invalid-report-map");
++}
++
++static inline uint64_t rra_candidates(const RraState *s, uint64_t start,
++                                       uint64_t length)
++{
++    uint64_t page, end, count = 0;
++    if (s->backing != RRA_PRIVATE || s->whole_reason ||
++        !rra_range(s, start, length) ||
++        ((start | length) & (s->page_size - 1))) {
++        return 0;
++    }
++    page = start / s->page_size;
++    end = (start + length) / s->page_size;
++    for (; page < end; page++) {
++        count += !(s->bits[page / 8] & (1u << (page % 8)));
++    }
++    return count * s->page_size;
++}
++
++/* Caller retains the registry mutex until release, across the native memory
++ * transaction. A new exposure cannot escape before it can acquire that mutex. */
++static inline bool rra_reserve(RraState *s, uint64_t start, uint64_t length,
++                               uint64_t generation, RraReservation *r)
++{
++    if (s->reservation_id || generation != s->generation ||
++        !s->next_id || s->next_id == UINT64_MAX ||
++        rra_candidates(s, start, length) != length || !length) {
++        return false;
++    }
++    r->id = s->reservation_id = s->next_id++;
++    r->generation = s->generation;
++    r->start = s->reserved_start = start;
++    r->length = s->reserved_length = length;
++    return true;
++}
++
++static inline bool rra_reservation_valid(const RraState *s,
++                                         const RraReservation *r)
++{
++    return r->id && r->id == s->reservation_id &&
++           r->generation == s->generation &&
++           r->start == s->reserved_start && r->length == s->reserved_length &&
++           s->backing == RRA_PRIVATE && !s->whole_reason;
++}
++
++static inline void rra_release(RraState *s, const RraReservation *r)
++{
++    if (rra_reservation_valid(s, r)) {
++        s->reservation_id = 0;
++    }
++}
++
++static inline void rra_invalidate(RraState *s, const char *reason)
++{
++    s->generation = rra_add(s->generation, 1);
++    s->reservation_id = 0;
++    s->backing = RRA_UNKNOWN;
++    s->whole_reason = reason;
++    s->tainted_pages = s->pages;
++}
++
++static inline void rra_destroy(RraState *s)
++{
++    free(s->bits);
++    s->bits = NULL;
++}
++#endif
+diff --git a/include/exec/ram_addr.h b/include/exec/ram_addr.h
+index cce3c04e..3a854e36 100644
+--- a/include/exec/ram_addr.h
++++ b/include/exec/ram_addr.h
+@@ -43,6 +43,11 @@ struct RAMBlock {
+     /* Tracking file path for this RAMBlock, if any. */
+     const char* path;
+     size_t page_size;
++    /* Experimental, opt-in audit metadata; never authorizes replacement. */
++    struct RraState *reclaim_audit;
++    /* Exact allocator receipt; zero never authorizes native replacement. */
++    uint64_t reclaim_allocation_serial;
++    size_t reclaim_chunk_size;
+     /* dirty bitmap used during migration */
+     unsigned long *bmap;
+     /* bitmap of pages that haven't been sent even once
+diff --git a/include/exec/report-pause-lifecycle.h b/include/exec/report-pause-lifecycle.h
+new file mode 100644
+index 00000000..d36faf37
+--- /dev/null
++++ b/include/exec/report-pause-lifecycle.h
+@@ -0,0 +1,39 @@
++#ifndef MODAVD_REPORT_PAUSE_LIFECYCLE_H
++#define MODAVD_REPORT_PAUSE_LIFECYCLE_H
++#include <stdbool.h>
++#include <stdint.h>
++
++typedef struct RplSnapshot {
++    uint64_t vm_epoch, queue_epoch, device_epoch, features;
++    uint32_t poison;
++    uint8_t status;
++    bool realized, running, queue_ready;
++} RplSnapshot;
++
++static inline bool rpl_ready(const RplSnapshot *s, uint64_t required_features,
++                              uint8_t driver_ok)
++{
++    return s->realized && s->running && s->queue_ready && !s->poison &&
++           s->vm_epoch != UINT64_MAX && s->queue_epoch != UINT64_MAX &&
++           s->device_epoch != UINT64_MAX && (s->status & driver_ok) &&
++           (s->features & required_features) == required_features;
++}
++
++static inline bool rpl_unchanged(const RplSnapshot *before,
++                                 const RplSnapshot *after,
++                                 uint64_t required_features, uint8_t driver_ok)
++{
++    return rpl_ready(before, required_features, driver_ok) &&
++           rpl_ready(after, required_features, driver_ok) &&
++           before->vm_epoch == after->vm_epoch &&
++           before->queue_epoch == after->queue_epoch &&
++           before->device_epoch == after->device_epoch &&
++           before->features == after->features && before->status == after->status;
++}
++
++static inline bool rpl_resume_cpu(bool stopped_before, bool stop_before,
++                                   bool same_vm_epoch, bool running_now)
++{
++    return !stopped_before && !stop_before && same_vm_epoch && running_now;
++}
++#endif
+diff --git a/include/host-common/DmaMap.h b/include/host-common/DmaMap.h
+new file mode 100644
+index 00000000..cde43216
+--- /dev/null
++++ b/include/host-common/DmaMap.h
+@@ -0,0 +1,82 @@
++// Copyright 2016 The Android Open Source Project
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++// http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++
++#pragma once
++
++#include "aemu/base/Compiler.h"
++#include "aemu/base/files/Stream.h"
++#include "aemu/base/Optional.h"
++#include "aemu/base/synchronization/Lock.h"
++
++#include <unordered_map>
++#include <inttypes.h>
++
++using android::base::Optional;
++using android::base::kNullopt;
++
++namespace android {
++
++struct DmaBufferInfo {
++    void* hwpipe = nullptr;
++    uint64_t guestAddr = 0;
++    uint64_t bufferSize = 0;
++    Optional<void*> currHostAddr = kNullopt;
++};
++
++using DmaBufferMap = std::unordered_map<uint64_t, DmaBufferInfo>;
++
++class DmaMap {
++public:
++    // Constructor.
++    DmaMap() = default;
++
++    // Destructor.
++    virtual ~DmaMap() = default;
++
++    void addBuffer(void* hwpipe, uint64_t addr, uint64_t bufferSize);
++    void removeBuffer(uint64_t addr);
++    void* getHostAddr(uint64_t addr);
++    // Checks the complete command extent under mLock before pointer escape.
++    // Nonvirtual: does not change this class's layout or vtable.
++    void* getHostAddrSized(uint64_t addr, uint64_t length);
++    void invalidateHostMappings();
++    void resetHostMappings();
++    void* getPipeInstance(uint64_t addr);
++
++    // get() / set are NOT thread-safe,
++    // but we don't expect multiple threads to call this
++    // concurrently at init time, and the worst that can happen is to leak
++    // a single instance. (c.f. VmLock)
++    static DmaMap* get();
++    static DmaMap* set(DmaMap* dmaMap);
++
++    // Snapshotting.
++    void save(android::base::Stream* stream) const;
++    void load(android::base::Stream* stream);
++protected:
++
++    virtual void createMappingLocked(DmaBufferInfo* info);
++    virtual void removeMappingLocked(DmaBufferInfo* info);
++
++    // These are meant to be replaced by a real implementation
++    // in subclasses.
++    virtual void* doMap(uint64_t addr, uint64_t bufferSize) = 0;
++    virtual void doUnmap(void* mapped, uint64_t bufferSize) = 0;
++
++    DmaBufferMap mDmaBuffers;
++    android::base::ReadWriteLock mLock;
++    DISALLOW_COPY_ASSIGN_AND_MOVE(DmaMap);
++};
++
++} // namespace android
+diff --git a/include/host-common/address_space_graphics.h b/include/host-common/address_space_graphics.h
+new file mode 100644
+index 00000000..3f4b4840
+--- /dev/null
++++ b/include/host-common/address_space_graphics.h
+@@ -0,0 +1,117 @@
++// Copyright 2019 The Android Open Source Project
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++// http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++#pragma once
++
++#include <functional>
++#include <optional>
++#include <vector>
++
++#include "host-common/AddressSpaceService.h"
++#include "host-common/address_space_device.h"
++#include "host-common/address_space_device.hpp"
++#include "aemu/base/ring_buffer.h"
++#include "aemu/base/synchronization/MessageChannel.h"
++#include "aemu/base/threads/FunctorThread.h"
++#include "render-utils/address_space_graphics_types.h"
++
++namespace android {
++namespace emulation {
++namespace asg {
++
++struct Allocation {
++    char* buffer = nullptr;
++    size_t blockIndex = 0;
++    uint64_t offsetIntoPhys = 0;
++    uint64_t size = 0;
++    std::optional<uint32_t> dedicatedContextHandle;
++    uint64_t hostmemId = 0;
++    bool isView = false;
++};
++
++class AddressSpaceGraphicsContext : public AddressSpaceDeviceContext {
++public:
++ AddressSpaceGraphicsContext(const struct AddressSpaceCreateInfo& create);
++ ~AddressSpaceGraphicsContext();
++
++ static void setConsumer(gfxstream::ConsumerInterface);
++ static void init(const address_space_device_control_ops* ops);
++ static void clear();
++
++ void perform(AddressSpaceDevicePingInfo* info) override;
++ AddressSpaceDeviceType getDeviceType() const override;
++
++ void save(base::Stream* stream) const override;
++ bool load(base::Stream* stream) override;
++
++ void preSave() const override;
++ void postSave() const override;
++
++ static void globalStatePreSave();
++ static void globalStateSave(base::Stream*);
++ static void globalStatePostSave();
++
++ static bool globalStateLoad(base::Stream*,
++                             const std::optional<AddressSpaceDeviceLoadResources>& resources);
++
++ enum AllocType {
++     AllocTypeRing,
++     AllocTypeBuffer,
++     AllocTypeCombined,
++ };
++
++private:
++    void saveAllocation(base::Stream* stream, const Allocation& alloc) const;
++    void loadAllocation(base::Stream* stream, Allocation& alloc);
++
++    // For consumer communication
++    enum ConsumerCommand {
++        Wakeup = 0,
++        Sleep = 1,
++        Exit = 2,
++        PausePreSnapshot = 3,
++        ResumePostSnapshot = 4,
++    };
++
++    // For ConsumerCallbacks
++    gfxstream::AsgOnUnavailableReadStatus onUnavailableRead();
++
++    // Data layout
++    bool mExternalReclaimGuard = false;
++    uint32_t mVersion = 1;
++    Allocation mRingAllocation;
++    Allocation mBufferAllocation;
++    Allocation mCombinedAllocation;
++
++    // Consumer storage
++    gfxstream::ConsumerCallbacks mConsumerCallbacks;
++    gfxstream::ConsumerInterface mConsumerInterface;
++    void* mCurrentConsumer = 0;
++
++    // Communication with consumer
++    mutable base::MessageChannel<ConsumerCommand, 4> mConsumerMessages;
++    uint32_t mExiting = 0;
++    // For onUnavailableRead
++
++
++    struct VirtioGpuInfo {
++        uint32_t contextId = 0;
++        uint32_t capsetId = 0;
++        std::optional<std::string> name;
++    };
++    std::optional<VirtioGpuInfo> mVirtioGpuInfo;
++};
++
++}  // namespace asg
++}  // namespace android
++}  // namespace emulation
+diff --git a/include/hw/virtio/virtio-balloon.h b/include/hw/virtio/virtio-balloon.h
+index 6052e0a6..4c0fb67c 100644
+--- a/include/hw/virtio/virtio-balloon.h
++++ b/include/hw/virtio/virtio-balloon.h
+@@ -48,6 +48,12 @@ typedef struct VirtIOBalloon {
+     /* free page reporting: bytes handed to ram_block_discard_range() */
+     uint64_t reported_bytes;
+     uint64_t reported_bytes_logged;
++    QEMUBH *report_bh;
++    uint64_t report_device_epoch, report_scheduled_device_epoch;
++    uint64_t report_scheduled_queue_epoch, report_scheduled_vm_epoch;
++    uint64_t report_pause_batches, report_pause_canceled;
++    uint16_t report_queue_index;
++    bool report_pending, report_active;
+ } VirtIOBalloon;
+ 
+ #endif
+diff --git a/include/hw/virtio/virtio.h b/include/hw/virtio/virtio.h
+index 098bdaae..b5ed49bd 100644
+--- a/include/hw/virtio/virtio.h
++++ b/include/hw/virtio/virtio.h
+@@ -84,6 +84,8 @@ struct VirtIODevice
+     void *config;
+     uint16_t config_vector;
+     uint32_t generation;
++    /* Queue/status/features/reset/unrealize epoch; not guest config generation. */
++    uint64_t reclaim_epoch;
+     int nvectors;
+     VirtQueue *vq;
+     MemoryListener listener;
+@@ -176,6 +178,8 @@ void virtqueue_fill(VirtQueue *vq, const VirtQueueElement *elem,
+ 
+ void virtqueue_map(VirtIODevice *vdev, VirtQueueElement *elem);
+ void *virtqueue_pop(VirtQueue *vq, size_t sz);
++/* Only the balloon free-page reporting queue may use this owner class. */
++void *virtqueue_pop_report(VirtQueue *vq, size_t sz);
+ unsigned int virtqueue_drop_all(VirtQueue *vq);
+ void *qemu_get_virtqueue_element(VirtIODevice *vdev, QEMUFile *f, size_t sz);
+ void qemu_put_virtqueue_element(QEMUFile *f, VirtQueueElement *elem);
+diff --git a/include/qemu/darwin-chunked-ram.h b/include/qemu/darwin-chunked-ram.h
+new file mode 100644
+index 00000000..643088d9
+--- /dev/null
++++ b/include/qemu/darwin-chunked-ram.h
+@@ -0,0 +1,187 @@
++/* Private Darwin RAM backing primitive; no QEMU types or authorization.
++ * A successful initial construction preserves the caller's virtual range and
++ * gives each <=256 KiB extent its own anonymous VM object without touching data.
++ * The caller must reject shared/file/user backing and publish provenance only
++ * after complete success. A failed construction must never be published or
++ * silently used as a monolithic fallback. */
++#ifndef MODAVD_DARWIN_CHUNKED_RAM_H
++#define MODAVD_DARWIN_CHUNKED_RAM_H
++#if defined(__APPLE__) && defined(__aarch64__)
++#include <mach/mach.h>
++#include <mach/mach_vm.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <string.h>
++#include <sys/mman.h>
++#include <unistd.h>
++
++#define DCR_CHUNK_SIZE ((size_t)256 * 1024)
++
++typedef struct DcrMapping {
++    void *base;
++    void *reservation;
++    size_t length;
++    size_t reserved_length;
++} DcrMapping;
++
++typedef struct DcrAttributes {
++    vm_prot_t current, maximum;
++    vm_inherit_t inheritance;
++} DcrAttributes;
++
++static inline bool dcr_attributes(void *address, size_t length,
++                                   DcrAttributes *attributes)
++{
++    mach_vm_address_t region = (mach_vm_address_t)address;
++    mach_vm_size_t region_size = 0;
++    vm_region_basic_info_data_64_t info;
++    mach_msg_type_number_t count = VM_REGION_BASIC_INFO_COUNT_64;
++    mach_port_t object = MACH_PORT_NULL;
++    kern_return_t result = mach_vm_region(mach_task_self(), &region, &region_size,
++        VM_REGION_BASIC_INFO_64, (vm_region_info_t)&info, &count, &object);
++    if (object != MACH_PORT_NULL) {
++        mach_port_deallocate(mach_task_self(), object);
++    }
++    uintptr_t target = (uintptr_t)address;
++    if (result != KERN_SUCCESS || region > target ||
++        target - region >= region_size ||
++        length > region_size - (target - region)) {
++        return false;
++    }
++    attributes->current = info.protection;
++    attributes->maximum = info.max_protection;
++    attributes->inheritance = info.inheritance;
++    return true;
++}
++
++/* On false, mapping may still own a reservation. Always call dcr_release().
++ * Guard pages prevent adjacent anonymous RW mmap entries from coalescing
++ * before Mach remap has materialized the independent backing VM object. */
++static inline bool dcr_allocate_fresh(size_t length, DcrMapping *mapping)
++{
++    size_t page = getpagesize();
++    memset(mapping, 0, sizeof(*mapping));
++    if (!page || (page & (page - 1)) || !length || length > DCR_CHUNK_SIZE ||
++        (length & (page - 1)) || page > (SIZE_MAX - length) / 2) {
++        return false;
++    }
++    size_t reserved_length = length + 2 * page;
++    void *reservation = mmap(NULL, reserved_length, PROT_NONE,
++                             MAP_ANON | MAP_PRIVATE, -1, 0);
++    if (reservation == MAP_FAILED) {
++        return false;
++    }
++    mapping->reservation = reservation;
++    mapping->reserved_length = reserved_length;
++    mapping->length = length;
++    void *base = (char *)reservation + page;
++    if (mmap(base, length, PROT_READ | PROT_WRITE,
++             MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0) == MAP_FAILED) {
++        return false;
++    }
++    mapping->base = base;
++    return true;
++}
++
++/* Retain the handle when cleanup fails so ownership is never lost. */
++static inline bool dcr_release(DcrMapping *mapping)
++{
++    if (mapping->reservation &&
++        munmap(mapping->reservation, mapping->reserved_length) != 0) {
++        return false;
++    }
++    memset(mapping, 0, sizeof(*mapping));
++    return true;
++}
++
++static inline bool dcr_apply_attributes(void *address, size_t length,
++                                         const DcrAttributes *expected)
++{
++    DcrAttributes actual;
++    if (!dcr_attributes(address, length, &actual)) {
++        return false;
++    }
++    /* Do not reapply an unchanged RWX maximum: W^X policy can reject it. */
++    if (actual.maximum != expected->maximum &&
++        mach_vm_protect(mach_task_self(), (uintptr_t)address, length, true,
++                        expected->maximum) != KERN_SUCCESS) {
++        return false;
++    }
++    if (actual.current != expected->current &&
++        mach_vm_protect(mach_task_self(), (uintptr_t)address, length, false,
++                        expected->current) != KERN_SUCCESS) {
++        return false;
++    }
++    return mach_vm_inherit(mach_task_self(), (uintptr_t)address, length,
++                           expected->inheritance) == KERN_SUCCESS;
++}
++
++/* Success leaves retained empty. Failure leaves the target partially rebuilt;
++ * caller must destroy its complete original reservation. If temporary cleanup
++ * fails, retained owns that additional reservation and can be retried. */
++static inline bool dcr_map_initial(void *target, size_t length,
++                                     DcrMapping *retained)
++{
++    size_t page = getpagesize();
++    memset(retained, 0, sizeof(*retained));
++    if (!page || (page & (page - 1)) || !target || !length ||
++        length > UINTPTR_MAX - (uintptr_t)target ||
++        (((uintptr_t)target | length) & (page - 1))) {
++        return false;
++    }
++    /* Darwin can split a single large mmap at 128 MiB. Validate each planned
++     * backing extent instead of requiring one region for the complete block. */
++    for (size_t offset = 0; offset < length;) {
++        size_t chunk = length - offset;
++        DcrAttributes original;
++        if (chunk > DCR_CHUNK_SIZE) {
++            chunk = DCR_CHUNK_SIZE;
++        }
++        if (!dcr_attributes((char *)target + offset, chunk, &original) ||
++            original.current != (VM_PROT_READ | VM_PROT_WRITE) ||
++            original.inheritance == VM_INHERIT_SHARE) {
++            return false;
++        }
++        offset += chunk;
++    }
++    for (size_t offset = 0; offset < length;) {
++        size_t chunk = length - offset;
++        DcrAttributes original;
++        if (chunk > DCR_CHUNK_SIZE) {
++            chunk = DCR_CHUNK_SIZE;
++        }
++        if (!dcr_attributes((char *)target + offset, chunk, &original)) {
++            return false;
++        }
++        bool success = dcr_allocate_fresh(chunk, retained);
++        if (success) {
++            success = dcr_apply_attributes(retained->base, chunk, &original);
++        }
++        if (success) {
++            mach_vm_address_t destination = (uintptr_t)target + offset;
++            vm_prot_t current, maximum;
++            kern_return_t result = mach_vm_remap(mach_task_self(), &destination,
++                chunk, 0, VM_FLAGS_FIXED | VM_FLAGS_OVERWRITE, mach_task_self(),
++                (uintptr_t)retained->base, false, &current, &maximum,
++                original.inheritance);
++            DcrAttributes actual;
++            success = result == KERN_SUCCESS &&
++                destination == (uintptr_t)target + offset &&
++                current == original.current && maximum == original.maximum &&
++                dcr_attributes((void *)destination, chunk, &actual) &&
++                actual.current == original.current &&
++                actual.maximum == original.maximum &&
++                actual.inheritance == original.inheritance;
++        }
++        if (!dcr_release(retained)) {
++            return false;
++        }
++        if (!success) {
++            return false;
++        }
++        offset += chunk;
++    }
++    return true;
++}
++#endif
++#endif
+diff --git a/include/qemu/darwin-ram-receipt.h b/include/qemu/darwin-ram-receipt.h
+new file mode 100644
+index 00000000..06641cb0
+--- /dev/null
++++ b/include/qemu/darwin-ram-receipt.h
+@@ -0,0 +1,12 @@
++/* Private allocator provenance boundary. No environment value is a receipt. */
++#ifndef MODAVD_DARWIN_RAM_RECEIPT_H
++#define MODAVD_DARWIN_RAM_RECEIPT_H
++#include <stddef.h>
++#include <stdint.h>
++#if defined(__APPLE__) && defined(__aarch64__)
++/* Nonzero only for an exact, still-live, independently chunked allocation
++ * constructed at the requested granule. The request is never a receipt. */
++uint64_t qemu_anon_ram_allocation_serial(const void *base, size_t size,
++                                        size_t expected_chunk_size);
++#endif
++#endif
+diff --git a/include/sysemu/address-space-sized.h b/include/sysemu/address-space-sized.h
+new file mode 100644
+index 00000000..58e5f962
+--- /dev/null
++++ b/include/sysemu/address-space-sized.h
+@@ -0,0 +1,13 @@
++/* Optional private extension: do not change the external VmOperations ABI. */
++#ifndef MODAVD_ADDRESS_SPACE_SIZED_H
++#define MODAVD_ADDRESS_SPACE_SIZED_H
++#include <stdint.h>
++#ifdef __cplusplus
++extern "C" {
++#endif
++typedef void *(*AddressSpaceSizedBorrow)(uint64_t gpa, uint64_t length);
++void address_space_set_sized_borrow(AddressSpaceSizedBorrow callback);
++#ifdef __cplusplus
++}
++#endif
++#endif
+diff --git a/include/sysemu/cpus.h b/include/sysemu/cpus.h
+index 731756d9..69e5bd4e 100644
+--- a/include/sysemu/cpus.h
++++ b/include/sysemu/cpus.h
+@@ -8,6 +8,10 @@ bool qemu_in_vcpu_thread(void);
+ void qemu_init_cpu_loop(void);
+ void resume_all_vcpus(void);
+ void pause_all_vcpus(void);
++/* Experimental report boundary, same BQL/replay-lock contract as above. */
++void pause_all_vcpus_for_reclaim(void);
++void resume_vcpus_after_reclaim(void);
++bool qemu_reclaim_pause_active(void);
+ void cpu_stop_current(void);
+ void cpu_ticks_init(void);
+ 
+diff --git a/include/sysemu/dma-sized.h b/include/sysemu/dma-sized.h
+new file mode 100644
+index 00000000..c61fbf62
+--- /dev/null
++++ b/include/sysemu/dma-sized.h
+@@ -0,0 +1,29 @@
++/* Private additive extension; no GoldfishDmaOps/renderer vtable ABI change. */
++#ifndef MODAVD_DMA_SIZED_H
++#define MODAVD_DMA_SIZED_H
++#include <stdbool.h>
++#include <stdint.h>
++#ifdef __cplusplus
++extern "C" {
++#endif
++typedef void (*ModavdDmaAuditBorrow)(void *, uint64_t, const char *);
++void modavd_dma_set_audit_borrow(ModavdDmaAuditBorrow callback);
++void modavd_dma_audit_borrow(void *host, uint64_t length, const char *reason);
++void *modavd_address_space_dma_borrow(uint64_t gpa, uint64_t length, bool *found);
++void *modavd_goldfish_dma_borrow_v1(uint64_t gpa, uint64_t length);
++void modavd_dma_set_renderer_ready(bool ready);
++bool modavd_dma_renderer_borrow_ready(void);
++typedef void (*ModavdExternalLifetime)(const void *identity, bool enter);
++bool modavd_dma_set_external_lifetime(ModavdExternalLifetime callback);
++bool modavd_dma_external_tracking_ready(void);
++void modavd_reclaim_external_enter(const void *identity);
++void modavd_reclaim_external_leave(const void *identity);
++typedef bool (*ModavdAsgExternalOwned)(uint32_t handle, const void *base,
++                                     uint64_t size);
++void modavd_dma_set_asg_external_owned_v1(ModavdAsgExternalOwned callback);
++bool modavd_dma_asg_external_owned_v1(uint32_t handle, const void *base,
++                                    uint64_t size);
++#ifdef __cplusplus
++}
++#endif
++#endif
+diff --git a/include/sysemu/hvf-reclaim.h b/include/sysemu/hvf-reclaim.h
+new file mode 100644
+index 00000000..1968e012
+--- /dev/null
++++ b/include/sysemu/hvf-reclaim.h
+@@ -0,0 +1,24 @@
++/* Private report-owner transaction boundary; caller holds BQL/audit registry. */
++#ifndef MODAVD_HVF_RECLAIM_H
++#define MODAVD_HVF_RECLAIM_H
++#include <stdbool.h>
++#include <stdint.h>
++typedef struct HvfReclaimOutcome {
++    int result, stage;
++    uint32_t hv_error, mach_error, restore_hv_error, restore_mach_error;
++    uint64_t generation, flags;
++    bool cleanup_failed;
++    bool observation_enabled;
++    uint64_t old_object_id, old_ref_min, old_ref_max;
++    uint64_t old_present_pages, old_paged_out_pages, old_reusable_pages;
++    uint64_t old_page_query_errors;
++    uint64_t free_pages_before, free_pages_after;
++    uint64_t speculative_pages_before, speculative_pages_after;
++    int physical_query_error;
++} HvfReclaimOutcome;
++enum { HVF_RECLAIM_SKIPPED, HVF_RECLAIM_COMMITTED,
++       HVF_RECLAIM_ROLLED_BACK, HVF_RECLAIM_FATAL };
++bool hvf_reclaim_permissions_ready(void);
++HvfReclaimOutcome hvf_reclaim_private_range(void *host, uint64_t gpa,
++                                           uint64_t length, int fault);
++#endif
+diff --git a/include/sysemu/hvf.h b/include/sysemu/hvf.h
+index 573c05f7..ba36b96e 100644
+--- a/include/sysemu/hvf.h
++++ b/include/sysemu/hvf.h
+@@ -49,6 +49,9 @@ void hvf_raise_event(CPUState *cpu);
+ // void hvf_reset_vcpu_state(void *opaque);
+ 
+ void* hvf_gpa2hva(uint64_t gpa, bool* found);
++#if defined(__aarch64__)
++void* hvf_gpa2hva_sized(uint64_t gpa, uint64_t length, bool* found);
++#endif
+ int hvf_hva2gpa(void* hva, uint64_t length, int max,
+                 uint64_t* gpa, uint64_t* size);
+ 
+diff --git a/include/sysemu/sysemu.h b/include/sysemu/sysemu.h
+index dded5623..6da5e6c5 100644
+--- a/include/sysemu/sysemu.h
++++ b/include/sysemu/sysemu.h
+@@ -21,6 +21,9 @@ extern bool qemu_uuid_set;
+ bool runstate_check(RunState state);
+ RunState get_runstate();
+ void runstate_set(RunState new_state);
++/* Saturating epoch for report pause/revalidation, including pending requests. */
++uint64_t qemu_vm_reclaim_epoch(void);
++bool qemu_vm_reclaim_running(void);
+ int runstate_is_running(void);
+ bool runstate_needs_reset(void);
+ bool runstate_store(char *str, size_t size);
+diff --git a/memory.c b/memory.c
+index a19d8ed3..587b981a 100644
+--- a/memory.c
++++ b/memory.c
+@@ -2090,7 +2090,7 @@ int memory_region_get_fd(MemoryRegion *mr)
+     return fd;
+ }
+ 
+-void *memory_region_get_ram_ptr(MemoryRegion *mr)
++static void *memory_region_ram_ptr_internal(MemoryRegion *mr, bool accel)
+ {
+     void *ptr;
+     uint64_t offset = 0;
+@@ -2101,12 +2101,57 @@ void *memory_region_get_ram_ptr(MemoryRegion *mr)
+         mr = mr->alias;
+     }
+     assert(mr->ram_block);
+-    ptr = qemu_map_ram_ptr(mr->ram_block, offset);
++    ptr = accel ? qemu_map_ram_ptr_for_accel(mr->ram_block, offset) :
++                  qemu_map_ram_ptr(mr->ram_block, offset);
+     rcu_read_unlock();
+ 
+     return ptr;
+ }
+ 
++void *memory_region_get_ram_ptr(MemoryRegion *mr)
++{
++    return memory_region_ram_ptr_internal(mr, false);
++}
++
++void *memory_region_get_ram_ptr_sized(MemoryRegion *mr, uint64_t offset,
++                                      uint64_t length)
++{
++    void *ptr = NULL;
++    unsigned depth = 0;
++
++    if (!length) {
++        return NULL;
++    }
++    rcu_read_lock();
++    for (;;) {
++        if (++depth > 64 || int128_ge(int128_make64(offset), mr->size) ||
++            int128_gt(int128_make64(length),
++                      int128_sub(mr->size, int128_make64(offset)))) {
++            break;
++        }
++        if (!mr->alias) {
++            RAMBlock *rb = mr->ram_block;
++            if (rb && rb->host && offset < rb->used_length &&
++                length <= rb->used_length - offset) {
++                ptr = qemu_map_ram_ptr_sized(rb, offset, length);
++            }
++            break;
++        }
++        if (mr->alias_offset > UINT64_MAX - offset) {
++            break;
++        }
++        offset += mr->alias_offset;
++        mr = mr->alias;
++    }
++    rcu_read_unlock();
++    return ptr;
++}
++
++void *memory_region_get_ram_ptr_for_accel(MemoryRegion *mr)
++{
++    return memory_region_ram_ptr_internal(mr, true);
++}
++
+ MemoryRegion *memory_region_from_host(void *ptr, ram_addr_t *offset)
+ {
+     RAMBlock *block;
+diff --git a/memory_ldst.inc.c b/memory_ldst.inc.c
+index a30060cf..2cefef16 100644
+--- a/memory_ldst.inc.c
++++ b/memory_ldst.inc.c
+@@ -50,7 +50,7 @@ static inline uint32_t glue(address_space_ldl_internal, SUFFIX)(ARG1_DECL,
+ #endif
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             val = ldl_le_p(ptr);
+@@ -144,7 +144,7 @@ static inline uint64_t glue(address_space_ldq_internal, SUFFIX)(ARG1_DECL,
+ #endif
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             val = ldq_le_p(ptr);
+@@ -227,7 +227,7 @@ uint32_t glue(address_space_ldub, SUFFIX)(ARG1_DECL,
+         r = memory_region_dispatch_read(mr, addr1, &val, 1, attrs);
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         val = ldub_p(ptr);
+         r = MEMTX_OK;
+     }
+@@ -278,7 +278,7 @@ static inline uint32_t glue(address_space_lduw_internal, SUFFIX)(ARG1_DECL,
+ #endif
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             val = lduw_le_p(ptr);
+@@ -362,7 +362,7 @@ void glue(address_space_stl_notdirty, SUFFIX)(ARG1_DECL,
+ 
+         r = memory_region_dispatch_write(mr, addr1, val, 4, attrs);
+     } else {
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         stl_p(ptr, val);
+ 
+         dirty_log_mask = memory_region_get_dirty_log_mask(mr);
+@@ -415,7 +415,7 @@ static inline void glue(address_space_stl_internal, SUFFIX)(ARG1_DECL,
+         r = memory_region_dispatch_write(mr, addr1, val, 4, attrs);
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             stl_le_p(ptr, val);
+@@ -495,7 +495,7 @@ void glue(address_space_stb, SUFFIX)(ARG1_DECL,
+         r = memory_region_dispatch_write(mr, addr1, val, 1, attrs);
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         stb_p(ptr, val);
+         invalidate_and_set_dirty(mr, addr1, 1);
+         r = MEMTX_OK;
+@@ -544,7 +544,7 @@ static inline void glue(address_space_stw_internal, SUFFIX)(ARG1_DECL,
+         r = memory_region_dispatch_write(mr, addr1, val, 2, attrs);
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             stw_le_p(ptr, val);
+@@ -635,7 +635,7 @@ static void glue(address_space_stq_internal, SUFFIX)(ARG1_DECL,
+         r = memory_region_dispatch_write(mr, addr1, val, 8, attrs);
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             stq_le_p(ptr, val);
+diff --git a/migration/ram.c b/migration/ram.c
+index 109cf956..3b9b3c3e 100644
+--- a/migration/ram.c
++++ b/migration/ram.c
+@@ -2265,6 +2265,7 @@ static int ram_save_setup(QEMUFile *f, void *opaque)
+     RAMState **rsp = opaque;
+     RAMBlock *block;
+ 
++    qemu_ram_audit_inhibit("migration-or-snapshot");
+     /* migration has already setup the bitmap, reuse it. */
+     if (!migration_in_colo_state()) {
+         if (ram_init_all(rsp) != 0) {
+@@ -2700,6 +2701,7 @@ static void decompress_data_with_multi_threads(QEMUFile *f,
+  */
+ static int ram_load_setup(QEMUFile *f, void *opaque)
+ {
++    qemu_ram_audit_inhibit("migration-load-setup");
+     xbzrle_load_setup();
+     compress_threads_load_setup();
+     ramblock_recv_map_init();
+@@ -2907,6 +2909,7 @@ static int ram_load(QEMUFile *f, void *opaque, int version_id)
+     /* ADVISE is earlier, it shows the source has the postcopy capability on */
+     bool postcopy_advised = postcopy_is_advised();
+ 
++    qemu_ram_audit_inhibit("migration-or-snapshot");
+     seq_iter++;
+ 
+     if (version_id != 4) {
+diff --git a/migration/savevm.c b/migration/savevm.c
+index ac91b0b6..c14ee4bd 100644
+--- a/migration/savevm.c
++++ b/migration/savevm.c
+@@ -1027,6 +1027,7 @@ void qemu_savevm_state_header(QEMUFile *f)
+ 
+ void qemu_savevm_state_setup(QEMUFile *f)
+ {
++    qemu_ram_audit_inhibit("savevm-entry");
+     SaveStateEntry *se;
+     int ret;
+ 
+@@ -2098,6 +2099,7 @@ qemu_loadvm_section_part_end(QEMUFile *f, MigrationIncomingState *mis)
+ 
+ static int qemu_loadvm_state_setup(QEMUFile *f)
+ {
++    qemu_ram_audit_inhibit("loadvm-entry");
+     SaveStateEntry *se;
+     int ret;
+ 
+diff --git a/numa.c b/numa.c
+index d7c46744..100d9baf 100644
+--- a/numa.c
++++ b/numa.c
+@@ -611,6 +611,7 @@ MemdevList *qmp_query_memdev(Error **errp)
+ 
+ void ram_block_notifier_add(RAMBlockNotifier *n)
+ {
++    qemu_ram_audit_inhibit("external-ram-notifier");
+     QLIST_INSERT_HEAD(&ram_list.ramblock_notifiers, n, next);
+ }
+ 
+diff --git a/target/arm/hvf.c b/target/arm/hvf.c
+index 8ca26b63..c2227651 100644
+--- a/target/arm/hvf.c
++++ b/target/arm/hvf.c
+@@ -26,6 +26,10 @@
+ #include "exec/ioport.h"
+ #include "exec/ram_addr.h"
+ #include "exec/memory-remap.h"
++#include "exec/hvf-map-registry.h"
++#include "exec/darwin-hvf-reclaim-transaction.h"
++#include "sysemu/hvf-reclaim.h"
++#include "sysemu/cpus.h"
+ #include "hw/arm/virt.h"
+ #include "qemu/main-loop.h"
+ #include "qemu/abort.h"
+@@ -240,69 +244,161 @@ struct mac_slot {
+     uint64_t gpa_start;
+     uint64_t gva;
+     void* hva;
++    uint64_t flags;
++    uint64_t generation;
+ };
+ 
+ struct mac_slot mac_slots[HVF_MAX_SLOTS];
++static HmrRegistry hvf_mappings;
++
++bool hvf_reclaim_permissions_ready(void)
++{
++    bool ready;
++    pthread_rwlock_rdlock(&mem_lock);
++    ready = hvf_mappings.complete && hvf_mappings.generation &&
++            hvf_mappings.generation != UINT64_MAX;
++    pthread_rwlock_unlock(&mem_lock);
++    return ready;
++}
++
++HvfReclaimOutcome hvf_reclaim_private_range(void *host, uint64_t gpa,
++                                           uint64_t length, int fault)
++{
++    HvfReclaimOutcome result = {0};
++    CPUState *cpu;
++    assert(qemu_mutex_iothread_locked() && !qemu_in_vcpu_thread());
++    if (!qemu_reclaim_pause_active() || !qemu_vm_reclaim_running()) return result;
++    CPU_FOREACH(cpu) {
++        if (!cpu->stopped || cpu->unplug) return result;
++    }
++    /* Lock order: BQL -> RAM exposure/reservation registry -> HVF registry.
++     * No vCPU acknowledgement or BQL release occurs inside these locks. */
++    pthread_rwlock_wrlock(&mem_lock);
++    const HmrMap *mapping = hmr_lookup(&hvf_mappings, gpa, length);
++    if (mapping && hvf_mappings.generation != UINT64_MAX &&
++        mapping->hva + gpa - mapping->gpa == (uintptr_t)host &&
++        hmr_no_alias(&hvf_mappings, mapping, (uintptr_t)host, length)) {
++        result.flags = mapping->flags;
++        result.generation = hvf_mappings.generation;
++        DhrtOutcome outcome = dhrt_replace_private(host, gpa, length,
++            mapping->flags, (DhrtFault)fault);
++        result.result = outcome.result;
++        result.stage = outcome.stage;
++        result.hv_error = outcome.hv_error;
++        result.mach_error = outcome.mach_error;
++        result.restore_hv_error = outcome.restore_hv_error;
++        result.restore_mach_error = outcome.restore_mach_error;
++        result.cleanup_failed = outcome.cleanup_failed;
++        result.observation_enabled = outcome.observation_enabled;
++        result.old_object_id = outcome.old_object_id;
++        result.old_ref_min = outcome.old_ref_min;
++        result.old_ref_max = outcome.old_ref_max;
++        result.old_present_pages = outcome.old_present_pages;
++        result.old_paged_out_pages = outcome.old_paged_out_pages;
++        result.old_reusable_pages = outcome.old_reusable_pages;
++        result.old_page_query_errors = outcome.old_page_query_errors;
++        result.free_pages_before = outcome.free_pages_before;
++        result.free_pages_after = outcome.free_pages_after;
++        result.speculative_pages_before = outcome.speculative_pages_before;
++        result.speculative_pages_after = outcome.speculative_pages_after;
++        result.physical_query_error = outcome.physical_query_error;
++        if (outcome.result == DHRT_COMMITTED || outcome.result == DHRT_ROLLED_BACK) {
++            /* The HVA/GPA/flags are identical after commit or restoration, but
++             * pending two-phase borrows must still observe a new generation. */
++            hmr_update(&hvf_mappings, gpa, length, (uintptr_t)host,
++                       result.flags, true, false);
++        } else if (outcome.result == DHRT_FATAL) {
++            hvf_mappings.complete = false;
++        }
++    }
++    pthread_rwlock_unlock(&mem_lock);
++    return result;
++}
+ 
+ #define ALIGN(x, y)  (((x)+(y)-1) & ~((y)-1))
+ 
+-void* hvf_gpa2hva(uint64_t gpa, bool* found) {
+-    struct mac_slot *mslot;
++/* Capture without holding mem_lock while entering the exposure registry.
++ * Revalidation prevents a changed topology from returning an unrecorded HVA.
++ * Lock order for a reclaim transaction is registry -> mem_lock. */
++static void *hvf_borrow_gpa(uint64_t gpa, uint64_t length, bool sized, bool *found)
++{
++    void *host = NULL;
++    uint64_t generation;
++    bool known = false;
+     *found = false;
+-
+-    for (uint32_t i = 0; i < HVF_MAX_SLOTS; i++) {
+-        mslot = &mac_slots[i];
+-        if (!mslot->present) continue;
+-        if (gpa >= mslot->gpa_start &&
+-            gpa < mslot->gpa_start + mslot->size) {
+-            *found = true;
+-            return (void*)((char*)(mslot->hva) + (gpa - mslot->gpa_start));
++    if (!hmr_range(gpa, length)) {
++        return NULL;
++    }
++    pthread_rwlock_rdlock(&mem_lock);
++    generation = hvf_mappings.generation;
++    for (unsigned i = 0; i < HVF_MAX_SLOTS; i++) {
++        const struct mac_slot *s = &mac_slots[i];
++        if (s->present && gpa >= s->gpa_start &&
++            gpa - s->gpa_start < s->size &&
++            length <= s->size - (gpa - s->gpa_start)) {
++            const HmrMap *m = hmr_lookup(&hvf_mappings, gpa, length);
++            if (m) {
++                host = (void *)(uintptr_t)(m->hva + gpa - m->gpa);
++                known = true;
++            }
++            break;
++        }
++    }
++    pthread_rwlock_unlock(&mem_lock);
++    if (!host) {
++        return NULL;
++    }
++    if (sized && known) {
++        if (!qemu_ram_borrow_host_sized(host, length, "sized-hvf-gpa-lookup")) {
++            return NULL;
+         }
++    } else {
++        qemu_ram_audit_host_pointer(host, 0, "unsized-hvf-gpa-lookup");
++    }
++    pthread_rwlock_rdlock(&mem_lock);
++    bool unchanged = generation == hvf_mappings.generation;
++    pthread_rwlock_unlock(&mem_lock);
++    if (unchanged) {
++        *found = true;
++        return host;
+     }
++    return NULL;
++}
+ 
+-    return 0;
++void* hvf_gpa2hva(uint64_t gpa, bool* found)
++{
++    return hvf_borrow_gpa(gpa, 1, false, found);
++}
++
++void* hvf_gpa2hva_sized(uint64_t gpa, uint64_t length, bool* found)
++{
++    return hvf_borrow_gpa(gpa, length, true, found);
+ }
+ 
+-#define min(a, b) ((a) < (b) ? (a) : (b))
+ int hvf_hva2gpa(void* hva, uint64_t length, int array_size,
+-                uint64_t* gpa, uint64_t* size) {
+-    struct mac_slot *mslot;
++                uint64_t* gpa, uint64_t* size)
++{
++    uint64_t address = (uintptr_t)hva;
+     int count = 0;
+-
+-    for (uint32_t i = 0; i < HVF_MAX_SLOTS; i++) {
+-        mslot = &mac_slots[i];
+-        if (!mslot->present) continue;
+-
+-        uintptr_t hva_start_num = (uintptr_t)mslot->hva;
+-        uintptr_t hva_num = (uintptr_t)hva;
+-        // Start of this hva region is in this slot.
+-        if (hva_num >= hva_start_num &&
+-            hva_num < hva_start_num + mslot->size) {
+-            if (count < array_size) {
+-                gpa[count] = mslot->gpa_start + (hva_num - hva_start_num);
+-                size[count] = min(length,
+-                                  mslot->size - (hva_num - hva_start_num));
+-            }
+-            count++;
+-        // End of this hva region is in this slot.
+-        // Its start is outside of this slot.
+-        } else if (hva_num + length <= hva_start_num + mslot->size &&
+-                   hva_num + length > hva_start_num) {
+-            if (count < array_size) {
+-                gpa[count] = mslot->gpa_start;
+-                size[count] = hva_num + length - hva_start_num;
+-            }
+-            count++;
+-        // This slot belongs to this hva region completely.
+-        } else if (hva_num + length > hva_start_num +  mslot->size &&
+-                   hva_num < hva_start_num)  {
+-            if (count < array_size) {
+-                gpa[count] = mslot->gpa_start;
+-                size[count] = mslot->size;
++    if (!hmr_range(address, length) || array_size < 0) {
++        return 0;
++    }
++    pthread_rwlock_rdlock(&mem_lock);
++    if (hvf_mappings.complete) {
++        for (unsigned i = 0; i < hvf_mappings.count; i++) {
++            const HmrMap *m = &hvf_mappings.maps[i];
++            uint64_t first = MAX(address, m->hva);
++            uint64_t last = MIN(address + length, m->hva + m->size);
++            if (first < last) {
++                if (count < array_size) {
++                    gpa[count] = m->gpa + first - m->hva;
++                    size[count] = last - first;
++                }
++                count++;
+             }
+-            count++;
+         }
+     }
++    pthread_rwlock_unlock(&mem_lock);
+     return count;
+ }
+ 
+@@ -324,11 +420,15 @@ int __hvf_set_memory(hvf_slot *slot);
+ int __hvf_set_memory_with_flags_locked(hvf_slot *slot, hv_memory_flags_t flags);
+ 
+ int hvf_map_safe(void* hva, uint64_t gpa, uint64_t size, uint64_t flags) {
+-    if (!hva) {
++    if (!hva || !size || size > UINT64_MAX - (qemu_real_host_page_size - 1)) {
+         return -EINVAL;
+     }
+     // Align size to host page size (0x1000 on x86_64, 0x4000 on Apple Silicon ARM64)
+     size = ALIGN(size, qemu_real_host_page_size);
++    if (!hmr_range(gpa, size) || !hmr_range((uintptr_t)hva, size)) {
++        return -EINVAL;
++    }
++    qemu_ram_audit_host_pointer(hva, size, "hvf-map-alias");
+ 
+     pthread_rwlock_wrlock(&mem_lock);
+     DPRINTF("%s: hva: [%p 0x%llx] gpa: [0x%llx 0x%llx]\n", __func__,
+@@ -384,7 +484,13 @@ int hvf_map_safe(void* hva, uint64_t gpa, uint64_t size, uint64_t flags) {
+ }
+ 
+ int hvf_unmap_safe(uint64_t gpa, uint64_t size) {
+-    size = ALIGN(size, 0x4000);
++    if (!size || size > UINT64_MAX - (qemu_real_host_page_size - 1)) {
++        return -EINVAL;
++    }
++    size = ALIGN(size, qemu_real_host_page_size);
++    if (!hmr_range(gpa, size)) {
++        return -EINVAL;
++    }
+     DPRINTF("%s: gpa: [0x%llx 0x%llx]\n", __func__,
+             (unsigned long long)gpa,
+             (unsigned long long)gpa + size);
+@@ -418,16 +524,30 @@ int hvf_unmap_safe(uint64_t gpa, uint64_t size) {
+ int hvf_protect_safe(uint64_t gpa, uint64_t size, uint64_t flags) {
+     pthread_rwlock_wrlock(&mem_lock);
+     int res = hv_vm_protect(gpa, size, flags);
++    if (res == HV_SUCCESS) {
++        hmr_update(&hvf_mappings, gpa, size, 0, flags, false, true);
++    }
+     pthread_rwlock_unlock(&mem_lock);
+     return res;
+ }
+ 
+ int hvf_remap_safe(void* hva, uint64_t gpa, uint64_t size, uint64_t flags) {
++    qemu_ram_audit_inhibit("hvf-snapshot-remap");
+     pthread_rwlock_wrlock(&mem_lock);
+     int res = hv_vm_unmap(gpa, size);
+-    check_hvf_ok(res);
+-    res = hv_vm_map(hva, gpa, size, flags);
+-    check_hvf_ok(res);
++    if (res == HV_SUCCESS) {
++        hmr_update(&hvf_mappings, gpa, size, 0, 0, false, false);
++        res = hv_vm_map(hva, gpa, size, flags);
++        if (res == HV_SUCCESS) {
++            hmr_update(&hvf_mappings, gpa, size, (uintptr_t)hva, flags, true, false);
++        }
++    }
++    if (res != HV_SUCCESS) {
++        hvf_mappings.complete = false;
++        if (hvf_mappings.generation != UINT64_MAX) {
++            hvf_mappings.generation++;
++        }
++    }
+     pthread_rwlock_unlock(&mem_lock);
+     return res;
+ }
+@@ -469,19 +589,21 @@ int __hvf_set_memory_with_flags_locked(hvf_slot *slot, hv_memory_flags_t flags)
+     macslot = &mac_slots[slot->slot_id];
+ 
+     if (macslot->present) {
+-        macslot->present = 0;
+         DPRINTF("%s: hv_vm_unmap for gpa [0x%llx 0x%llx]\n", __func__,
+                 (unsigned long long)macslot->gpa_start,
+                 (unsigned long long)(macslot->gpa_start + macslot->size));
+         int unmapres = hv_vm_unmap(macslot->gpa_start, macslot->size);
+         assert_hvf_ok(unmapres);
++        hmr_update(&hvf_mappings, macslot->gpa_start, macslot->size,
++                   0, 0, false, false);
++        macslot->present = 0;
++        macslot->generation = hvf_mappings.generation;
+     }
+ 
+     if (!slot->size) {
+         return 0;
+     }
+ 
+-    macslot->present = 1;
+     macslot->gpa_start = slot->start;
+     macslot->size = slot->size;
+     macslot->hva = slot->mem;
+@@ -491,6 +613,11 @@ int __hvf_set_memory_with_flags_locked(hvf_slot *slot, hv_memory_flags_t flags)
+             (unsigned long long)(macslot->gpa_start + macslot->size));
+     int mapres = (hv_vm_map(slot->mem, slot->start, slot->size, flags));
+     assert_hvf_ok(mapres);
++    hmr_update(&hvf_mappings, slot->start, slot->size, (uintptr_t)slot->mem,
++               flags, true, false);
++    macslot->flags = flags;
++    macslot->generation = hvf_mappings.generation;
++    macslot->present = 1;
+     return 0;
+ }
+ 
+@@ -508,7 +635,7 @@ void hvf_set_phys_mem(MemoryRegionSection* section, bool add) {
+     if (mem && add) {
+         if (mem->size == int128_get64(section->size) &&
+                 mem->start == section->offset_within_address_space &&
+-                mem->mem == (memory_region_get_ram_ptr(area) + section->offset_within_region))
++                mem->mem == (memory_region_get_ram_ptr_for_accel(area) + section->offset_within_region))
+             return; // Same region was attempted to register, go away.
+     }
+ 
+@@ -532,7 +659,7 @@ void hvf_set_phys_mem(MemoryRegionSection* section, bool add) {
+     }
+ 
+     mem->size = int128_get64(section->size);
+-    mem->mem = memory_region_get_ram_ptr(area) + section->offset_within_region;
++    mem->mem = memory_region_get_ram_ptr_for_accel(area) + section->offset_within_region;
+     mem->start = section->offset_within_address_space;
+ 
+     if (__hvf_set_memory(mem)) {
+@@ -747,7 +874,7 @@ static hv_simd_fp_reg_t regno_to_hv_simd_fp_reg_type(int i) {
+         case 29:
+             return HV_SIMD_FP_REG_Q29;
+         case 30:
+-            return HV_SIMD_FP_REG_Q20;
++            return HV_SIMD_FP_REG_Q30;
+         case 31:
+             return HV_SIMD_FP_REG_Q31;
+     }
+@@ -1718,8 +1845,14 @@ static void hvf_exit_notifier(Notifier *notifier, void *data) {
+             DPRINTF("%s: Explicitly unmapping gpa [0x%llx 0x%llx]\n", __func__,
+                     (unsigned long long)mslot->gpa_start,
+                     (unsigned long long)(mslot->gpa_start + mslot->size));
+-            hv_vm_unmap(mslot->gpa_start, mslot->size);
+-            mslot->present = 0;
++            int result = hv_vm_unmap(mslot->gpa_start, mslot->size);
++            if (result == HV_SUCCESS) {
++                hmr_update(&hvf_mappings, mslot->gpa_start, mslot->size,
++                           0, 0, false, false);
++                mslot->present = 0;
++            } else {
++                hvf_mappings.complete = false;
++            }
+         }
+     }
+     pthread_rwlock_unlock(&mem_lock);
+@@ -1729,6 +1862,7 @@ static void hvf_exit_notifier(Notifier *notifier, void *data) {
+ static int hvf_accel_init(MachineState *ms) {
+     int x;
+     DPRINTF("%s: call. hv vm create?\n", __func__);
++    hmr_init(&hvf_mappings);
+     int r = hv_vm_create(0);
+ 
+     mig_state.ticks = 0;
+diff --git a/util/oslib-posix.c b/util/oslib-posix.c
+index 6e4ff08c..2024f2c9 100644
+--- a/util/oslib-posix.c
++++ b/util/oslib-posix.c
+@@ -54,6 +54,10 @@
+ #endif
+ 
+ #include "qemu/mmap-alloc.h"
++#if defined(__APPLE__) && defined(__aarch64__)
++#include "qemu/darwin-chunked-ram.h"
++#include "qemu/darwin-ram-receipt.h"
++#endif
+ 
+ #ifdef CONFIG_DEBUG_STACK_USAGE
+ #include "qemu/error-report.h"
+@@ -136,6 +140,111 @@ void *qemu_memalign(size_t alignment, size_t size)
+ 
+ bool insufficientMemMessage = false;
+ 
++#if defined(__APPLE__) && defined(__aarch64__)
++/* A successful construction receipt, independent of address reuse or an
++ * environment request. Retire it before releasing the underlying mapping.
++ * This mutex never enters the RAM audit or HVF registries. */
++typedef struct DarwinRamReceipt {
++    void *base;
++    size_t size;
++    size_t chunk_size;
++    uint64_t serial;
++    struct DarwinRamReceipt *next;
++} DarwinRamReceipt;
++static DarwinRamReceipt *darwin_ram_receipts;
++static QemuMutex darwin_ram_receipt_lock;
++static gsize darwin_ram_receipt_once;
++static uint64_t darwin_ram_receipt_serial;
++
++static void darwin_ram_receipts_init(void)
++{
++    if (g_once_init_enter(&darwin_ram_receipt_once)) {
++        qemu_mutex_init(&darwin_ram_receipt_lock);
++        g_once_init_leave(&darwin_ram_receipt_once, 1);
++    }
++}
++
++uint64_t qemu_anon_ram_allocation_serial(const void *base, size_t size,
++                                        size_t expected_chunk_size)
++{
++    uint64_t serial = 0;
++    DarwinRamReceipt *receipt;
++    darwin_ram_receipts_init();
++    qemu_mutex_lock(&darwin_ram_receipt_lock);
++    for (receipt = darwin_ram_receipts; receipt; receipt = receipt->next) {
++        if (receipt->base == base && receipt->size == size &&
++            receipt->chunk_size == expected_chunk_size) {
++            serial = receipt->serial;
++            break;
++        }
++    }
++    qemu_mutex_unlock(&darwin_ram_receipt_lock);
++    return serial;
++}
++
++static void darwin_ram_receipt_retire(void *base, size_t size)
++{
++    DarwinRamReceipt **link, *receipt = NULL;
++    darwin_ram_receipts_init();
++    qemu_mutex_lock(&darwin_ram_receipt_lock);
++    for (link = &darwin_ram_receipts; *link; link = &(*link)->next) {
++        if ((*link)->base == base) {
++            /* A mismatched free must not leave a reusable certificate. */
++            receipt = *link;
++            *link = receipt->next;
++            break;
++        }
++    }
++    qemu_mutex_unlock(&darwin_ram_receipt_lock);
++    if (receipt) {
++        fprintf(stderr, "hvf-ram-backing: event=retire serial=%" PRIu64
++                " size=%zu requested_size=%zu chunk_size=%zu\n",
++                receipt->serial, receipt->size, size, receipt->chunk_size);
++        g_free(receipt);
++    }
++}
++
++static bool darwin_ram_construct_chunked(void *base, size_t size)
++{
++    DarwinRamReceipt *receipt = g_try_new0(DarwinRamReceipt, 1);
++    DcrMapping retained = {0};
++    if (!receipt) {
++        errno = ENOMEM;
++        return false;
++    }
++    if (!dcr_map_initial(base, size, &retained)) {
++        /* No partially constructed target may reach a RAMBlock. The caller
++         * releases its entire original allocation, including its guard page. */
++        bool released = dcr_release(&retained);
++        fprintf(stderr, "hvf-ram-backing: event=construction-failed size=%zu"
++                " retained_cleanup=%d qualified=0\n", size, released);
++        g_free(receipt);
++        errno = EIO;
++        return false;
++    }
++    darwin_ram_receipts_init();
++    qemu_mutex_lock(&darwin_ram_receipt_lock);
++    if (darwin_ram_receipt_serial == UINT64_MAX) {
++        qemu_mutex_unlock(&darwin_ram_receipt_lock);
++        g_free(receipt);
++        errno = EOVERFLOW;
++        return false;
++    }
++    receipt->base = base;
++    receipt->size = size;
++    receipt->chunk_size = DCR_CHUNK_SIZE;
++    receipt->serial = ++darwin_ram_receipt_serial;
++    receipt->next = darwin_ram_receipts;
++    darwin_ram_receipts = receipt;
++    qemu_mutex_unlock(&darwin_ram_receipt_lock);
++    fprintf(stderr, "hvf-ram-backing: event=allocate serial=%" PRIu64
++            " size=%zu chunk_size=%zu full_chunks=%zu tail_bytes=%zu\n",
++            receipt->serial, size, (size_t)DCR_CHUNK_SIZE,
++            size / (size_t)DCR_CHUNK_SIZE, size % (size_t)DCR_CHUNK_SIZE);
++    return true;
++}
++#endif
++
+ /* alloc shared memory pages */
+ void *qemu_anon_ram_alloc(size_t size, uint64_t *alignment, bool shared)
+ {
+@@ -153,6 +262,17 @@ void *qemu_anon_ram_alloc(size_t size, uint64_t *alignment, bool shared)
+         return NULL;
+     }
+ 
++#if defined(__APPLE__) && defined(__aarch64__)
++    const char *reclaim = getenv("MODAVD_HVF_RAM_RECLAIM");
++    if (!shared && reclaim && !strcmp(reclaim, "1") &&
++        !darwin_ram_construct_chunked(ptr, size)) {
++        int saved_errno = errno;
++        qemu_ram_munmap(ptr, size);
++        errno = saved_errno;
++        return NULL; /* Never publish a monolithic fallback as qualified. */
++    }
++#endif
++
+     if (alignment) {
+         *alignment = align;
+     }
+@@ -170,6 +290,9 @@ void qemu_vfree(void *ptr)
+ void qemu_anon_ram_free(void *ptr, size_t size)
+ {
+     trace_qemu_anon_ram_free(ptr, size);
++#if defined(__APPLE__) && defined(__aarch64__)
++    darwin_ram_receipt_retire(ptr, size);
++#endif
+     qemu_ram_munmap(ptr, size);
+ }
+ 
+diff --git a/vl.c b/vl.c
+index 43a8b8bb..f4980a6c 100755
+--- a/vl.c
++++ b/vl.c
+@@ -908,6 +908,24 @@ static void runstate_init(void)
+ }
+ 
+ /* This function will abort() on invalid state transitions */
++static uint64_t vm_reclaim_epoch = 1;
++
++uint64_t qemu_vm_reclaim_epoch(void)
++{
++    return atomic_read(&vm_reclaim_epoch);
++}
++
++static void vm_reclaim_transition(void)
++{
++    uint64_t old;
++    do {
++        old = atomic_read(&vm_reclaim_epoch);
++        if (old == UINT64_MAX) {
++            return;
++        }
++    } while (atomic_cmpxchg(&vm_reclaim_epoch, old, old + 1) != old);
++}
++
+ void runstate_set(RunState new_state)
+ {
+     assert(new_state < RUN_STATE__MAX);
+@@ -922,6 +940,7 @@ void runstate_set(RunState new_state)
+                      RunState_str(new_state));
+         abort();
+     }
++    vm_reclaim_transition();
+     trace_runstate_set(new_state);
+     current_run_state = new_state;
+ }
+@@ -964,6 +983,7 @@ void qemu_system_vmstop_request_prepare(void)
+ 
+ void qemu_system_vmstop_request(RunState state)
+ {
++    vm_reclaim_transition();
+     vmstop_requested = state;
+     qemu_mutex_unlock(&vmstop_lock);
+     qemu_notify_event();
+@@ -1833,6 +1853,13 @@ static int powerdown_requested;
+ static int debug_requested;
+ static int suspend_requested;
+ static WakeupReason wakeup_reason;
++bool qemu_vm_reclaim_running(void)
++{
++    return runstate_is_running() &&
++           !atomic_read(&reset_requested) && !atomic_read(&shutdown_requested) &&
++           !atomic_read(&suspend_requested) && !atomic_read(&debug_requested) &&
++           atomic_read(&vmstop_requested) == RUN_STATE__MAX;
++}
+ static NotifierList powerdown_notifiers =
+     NOTIFIER_LIST_INITIALIZER(powerdown_notifiers);
+ static NotifierList suspend_notifiers =
+@@ -1846,6 +1873,7 @@ static int64_t s_shutdown_request_uptime_ms;
+ #endif
+ 
+ static void set_shutdown_requested(void) {
++    vm_reclaim_transition();
+     shutdown_requested = 1;
+ #ifdef CONFIG_ANDROID
+     if (s_shutdown_request_uptime_ms == 0) {
+@@ -1934,6 +1962,7 @@ static int qemu_debug_requested(void)
+  */
+ void qemu_system_reset(ShutdownCause reason)
+ {
++    vm_reclaim_transition();
+     MachineClass *mc;
+ 
+     mc = current_machine ? MACHINE_GET_CLASS(current_machine) : NULL;
+@@ -1991,6 +2020,7 @@ void qemu_system_guest_panicked(GuestPanicInformation *info)
+ 
+ void qemu_system_reset_request(ShutdownCause reason)
+ {
++    vm_reclaim_transition();
+     if (no_reboot) {
+         shutdown_requested = reason;
+     } else {
+@@ -2013,6 +2043,7 @@ static void qemu_system_suspend(void)
+ 
+ void qemu_system_suspend_request(void)
+ {
++    vm_reclaim_transition();
+     if (runstate_check(RUN_STATE_SUSPENDED)) {
+         return;
+     }
+@@ -2062,6 +2093,7 @@ void qemu_system_invalidate_exit_snapshot(void)
+ 
+ void qemu_system_killed(int signal, pid_t pid)
+ {
++    vm_reclaim_transition();
+     shutdown_signal = signal;
+     shutdown_pid = pid;
+     no_shutdown = 0;
+@@ -2075,6 +2107,7 @@ void qemu_system_killed(int signal, pid_t pid)
+ 
+ void qemu_system_shutdown_request(ShutdownCause reason)
+ {
++    vm_reclaim_transition();
+     trace_qemu_system_shutdown_request(reason);
+     replay_shutdown_request(reason);
+     shutdown_requested = reason;
+@@ -2101,6 +2134,7 @@ void qemu_register_powerdown_notifier(Notifier *notifier)
+ 
+ void qemu_system_debug_request(void)
+ {
++    vm_reclaim_transition();
+     debug_requested = 1;
+     qemu_notify_event();
+ }

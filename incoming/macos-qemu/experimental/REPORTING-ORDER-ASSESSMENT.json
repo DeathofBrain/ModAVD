@@ -1,0 +1,762 @@
+{
+  "schema": "modavd-read-only-guest-reporting-order-assessment-1",
+  "captured_utc": "2026-10-31T22:29:09.190606+00:00",
+  "scope": "Read-only existing frozen guest evidence, exact official deployed-kernel source, Manager source, and private host source. No guest/config/parameter/gate/granule mutation, launch or build.",
+  "source_receipt": {
+    "path": "incoming/macos-qemu/experimental/evidence/20261101-guest-reporting-order-source/receipt.json",
+    "sha256": "f41e038ae1463d944e3787f00a6ce2cc641642613c9d4df6d7608c80ee574bdc"
+  },
+  "kernel_full_commit": "7e35917775b8b3e3346a87f294e334e258bf15e6",
+  "guest_page_size_evidence": [
+    {
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-memory256/probe.jsonl",
+        "sha256": "7ed74073756473e277a985ca72cdb8e14f64fa435c0255134a82aacf33c69781"
+      },
+      "begin": {
+        "event": "begin",
+        "churn_bytes": 268435456,
+        "live_bytes": 16777216,
+        "guest_page_bytes": 4096,
+        "rounds": 3,
+        "release_seconds": 8
+      }
+    },
+    {
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-memory256/probe.jsonl",
+        "sha256": "f2b1c83e3a6f6e32d380d81723215cbe2967a18331a6ec9458f69679e219bae4"
+      },
+      "begin": {
+        "event": "begin",
+        "churn_bytes": 268435456,
+        "live_bytes": 16777216,
+        "guest_page_bytes": 4096,
+        "rounds": 3,
+        "release_seconds": 8
+      }
+    },
+    {
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-memory512/probe.jsonl",
+        "sha256": "9368c7acbc6361999c3e86f08030b841aff1438db7f98d099fce27edb560e468"
+      },
+      "begin": {
+        "event": "begin",
+        "churn_bytes": 536870912,
+        "live_bytes": 16777216,
+        "guest_page_bytes": 4096,
+        "rounds": 3,
+        "release_seconds": 8
+      }
+    },
+    {
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-concurrent-memory/probe.jsonl",
+        "sha256": "497fe3b27d4530beaed11f97c4373d6fd0eddbd423e56634c7d1fefc799b1fd9"
+      },
+      "begin": {
+        "event": "begin",
+        "churn_bytes": 268435456,
+        "live_bytes": 16777216,
+        "guest_page_bytes": 4096,
+        "rounds": 3,
+        "release_seconds": 8
+      }
+    },
+    {
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map-memory256/probe.jsonl",
+        "sha256": "45928e90f38c9648c6385a1a7233e9a329e12845c8673a9489b80caadec7ec44"
+      },
+      "begin": {
+        "event": "begin",
+        "churn_bytes": 268435456,
+        "live_bytes": 16777216,
+        "guest_page_bytes": 4096,
+        "rounds": 3,
+        "release_seconds": 8
+      }
+    },
+    {
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map-memory512/probe.jsonl",
+        "sha256": "291c1c90ca9c27f74059261ea42779760aebb37e9ef57a4fbdbfc9849907272c"
+      },
+      "begin": {
+        "event": "begin",
+        "churn_bytes": 536870912,
+        "live_bytes": 16777216,
+        "guest_page_bytes": 4096,
+        "rounds": 3,
+        "release_seconds": 8
+      }
+    },
+    {
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-memory/probe.jsonl",
+        "sha256": "6654bac7654380578990d7f05ad52d801055ea19e1fdfa1d60f4e6ce210d3bf0"
+      },
+      "begin": {
+        "event": "begin",
+        "churn_bytes": 134217728,
+        "live_bytes": 16777216,
+        "guest_page_bytes": 4096,
+        "rounds": 1,
+        "release_seconds": 2
+      }
+    }
+  ],
+  "manager_order": {
+    "constant": 9,
+    "source": {
+      "path": ".macos-work/manager/internal/emu/manager.go",
+      "sha256": "3408760704d37d72ab8fcec812f58443abdef081d2391803e4a03e76f3573028"
+    },
+    "setup_source": {
+      "path": ".macos-work/manager/internal/emu/afterboot.go",
+      "sha256": "2c3bc7a03196a8ec8a75445a9dd796ce29de1b98743730e4e028e77d2eadad2d"
+    },
+    "root_readback": {
+      "path": ".macos-work/qa/runtime-parity-guest-20261101.json",
+      "sha256": "f98181d5c0fe8e4c38d4024dc5df07ad4fb48eb7f0a2ff90d136add9be4c1540"
+    },
+    "meaning": "Manager setupBalloon uses su to write order9 after device binding and reads back; it is a Manager tuning value, not kernel fixed default."
+  },
+  "private_observed_order": {
+    "observed_in_v6_sysfs": 10,
+    "pageblock_order": 10,
+    "v7_per_launch_sysfs_capture_present": false,
+    "v7_scope": "V7 probe proves 4096B base pages; frozen native report logs show4MiB SGs and private startup path does not run Manager setup. No fresh order read was taken in any V7 window; do not claim a per-launch sysfs measurement.",
+    "private_startup_wrapper": {
+      "path": "incoming/macos-qemu/experimental/run-private-runtime.py",
+      "sha256": "c7ab73e072a7b61c0be867e1fa39984422e64ac8a186c160a8240bd4ac28a38c"
+    },
+    "private_runtime_source": {
+      "path": "ports/macos/runtime/runtime.py",
+      "sha256": "b4b3f45e079ac4a71571b96b808b24ddfa908f0d6da40d058d844013831b299e"
+    }
+  },
+  "runtime_parameter": {
+    "name": "/sys/module/page_reporting/parameters/page_reporting_order",
+    "type": "uint",
+    "mode_octal": "0644",
+    "runtime_writable_in_kernel_by_privileged_owner": true,
+    "actual_write_attempted_in_this_audit": false,
+    "unprivileged_read_was_denied_in_existing_capture": true,
+    "custom_setter_or_synchronization": false,
+    "write_itself_schedules_work": false,
+    "register_resets_to_driver_order_or_pageblock": true,
+    "behavior": "Minimum scanning/notify order, not forced SG size. Ordinary writes affect subsequent reads; do not assume in-flight worker snapshot or immediate reporting. Later qualifying free notifications or pending work drive processing.",
+    "android_permission_limit": "Source ownership mode supports root writes; Android SELinux/permissions and actual value changes were not tested in private V7 guests. Manager order9 readback is separate successful evidence."
+  },
+  "order_model": [
+    {
+      "minimum_order": 10,
+      "smallest_buddy_sg_bytes": 4194304,
+      "smallest_buddy_sg_MiB": 4.0,
+      "additional_zone_watermark_guest_pages": 32768,
+      "additional_zone_watermark_MiB": 128.0,
+      "backing_objects_in_one_minimum_sized_sg": 16,
+      "native_attempt_cap_for_that_sg": 2,
+      "native_attempted_fraction_for_cold_minimum_sized_sg": 0.125,
+      "can_authorize_whole_256k_transaction_for_smallest_sg": true,
+      "note": "Higher orders remain present as their original larger SGs; no splitting or ownership accumulation."
+    },
+    {
+      "minimum_order": 9,
+      "smallest_buddy_sg_bytes": 2097152,
+      "smallest_buddy_sg_MiB": 2.0,
+      "additional_zone_watermark_guest_pages": 16384,
+      "additional_zone_watermark_MiB": 64.0,
+      "backing_objects_in_one_minimum_sized_sg": 8,
+      "native_attempt_cap_for_that_sg": 2,
+      "native_attempted_fraction_for_cold_minimum_sized_sg": 0.25,
+      "can_authorize_whole_256k_transaction_for_smallest_sg": true,
+      "note": "Higher orders remain present as their original larger SGs; no splitting or ownership accumulation."
+    },
+    {
+      "minimum_order": 8,
+      "smallest_buddy_sg_bytes": 1048576,
+      "smallest_buddy_sg_MiB": 1.0,
+      "additional_zone_watermark_guest_pages": 8192,
+      "additional_zone_watermark_MiB": 32.0,
+      "backing_objects_in_one_minimum_sized_sg": 4,
+      "native_attempt_cap_for_that_sg": 2,
+      "native_attempted_fraction_for_cold_minimum_sized_sg": 0.5,
+      "can_authorize_whole_256k_transaction_for_smallest_sg": true,
+      "note": "Higher orders remain present as their original larger SGs; no splitting or ownership accumulation."
+    },
+    {
+      "minimum_order": 7,
+      "smallest_buddy_sg_bytes": 524288,
+      "smallest_buddy_sg_MiB": 0.5,
+      "additional_zone_watermark_guest_pages": 4096,
+      "additional_zone_watermark_MiB": 16.0,
+      "backing_objects_in_one_minimum_sized_sg": 2,
+      "native_attempt_cap_for_that_sg": 2,
+      "native_attempted_fraction_for_cold_minimum_sized_sg": 1.0,
+      "can_authorize_whole_256k_transaction_for_smallest_sg": true,
+      "note": "Higher orders remain present as their original larger SGs; no splitting or ownership accumulation."
+    },
+    {
+      "minimum_order": 6,
+      "smallest_buddy_sg_bytes": 262144,
+      "smallest_buddy_sg_MiB": 0.25,
+      "additional_zone_watermark_guest_pages": 2048,
+      "additional_zone_watermark_MiB": 8.0,
+      "backing_objects_in_one_minimum_sized_sg": 1,
+      "native_attempt_cap_for_that_sg": 1,
+      "native_attempted_fraction_for_cold_minimum_sized_sg": 1.0,
+      "can_authorize_whole_256k_transaction_for_smallest_sg": true,
+      "note": "Higher orders remain present as their original larger SGs; no splitting or ownership accumulation."
+    },
+    {
+      "minimum_order": 5,
+      "smallest_buddy_sg_bytes": 131072,
+      "smallest_buddy_sg_MiB": 0.125,
+      "additional_zone_watermark_guest_pages": 1024,
+      "additional_zone_watermark_MiB": 4.0,
+      "backing_objects_in_one_minimum_sized_sg": 0,
+      "native_attempt_cap_for_that_sg": 0,
+      "native_attempted_fraction_for_cold_minimum_sized_sg": 0,
+      "can_authorize_whole_256k_transaction_for_smallest_sg": false,
+      "note": "Higher orders remain present as their original larger SGs; no splitting or ownership accumulation."
+    }
+  ],
+  "existing_buddy_snapshots": [
+    {
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-reporter-state.json",
+        "sha256": "0f653b630612fd7cd22903e23a6f7ee2687cdc4a3499a323b4d79ad7418ca96b"
+      },
+      "pid": 21579,
+      "captured_utc": "2026-10-31T20:25:39.069421+00:00",
+      "observed_order": 10,
+      "pageblock_order": 10,
+      "guest_page_bytes": 4096,
+      "migrate_type_rows": [
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Unmovable",
+          "counts": [
+            920,
+            687,
+            273,
+            1,
+            0,
+            1,
+            6,
+            4,
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Movable",
+          "counts": [
+            29931,
+            13699,
+            4332,
+            1362,
+            462,
+            121,
+            134,
+            81,
+            41,
+            12,
+            12
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Reclaimable",
+          "counts": [
+            176,
+            0,
+            66,
+            79,
+            19,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "HighAtomic",
+          "counts": [
+            24,
+            8,
+            6,
+            4,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "CMA",
+          "counts": [
+            112,
+            42,
+            10,
+            6,
+            5,
+            5,
+            3,
+            2,
+            1,
+            0,
+            2
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Isolate",
+          "counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "all_nonisolate_counts_by_order": [
+        31163,
+        14436,
+        4687,
+        1452,
+        487,
+        132,
+        143,
+        87,
+        44,
+        12,
+        14
+      ],
+      "all_nonisolate_free_list_MiB": 603.30859375,
+      "minimum_order_structural_coverage": {
+        "10": {
+          "existing_buddy_blocks": 14,
+          "guest_pages": 14336,
+          "bytes": 58720256,
+          "MiB": 56.0,
+          "equivalent_256k_objects": 224
+        },
+        "9": {
+          "existing_buddy_blocks": 26,
+          "guest_pages": 20480,
+          "bytes": 83886080,
+          "MiB": 80.0,
+          "equivalent_256k_objects": 320
+        },
+        "8": {
+          "existing_buddy_blocks": 70,
+          "guest_pages": 31744,
+          "bytes": 130023424,
+          "MiB": 124.0,
+          "equivalent_256k_objects": 496
+        },
+        "7": {
+          "existing_buddy_blocks": 157,
+          "guest_pages": 42880,
+          "bytes": 175636480,
+          "MiB": 167.5,
+          "equivalent_256k_objects": 670
+        },
+        "6": {
+          "existing_buddy_blocks": 300,
+          "guest_pages": 52032,
+          "bytes": 213123072,
+          "MiB": 203.25,
+          "equivalent_256k_objects": 813
+        }
+      },
+      "extra_order6_through9_MiB": 147.25,
+      "extra_order6_through8_MiB": 123.25
+    },
+    {
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-subobject-directed-guest/reporter-state-during512.json",
+        "sha256": "4339adf9508543ceba02b6c0451831529953b0150c606b800c5a66d03dad21c6"
+      },
+      "pid": 52205,
+      "captured_utc": "2026-10-31T20:57:08.659866+00:00",
+      "observed_order": 10,
+      "pageblock_order": 10,
+      "guest_page_bytes": 4096,
+      "migrate_type_rows": [
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Unmovable",
+          "counts": [
+            831,
+            657,
+            206,
+            69,
+            27,
+            12,
+            2,
+            2,
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Movable",
+          "counts": [
+            33004,
+            18727,
+            6080,
+            1957,
+            468,
+            83,
+            68,
+            25,
+            11,
+            6,
+            16
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Reclaimable",
+          "counts": [
+            172,
+            10,
+            87,
+            87,
+            16,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "HighAtomic",
+          "counts": [
+            16,
+            3,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "CMA",
+          "counts": [
+            68,
+            14,
+            4,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Isolate",
+          "counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "all_nonisolate_counts_by_order": [
+        34091,
+        19411,
+        6377,
+        2116,
+        511,
+        97,
+        71,
+        27,
+        11,
+        7,
+        19
+      ],
+      "all_nonisolate_free_list_MiB": 626.89453125,
+      "minimum_order_structural_coverage": {
+        "10": {
+          "existing_buddy_blocks": 19,
+          "guest_pages": 19456,
+          "bytes": 79691776,
+          "MiB": 76.0,
+          "equivalent_256k_objects": 304
+        },
+        "9": {
+          "existing_buddy_blocks": 26,
+          "guest_pages": 23040,
+          "bytes": 94371840,
+          "MiB": 90.0,
+          "equivalent_256k_objects": 360
+        },
+        "8": {
+          "existing_buddy_blocks": 37,
+          "guest_pages": 25856,
+          "bytes": 105906176,
+          "MiB": 101.0,
+          "equivalent_256k_objects": 404
+        },
+        "7": {
+          "existing_buddy_blocks": 64,
+          "guest_pages": 29312,
+          "bytes": 120061952,
+          "MiB": 114.5,
+          "equivalent_256k_objects": 458
+        },
+        "6": {
+          "existing_buddy_blocks": 135,
+          "guest_pages": 33856,
+          "bytes": 138674176,
+          "MiB": 132.25,
+          "equivalent_256k_objects": 529
+        }
+      },
+      "extra_order6_through9_MiB": 56.25,
+      "extra_order6_through8_MiB": 42.25
+    },
+    {
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-subobject-directed-guest/reporter-state-final.json",
+        "sha256": "10b731471ee3e398090a9d81c77d52a2112fa711c8ed72cb8dcc9666865caf4b"
+      },
+      "pid": 52205,
+      "captured_utc": "2026-10-31T20:58:34.186528+00:00",
+      "observed_order": 10,
+      "pageblock_order": 10,
+      "guest_page_bytes": 4096,
+      "migrate_type_rows": [
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Unmovable",
+          "counts": [
+            1,
+            161,
+            208,
+            1,
+            7,
+            13,
+            2,
+            2,
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Movable",
+          "counts": [
+            34645,
+            19213,
+            6226,
+            1985,
+            479,
+            91,
+            67,
+            28,
+            8,
+            7,
+            20
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Reclaimable",
+          "counts": [
+            172,
+            1,
+            59,
+            87,
+            16,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "HighAtomic",
+          "counts": [
+            18,
+            3,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "CMA",
+          "counts": [
+            69,
+            14,
+            4,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3
+          ]
+        },
+        {
+          "node": 0,
+          "zone": "DMA32",
+          "migrate_type": "Isolate",
+          "counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "all_nonisolate_counts_by_order": [
+        34905,
+        19392,
+        6497,
+        2076,
+        502,
+        106,
+        70,
+        30,
+        8,
+        8,
+        23
+      ],
+      "all_nonisolate_free_list_MiB": 647.36328125,
+      "minimum_order_structural_coverage": {
+        "10": {
+          "existing_buddy_blocks": 23,
+          "guest_pages": 23552,
+          "bytes": 96468992,
+          "MiB": 92.0,
+          "equivalent_256k_objects": 368
+        },
+        "9": {
+          "existing_buddy_blocks": 31,
+          "guest_pages": 27648,
+          "bytes": 113246208,
+          "MiB": 108.0,
+          "equivalent_256k_objects": 432
+        },
+        "8": {
+          "existing_buddy_blocks": 39,
+          "guest_pages": 29696,
+          "bytes": 121634816,
+          "MiB": 116.0,
+          "equivalent_256k_objects": 464
+        },
+        "7": {
+          "existing_buddy_blocks": 69,
+          "guest_pages": 33536,
+          "bytes": 137363456,
+          "MiB": 131.0,
+          "equivalent_256k_objects": 524
+        },
+        "6": {
+          "existing_buddy_blocks": 139,
+          "guest_pages": 38016,
+          "bytes": 155713536,
+          "MiB": 148.5,
+          "equivalent_256k_objects": 594
+        }
+      },
+      "extra_order6_through9_MiB": 56.5,
+      "extra_order6_through8_MiB": 40.5
+    }
+  ],
+  "structural_conclusion": "Existing snapshots prove substantial free-list bytes below order10 but at/above order6. They support guest high-order coverage limitation as a distinct hypothesis, not resident-tail starvation or host benefit.",
+  "limits": [
+    "Buddy/pagetype snapshots are from earlier V6 guests, not the V7 positive/tail PID/boot or the same probe phase; never transplant their byte totals to V7.",
+    "Counts are existing free-list blocks, include PageReported blocks and CMA, lack physical-address identity, PCP coverage, zone-watermark state, host exposure and PRESENT correlation; structural candidate upper bounds only.",
+    "A lower minimum includes smaller existing buddy blocks without compacting memory, touching guest pages, splitting high-order blocks, or gathering subchunk ownership. Existing4MiB SG tails remain.",
+    "Order6 is256KiB at guest4KiB and aligns with fixed host256KiB objects for the observed main-RAM base0x40000000. Host16KiB is a separate page size. Order0–5 smallest SGs fail whole-chunk eligibility.",
+    "Lower order reduces additional zone watermark128MiB(order10)/64MiB(order9) to8MiB(order6), increases eligible free notifications/list work/SG count;32-SG capacity/2s scheduling delay remain, no latency or memory-saving bound inferred.",
+    "For equal bytes represented entirely by minimum-sized blocks, order6 has16x descriptor count vsorder10 (8x vsorder9); actual kernel does not split existing high-order blocks, so this is a volume ratio, not measured traffic.",
+    "Host retains2attempts/32inspections perSG; smaller whole SGs may expose different ranges and improve attempted-byte fraction, but more SGs/BHs and unchanged expensive caller validation require measured shared-budget assessment.",
+    "Separating guest fragmentation from host residency/exposure requires same-boot synchronized buddy/order/zoneinfo plus per-SG address/order and host candidate/PRESENT observations. No such new runtime data collected."
+  ]
+}

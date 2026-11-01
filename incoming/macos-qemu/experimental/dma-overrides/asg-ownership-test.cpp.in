@@ -1,0 +1,481 @@
+// QA shims surrounding exact source functions. Not a renderer implementation.
+#include "modavd-asg-external-ownership.h"
+#include "sysemu/dma-sized.h"
+#include <algorithm>
+#include <atomic>
+#include <cassert>
+#include <cerrno>
+#include <cstdint>
+#include <cstdlib>
+#include <functional>
+#include <iostream>
+#include <memory>
+#include <mutex>
+#include <optional>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
+@@REGISTRY@@
+
+static int checks = 0;
+static int guardEnters = 0, guardLeaves = 0;
+static int activeGuards = 0;
+static bool expectGuard = false;
+static bool consumerJoined = true;
+static std::vector<std::string> events;
+static unsigned lifecycleCases = 0, createCases = 0;
+static void check(bool result) { assert(result); ++checks; }
+static void lifetimeCallback(const void*, bool enter) {
+    if (enter) {
+        assert(events.empty());
+        ++activeGuards;
+        ++guardEnters;
+        events.push_back("enter");
+    } else {
+        assert(activeGuards == 1 && consumerJoined);
+        assert(events.size() >= 3);
+        assert(events[events.size()-3] == "free-buffer");
+        assert(events[events.size()-2] == "free-ring");
+        assert(events.back() == "free-combined");
+        --activeGuards;
+        ++guardLeaves;
+        events.push_back("leave");
+    }
+}
+static void firstPublication(const char* name) {
+    assert(activeGuards == (expectGuard ? 1 : 0));
+    if (expectGuard) assert(!events.empty() && events.front() == "enter");
+    events.push_back(name);
+}
+
+enum class AddressSpaceDeviceType { Graphics, VirtioGpuGraphics };
+constexpr auto ADDRESS_SPACE_CONTEXT_TYPE_VIRTIO_GPU_GRAPHICS = AddressSpaceDeviceType::VirtioGpuGraphics;
+struct AddressSpaceCreateInfo {
+    uint32_t handle = 0;
+    AddressSpaceDeviceType type = AddressSpaceDeviceType::Graphics;
+    bool createRenderThread = false;
+    void* externalAddr = nullptr;
+    uint64_t externalAddrSize = 0;
+    uint32_t virtioGpuContextId = 0;
+    uint32_t virtioGpuCapsetId = 0;
+    const char* contextName = nullptr;
+    uint32_t contextNameSize = 0;
+    bool fromSnapshot = false;
+};
+struct address_space_device_control_ops {
+    std::function<uint32_t()> gen_handle;
+    std::function<void(const AddressSpaceCreateInfo&)> create_instance;
+};
+
+namespace gfxstream {
+enum AsgOnUnavailableReadStatus { Unavailable };
+struct ConsumerCallbacks {
+    std::function<AsgOnUnavailableReadStatus()> onUnavailableRead;
+    std::function<char*(uint64_t)> getPtr;
+};
+struct AsgConsumerCreateInfo {
+    uint32_t version;
+    char* ring_storage;
+    char* buffer;
+    uint64_t buffer_size;
+    uint64_t buffer_flush_interval;
+    ConsumerCallbacks callbacks;
+    std::optional<uint32_t> virtioGpuContextId;
+    std::optional<std::string> virtioGpuContextName;
+    std::optional<uint32_t> virtioGpuCapsetId;
+};
+struct ConsumerInterface {
+    void* (*create)(const AsgConsumerCreateInfo&, void*);
+    void (*destroy)(void*);
+};
+struct TestWorker {
+    std::atomic<bool> stop{false};
+    std::thread thread;
+    TestWorker() : thread([this] { while (!stop.load()) std::this_thread::yield(); }) {}
+};
+static void* createConsumer(const AsgConsumerCreateInfo& info, void*) {
+    firstPublication("create-consumer");
+    assert(info.ring_storage && info.buffer && info.buffer_size == 1024);
+    assert(info.callbacks.onUnavailableRead() == Unavailable);
+    assert(info.callbacks.getPtr(0x1234) == reinterpret_cast<char*>(0x1234));
+    consumerJoined = false;
+    return new TestWorker;
+}
+static void destroyConsumer(void* opaque) {
+    events.push_back("destroy-consumer");
+    auto* worker = static_cast<TestWorker*>(opaque);
+    worker->stop.store(true);
+    worker->thread.join();
+    consumerJoined = true;
+    events.push_back("join-consumer");
+    delete worker;
+}
+namespace host {
+using VirtioGpuResourceId = uint32_t;
+struct RingBlob {
+    void* base;
+    uint64_t extent;
+    RingBlob(void* value, uint64_t size) : base(value), extent(size) {}
+    void* map() const { return base; }
+    uint64_t size() const { return extent; }
+};
+struct VirtioGpuResource {
+    uint32_t id = 4;
+    void* address = nullptr;
+    uint64_t size = 0;
+    int mapStatus = 0, mapCalls = 0, shareCalls = 0;
+    std::shared_ptr<RingBlob> owner;
+    uint32_t GetId() const { return id; }
+    int Map(void** output, uint64_t* outputSize) {
+        ++mapCalls;
+        *output = address;
+        *outputSize = size;
+        return mapStatus;
+    }
+    std::shared_ptr<RingBlob> ShareRingBlob() { ++shareCalls; return owner; }
+};
+struct VirtioGpuContext {
+    uint32_t mId = 9, mCapsetId = 2;
+    std::string mName = "native-asg";
+    std::unordered_map<VirtioGpuResourceId, uint32_t> mAddressSpaceHandles;
+    int CreateAddressSpaceGraphicsInstance(const address_space_device_control_ops&, VirtioGpuResource&);
+};
+#define GFXSTREAM_ERROR(...) ((void)0)
+@@CREATE_ASG@@
+#undef GFXSTREAM_ERROR
+} // host
+} // gfxstream
+
+namespace android { namespace emulation { namespace asg {
+using gfxstream::AsgConsumerCreateInfo;
+struct Allocation { char* buffer = nullptr; };
+struct Globals {
+    struct ControlOps {
+        char* get_host_ptr(uint64_t value) { return reinterpret_cast<char*>(value); }
+    } ops;
+    char ring[64]{}, buffer[1024]{}, combined[1088]{};
+    ControlOps* controlOps() { return &ops; }
+    gfxstream::ConsumerInterface getConsumerInterface() {
+        return {gfxstream::createConsumer, gfxstream::destroyConsumer};
+    }
+    Allocation allocRingAndBufferStorageDedicated(const AddressSpaceCreateInfo&) {
+        firstPublication("alloc-combined"); return {combined};
+    }
+    Allocation allocRingViewIntoCombined(const Allocation&) {
+        firstPublication("alloc-ring-view"); return {ring};
+    }
+    Allocation allocBufferViewIntoCombined(const Allocation&) {
+        firstPublication("alloc-buffer-view"); return {buffer};
+    }
+    Allocation allocRingStorage() { firstPublication("alloc-ring"); return {ring}; }
+    Allocation allocBuffer() { firstPublication("alloc-buffer"); return {buffer}; }
+    uint64_t perContextBufferSize() const { return 1024; }
+    void freeBuffer(const Allocation&) { assert(consumerJoined); events.push_back("free-buffer"); }
+    void freeRingStorage(const Allocation&) { assert(consumerJoined); events.push_back("free-ring"); }
+    void freeRingAndBuffer(const Allocation&) { assert(consumerJoined); events.push_back("free-combined"); }
+};
+static Globals globals;
+static Globals* sGlobals = &globals;
+struct Hw { uint64_t hw_gltransport_asg_writeStepSize = 8; };
+struct Settings { Hw values; Hw* hw() { return &values; } };
+struct ConsoleAgents { Settings store; Settings* settings = &store; };
+static ConsoleAgents* getConsoleAgents() { static ConsoleAgents value; return &value; }
+[[noreturn]] static void crashhandler_die(const char*) { std::abort(); }
+class AddressSpaceGraphicsContext {
+public:
+    AddressSpaceGraphicsContext(const AddressSpaceCreateInfo&);
+    ~AddressSpaceGraphicsContext();
+private:
+    enum ConsumerCommand { Exit };
+    struct MessageChannel {
+        void send(ConsumerCommand command) { assert(command == Exit); events.push_back("send-exit"); }
+    };
+    gfxstream::AsgOnUnavailableReadStatus onUnavailableRead() { return gfxstream::Unavailable; }
+@@GUARD_MEMBER@@
+    uint32_t mVersion = 1;
+    Allocation mRingAllocation, mBufferAllocation, mCombinedAllocation;
+    gfxstream::ConsumerCallbacks mConsumerCallbacks;
+    gfxstream::ConsumerInterface mConsumerInterface;
+    void* mCurrentConsumer = nullptr;
+    MessageChannel mConsumerMessages;
+    uint32_t mExiting = 0;
+    struct VirtioGpuInfo {
+        uint32_t contextId = 0, capsetId = 0;
+        std::optional<std::string> name;
+    };
+    std::optional<VirtioGpuInfo> mVirtioGpuInfo;
+};
+@@QEMU_CTOR@@
+@@QEMU_DTOR@@
+} } }
+
+using android::emulation::asg::AddressSpaceGraphicsContext;
+static char storage[256];
+static unsigned queryCalls = 0;
+static bool countedOwnership(uint32_t handle, const void* base, uint64_t size) {
+    ++queryCalls;
+    return modavd_asg_external_owned_v1(handle, base, size);
+}
+static bool alwaysFalse(uint32_t, const void*, uint64_t) { ++queryCalls; return false; }
+static bool alwaysTrue(uint32_t, const void*, uint64_t) { ++queryCalls; return true; }
+static void prepareLifecycle(bool guarded) {
+    assert(activeGuards == 0 && sExternalLifetimes.empty() && consumerJoined);
+    expectGuard = guarded;
+    events.clear();
+}
+static void finishLifecycle(bool guarded, bool consumer) {
+    check(activeGuards == 0 && sExternalLifetimes.empty());
+    check(consumerJoined);
+    check(events.back() == (guarded ? "leave" : "free-combined"));
+    if (consumer) {
+        auto destroy = std::find(events.begin(), events.end(), "destroy-consumer");
+        auto join = std::find(events.begin(), events.end(), "join-consumer");
+        auto free = std::find(events.begin(), events.end(), "free-buffer");
+        check(destroy < join && join < free);
+    }
+    ++lifecycleCases;
+}
+static AddressSpaceCreateInfo externalCreate() {
+    AddressSpaceCreateInfo result;
+    result.handle = 7;
+    result.type = AddressSpaceDeviceType::VirtioGpuGraphics;
+    result.externalAddr = storage;
+    result.externalAddrSize = sizeof(storage);
+    result.createRenderThread = true;
+    return result;
+}
+
+static void testCertificate() {
+    check(!modavd_asg_external_owned_v1(7, storage, sizeof(storage)));
+    {
+        ModavdAsgExternalScope scope(7, storage, sizeof(storage), true);
+        check(!modavd_asg_external_owned_v1(8, storage, sizeof(storage)));
+        check(!modavd_asg_external_owned_v1(7, storage + 1, sizeof(storage)));
+        check(!modavd_asg_external_owned_v1(7, storage, sizeof(storage) - 1));
+        check(modavd_asg_external_owned_v1(7, storage, sizeof(storage)));
+        check(!modavd_asg_external_owned_v1(7, storage, sizeof(storage)));
+    }
+    check(!modavd_asg_external_owned_v1(7, storage, sizeof(storage)));
+    {
+        ModavdAsgExternalScope outer(7, storage, sizeof(storage), true);
+        {
+            ModavdAsgExternalScope inner(8, storage + 1, 10, true);
+            check(!modavd_asg_external_owned_v1(7, storage, sizeof(storage)));
+            check(modavd_asg_external_owned_v1(8, storage + 1, 10));
+            check(!modavd_asg_external_owned_v1(8, storage + 1, 10));
+        }
+        check(modavd_asg_external_owned_v1(7, storage, sizeof(storage)));
+    }
+    struct Invalid { uint32_t handle; const void* base; uint64_t size; bool owned; };
+    const Invalid invalid[] = {
+        {0, storage, sizeof(storage), true}, {7, nullptr, sizeof(storage), true},
+        {7, storage, 0, true}, {7, storage, sizeof(storage), false},
+        {7, reinterpret_cast<void*>(UINTPTR_MAX - 63), 64, true},
+        {7, storage, UINT64_MAX, true},
+    };
+    for (const auto& value : invalid) {
+        ModavdAsgExternalScope scope(value.handle, value.base, value.size, value.owned);
+        check(!modavd_asg_external_owned_v1(value.handle, value.base, value.size));
+    }
+    {
+        const void* edge = reinterpret_cast<void*>(UINTPTR_MAX - 63);
+        ModavdAsgExternalScope scope(7, edge, 63, true);
+        check(modavd_asg_external_owned_v1(7, edge, 63));
+    }
+    {
+        ModavdAsgExternalScope outer(7, storage, sizeof(storage), true);
+        std::thread other([] {
+            assert(!modavd_asg_external_owned_v1(7, storage, sizeof(storage)));
+            ModavdAsgExternalScope own(7, storage, sizeof(storage), true);
+            assert(modavd_asg_external_owned_v1(7, storage, sizeof(storage)));
+        });
+        other.join();
+        check(modavd_asg_external_owned_v1(7, storage, sizeof(storage)));
+    }
+    std::atomic<unsigned> accepted{0};
+    std::vector<std::thread> workers;
+    for (int i = 0; i < 8; ++i) workers.emplace_back([&] {
+        for (int iteration = 0; iteration < 1000; ++iteration) {
+            ModavdAsgExternalScope scope(7, storage, sizeof(storage), true);
+            assert(!modavd_asg_external_owned_v1(8, storage, sizeof(storage)));
+            assert(modavd_asg_external_owned_v1(7, storage, sizeof(storage)));
+            assert(!modavd_asg_external_owned_v1(7, storage, sizeof(storage)));
+            ++accepted;
+        }
+    });
+    for (auto& worker : workers) worker.join();
+    check(accepted == 8000);
+}
+
+static void testQemu() {
+    check(modavd_dma_set_external_lifetime(lifetimeCallback));
+    auto create = externalCreate();
+    modavd_dma_set_asg_external_owned_v1(nullptr);
+    check(!modavd_dma_asg_external_owned_v1(create.handle, create.externalAddr, create.externalAddrSize));
+    prepareLifecycle(true);
+    { AddressSpaceGraphicsContext context(create); }
+    finishLifecycle(true, true);
+    modavd_dma_set_asg_external_owned_v1(alwaysFalse);
+    prepareLifecycle(true);
+    { AddressSpaceGraphicsContext context(create); }
+    finishLifecycle(true, true);
+    modavd_dma_set_asg_external_owned_v1(countedOwnership);
+    prepareLifecycle(true);
+    { AddressSpaceGraphicsContext context(create); }
+    finishLifecycle(true, true);
+    for (unsigned mismatch = 0; mismatch < 4; ++mismatch) {
+        prepareLifecycle(mismatch != 0);
+        ModavdAsgExternalScope scope(create.handle + (mismatch == 1),
+            static_cast<char*>(create.externalAddr) + (mismatch == 2),
+            create.externalAddrSize - (mismatch == 3), true);
+        { AddressSpaceGraphicsContext context(create); }
+        finishLifecycle(mismatch != 0, true);
+        // A mismatching query must not consume the pending exact certificate.
+        if (mismatch) check(modavd_asg_external_owned_v1(create.handle + (mismatch == 1),
+            static_cast<char*>(create.externalAddr) + (mismatch == 2),
+            create.externalAddrSize - (mismatch == 3)));
+        else check(!modavd_asg_external_owned_v1(create.handle, create.externalAddr, create.externalAddrSize));
+    }
+    create.fromSnapshot = true;
+    for (unsigned nullAddress = 0; nullAddress < 2; ++nullAddress) {
+        create.externalAddr = nullAddress ? nullptr : storage;
+        modavd_dma_set_asg_external_owned_v1(alwaysTrue);
+        auto previous = queryCalls;
+        prepareLifecycle(true);
+        { AddressSpaceGraphicsContext context(create); }
+        check(queryCalls == previous);
+        check(events == std::vector<std::string>({"enter", "free-buffer", "free-ring", "free-combined", "leave"}));
+        finishLifecycle(true, false);
+    }
+    create = externalCreate();
+    create.externalAddr = nullptr;
+    modavd_dma_set_asg_external_owned_v1(alwaysFalse);
+    auto previous = queryCalls;
+    prepareLifecycle(false);
+    { AddressSpaceGraphicsContext context(create); }
+    check(queryCalls == previous);
+    finishLifecycle(false, true);
+    create = externalCreate();
+    create.createRenderThread = false;
+    prepareLifecycle(true);
+    { AddressSpaceGraphicsContext context(create); }
+    finishLifecycle(true, false);
+    create = externalCreate();
+    create.type = AddressSpaceDeviceType::Graphics;
+    prepareLifecycle(true);
+    { AddressSpaceGraphicsContext context(create); }
+    finishLifecycle(true, true);
+    modavd_dma_set_asg_external_owned_v1(nullptr);
+    check(!modavd_dma_asg_external_owned_v1(7, storage, sizeof(storage)));
+}
+
+static void testCreateAsg() {
+    using gfxstream::host::RingBlob;
+    using gfxstream::host::VirtioGpuContext;
+    using gfxstream::host::VirtioGpuResource;
+    modavd_dma_set_asg_external_owned_v1(countedOwnership);
+    for (unsigned variant = 0; variant < 8; ++variant) {
+        VirtioGpuContext context;
+        VirtioGpuResource resource;
+        resource.address = storage;
+        resource.size = sizeof(storage);
+        resource.owner = std::make_shared<RingBlob>(storage, sizeof(storage));
+        if (variant == 1) resource.owner.reset();
+        if (variant == 2) resource.owner->base = storage + 1;
+        if (variant == 3) --resource.owner->extent;
+        if (variant == 4) resource.address = nullptr;
+        if (variant == 5) resource.size = 0;
+        if (variant == 6) {
+            resource.address = reinterpret_cast<void*>(UINTPTR_MAX - 63);
+            resource.size = 64;
+            resource.owner->base = resource.address;
+            resource.owner->extent = resource.size;
+        }
+        const uint32_t handle = variant == 7 ? 0 : 17;
+        std::weak_ptr<RingBlob> weakOwner = resource.owner;
+        int generated = 0, created = 0;
+        address_space_device_control_ops ops;
+        ops.gen_handle = [&] { ++generated; return handle; };
+        ops.create_instance = [&](const AddressSpaceCreateInfo& info) {
+            ++created;
+            assert(info.handle == handle && info.externalAddr == resource.address &&
+                   info.externalAddrSize == resource.size && info.createRenderThread &&
+                   info.virtioGpuContextId == context.mId && info.virtioGpuCapsetId == context.mCapsetId);
+            assert(std::string(info.contextName, info.contextNameSize) == "native-asg-4");
+            resource.owner.reset();
+            assert(variant == 1 ? weakOwner.expired() : !weakOwner.expired());
+            // QEMU's real query consumes the renderer's scope synchronously.
+            bool guarded = variant != 0 && resource.address != nullptr;
+            prepareLifecycle(guarded);
+            { AddressSpaceGraphicsContext qemuContext(info); }
+            finishLifecycle(guarded, true);
+            assert(!modavd_asg_external_owned_v1(handle, resource.address, resource.size));
+            assert(variant == 1 ? weakOwner.expired() : !weakOwner.expired());
+        };
+        check(context.CreateAddressSpaceGraphicsInstance(ops, resource) == 0);
+        check(generated == 1 && created == 1 && resource.mapCalls == 1 && resource.shareCalls == 1);
+        check(context.mAddressSpaceHandles.at(resource.id) == handle);
+        check(weakOwner.expired());
+        check(!modavd_asg_external_owned_v1(handle, resource.address, resource.size));
+        ++createCases;
+    }
+    {
+        VirtioGpuContext context;
+        VirtioGpuResource resource;
+        resource.mapStatus = -1;
+        int called = 0;
+        address_space_device_control_ops ops;
+        ops.gen_handle = [&] { ++called; return 1; };
+        ops.create_instance = [&](const AddressSpaceCreateInfo&) { ++called; };
+        check(context.CreateAddressSpaceGraphicsInstance(ops, resource) == -EINVAL);
+        check(called == 0 && resource.mapCalls == 1 && resource.shareCalls == 0 && context.mAddressSpaceHandles.empty());
+        ++createCases;
+    }
+    {
+        VirtioGpuContext context;
+        VirtioGpuResource resource;
+        resource.address = storage;
+        resource.size = sizeof(storage);
+        resource.owner = std::make_shared<RingBlob>(storage, sizeof(storage));
+        std::weak_ptr<RingBlob> weakOwner = resource.owner;
+        address_space_device_control_ops ops;
+        ops.gen_handle = [] { return 23; };
+        ops.create_instance = [&](const AddressSpaceCreateInfo& info) {
+            resource.owner.reset();
+            assert(!weakOwner.expired());
+            assert(modavd_asg_external_owned_v1(info.handle, info.externalAddr, info.externalAddrSize));
+            assert(!modavd_asg_external_owned_v1(info.handle, info.externalAddr, info.externalAddrSize));
+            throw 41;
+        };
+        try { context.CreateAddressSpaceGraphicsInstance(ops, resource); assert(false); }
+        catch (int value) { check(value == 41); }
+        check(weakOwner.expired() && context.mAddressSpaceHandles.empty());
+        check(!modavd_asg_external_owned_v1(23, storage, sizeof(storage)));
+        ++createCases;
+    }
+}
+
+int main(int argc, char** argv) {
+    if (argc == 2 && std::string(argv[1]) == "out-of-order-scope") {
+        auto* outer = new ModavdAsgExternalScope(7, storage, sizeof(storage), true);
+        auto* inner = new ModavdAsgExternalScope(8, storage, sizeof(storage), true);
+        delete outer;
+        delete inner;
+        return 1;
+    }
+    testCertificate();
+    testQemu();
+    testCreateAsg();
+    check(guardEnters == guardLeaves && activeGuards == 0 && sExternalLifetimes.empty());
+    std::cout << "{\"assertion_checks\":" << checks
+              << ",\"parallel_certificate_scopes\":8000"
+              << ",\"lifecycle_cases\":" << lifecycleCases
+              << ",\"renderer_create_cases\":" << createCases
+              << ",\"guard_enters\":" << guardEnters
+              << ",\"guard_leaves\":" << guardLeaves
+              << ",\"query_calls\":" << queryCalls
+              << ",\"real_consumer_threads_joined\":true}\n";
+}

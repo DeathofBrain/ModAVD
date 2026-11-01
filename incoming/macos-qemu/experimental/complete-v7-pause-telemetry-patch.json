@@ -1,0 +1,157 @@
+{
+  "base_head": "568f0a3e755118d5dddd13bbdd821146d75f5711",
+  "file": "0007-darwin-hvf-v7-pause-telemetry-complete.patch",
+  "sha256": "dc2aa603dd0b125561b583f8488aa256db0c7664600b513f2c4ba68d73ea7c89",
+  "alternative_complete_diff_not_sequential": true,
+  "incremental_delta": "evidence/20261101-v7-pause-telemetry-source/telemetry-only.patch",
+  "source_receipt": "evidence/20261101-v7-pause-telemetry-source/receipt.json",
+  "installed_receipt": "evidence/20261101-v7-pause-telemetry-installed/installed.json",
+  "native_sources_unchanged": true,
+  "updated_utc": "2026-10-31T22:24:24.782568+00:00",
+  "validation_path_base": "repository_root",
+  "build_validation": {
+    "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-build/receipt.json",
+    "sha256": "da56eeae8833c10ac72b053a4fc31d6c846407b18f9c96447bc96fa2e65f6520"
+  },
+  "positive_validation": {
+    "pid": 2276,
+    "stopped_normally": true,
+    "installed_files": {
+      "qemu/darwin-aarch64/qemu-system-aarch64-headless": "e84c349aa7346c8c4fb69ae62feab08e7de245525737be27f31efa08b5bd7e63",
+      "lib64/libemugl_common.dylib": "21e6f074cc985fd74c07655bc3a727fcae18d479fec69a5a159fec7db8168929",
+      "lib64/libgfxstream_backend.dylib": "a246f2a57c3ab4c50e9850f828e5f277ff88e24a613c17592d037c0f7af6f471",
+      "emulator": "748395347e9719fac6a950654765a7ea3bd90784146109bfabafd557be99e1e4"
+    },
+    "evidence": {
+      "capture.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/capture.json",
+        "sha256": "18889a3d124e26d0259562fa764f24ce7ef95096a7fac836c7688a817c5c9ddd"
+      },
+      "assessment.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/assessment.json",
+        "sha256": "037652f67f443bf9e053138ceb280251d9b0260f07ae2d18e54571ee4d30d910"
+      },
+      "timing-assessment.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/timing-assessment.json",
+        "sha256": "1b5654848376aa9fbb925223f4ac9c3ce850a27d6b267d7ca34423cca7386c59"
+      },
+      "physical-noise-assessment.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/physical-noise-assessment.json",
+        "sha256": "72cb8f801e4c8a078dd6cc318c366a1ca6b0a5acdaa001420b5e44454ebba3ec"
+      },
+      "emulator.log": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/emulator.log",
+        "sha256": "67ba470466168cfdb9534726d4200f2b12bb35aaeab8b1114d0cb12c55a4c3fc"
+      },
+      "installed.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/installed.json",
+        "sha256": "412bc9b9ebb8a8c4621d38d0d0325a9bb7b46b8c696883ecfa87089603dbaf27"
+      },
+      "start.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/start.json",
+        "sha256": "eebbd4187f9191430811e7834e3d899f628cd1205d35fac82ce7c920d1c37ecf"
+      },
+      "stop-receipt.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/stop-receipt.json",
+        "sha256": "73e698c03ce8105c7b0808adbc1051e2a4cc802c5ebbd0622b1a672549dd8142"
+      },
+      "analysis-script.py": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/analysis-script.py",
+        "sha256": "87a3315c47c45f1e29a4b4f1627bcd4368ed686bc78f39afc2f0109f2b534004"
+      },
+      "positive-checkpoint.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/positive-checkpoint.json",
+        "sha256": "543bccfee2f33975d355b03f4c0e3465ce6475482377524d32d1454f4413872b"
+      },
+      "positive-checkpoint.log": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/positive-checkpoint.log",
+        "sha256": "5c152ffeb04cdb40e074c0eabe0b3b46e57a24aeb638dfdea908abe3d3cd1beb"
+      }
+    },
+    "result": {
+      "commits": 266,
+      "cold_commits": 262,
+      "resident_commits": 4,
+      "resident_old_refcount": 1,
+      "host_present_pages_per_resident_object": 16,
+      "resident_free_delta_hostpages": 16,
+      "resident_speculative_delta_hostpages": 0,
+      "distinct_resident_ranges": 3,
+      "distinct_observed_address_range_bytes": 786432,
+      "cumulative_resident_window_bytes": 1048576,
+      "same_offset_distinct_old_object_generations": 2,
+      "joint_nonexact_cold_windows": 10,
+      "free_nonzero_cold_windows": 7,
+      "speculative_only_cold_windows": 3,
+      "query_or_cleanup_errors": 0,
+      "net_saving_measured": false
+    },
+    "stop_evidence_limit": "Receipt transcribes an actual successful session exec_command result; historical execution timestamp was not preserved. Frozen assessment initially checked PID absence. Do not represent the receipt as a direct subprocess capture."
+  },
+  "same_binary_map_fault_validation": {
+    "pid": 12525,
+    "stopped_normally": true,
+    "installed_files": {
+      "qemu/darwin-aarch64/qemu-system-aarch64-headless": "e84c349aa7346c8c4fb69ae62feab08e7de245525737be27f31efa08b5bd7e63",
+      "lib64/libemugl_common.dylib": "21e6f074cc985fd74c07655bc3a727fcae18d479fec69a5a159fec7db8168929",
+      "lib64/libgfxstream_backend.dylib": "a246f2a57c3ab4c50e9850f828e5f277ff88e24a613c17592d037c0f7af6f471",
+      "emulator": "748395347e9719fac6a950654765a7ea3bd90784146109bfabafd557be99e1e4"
+    },
+    "evidence": {
+      "capture.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/capture.json",
+        "sha256": "9aa431753fed621b41700f52d9f3d51e2024ae08aedb0cffa3f8a420ba8db731"
+      },
+      "assessment.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/assessment.json",
+        "sha256": "252739850a7b54cdbb8700665673ba2c1eed6d65a848a03128bf321b921bf715"
+      },
+      "timing-assessment.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/timing-assessment.json",
+        "sha256": "e2b359e17c198c71695cd7f305b4650a23da07c0684b2e1dc840c0336d06972b"
+      },
+      "emulator.log": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/emulator.log",
+        "sha256": "3c5c87cf671b01cfc8f20b6b0bdd0175949e80532ebaae4b925ad91ae9240349"
+      },
+      "installed.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/installed.json",
+        "sha256": "412bc9b9ebb8a8c4621d38d0d0325a9bb7b46b8c696883ecfa87089603dbaf27"
+      },
+      "start.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/start.json",
+        "sha256": "aaef10d96b776f7791219dd9dee9f8281ca037d1439c372f9e27aeb4e664e273"
+      },
+      "stop-receipt.json": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/stop-receipt.json",
+        "sha256": "67a52a3404838cbb801d9460fb9e8dca83e97e5e35613395925825434b789f6b"
+      },
+      "analysis-script.py": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/analysis-script.py",
+        "sha256": "79cdb57af40ca680dd883c76fae88f9f006523a1893d748d3ce4d39a003dd614"
+      }
+    },
+    "result": {
+      "same_four_file_set_as_positive": true,
+      "rollbacks": 271,
+      "commits": 0,
+      "resident_rollback_windows": 9,
+      "resident_old_refcount_at_rollback_observation": 3,
+      "resident_free_and_speculative_delta_hostpages": 0,
+      "resident_hva_preserved": true,
+      "repeated_offset_old_object_identity_preserved": true,
+      "query_or_cleanup_errors": 0
+    }
+  },
+  "independent_review": {
+    "path": ".macos-work/qa/v7-timing-positive-independent-review-20261101/assessment.json",
+    "sha256": "4d4b187635dd5db082ae896b1d6e93e25946387659f4d435c65100347f2cf61a",
+    "checks_total": 67,
+    "all_checks_pass": true
+  },
+  "production_default_promoted": false,
+  "final_decision": {
+    "path": "incoming/macos-qemu/experimental/V7-VALIDATION-DECISION.md",
+    "sha256": "d0ed9346d1be7009417362477b957b15b63e031a5783ba979b0128d219df2c45"
+  }
+}

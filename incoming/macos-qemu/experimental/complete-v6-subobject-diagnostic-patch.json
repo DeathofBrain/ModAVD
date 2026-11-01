@@ -1,0 +1,14 @@
+{
+  "captured_utc": "2026-10-31T20:50:08.913496+00:00",
+  "base_head": "568f0a3e755118d5dddd13bbdd821146d75f5711",
+  "file": "0005-darwin-hvf-subobject-diagnostic-complete.patch",
+  "sha256": "7e4c3ef9203e06ad3eaf3ff48682670ade6670d7a70d8e512c285292f9efb483",
+  "ram_only": {
+    "file": "ram-only-subobject-diagnostic-after-d8.patch",
+    "receipt": "ram-only-subobject-diagnostic-after-d8.json",
+    "sha256": "a2cc5decc7da9316011665bcbbba62877e1c70a0aab4b040ce3aeb52a8ec46e9"
+  },
+  "native_transaction_header_sha256": "57ef9ef0c84e716e07e25f703e2e541390a70a1609cb5a89903e642b798ae72b",
+  "chunked_backing_header_sha256": "bf90b3c44dbe1eb739368562b77848ca53de34e591328522ac8557cfa5d4bbf2",
+  "change_from0004": "Only exec.c bounded read-only subobject metadata diagnostics; DCR2MiB, receipt and native gates unchanged."
+}

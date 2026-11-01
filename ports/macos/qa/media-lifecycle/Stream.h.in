@@ -1,0 +1,36 @@
+#pragma once
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+namespace android { namespace base {
+struct Stream {
+    std::vector<uint8_t> bytes;
+    size_t pos = 0;
+    void putBe32(uint32_t value) {
+        for (int shift = 24; shift >= 0; shift -= 8) bytes.push_back(value >> shift);
+    }
+    void putBe64(uint64_t value) {
+        for (int shift = 56; shift >= 0; shift -= 8) bytes.push_back(value >> shift);
+    }
+    uint64_t get(size_t count) {
+        if (pos + count > bytes.size()) {
+            std::fprintf(stderr, "snapshot stream underflow\n"); std::exit(1);
+        }
+        uint64_t value = 0;
+        while (count--) value = (value << 8) | bytes[pos++];
+        return value;
+    }
+    uint32_t getBe32() { return static_cast<uint32_t>(get(4)); }
+    uint64_t getBe64() { return get(8); }
+    size_t write(const void* data, size_t size) {
+        auto* p = static_cast<const uint8_t*>(data);
+        bytes.insert(bytes.end(), p, p + size); return size;
+    }
+    size_t read(void* data, size_t size) {
+        if (pos + size > bytes.size()) std::abort();
+        std::memcpy(data, bytes.data() + pos, size); pos += size; return size;
+    }
+};
+}}

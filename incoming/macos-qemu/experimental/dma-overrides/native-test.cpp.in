@@ -1,0 +1,180 @@
+#include <cassert>
+#include <cstdint>
+#include <cstdio>
+#include <cstring>
+#include <memory>
+#include <map>
+#include <thread>
+#include "modavd-dma-sized-borrow.h"
+#include "modavd-dma-pixel-extent.h"
+#include "modavd-dma-pixel-store.h"
+
+using GLenum = uint32_t; using GLint = int32_t; using GLintptr = intptr_t;
+using GLsizeiptr = intptr_t; using GLbitfield = uint32_t; using GLboolean = uint8_t;
+constexpr GLboolean GL_TRUE = 1, GL_FALSE = 0;
+constexpr unsigned GL_MAP_READ_BIT = 1, GL_MAP_WRITE_BIT = 2;
+constexpr unsigned GL_MAP_INVALIDATE_RANGE_BIT = 4, GL_MAP_INVALIDATE_BUFFER_BIT = 8;
+constexpr unsigned OP_rcUpdateColorBufferDMA = 10034, OP_rcReadColorBufferDMA = 10064;
+#define GRSYNC_DPRINT(...) ((void)0)
+#define GFXSTREAM_WARNING(...) ((void)0)
+#define DECODER_DEBUG_LOG(...) ((void)0)
+#define SET_LASTCALL(...) ((void)0)
+namespace gfxstream { namespace base { inline void beginTrace(const char*) {} inline void endTrace() {} } }
+struct ChecksumCalculator {};
+struct ChecksumCalculatorThreadInfo {
+    template <typename... A> static void validOrDie(A...) {}
+    template <typename... A> static void writeChecksum(A...) {}
+};
+template <typename T, typename W> T Unpack(const unsigned char* p) {
+    W word; std::memcpy(&word,p,sizeof(word)); return static_cast<T>(word);
+}
+using gfxstream::host::FrameBuffer;
+struct Sync { int unlocks=0; void unlockColorBufferPrepare() { ++unlocks; } } syncState;
+static Sync* sGrallocSync() { return &syncState; }
+@@RC_FUNCTIONS@@
+
+struct GLESv2Decoder {
+    int maps=0, unmaps=0; unsigned char gpu[4096]{};
+    void* glMapBufferRange(GLenum,GLintptr,GLsizeiptr,GLbitfield) { ++maps; return gpu; }
+    GLboolean glUnmapBuffer(GLenum) { ++unmaps; return GL_TRUE; }
+    static void s_glMapBufferRangeDMA(void*,GLenum,GLintptr,GLsizeiptr,GLbitfield,uint64_t);
+    static void s_glUnmapBufferDMA(void*,GLenum,GLintptr,GLsizeiptr,GLbitfield,uint64_t,GLboolean*);
+};
+@@GL_FUNCTIONS@@
+
+struct Stream {
+    unsigned char response[32]{}; int unlocks=0,flushes=0,unsizedExports=0;
+    uint64_t lastUnlock=0; void* legacyPointer=nullptr;
+    unsigned char* alloc(size_t n) { assert(n<=sizeof(response)); return response; }
+    void unlockDma(uint64_t gpa) { ++unlocks; lastUnlock=gpa; }
+    void flush() { ++flushes; }
+    void* getDmaForReading(uint64_t) { ++unsizedExports; return legacyPointer; }
+    int result() { int r; std::memcpy(&r,response,sizeof(r)); return r; }
+};
+using IOStream = Stream;
+struct Decoder {
+    void run(unsigned opcode,unsigned char* ptr,Stream* stream) {
+        bool useChecksum=true; size_t checksumSize=4;
+        ChecksumCalculator calculator,*checksumCalc=&calculator;
+        switch(opcode) {
+@@RC_CASES@@
+        default: assert(false);
+        }
+    }
+};
+static unsigned char guest[4096]; static int borrows; static uint64_t borrowedLength;
+static bool allowBorrow=true;
+static void* checkedBorrow(uint64_t gpa,uint64_t n) {
+    ++borrows; borrowedLength=n;
+    return allowBorrow && gpa==0x1000 && n<=sizeof(guest) ? guest : nullptr;
+}
+static void word(unsigned char* p,uint32_t v) { std::memcpy(p,&v,4); }
+static void packet(unsigned char* p,uint32_t cb,int w,int h,uint32_t format,uint32_t size) {
+    std::memset(p,0,64); word(p+8,cb); word(p+20,w); word(p+24,h); word(p+28,format);
+    word(p+32,0x1401); uint64_t gpa=0x1000; std::memcpy(p+36,&gpa,8); word(p+44,size);
+}
+struct FakeDispatch {
+    std::map<uint32_t,int> state{{0x0d05,8},{0x0d02,17},{0x0d03,3},{0x0d04,5},
+        {0x0cf5,8},{0x0cf2,19},{0x0cf3,7},{0x0cf4,11},{0x88ed,31},{0x88ef,37}};
+    bool reject=false;
+    void glGetIntegerv(uint32_t name,int* p) { *p=state.at(name); }
+    void glPixelStorei(uint32_t name,int v) { if (!reject) state.at(name)=v; }
+    void glBindBuffer(uint32_t target,int v) { state.at(target==0x88eb ? 0x88ed:0x88ef)=v; }
+};
+int main() {
+    assert(!modavd_dma_sized_borrow_ready());
+    assert(modavd_dma_borrow_sized(0x1000,64)==nullptr);
+    assert(modavd_register_dma_borrow_v1(checkedBorrow));
+    assert(modavd_dma_sized_borrow_ready());
+    assert(modavd_dma_borrow_sized(UINT64_MAX-15,16)==nullptr && borrows==0);
+    assert(modavd_dma_borrow_sized(0x1000,0)==nullptr && borrows==0);
+    GLESv2Decoder gl;
+    for(unsigned i=0;i<sizeof(guest);++i) gl.gpu[i]=static_cast<unsigned char>(i*17+3);
+    GLESv2Decoder::s_glMapBufferRangeDMA(&gl,0,0,128,GL_MAP_READ_BIT,0x1000);
+    assert(gl.maps==1 && gl.unmaps==1 && borrowedLength==128);
+    assert(std::memcmp(guest,gl.gpu,128)==0);
+    std::memset(guest,0x5c,128); GLboolean out=GL_FALSE;
+    GLESv2Decoder::s_glUnmapBufferDMA(&gl,0,0,128,GL_MAP_WRITE_BIT,0x1000,&out);
+    assert(out==GL_TRUE && gl.maps==2 && gl.unmaps==2 && std::memcmp(guest,gl.gpu,128)==0);
+    allowBorrow=false;
+    GLESv2Decoder::s_glMapBufferRangeDMA(&gl,0,0,128,GL_MAP_READ_BIT,0x1000);
+    GLESv2Decoder::s_glUnmapBufferDMA(&gl,0,0,128,GL_MAP_WRITE_BIT,0x1000,&out);
+    assert(out==GL_FALSE && gl.maps==2 && gl.unmaps==2);
+    int before=borrows;
+    GLESv2Decoder::s_glMapBufferRangeDMA(&gl,0,0,-1,GL_MAP_READ_BIT,0x1000);
+    GLESv2Decoder::s_glUnmapBufferDMA(&gl,0,0,-1,GL_MAP_WRITE_BIT,0x1000,&out);
+    assert(out==GL_FALSE && borrows==before);
+    GLESv2Decoder::s_glUnmapBufferDMA(&gl,0,0,128,GL_MAP_WRITE_BIT,0,&out);
+    assert(out==GL_TRUE && borrows==before); allowBorrow=true;
+
+    unsigned char p[64]; Decoder decoder; auto* fb=FrameBuffer::getFB();
+    packet(p,1,4,4,0x1908,128); Stream update;
+    decoder.run(OP_rcUpdateColorBufferDMA,p,&update);
+    assert(update.result()==0 && fb->cb->updates==1 && syncState.unlocks==1);
+    assert(update.unlocks==1 && update.flushes==1 && update.unsizedExports==0);
+    assert(borrowedLength==64 && fb->depth==0 && !modavd_dma_precise_pixel_transfer_active());
+    Stream read; decoder.run(OP_rcReadColorBufferDMA,p,&read);
+    assert(read.result()==0 && fb->cb->reads==1 && read.unlocks==1 && read.flushes==1 && read.unsizedExports==0);
+    assert(borrowedLength==64 && fb->depth==0);
+    word(p+32,0x1406); // FLOAT is converted by the existing RGBA=>RGBA8 mapping.
+    Stream convertedType; decoder.run(OP_rcReadColorBufferDMA,p,&convertedType);
+    assert(convertedType.result()==0 && borrowedLength==64 && convertedType.unsizedExports==0);
+    before=borrows;
+    for(unsigned scenario=0;scenario<6;++scenario) {
+        packet(p,1,4,4,0x1908,64);
+        if(scenario==0) word(p+44,1);
+        if(scenario==1) word(p+20,0xffffffff);
+        if(scenario==2) word(p+20,0x7fffffff);
+        if(scenario==3) word(p+12,63);
+        if(scenario==4) word(p+24,0);
+        if(scenario==5) { word(p+28,0x8056); word(p+44,32); }
+        for(unsigned opcode:{OP_rcUpdateColorBufferDMA,OP_rcReadColorBufferDMA}) {
+            Stream rejected; decoder.run(opcode,p,&rejected);
+            assert(rejected.result()==-1 && rejected.unlocks==1 && rejected.flushes==1);
+            assert(rejected.unsizedExports==0 && borrows==before && fb->depth==0);
+        }
+    }
+    for(unsigned scenario=0;scenario<4;++scenario) {
+        packet(p,1,4,4,0x1908,64);
+        if(scenario==0) word(p+28,0xdead);
+        if(scenario==1) fb->cb->format=gfxstream::host::GfxstreamFormat::YUV;
+        if(scenario==2) fb->cb->format=gfxstream::host::GfxstreamFormat::RGBA16F;
+        if(scenario==3) word(p+28,0x1907);
+        for(unsigned opcode:{OP_rcUpdateColorBufferDMA,OP_rcReadColorBufferDMA}) {
+            Stream legacy; legacy.legacyPointer=guest; decoder.run(opcode,p,&legacy);
+            assert(legacy.result()==0 && legacy.unsizedExports==1 && borrows==before && fb->depth==0);
+        }
+        fb->cb->format=gfxstream::host::GfxstreamFormat::R8G8B8A8_UNORM;
+    }
+    packet(p,1,4,4,0x1908,64); allowBorrow=false;
+    Stream failed; decoder.run(OP_rcUpdateColorBufferDMA,p,&failed);
+    assert(failed.result()==-1 && failed.unsizedExports==0 && fb->depth==0);
+    assert(!modavd_dma_precise_pixel_transfer_active());
+    modavd_register_dma_borrow_v1(nullptr);
+    Stream absent; decoder.run(OP_rcReadColorBufferDMA,p,&absent);
+    assert(absent.result()==-1 && absent.unsizedExports==0 && !modavd_dma_sized_borrow_ready());
+    packet(p,1,4,4,0xdead,64); Stream missingLegacy;
+    int unlocked=syncState.unlocks; decoder.run(OP_rcUpdateColorBufferDMA,p,&missingLegacy);
+    assert(missingLegacy.result()==-1 && missingLegacy.unsizedExports==1 && syncState.unlocks==unlocked+1);
+
+    FakeDispatch dispatch; const auto original=dispatch.state;
+    { ModavdDmaPixelStoreScope inactive(dispatch,true); assert(inactive.isOk() && dispatch.state==original); }
+    assert(!modavd_dma_set_precise_pixel_transfer(true));
+    bool child=false; std::thread([&] { child=!modavd_dma_precise_pixel_transfer_active(); }).join(); assert(child);
+    for(bool pack:{false,true}) {
+        { ModavdDmaPixelStoreScope scope(dispatch,pack); assert(scope.isOk());
+          assert(dispatch.state.at(pack?0x0d05:0x0cf5)==1 && dispatch.state.at(pack?0x0d02:0x0cf2)==0);
+          assert(dispatch.state.at(pack?0x0d03:0x0cf3)==0 && dispatch.state.at(pack?0x0d04:0x0cf4)==0);
+          assert(dispatch.state.at(pack?0x88ed:0x88ef)==0); }
+        assert(dispatch.state==original);
+    }
+    dispatch.reject=true;
+    { ModavdDmaPixelStoreScope scope(dispatch,true); assert(!scope.isOk()); }
+    assert(dispatch.state==original); modavd_dma_set_precise_pixel_transfer(false);
+    puts("{\"ok\":true,\"actual_gl_consumers\":2,\"actual_rc_decoder_cases\":2,"
+         "\"actual_rc_dispatch_and_failure_unlock\":true,\"rgba8_minimal_actual_extent\":true,"
+         "\"negative_rgba8_preflight_cases\":6,\"legacy_compatibility_cases\":4,"
+         "\"missing_callback_fails_closed\":true,\"pixel_store_save_reset_verify_restore\":true,"
+         "\"unsupported_pixel_state_fails_closed\":true,\"precise_scope_thread_local\":true,"
+         "\"response_checksum_flush_unlock_paths_executed\":true}");
+}

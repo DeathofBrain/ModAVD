@@ -1,0 +1,25 @@
+{
+  "captured_utc": "2026-10-31T22:58:22.190708+00:00",
+  "kind": "append-only narrative label erratum",
+  "original_json": {
+    "path": "incoming/macos-qemu/experimental/REPORTING-ORDER-RESULTS.json",
+    "sha256": "1c4405356c8263970f4351715f5fe4ca4c4bffc7fc76c2913e670a00643196a6"
+  },
+  "original_markdown": {
+    "path": "incoming/macos-qemu/experimental/REPORTING-ORDER-RESULTS.md",
+    "sha256": "5e7657b8cc52eb5a1e68dfab29a864064ef9c07286e8faf7c5f94a5d083a6bc2"
+  },
+  "original_manifest": {
+    "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-order-comparison-retry1/comparison-freeze-manifest.json",
+    "sha256": "6786eef0550e137f46ddc3610f8ad0aa0d1bf2b161372367e8f0cb0f84c72afb"
+  },
+  "correction": {
+    "json_pointer": "/interpretation/coverage",
+    "original_text": "A6 expands observed free-SG/resident-object coverage for this pair; actual order6-10 SG lengths are retained. Neither cumulative nor address-union report bytes measures unique reclaimed physical pages.",
+    "corrected_text": "B6 expands observed free-SG/resident-object coverage for this pair; actual order6-10 SG lengths are retained. Neither cumulative nor address-union report bytes measures unique reclaimed physical pages.",
+    "scope": "Only A6 to B6 narrative label; all numerical values, order fields, evidence, decisions and hashes remain unchanged."
+  },
+  "no_frozen_file_rewritten": true,
+  "raw_reanalysis_required": false,
+  "additional_guest_started": false
+}

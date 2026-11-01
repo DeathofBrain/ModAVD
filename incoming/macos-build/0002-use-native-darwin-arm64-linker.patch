@@ -1,0 +1,35 @@
+diff --git a/android/scripts/unix/gen-android-sdk-toolchain.sh b/android/scripts/unix/gen-android-sdk-toolchain.sh
+index c626b829..c693bb20 100755
+--- a/android/scripts/unix/gen-android-sdk-toolchain.sh
++++ b/android/scripts/unix/gen-android-sdk-toolchain.sh
+@@ -834,6 +834,8 @@ prepare_build_for_darwin_aarch64() {
+     CLANG_BINDIR=$PREBUILT_TOOLCHAIN_DIR/bin
+ 
+     get_osx_sysroot
++    # Apple Silicon starts at macOS 11; current libc++ rejects a 10.15 target.
++    OSX_DEPLOYMENT_TARGET=11.0
+ 
+     EXTRA_ENV_SETUP="export SDKROOT=$OSX_SDK_ROOT"
+     PREBUILT_TOOLCHAIN_DIR=
+@@ -853,8 +855,19 @@ prepare_build_for_darwin_aarch64() {
+     var_append common_FLAGS " -no-canonical-prefixes -nostdinc++"
+ 
+ 
+-    EXTRA_CFLAGS="$common_FLAGS -B/usr/bin"
+-    EXTRA_CXXFLAGS="$common_FLAGS -B/usr/bin"
++    # Keep the pinned compiler, but use the selected Xcode's linker to read
++    # its SDK's TAPI files (new architectures can predate support in lld).
++    local DARWIN_LD
++    DARWIN_LD=$(xcrun --sdk "$OSX_SDK_ROOT" --find ld) ||
++        panic "Could not find the native linker for $OSX_SDK_ROOT"
++    if [ ! -x "$DARWIN_LD" ]; then
++        panic "Native Darwin linker is not executable: $DARWIN_LD"
++    fi
++    # Compiler wrappers also handle compile-only calls; ignore only this
++    # link-only driver option when no linker job is requested.
++    local DRIVER_LD_FLAGS="--start-no-unused-arguments --ld-path=\"$DARWIN_LD\" --end-no-unused-arguments"
++    EXTRA_CFLAGS="$common_FLAGS -B/usr/bin $DRIVER_LD_FLAGS"
++    EXTRA_CXXFLAGS="$common_FLAGS -B/usr/bin $DRIVER_LD_FLAGS"
+     var_append EXTRA_CXXFLAGS "-stdlib=libc++"
+     EXTRA_LDFLAGS="$common_FLAGS"
+ }

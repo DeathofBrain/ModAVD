@@ -1,0 +1,203 @@
+Subject: [PATCH candidate] host: publish no-GL readback only after reader success
+
+Against sealed D9 gfxstream tree ea665af11444f3a33c10d22896fa27e53b862a62.
+Preserve IColorBuffer's void API and add a checked ColorBuffer entry that propagates
+existing GL/Vulkan bool results. Zero-initialize the cache; stage no-GL reads in a
+per-display scratch buffer allocated once at callback registration and reused under
+the cache lock. Only publish on reader success, preserving the last good frame on
+explicit failure. No GPU run or build has been performed for this candidate.
+
+diff --git a/host/color_buffer.h b/host/color_buffer.h
+--- a/host/color_buffer.h
++++ b/host/color_buffer.h
+@@ -70,6 +70,10 @@
+ 
+     void readToBytes(int x, int y, int width, int height, GfxstreamFormat pixelsFormat,
+                      void* outPixels, uint64_t outPixelsSize) override;
++    // Propagate the selected GL/Vulkan reader's existing success result. The legacy
++    // IColorBuffer void interface remains available to callers that ignore failures.
++    bool readToBytesChecked(int x, int y, int width, int height, GfxstreamFormat pixelsFormat,
++                            void* outPixels, uint64_t outPixelsSize);
+     void readToBytesScaled(int pixelsWidth, int pixelsHeight, int pixelsRotation, const Rect& rect,
+                            GfxstreamFormat pixelsFormat, void* outPixels,
+                            const std::optional<std::array<float, 16>>& colorTransform) override;
+diff --git a/host/color_buffer.cpp b/host/color_buffer.cpp
+--- a/host/color_buffer.cpp
++++ b/host/color_buffer.cpp
+@@ -71,8 +71,8 @@
+     uint32_t getHeight() const { return mHeight; }
+     GfxstreamFormat getFormat() const { return mFormat; }
+ 
+-    void readToBytes(int x, int y, int width, int height, GfxstreamFormat pixelsFormat,
+-                     void* outPixels, uint64_t outPixelsSize);
++    bool readToBytesChecked(int x, int y, int width, int height, GfxstreamFormat pixelsFormat,
++                            void* outPixels, uint64_t outPixelsSize);
+     void readToBytesScaled(int pixelsWidth, int pixelsHeight, int pixelsRotation, Rect rect,
+                            GfxstreamFormat pixelsFormat, void* outPixels,
+                            const std::optional<std::array<float, 16>>& colorTransform);
+@@ -278,24 +278,24 @@
+ #endif
+ }
+ 
+-void ColorBuffer::Impl::readToBytes(int x, int y, int width, int height,
+-                                    GfxstreamFormat pixelsFormat, void* outPixels,
+-                                    uint64_t outPixelsSize) {
++bool ColorBuffer::Impl::readToBytesChecked(int x, int y, int width, int height,
++                                           GfxstreamFormat pixelsFormat, void* outPixels,
++                                           uint64_t outPixelsSize) {
+     touch();
+ 
+ #if GFXSTREAM_ENABLE_HOST_GLES
+     if (mColorBufferGl) {
+-        mColorBufferGl->readPixels(x, y, width, height, pixelsFormat, outPixels, outPixelsSize);
+-        return;
++        return mColorBufferGl->readPixels(x, y, width, height, pixelsFormat, outPixels,
++                                          outPixelsSize);
+     }
+ #endif
+ 
+     if (mColorBufferVk) {
+-        mColorBufferVk->readToBytes(x, y, width, height, outPixels, outPixelsSize);
+-        return;
++        return mColorBufferVk->readToBytes(x, y, width, height, outPixels, outPixelsSize);
+     }
+ 
+     GFXSTREAM_FATAL("%s: No ColorBuffer impl", __func__);
++    return false;
+ }
+ 
+ void ColorBuffer::Impl::readToBytesScaled(
+@@ -571,7 +571,13 @@
+ 
+ void ColorBuffer::readToBytes(int x, int y, int width, int height, GfxstreamFormat pixelsFormat,
+                               void* outPixels, uint64_t outPixelsSize) {
+-    mImpl->readToBytes(x, y, width, height, pixelsFormat, outPixels, outPixelsSize);
++    (void)mImpl->readToBytesChecked(x, y, width, height, pixelsFormat, outPixels, outPixelsSize);
++}
++
++bool ColorBuffer::readToBytesChecked(int x, int y, int width, int height,
++                                     GfxstreamFormat pixelsFormat, void* outPixels,
++                                     uint64_t outPixelsSize) {
++    return mImpl->readToBytesChecked(x, y, width, height, pixelsFormat, outPixels, outPixelsSize);
+ }
+ 
+ void ColorBuffer::readToBytesScaled(int pixelsWidth, int pixelsHeight, int pixelsRotation,
+diff --git a/host/frame_buffer.cpp b/host/frame_buffer.cpp
+--- a/host/frame_buffer.cpp
++++ b/host/frame_buffer.cpp
+@@ -27,6 +27,7 @@
+ #include <optional>
+ #include <string>
+ #include <string_view>
++#include <vector>
+ 
+ #if GFXSTREAM_ENABLE_HOST_GLES
+ #include "host/gl/gles_version_detector.h"
+@@ -913,6 +914,8 @@
+         uint32_t width;
+         uint32_t height;
+         unsigned char* img = nullptr;
++        // Reused only by no-GL posts while m_readbackWithoutWorkerLock is held.
++        std::vector<unsigned char> readbackScratch;
+         bool readBgra;
+         ~onPost() {
+             if (img) {
+@@ -923,7 +926,7 @@
+     };
+     std::map<uint32_t, onPost> m_onPost;
+     ReadbackWorker* m_readbackWorker = nullptr;
+-    // Serializes access to m_onPost[].img when there is no ReadbackWorker.
++    // Serializes no-worker access to m_onPost[].img and readbackScratch.
+     gfxstream::base::Lock m_readbackWithoutWorkerLock;
+     gfxstream::base::WorkerThread<Readback> m_readbackThread;
+     std::atomic_bool m_readbackThreadStarted = false;
+@@ -1589,9 +1592,10 @@
+ // same order as ColorBuffer::readToBytes(), RGBA or BGRA byte order depending on |readBgra|, and
+ // opaque alpha for formats without alpha. Only 32-bit RGBA/RGBX/BGRA color buffers of the
+ // requested size are handled. Returns false if |img| was not updated.
+-static bool readbackColorBufferWithoutWorker(ColorBuffer* cb, unsigned char* img, uint32_t width,
++static bool readbackColorBufferWithoutWorker(ColorBuffer* cb, unsigned char* img,
++                                             unsigned char* scratch, uint32_t width,
+                                              uint32_t height, bool readBgra) {
+-    if (!cb || !img || cb->getWidth() != width || cb->getHeight() != height) {
++    if (!cb || !img || !scratch || cb->getWidth() != width || cb->getHeight() != height) {
+         return false;
+     }
+     const GfxstreamFormat format = cb->getFormat();
+@@ -1601,18 +1605,25 @@
+         return false;
+     }
+     const uint64_t size = 4ull * width * height;
+-    cb->readToBytes(0, 0, static_cast<int>(width), static_cast<int>(height), format, img, size);
++    // A reader can fail after touching its output. The display's scratch buffer
++    // is reused under the cache lock; publish only after the existing GL/Vulkan
++    // success result has been propagated.
++    if (!cb->readToBytesChecked(0, 0, static_cast<int>(width), static_cast<int>(height),
++                                format, scratch, size)) {
++        return false;
++    }
+     const bool swapRedBlue = srcBgra != readBgra;
+     if (swapRedBlue || srcNoAlpha) {
+         for (uint64_t i = 0; i < size; i += 4) {
+             if (swapRedBlue) {
+-                std::swap(img[i], img[i + 2]);
++                std::swap(scratch[i], scratch[i + 2]);
+             }
+             if (srcNoAlpha) {
+-                img[i + 3] = 0xff;
++                scratch[i + 3] = 0xff;
+             }
+         }
+     }
++    memcpy(img, scratch, size);
+     return true;
+ }
+ 
+@@ -1621,7 +1632,7 @@
+     if (!m_readbackWorker) {
+         // No GL emulation (GuestVulkanOnly): postImpl() reads each posted frame synchronously
+         // into m_onPost[displayId].img, so there is nothing to set up and GetPixels copies the
+-        // last frame.
++        // last successful frame (zero-filled until one has been read).
+         switch (readback.cmd) {
+             case ReadbackCmd::GetPixels: {
+                 AutoLock lock(m_readbackWithoutWorkerLock);
+@@ -1783,7 +1794,13 @@
+         m_onPost[displayId].displayId = displayId;
+         m_onPost[displayId].width = w;
+         m_onPost[displayId].height = h;
+-        m_onPost[displayId].img = new unsigned char[4 * w * h];
++        // No-GL GetPixels may be called before the first successful post. Return
++        // a defined empty cache without publishing it as a new callback frame.
++        m_onPost[displayId].img = new unsigned char[4ull * w * h]();
++        if (!m_emulationGl) {
++            // Allocate once per registered display, never once per posted frame.
++            m_onPost[displayId].readbackScratch.resize(4ull * w * h);
++        }
+         m_onPost[displayId].readBgra = useBgraReadback;
+         bool expectedReadbackThreadStarted = false;
+         if (m_readbackThreadStarted.compare_exchange_strong(expectedReadbackThreadStarted, true)) {
+@@ -2776,8 +2793,8 @@
+                     {
+                         AutoLock readbackLock(m_readbackWithoutWorkerLock);
+                         updated = readbackColorBufferWithoutWorker(
+-                            cb.get(), iter.second.img, iter.second.width, iter.second.height,
+-                            iter.second.readBgra);
++                            cb.get(), iter.second.img, iter.second.readbackScratch.data(),
++                            iter.second.width, iter.second.height, iter.second.readBgra);
+                     }
+                     if (!updated) {
+                         // Do not report a stale (or never written) buffer as a new frame.
+diff --git a/host/frame_buffer.h b/host/frame_buffer.h
+--- a/host/frame_buffer.h
++++ b/host/frame_buffer.h
+@@ -274,6 +274,9 @@
+     // happens in a separate place)
+     void doPostCallback(void* pixels, uint32_t displayId);
+ 
++    // Without GL, copies the last successfully read post into the caller's buffer;
++    // before the first successful post the cache is zero-filled. This void method
++    // does not signal frame validity; only a successful post read invokes OnPost.
+     void getPixels(void* pixels, uint32_t bytes, uint32_t displayId);
+     void flushReadPipeline(int displayId);
+     void ensureReadbackWorker();

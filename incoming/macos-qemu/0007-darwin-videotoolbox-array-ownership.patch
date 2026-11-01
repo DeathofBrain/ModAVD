@@ -1,0 +1,36 @@
+diff --git a/android/emu/media/src/android/emulation/MediaVideoToolBoxVideoHelper.cpp b/android/emu/media/src/android/emulation/MediaVideoToolBoxVideoHelper.cpp
+--- a/android/emu/media/src/android/emulation/MediaVideoToolBoxVideoHelper.cpp
++++ b/android/emu/media/src/android/emulation/MediaVideoToolBoxVideoHelper.cpp
+@@ -209,7 +209,7 @@
+     // gone through validation in H264NaluParser.
+     uint8_t startHeaderSz = fptr[2] == 1 ? 3 : 4;
+     uint32_t dataSz = szBytes - startHeaderSz;
+-    std::unique_ptr<uint8_t> idr(new uint8_t[dataSz + 4]);
++    std::unique_ptr<uint8_t[]> idr(new uint8_t[dataSz + 4]);
+     uint32_t dataSzNl = htonl(dataSz);
+ 
+     // AVCC format requires us to replace the start code header on this NALU
+diff --git a/android/emu/media/src/android/emulation/MediaVideoToolBoxHevcVideoHelper.cpp b/android/emu/media/src/android/emulation/MediaVideoToolBoxHevcVideoHelper.cpp
+--- a/android/emu/media/src/android/emulation/MediaVideoToolBoxHevcVideoHelper.cpp
++++ b/android/emu/media/src/android/emulation/MediaVideoToolBoxHevcVideoHelper.cpp
+@@ -220,7 +220,7 @@
+     // gone through validation in HevcNaluParser.
+     uint8_t startHeaderSz = fptr[2] == 1 ? 3 : 4;
+     uint32_t dataSz = szBytes - startHeaderSz;
+-    std::unique_ptr<uint8_t> idr(new uint8_t[dataSz + 4]);
++    std::unique_ptr<uint8_t[]> idr(new uint8_t[dataSz + 4]);
+     uint32_t dataSzNl = htonl(dataSz);
+ 
+     // AVCC format requires us to replace the start code header on this NALU
+diff --git a/android/emu/media/src/android/emulation/MediaH264DecoderVideoToolBox.cpp b/android/emu/media/src/android/emulation/MediaH264DecoderVideoToolBox.cpp
+--- a/android/emu/media/src/android/emulation/MediaH264DecoderVideoToolBox.cpp
++++ b/android/emu/media/src/android/emulation/MediaH264DecoderVideoToolBox.cpp
+@@ -432,7 +432,7 @@
+     // gone through validation in H264NaluParser.
+     uint8_t startHeaderSz = fptr[2] == 1 ? 3 : 4;
+     uint32_t dataSz = szBytes - startHeaderSz;
+-    std::unique_ptr<uint8_t> idr(new uint8_t[dataSz + 4]);
++    std::unique_ptr<uint8_t[]> idr(new uint8_t[dataSz + 4]);
+     uint32_t dataSzNl = htonl(dataSz);
+ 
+     // AVCC format requires us to replace the start code header on this NALU

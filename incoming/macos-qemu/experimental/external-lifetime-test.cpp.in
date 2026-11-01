@@ -1,0 +1,159 @@
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <inttypes.h>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <unordered_set>
+#include <vector>
+#include <sys/resource.h>
+
+using ModavdExternalLifetime = void (*)(const void*, bool);
+@@REGISTRY@@
+
+// Use the actual exec.c counter function with QEMU synchronization/log shims.
+static std::mutex ram_audit_lock;
+static uint64_t ram_reclaim_external_users = 0;
+static const char* ram_audit_inhibited = nullptr;
+static bool ram_audit_active() { return true; }
+static void qemu_mutex_lock(std::mutex* p) { p->lock(); }
+static void qemu_mutex_unlock(std::mutex* p) { p->unlock(); }
+#define info_report(...) ((void)0)
+@@COUNTER@@
+
+static std::atomic<uint64_t> callbacks{0}, differentCallbacks{0};
+static std::mutex replayLock;
+static std::condition_variable replayCv;
+static bool pauseReplay=false, replayReached=false, resumeReplay=false;
+static void installedCallback(const void* identity, bool enter) {
+    qemu_ram_reclaim_external_lifetime(identity, enter);
+    ++callbacks;
+    std::unique_lock<std::mutex> lock(replayLock);
+    if(pauseReplay && !replayReached) {
+        replayReached=true;replayCv.notify_all();
+        replayCv.wait(lock,[]{return resumeReplay;});
+    }
+}
+static void differentCallback(const void*, bool) { ++differentCallbacks; }
+#define CHECK(x) do { if(!(x)){std::fprintf(stderr,"failed %d: %s\n",__LINE__,#x);return 1;} }while(0)
+
+int main(int argc, char** argv) {
+    struct rlimit noCore{0,0};setrlimit(RLIMIT_CORE,&noCore);
+    std::string mode=argc>1?argv[1]:"normal";
+    std::array<unsigned char,8> identity{};
+    if(mode=="duplicate-enter") {
+        modavd_reclaim_external_enter(&identity[0]);
+        modavd_reclaim_external_enter(&identity[0]);
+        return 10;
+    }
+    if(mode=="missing-leave") {
+        modavd_reclaim_external_leave(&identity[0]);
+        return 11;
+    }
+    CHECK(!modavd_dma_external_tracking_ready());
+    modavd_reclaim_external_enter(&identity[0]);
+    modavd_reclaim_external_enter(&identity[1]);
+    CHECK(!modavd_dma_external_tracking_ready());
+    CHECK(callbacks==0 && ram_reclaim_external_users==0);
+    // Hold replay after the first callback to observe publication ordering.
+    pauseReplay=true;
+    std::atomic<bool> installOk{false};
+    std::thread firstInstaller([&]{installOk=modavd_dma_set_external_lifetime(installedCallback);});
+    {
+        std::unique_lock<std::mutex> lock(replayLock);
+        CHECK(replayCv.wait_for(lock,std::chrono::seconds(5),[]{return replayReached;}));
+    }
+    {
+        std::lock_guard<std::mutex> lock(ram_audit_lock);
+        CHECK(!modavd_dma_external_tracking_ready());
+        CHECK(ram_reclaim_external_users==1);
+    }
+    {
+        std::lock_guard<std::mutex> lock(replayLock);resumeReplay=true;replayCv.notify_all();
+    }
+    firstInstaller.join();pauseReplay=false;
+    CHECK(installOk && modavd_dma_external_tracking_ready());
+    CHECK(callbacks==2 && ram_reclaim_external_users==2);
+    CHECK(modavd_dma_set_external_lifetime(installedCallback));
+    CHECK(callbacks==2 && ram_reclaim_external_users==2);
+    CHECK(!modavd_dma_set_external_lifetime(nullptr));
+    CHECK(!modavd_dma_external_tracking_ready());
+    CHECK(callbacks==2 && ram_reclaim_external_users==2);
+    CHECK(!modavd_dma_set_external_lifetime(differentCallback));
+    CHECK(!modavd_dma_external_tracking_ready());
+    CHECK(differentCallbacks==0);
+    // The failed replacement leaves the original installed callback active.
+    modavd_reclaim_external_enter(&identity[2]);
+    CHECK(callbacks==3 && ram_reclaim_external_users==3);
+    CHECK(modavd_dma_set_external_lifetime(installedCallback));
+    CHECK(modavd_dma_external_tracking_ready());
+    CHECK(callbacks==3 && ram_reclaim_external_users==3);
+    for(int i=0;i<3;++i)modavd_reclaim_external_leave(&identity[i]);
+    CHECK(callbacks==6 && ram_reclaim_external_users==0);
+    std::fprintf(stderr,"late replay and installation checks complete\n");
+
+    constexpr int workers=4, rounds=6000;
+    std::array<std::atomic<bool>,workers> completed{};
+    std::atomic<bool> start{false}, stopObserver{false};
+    std::atomic<uint64_t> observations{0}, readyObservations{0}, activeObservations{0}, violations{0};
+    std::thread observer([&]{
+        while(!stopObserver.load(std::memory_order_acquire)) {
+          {
+            // Match transaction ordering: test readiness and counter under audit lock.
+            std::lock_guard<std::mutex> lock(ram_audit_lock);
+            bool ready=modavd_dma_external_tracking_ready();
+            size_t active=0;
+            for(auto& c:completed)active+=c.load(std::memory_order_seq_cst);
+            ++observations;
+            if(ready)++readyObservations;
+            if(active)++activeObservations;
+            if(ready && active && ram_reclaim_external_users==0)++violations;
+            if(ready && ram_reclaim_external_users<active)++violations;
+          }
+          std::this_thread::yield();
+        }
+    });
+    std::vector<std::thread> threads;
+    for(int i=0;i<workers;++i)threads.emplace_back([&,i]{
+        while(!start.load(std::memory_order_acquire))std::this_thread::yield();
+        for(int k=0;k<rounds;++k) {
+            modavd_reclaim_external_enter(&identity[i]);
+            completed[i].store(true,std::memory_order_seq_cst);
+            if((k&15)==0)std::this_thread::yield();
+            // Resource use is over before leave can decrement the count.
+            completed[i].store(false,std::memory_order_seq_cst);
+            modavd_reclaim_external_leave(&identity[i]);
+        }
+    });
+    std::thread reinstall([&]{
+        while(!start.load(std::memory_order_acquire))std::this_thread::yield();
+        for(int k=0;k<12000;++k) {
+            if(k%3==0)modavd_dma_set_external_lifetime(nullptr);
+            else if(k%3==1)modavd_dma_set_external_lifetime(differentCallback);
+            else modavd_dma_set_external_lifetime(installedCallback);
+        }
+    });
+    start.store(true,std::memory_order_release);
+    for(auto& thread:threads)thread.join();reinstall.join();
+    std::fprintf(stderr,"concurrent workers and installer complete\n");
+    CHECK(modavd_dma_set_external_lifetime(installedCallback));
+    stopObserver.store(true,std::memory_order_release);observer.join();
+    CHECK(violations==0 && observations>0 && readyObservations>0 && activeObservations>0);
+    CHECK(ram_reclaim_external_users==0 && sExternalLifetimes.empty());
+    CHECK(callbacks==uint64_t(6+workers*rounds*2));
+    CHECK(differentCallbacks==0 && ram_audit_inhibited==nullptr);
+    CHECK(modavd_dma_external_tracking_ready());
+    std::printf("{\"late_replay\":true,\"no_double_replay\":true,\"failed_install_ready_false\":true,"
+                "\"original_callback_preserved\":true,\"concurrent_lifetimes\":%d,\"concurrent_installs\":12000,"
+                "\"callbacks\":%llu,\"observations\":%llu,\"ready_observations\":%llu,"
+                "\"active_observations\":%llu,\"violations\":%llu,\"final_counter\":%llu}\n",
+                workers*rounds,(unsigned long long)callbacks.load(),(unsigned long long)observations.load(),
+                (unsigned long long)readyObservations.load(),(unsigned long long)activeObservations.load(),
+                (unsigned long long)violations.load(),(unsigned long long)ram_reclaim_external_users);
+}

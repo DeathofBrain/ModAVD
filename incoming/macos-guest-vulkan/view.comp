@@ -1,0 +1,11 @@
+#version 450
+#extension GL_EXT_samplerless_texture_functions : require
+layout(local_size_x = 1) in;
+layout(set = 0, binding = 0) uniform utextureBuffer inputs[2];
+layout(set = 0, binding = 1) uniform utextureBuffer tail;
+layout(set = 0, binding = 2, std430) writeonly buffer Output { uint values[]; } result;
+void main() {
+    result.values[0] = texelFetch(inputs[0], 0).r;
+    result.values[1] = texelFetch(inputs[1], 0).r;
+    result.values[2] = texelFetch(tail, 0).r;
+}

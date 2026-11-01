@@ -1,0 +1,105 @@
+diff --git a/host/gl/glestranslator/egl/egl_os_api_darwin.cpp b/host/gl/glestranslator/egl/egl_os_api_darwin.cpp
+index ccf377b..eb0c632 100644
+--- a/host/gl/glestranslator/egl/egl_os_api_darwin.cpp
++++ b/host/gl/glestranslator/egl/egl_os_api_darwin.cpp
+@@ -319,8 +319,7 @@ public:
+                              EglOS::Context* ctx) {
+         // check for unbind
+         if (ctx == NULL && read == NULL && draw == NULL) {
+-            nsWindowMakeCurrent(NULL, NULL);
+-            return true;
++            return nsWindowMakeCurrent(NULL, NULL);
+         }
+         else if (ctx == NULL || read == NULL || draw == NULL) {
+             // error !
+@@ -333,21 +332,18 @@ public:
+         }
+         switch (draw->type()) {
+         case MacSurface::WINDOW:
+-            nsWindowMakeCurrent(MacContext::from(ctx),
+-                                MacSurface::from(draw)->handle());
+-            break;
++            return nsWindowMakeCurrent(MacContext::from(ctx),
++                                       MacSurface::from(draw)->handle());
+         case MacSurface::PBUFFER:
+         {
+             MacSurface* macdraw = MacSurface::from(draw);
+             int mipmapLevel = macdraw->hasMipmap() ? MAX_PBUFFER_MIPMAP_LEVEL : 0;
+-            nsPBufferMakeCurrent(MacContext::from(ctx),
+-                                 macdraw->handle(), mipmapLevel);
+-            break;
++            return nsPBufferMakeCurrent(MacContext::from(ctx),
++                                        macdraw->handle(), mipmapLevel);
+         }
+         default:
+             return false;
+         }
+-        return true;
+     }
+ 
+     virtual void swapBuffers(EglOS::Surface* srfc) {
+diff --git a/host/gl/glestranslator/egl/mac_native.h b/host/gl/glestranslator/egl/mac_native.h
+index ab20905..9b93994 100644
+--- a/host/gl/glestranslator/egl/mac_native.h
++++ b/host/gl/glestranslator/egl/mac_native.h
+@@ -63,8 +63,8 @@ void nsConvertVideoFrameToNV12Textures(void* context,
+ 
+ void nsCopyTexture(void* context, int from, int to, int w, int h);
+ 
+-void nsWindowMakeCurrent(void* context,void* nativeWin);
+-void nsPBufferMakeCurrent(void* context,void* nativePBuffer,int level);
++bool nsWindowMakeCurrent(void* context,void* nativeWin);
++bool nsPBufferMakeCurrent(void* context,void* nativePBuffer,int level);
+ void nsSwapBuffers();
+ void nsSwapInterval(int *interval);
+ void nsDestroyContext(void* context);
+diff --git a/host/gl/glestranslator/egl/mac_native.m b/host/gl/glestranslator/egl/mac_native.m
+index 15893c9..a4ff2d1 100644
+--- a/host/gl/glestranslator/egl/mac_native.m
++++ b/host/gl/glestranslator/egl/mac_native.m
+@@ -311,7 +311,18 @@ void nsConvertVideoFrameToNV12Textures(void* context,
+     nsCopyTexture(context, (int)UVtex, UVtexd, surface_w/2, surface_h/2);
+ }
+ 
+-void  nsPBufferMakeCurrent(void* context,void* nativePBuffer,int level){
++// AppKit's bind methods return void. Verify both views of the calling thread's
++// current context before reporting success to EGL.
++static bool nsContextIsCurrent(EmuGLContext* ctx) {
++    if (ctx == nil) {
++        return [NSOpenGLContext currentContext] == nil && CGLGetCurrentContext() == NULL;
++    }
++    CGLContextObj expected = [ctx CGLContextObj];
++    return expected != NULL && [NSOpenGLContext currentContext] == ctx &&
++           CGLGetCurrentContext() == expected;
++}
++
++bool nsPBufferMakeCurrent(void* context,void* nativePBuffer,int level){
+     EmuGLContext* ctx = (EmuGLContext *)context;
+     NSOpenGLPixelBuffer* pbuff = (NSOpenGLPixelBuffer *)nativePBuffer;
+     if(ctx == nil){
+@@ -327,18 +338,23 @@ void  nsPBufferMakeCurrent(void* context,void* nativePBuffer,int level){
+             [ctx makeCurrentContext];
+         }
+     }
++    return nsContextIsCurrent(ctx);
+ }
+ 
+-void nsWindowMakeCurrent(void* context,void* nativeWin){
++bool nsWindowMakeCurrent(void* context,void* nativeWin){
+     EmuGLContext* ctx = (EmuGLContext *)context;
+     NSView* win = (NSView *)nativeWin;
+     if(ctx == nil){
+         [NSOpenGLContext clearCurrentContext];
+-    } else if (win != nil) {
++    } else {
++        if (win == nil) {
++            return false;
++        }
+         [ctx preBind:0];
+         [ctx setView: win];
+         [ctx makeCurrentContext];
+     }
++    return nsContextIsCurrent(ctx);
+ }
+ 
+ void nsSwapBuffers(){

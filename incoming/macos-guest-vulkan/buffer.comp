@@ -1,0 +1,10 @@
+#version 450
+layout(local_size_x = 1) in;
+layout(set = 0, binding = 0, std430) readonly buffer Input { uint value; } inputs[2];
+layout(set = 0, binding = 1, std430) readonly buffer Tail { uint value; } tail;
+layout(set = 0, binding = 2, std430) writeonly buffer Output { uint values[]; } result;
+void main() {
+    result.values[0] = inputs[0].value;
+    result.values[1] = inputs[1].value;
+    result.values[2] = tail.value;
+}

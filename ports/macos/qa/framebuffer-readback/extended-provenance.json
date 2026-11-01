@@ -1,0 +1,93 @@
+{
+  "utc": "2026-10-31T22:31:42.594375+00:00",
+  "scope": "Export identical tested v4 native driver/runner and original verbatim failure generator. Old driver/runner and historical reports are preserved. No additional GPU or contract binary execution was used to export.",
+  "files": [
+    {
+      "source": ".macos-work/qa/gfxstream-d9-readback-candidate-20261101/qa-v4/framebuffer_readback_extended.cpp",
+      "export": "ports/macos/qa/framebuffer-readback/framebuffer_readback_extended.cpp",
+      "sha256": "b36139144ce4fff12a8259d3beddbaa920ae3c2f42a8747082078400123d07f7",
+      "byte_identical": true
+    },
+    {
+      "source": ".macos-work/qa/gfxstream-d9-readback-candidate-20261101/qa-v4/verify_extended.py",
+      "export": "ports/macos/qa/framebuffer-readback/verify_extended.py",
+      "sha256": "2720a71dcda6574f172a511796fbcdb0090ea7bcdb0b29027f63c4443ed64bfd",
+      "byte_identical": true
+    },
+    {
+      "source": ".macos-work/qa/gfxstream-d9-readback-candidate-20261101/qa/prepare_failure_contract.py",
+      "export": "ports/macos/qa/framebuffer-readback/prepare_failure_contract.py",
+      "sha256": "52a1197a9ebc1fa6e604bda3f4b10b564bd480d855bce1d59ae1004b9a4db0df",
+      "byte_identical": true
+    }
+  ],
+  "source_only_generator_reproduction": [
+    {
+      "variant": "baseline",
+      "argv": [
+        "python3",
+        "/Users/azuki/ModAVD/ports/macos/qa/framebuffer-readback/prepare_failure_contract.py",
+        "--source-root",
+        "/Users/azuki/ModAVD/.macos-work/qa/gfxstream-d9-readback-candidate-20261101/baseline",
+        "--output",
+        "/Users/azuki/ModAVD/.macos-work/qa/gfxstream-d9-readback-candidate-20261101/export-identity-check/baseline"
+      ],
+      "exit": 0,
+      "contract_cpp_sha256": "e1ae987dade2f570a8c0187db6302768d5a5f76d707b4a920546ced6e51f62b6",
+      "manifest_sha256": "187070fc40e8ee625cd3de990f751839b4d9524200bdfd79594282db30c503e4",
+      "byte_identical_to_executed_contract": true,
+      "compiled_or_run_again": false
+    },
+    {
+      "variant": "candidate",
+      "argv": [
+        "python3",
+        "/Users/azuki/ModAVD/ports/macos/qa/framebuffer-readback/prepare_failure_contract.py",
+        "--source-root",
+        "/Users/azuki/ModAVD/.macos-work/qa/gfxstream-d9-readback-candidate-20261101/candidate",
+        "--output",
+        "/Users/azuki/ModAVD/.macos-work/qa/gfxstream-d9-readback-candidate-20261101/export-identity-check/candidate"
+      ],
+      "exit": 0,
+      "contract_cpp_sha256": "4b493ea663e6a65c8393504c84c35e44f8cf08a16f73e14e1894d86bf5d56680",
+      "manifest_sha256": "984afbd1f0b8679e13ebb083ff37a44a29ad7b3e9a050f0fbdaf0999159510c5",
+      "byte_identical_to_executed_contract": true,
+      "compiled_or_run_again": false
+    }
+  ],
+  "executed_cpu_receipt": {
+    "path": ".macos-work/qa/gfxstream-d9-readback-candidate-20261101/future-contract-runs/receipt.json",
+    "sha256": "b1e46f2961286870126f880a04a8eae8abcff0a3d160abcd500ccd8e417f8c8e"
+  },
+  "executed_native_v4_receipt": {
+    "path": ".macos-work/qa/gfxstream-d9-readback-candidate-20261101/future-native-runs-v4/receipt.json",
+    "sha256": "8efeef0b3a929cf8e1e99f96cdc6e878ac62e124e7866b5dca89cf10fad29d2d"
+  },
+  "historical_attempts": [
+    {
+      "path": ".macos-work/qa/gfxstream-d9-readback-candidate-20261101/future-native-runs/receipt.json",
+      "sha256": "06b49926401c25d96ffd384b6797fb4f186e2358004ed0321d361c86caa9947d"
+    },
+    {
+      "path": ".macos-work/qa/gfxstream-d9-readback-candidate-20261101/future-native-runs-v2/receipt.json",
+      "sha256": "6993cbbd5baf95dbb305cca6f841ceef888ae645a7728a6d3c0fe7c176933ac3"
+    },
+    {
+      "path": ".macos-work/qa/gfxstream-d9-readback-candidate-20261101/future-native-runs-v3/receipt.json",
+      "sha256": "da1ec663f3cfc52f449d4c39878f947ed1e780307f5338c0c2549712f48cdd37"
+    }
+  ],
+  "native_backend_identities": {
+    "sealed_D9": "67812b82a0bbfcad9b6a65184b45d18b848ef66867b05bacb90ba26a29ec6d99",
+    "candidate_G2": "35fbd4366185ea5985e41e495c73c910030e7522075ef23de7c6317ea6f60920"
+  },
+  "native_mode_contracts": {
+    "vulkan-only": "Exact RGB and opaque255 for RGBX; exact direct synchronous callback and GetPixels; no callback on rejected source, preserve last good and recover. Candidate profile also zero empty cache/no callback.",
+    "gl": "Exact RGB; RGBX fourth byte exactly equals the same GPU source raw readback X, without tolerance or ignored bytes. Async direct callbacks may be null/prior; latest GetPixels is checked exactly."
+  },
+  "limits": [
+    "Native wrapper does not inject real GPU failures. ASan/UBSan instrument driver only.",
+    "Failure generator extracts selected production bodies and surrounds them with explicit doubles; no GPU/fullTU/ABI/thread coverage.",
+    "Actual source/build flags must be separately matched to selected backend provenance."
+  ]
+}

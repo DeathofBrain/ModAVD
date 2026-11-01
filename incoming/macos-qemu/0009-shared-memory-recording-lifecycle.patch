@@ -1,0 +1,145 @@
+diff --git a/android/android-emu/android/base/async/CallbackRegistry.cpp b/android/android-emu/android/base/async/CallbackRegistry.cpp
+--- a/android/android-emu/android/base/async/CallbackRegistry.cpp
++++ b/android/android-emu/android/base/async/CallbackRegistry.cpp
+@@ -54,23 +54,21 @@
+ }
+ 
+ void CallbackRegistry::unregisterCallback(void* opaque) {
+-    ForwarderMessage msg = {
+-            .cmd = MESSAGE_FORWARDER_REMOVE,
+-            .data = opaque,
+-            .callback = {},
+-    };
+-    mMessages.send(msg);
+-    AutoLock removeLock(mLock);
+-    mCvRemoval.wait(&mLock, [=]() {
+-        return !mProcessing || mStoredForwarders.count(msg.data) == 0;
+-    });
++    // Wait for callbacks already in flight, then consume pending registrations
++    // before erasing this key. Do not enqueue REMOVE: when no frames arrive,
++    // repeated register/unregister pairs must not fill the message channel.
++    AutoLock processingLock(mProcessingLock);
++    updateForwarders();
++    AutoLock lock(mLock);
++    mStoredForwarders.erase(opaque);
+ }
+ 
+-void CallbackRegistry::invokeCallbacks() {
+-    AutoLock processingLock(mProcessingLock);
+-    mProcessing = true;
++void CallbackRegistry::updateForwarders() {
++    // Bound a caller's work to the pending prefix. Registrations concurrent
++    // with unregister may be processed by the next invocation instead.
++    const size_t pending = mMessages.size();
+     ForwarderMessage msg;
+-    while (mMessages.tryReceive(&msg)) {
++    for (size_t i = 0; i < pending && mMessages.tryReceive(&msg); ++i) {
+         switch (msg.cmd) {
+             case MESSAGE_FORWARDER_ADD: {
+                 AutoLock lock(mLock);
+@@ -90,6 +88,14 @@
+                 break;
+         }
+     }
++}
++
++void CallbackRegistry::invokeCallbacks() {
++    AutoLock processingLock(mProcessingLock);
++    mProcessing = true;
++    while (mMessages.size() != 0) {
++        updateForwarders();
++    }
+ 
+     {
+         AutoLock lock(mLock);
+diff --git a/android/android-ui/modules/aemu-recording/src/android/recording/screen-recorder.cpp b/android/android-ui/modules/aemu-recording/src/android/recording/screen-recorder.cpp
+--- a/android/android-ui/modules/aemu-recording/src/android/recording/screen-recorder.cpp
++++ b/android/android-ui/modules/aemu-recording/src/android/recording/screen-recorder.cpp
+@@ -474,13 +474,15 @@
+ const char* start_shared_memory_module(int fps) {
+     auto& globals = *sGlobals;
+ 
++    AutoLock lock(globals.lock);
++
+     // emulator name --> shared memory handle.
+     // 1. Discovery is easier.
+     // 2. If we accidentally leak a region on posix, we can reclaim an clean up
+     // on 2nd run.
+-    globals.sharedMemoryHandle = std::string("videmulator") +
+-                                 std::to_string(android_serial_number_port);
+     if (!globals.webrtc_module) {
++        globals.sharedMemoryHandle = std::string("videmulator") +
++                                     std::to_string(android_serial_number_port);
+         globals.webrtc_module.reset(
+                 new VideoFrameSharer(globals.fbWidth, globals.fbHeight,
+                                      globals.sharedMemoryHandle.c_str()));
+@@ -494,14 +496,18 @@
+     }
+ 
+     globals.webrtc_module->start();
+-    gpu_frame_set_record_mode(true);
+     const char* handle = globals.sharedMemoryHandle.c_str();
+     D("%s(handle=%s, fps=%d)", __func__, handle, fps);
+     return handle;
+ }
+ 
+ bool stop_shared_memory_module() {
+-    gpu_frame_set_record_mode(false);
++    auto& globals = *sGlobals;
++    AutoLock lock(globals.lock);
++    if (globals.webrtc_module) {
++        // Stop forwarding, but keep the region mapped for existing readers.
++        globals.webrtc_module->stop();
++    }
+     return true;
+ }
+ 
+diff --git a/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.cpp b/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.cpp
+--- a/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.cpp
++++ b/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.cpp
+@@ -86,11 +86,22 @@
+ }
+ 
+ void VideoFrameSharer::start() {
++    std::lock_guard<std::mutex> lock(mLifecycleLock);
++    if (mStarted) {
++        return;
++    }
+     gpu_register_shared_memory_callback(&VideoFrameSharer::frameCallbackForwarder, this);
++    mStarted = true;
+ }
+ 
+ void VideoFrameSharer::stop() {
++    std::lock_guard<std::mutex> lock(mLifecycleLock);
++    if (!mStarted) {
++        return;
++    }
++    // unregister waits for in-flight callbacks before the memory can be closed.
+     gpu_unregister_shared_memory_callback(this);
++    mStarted = false;
+ }
+ 
+ void VideoFrameSharer::frameAvailable() {
+diff --git a/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.h b/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.h
+--- a/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.h
++++ b/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.h
+@@ -17,6 +17,7 @@
+ #include <stddef.h>                            // for size_t
+ #include <stdint.h>                            // for uint32_t, uint64_t
+ #include <atomic>                              // for atomic
++#include <mutex>
+ #include <memory>                              // for unique_ptr
+ #include <string>                              // for string, basic_string
+ #include "aemu/base/memory/SharedMemory.h"  // for SharedMemory
+@@ -79,6 +80,11 @@
+     std::unique_ptr<Producer> mVideoProducer;
+     size_t mPixelBufferSize;
+ 
++    // Only start/stop take this lock. The frame callback must not take it:
++    // stop waits for that callback while holding the lifecycle lock.
++    std::mutex mLifecycleLock;
++    bool mStarted = false;
++
+     static std::atomic<uint64_t> sFrameCounter;
+ };
+ }  // namespace recording

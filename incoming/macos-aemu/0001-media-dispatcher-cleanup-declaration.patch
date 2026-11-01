@@ -1,0 +1,12 @@
+diff --git a/host-common/include/host-common/MediaH264DecoderDefault.h b/host-common/include/host-common/MediaH264DecoderDefault.h
+--- a/host-common/include/host-common/MediaH264DecoderDefault.h
++++ b/host-common/include/host-common/MediaH264DecoderDefault.h
+@@ -29,7 +29,7 @@
+ class MediaH264DecoderDefault : public MediaH264Decoder {
+ public:
+     MediaH264DecoderDefault() = default;
+-    virtual ~MediaH264DecoderDefault() = default;
++    ~MediaH264DecoderDefault() override;
+ 
+     // This is the entry point
+     virtual void handlePing(MediaCodecType type, MediaOperation op, void* ptr) override;

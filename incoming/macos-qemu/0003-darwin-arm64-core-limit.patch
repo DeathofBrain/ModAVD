@@ -1,0 +1,53 @@
+diff --git a/android-qemu2-glue/main.cpp b/android-qemu2-glue/main.cpp
+index e98a8084..8e3d611f 100644
+--- a/android-qemu2-glue/main.cpp
++++ b/android-qemu2-glue/main.cpp
+@@ -142,6 +142,9 @@ extern "C" {
+ #include <unistd.h>
+ #endif
+ #include <algorithm>
++#if defined(__APPLE__) && defined(__aarch64__) && defined(TARGET_AARCH64)
++#include <Hypervisor/hv_vm.h>
++#endif
+ #include <regex>
+ #include <string>
+ #include <string_view>
+@@ -571,6 +574,20 @@ static bool volumeSupportsSparseFiles(const std::string& dir) {
+ }
+ #endif
+ 
++#if defined(__APPLE__) && defined(__aarch64__) && defined(TARGET_AARCH64)
++static int appleArmMaxGuestCores(int hostCores) {
++    // Apple's cores have no SMT siblings to reserve. The current virt machine
++    // uses GICv2 (GIC_NCPU == 8); advertising more CPUs makes it fail to boot.
++    int maxCores = std::max(1, std::min(hostCores, 8));
++    uint32_t hvfMaxCores = 0;
++    if (hv_vm_get_max_vcpu_count(&hvfMaxCores) == HV_SUCCESS &&
++        hvfMaxCores > 0 && hvfMaxCores < static_cast<uint32_t>(maxCores)) {
++        maxCores = static_cast<int>(hvfMaxCores);
++    }
++    return maxCores;
++}
++#endif
++
+ // MAS local: grow (never shrink) the virtual size of an existing userdata
+ // overlay to |newSize| bytes with qemu-img. The guest then sees a larger data
+ // disk; growing the file system on it is left to the guest (online resize2fs
+@@ -2959,6 +2976,17 @@ extern "C" int main(int argc, char** argv) {
+     }
+ #endif  // !TARGET_X86_64 && !TARGET_I386
+ 
++#if defined(__APPLE__) && defined(__aarch64__) && defined(TARGET_AARCH64)
++    const int armMaxCores =
++            appleArmMaxGuestCores(System::get()->getCpuCoreCount());
++    if (hw->hw_cpu_ncore > armMaxCores) {
++        dwarning("Apple Silicon supports at most %d guest cores with this "
++                 "machine and host. Number of cores set to %d",
++                 armMaxCores, armMaxCores);
++        hw->hw_cpu_ncore = armMaxCores;
++    }
++#endif
++
+     if (hw->hw_cpu_ncore > 1) {
+         args.add("-smp");
+         args.addFormat("cores=%d", hw->hw_cpu_ncore);

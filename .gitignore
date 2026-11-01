@@ -1,0 +1,8 @@
+.macos-work/
+.local-check/
+.DS_Store
+__pycache__/
+
+# Raw local VM evidence includes logs, signed executables and build snapshots.
+# Source probes, patches and compact result/identity reports remain tracked.
+/incoming/macos-qemu/experimental/evidence/

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "checkedOn": "2026-10-31",
+  "metadata": {
+    "sdk": {
+      "url": "https://dl.google.com/android/repository/repository2-3.xml",
+      "sha256": "fb1bd2fcd70b6116519563f1ff96cc578381e4e29237ab05ec8920f0864a7955"
+    },
+    "images": {
+      "url": "https://dl.google.com/android/repository/sys-img/google_apis/sys-img2-3.xml",
+      "sha256": "b1261b4f645125367bc74d5e0881a55cb489cf13bae26a3c9d61bdef287d228e"
+    }
+  },
+  "components": {
+    "platform-tools": {
+      "package": "platform-tools",
+      "revision": "37.0.1",
+      "metadata": "sdk",
+      "url": "https://dl.google.com/android/repository/platform-tools_r37.0.1-darwin.zip",
+      "size": 16110554,
+      "sha1": "6ae73f4de6452dc57e62ec02b68eed92a4c21661",
+      "license": "android-sdk-license",
+      "licenseTextSha256": "1f8729233617b193fd619213792ae16a41b95d2bbbf525dfe66998252ba68b16",
+      "archiveRoot": "platform-tools",
+      "destination": "platform-tools",
+      "expandedBudgetBytes": 60000000,
+      "sha256": "ee39ad5967e95c2a07f04dbcbde96b1a0c916ba376096db5d2f498b7727a5d1d",
+      "sha256Source": "locally verified official archive; runtime installation receipt 2026-10-31"
+    },
+    "system-image": {
+      "package": "system-images;android-34;google_apis;arm64-v8a",
+      "revision": "14",
+      "metadata": "images",
+      "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-34_r14.zip",
+      "size": 1610393229,
+      "sha1": "2fe8b46d419a3400e30f31b0152b241b50c8b99f",
+      "license": "android-sdk-arm-dbt-license",
+      "licenseTextSha256": "0682da42e0ca119ce29503c265587f8ae17277094f9262b54c1d2bb99557c6f5",
+      "archiveRoot": "arm64-v8a",
+      "destination": "system-images/android-34/google_apis/arm64-v8a",
+      "expandedBudgetBytes": 6000000000,
+      "sha256": "bd1c323cbdd3c9dd55dde54588b298d172fd126fe16e127a7bd7aeab6897890a",
+      "sha256Source": "locally verified official archive; runtime installation receipt 2026-10-31"
+    }
+  }
+}

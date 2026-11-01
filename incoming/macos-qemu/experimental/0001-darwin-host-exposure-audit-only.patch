@@ -1,0 +1,1105 @@
+diff --git a/exec.c b/exec.c
+index bc5faa69..bea5a5bd 100644
+--- a/exec.c
++++ b/exec.c
+@@ -62,6 +62,7 @@
+ 
+ #include "exec/memory-internal.h"
+ #include "exec/ram_addr.h"
++#include "exec/ram-reclaim-audit-model.h"
+ #include "exec/log.h"
+ 
+ #include "migration/vmstate.h"
+@@ -120,6 +121,209 @@ static bool ram_blocks_exiting = false;
+ /* RAM backing is managed by user */
+ #define RAM_USER_BACKED (1 << 4)
+ 
++/* Audit only: no reservation or replacement operation is exposed to QEMU. */
++static QemuMutex ram_audit_lock;
++static gsize ram_audit_once;
++static bool ram_audit_enabled;
++static const char *ram_audit_inhibited;
++
++static bool ram_audit_active(void)
++{
++    if (g_once_init_enter(&ram_audit_once)) {
++#if defined(__APPLE__) && defined(__aarch64__)
++        const char *value = getenv("MODAVD_HVF_RAM_AUDIT");
++#endif
++        qemu_mutex_init(&ram_audit_lock);
++#if defined(__APPLE__) && defined(__aarch64__)
++        ram_audit_enabled = value && !strcmp(value, "1");
++#endif
++        g_once_init_leave(&ram_audit_once, 1);
++    }
++    return ram_audit_enabled;
++}
++
++bool qemu_ram_audit_is_enabled(void)
++{
++    return ram_audit_active();
++}
++
++static void ram_audit_log_locked(RAMBlock *rb, const char *event,
++                                 uint64_t offset, uint64_t length,
++                                 uint64_t candidates)
++{
++    RraState *s = rb->reclaim_audit;
++    info_report("hvf-ram-audit: event=%s block=%s kind=%d generation=%" PRIu64
++                " size=%" PRIu64 " host_page=%" PRIu64
++                " exposed_pages=%" PRIu64 "/%" PRIu64
++                " whole_reason=%s exposures=%" PRIu64
++                " exposure_bytes_total=%" PRIu64 " report_maps=%" PRIu64
++                " report_map_bytes_total=%" PRIu64 " reports_skipped=%" PRIu64
++                " report_sg_total=%" PRIu64 " report_bytes_total=%" PRIu64
++                " candidate_bytes_total=%" PRIu64
++                " range=%" PRIu64 "+%" PRIu64 " range_upper_bound=%" PRIu64
++                " ingress_complete=0 permissions_complete=0 coverage_tainted=1"
++                " strict_eligible_bytes=0 reclaim_enabled=0",
++                event, memory_region_name(rb->mr), (int)s->backing,
++                s->generation, s->size, s->page_size, s->tainted_pages, s->pages,
++                s->whole_reason ? s->whole_reason : "none", s->exposures,
++                s->exposure_bytes, s->report_maps, s->report_map_bytes,
++                s->reports_skipped,
++                s->reports, s->report_bytes, s->candidate_bytes,
++                offset, length, candidates);
++}
++
++static void ram_audit_causes_locked(RAMBlock *rb)
++{
++    RraState *s = rb->reclaim_audit;
++    unsigned i;
++    for (i = 0; i < s->causes_used; i++) {
++        RraCause *c = &s->causes[i];
++        info_report("hvf-ram-audit: event=cause block=%s cause=%s"
++                    " calls=%" PRIu64 " bytes=%" PRIu64 " invalid=%" PRIu64,
++                    memory_region_name(rb->mr), c->name,
++                    c->calls, c->bytes, c->invalid);
++    }
++}
++
++static void ram_audit_note(RAMBlock *rb, uint64_t offset, uint64_t length,
++                           const char *reason)
++{
++    RraState *s = rb->reclaim_audit;
++    bool whole_before, noted;
++    unsigned causes_before;
++    if (!s) {
++        return;
++    }
++    qemu_mutex_lock(&ram_audit_lock);
++    whole_before = s->whole_reason != NULL;
++    causes_before = s->causes_used;
++    /* No QEMU caller can reserve in this audit-only prototype. */
++    noted = rra_map(s, offset, length, false, reason);
++    assert(noted);
++    if ((!whole_before && s->whole_reason) || s->exposures <= 8 ||
++        causes_before != s->causes_used) {
++        ram_audit_log_locked(rb, reason, offset, length, 0);
++    }
++    qemu_mutex_unlock(&ram_audit_lock);
++}
++
++static void ram_audit_report_map(RAMBlock *rb, uint64_t offset, uint64_t length)
++{
++    RraState *s = rb->reclaim_audit;
++    bool noted;
++    if (!s) {
++        return;
++    }
++    qemu_mutex_lock(&ram_audit_lock);
++    noted = rra_map(s, offset, length, true, "report-owner");
++    assert(noted);
++    qemu_mutex_unlock(&ram_audit_lock);
++}
++
++static void ram_audit_invalidate(RAMBlock *rb, const char *reason)
++{
++    if (rb->reclaim_audit) {
++        qemu_mutex_lock(&ram_audit_lock);
++        rra_invalidate(rb->reclaim_audit, reason);
++        ram_audit_log_locked(rb, reason, 0, 0, 0);
++        qemu_mutex_unlock(&ram_audit_lock);
++    }
++}
++
++void qemu_ram_audit_inhibit(const char *reason)
++{
++    RAMBlock *rb;
++    if (!ram_audit_active()) {
++        return;
++    }
++    rcu_read_lock();
++    qemu_mutex_lock(&ram_audit_lock);
++    ram_audit_inhibited = reason;
++    RAMBLOCK_FOREACH(rb) {
++        if (rb->reclaim_audit) {
++            rra_taint_all(rb->reclaim_audit, reason);
++            ram_audit_log_locked(rb, reason, 0, 0, 0);
++        }
++    }
++    qemu_mutex_unlock(&ram_audit_lock);
++    rcu_read_unlock();
++}
++
++void qemu_ram_audit_host_pointer(void *host, uint64_t length, const char *reason)
++{
++    RAMBlock *rb;
++    uintptr_t address = (uintptr_t)host;
++    if (!host || !ram_audit_active()) {
++        return;
++    }
++    if (length > UINTPTR_MAX - address) {
++        qemu_ram_audit_inhibit("overflowing-host-pointer");
++        return;
++    }
++    rcu_read_lock();
++    RAMBLOCK_FOREACH(rb) {
++        uintptr_t base = (uintptr_t)rb->host;
++        uint64_t offset;
++        if (!base || rb->max_length > UINTPTR_MAX - base) {
++            continue;
++        }
++        if (!length) {
++            if (address >= base && address - base < rb->max_length) {
++                ram_audit_note(rb, 0, 0, reason);
++            }
++        } else if (address < base + rb->max_length && base < address + length) {
++            uintptr_t first = MAX(address, base);
++            uintptr_t last = MIN(address + length, base + rb->max_length);
++            offset = first - base;
++            ram_audit_note(rb, offset, last - first, reason);
++        }
++    }
++    rcu_read_unlock();
++}
++
++void qemu_ram_audit_report(RAMBlock *rb, uint64_t offset, uint64_t length,
++                           const char *skip_reason)
++{
++    RraState *s = rb->reclaim_audit;
++    uint64_t candidates;
++    if (!s) {
++        return;
++    }
++    qemu_mutex_lock(&ram_audit_lock);
++    if (!skip_reason && !rra_range(s, offset, length)) {
++        skip_reason = "report-invalid-range";
++    }
++    if (!skip_reason && ((offset | length) & (s->page_size - 1))) {
++        skip_reason = "report-host-page-unaligned";
++    }
++    candidates = skip_reason ? 0 : rra_candidates(s, offset, length);
++    s->reports = rra_add(s->reports, 1);
++    s->report_bytes = rra_add(s->report_bytes, length);
++    s->candidate_bytes = rra_add(s->candidate_bytes, candidates);
++    s->reports_skipped = rra_add(s->reports_skipped, skip_reason != NULL);
++    if (s->reports == 1 || !(s->reports % 64)) {
++        ram_audit_log_locked(rb, skip_reason ? skip_reason : "report",
++                             offset, length, candidates);
++        ram_audit_causes_locked(rb);
++    }
++    qemu_mutex_unlock(&ram_audit_lock);
++}
++
++void qemu_ram_audit_untracked_report(uint64_t length)
++{
++    static uint64_t reports, bytes;
++    if (!ram_audit_active()) {
++        return;
++    }
++    qemu_mutex_lock(&ram_audit_lock);
++    reports = rra_add(reports, 1);
++    bytes = rra_add(bytes, length);
++    info_report("hvf-ram-audit: event=report-untracked report_sg_total=%" PRIu64
++                " report_bytes_total=%" PRIu64 " strict_eligible_bytes=0"
++                " reclaim_enabled=0", reports, bytes);
++    qemu_mutex_unlock(&ram_audit_lock);
++}
++
+ /* UFFDIO_ZEROPAGE is available on this RAMBlock to atomically
+  * zero the page and wake waiting processes.
+  * (Set during postcopy)
+@@ -1434,6 +1638,48 @@ static subpage_t *subpage_init(FlatView *fv, hwaddr base);
+ static void *(*phys_mem_alloc)(size_t size, uint64_t *align, bool shared) =
+                                qemu_anon_ram_alloc;
+ 
++static void ram_audit_allocate(RAMBlock *rb, bool shared)
++{
++    RraBacking kind;
++    if (!ram_audit_active()) {
++        return;
++    }
++    if (rb->fd >= 0 || (rb->flags & RAM_MAPPED)) {
++        kind = RRA_FILE;
++    } else if (rb->flags & (RAM_PREALLOC | RAM_USER_BACKED)) {
++        kind = RRA_EXTERNAL;
++    } else if (rb->flags & RAM_RESIZEABLE) {
++        kind = RRA_RESIZABLE;
++    } else if (phys_mem_alloc != qemu_anon_ram_alloc) {
++        kind = RRA_CUSTOM;
++    } else {
++        kind = shared ? RRA_SHARED : RRA_PRIVATE;
++    }
++    rb->reclaim_audit = g_new0(RraState, 1);
++    qemu_mutex_lock(&ram_audit_lock);
++    rra_init(rb->reclaim_audit, rb->max_length, rb->page_size, kind);
++    if (ram_audit_inhibited || rb->mr->readonly) {
++        rra_taint_all(rb->reclaim_audit,
++                      ram_audit_inhibited ? ram_audit_inhibited : "readonly");
++    }
++    ram_audit_log_locked(rb, "allocate", 0, 0, 0);
++    qemu_mutex_unlock(&ram_audit_lock);
++}
++
++static void ram_audit_published(RAMBlock *rb)
++{
++    if (!rb->reclaim_audit) {
++        return;
++    }
++    /* Close the gap between initialization and RCU list publication: an
++     * inhibit that did not see this block must still apply to it. */
++    qemu_mutex_lock(&ram_audit_lock);
++    if (ram_audit_inhibited) {
++        rra_taint_all(rb->reclaim_audit, ram_audit_inhibited);
++        ram_audit_log_locked(rb, "inhibit-at-publication", 0, 0, 0);
++    }
++    qemu_mutex_unlock(&ram_audit_lock);
++}
+ /*
+  * Set a custom physical guest memory alloator.
+  * Accelerators with unusual needs may need this.  Hopefully, we can
+@@ -2083,6 +2329,7 @@ int qemu_ram_resize(RAMBlock *block, ram_addr_t newsize, Error **errp)
+     }
+ 
+     cpu_physical_memory_clear_dirty_range(block->offset, block->used_length);
++    ram_audit_invalidate(block, "resize");
+     block->used_length = newsize;
+     cpu_physical_memory_set_dirty_range(block->offset, block->used_length,
+                                         DIRTY_CLIENTS_ALL);
+@@ -2175,6 +2422,8 @@ static void ram_block_add(RAMBlock *new_block, Error **errp, bool shared)
+         }
+     }
+ 
++    ram_audit_allocate(new_block, shared);
++
+     new_ram_size = MAX(old_ram_size,
+               (new_block->offset + new_block->max_length) >> TARGET_PAGE_BITS);
+     if (new_ram_size > old_ram_size) {
+@@ -2197,6 +2446,7 @@ static void ram_block_add(RAMBlock *new_block, Error **errp, bool shared)
+     } else { /* list is empty */
+         QLIST_INSERT_HEAD_RCU(&ram_list.blocks, new_block, next);
+     }
++    ram_audit_published(new_block);
+     ram_list.mru_block = NULL;
+ 
+     /* Write list before version */
+@@ -2487,6 +2737,7 @@ void qemu_set_user_backed_mapping_funcs(QemuUserBackedRamMapFunc mapFunc,
+ 
+ void qemu_user_backed_ram_map(uint64_t gpa, void *hva, uint64_t size, int flags)
+ {
++    qemu_ram_audit_host_pointer(hva, size, "user-backed-alias");
+     goldfish_address_space_map_hook(gpa, size);
+     s_user_backed_ram_map(gpa, hva, size, flags);
+ }
+@@ -2512,6 +2763,14 @@ qemu_get_address_space_device_control_ops() {
+ 
+ static void reclaim_ramblock(RAMBlock *block)
+ {
++    if (block->reclaim_audit) {
++        qemu_mutex_lock(&ram_audit_lock);
++        ram_audit_log_locked(block, "free", 0, 0, 0);
++        ram_audit_causes_locked(block);
++        rra_destroy(block->reclaim_audit);
++        g_free(block->reclaim_audit);
++        qemu_mutex_unlock(&ram_audit_lock);
++    }
+     if (block->flags & RAM_PREALLOC) {
+         ;
+     } else if (xen_enabled()) {
+@@ -2569,6 +2828,7 @@ void qemu_ram_remap(ram_addr_t addr, ram_addr_t length)
+     RAMBLOCK_FOREACH(block) {
+         offset = addr - block->offset;
+         if (offset < block->max_length) {
++            ram_audit_invalidate(block, "ram-remap");
+             vaddr = ramblock_ptr(block, offset);
+             if (block->flags & RAM_PREALLOC) {
+                 ;
+@@ -2608,6 +2868,7 @@ void qemu_ram_remap(ram_addr_t addr, ram_addr_t length)
+ #endif /* !_WIN32 */
+ 
+ static void ram_block_teardown_backing(RAMBlock* block) {
++    ram_audit_invalidate(block, "backing-teardown");
+ 
+     if (block->fd >= 0) {
+         qemu_ram_munmap(block->host, block->max_length);
+@@ -2727,7 +2988,8 @@ void ram_blocks_remap_shared(int shared)
+  *
+  * Called within RCU critical section.
+  */
+-void *qemu_map_ram_ptr(RAMBlock *ram_block, ram_addr_t addr)
++static void *qemu_map_ram_ptr_internal(RAMBlock *ram_block, ram_addr_t addr,
++                                        uint64_t length, bool internal)
+ {
+     RAMBlock *block = ram_block;
+ 
+@@ -2747,16 +3009,35 @@ void *qemu_map_ram_ptr(RAMBlock *ram_block, ram_addr_t addr)
+ 
+         block->host = xen_map_cache(block->offset, block->max_length, 1, false);
+     }
++    if (!internal) {
++        ram_audit_note(block, length ? addr : 0, length,
++                       length ? "sized-ram-pointer" : "unsized-ram-pointer");
++    }
+     return ramblock_ptr(block, addr);
+ }
+ 
++void *qemu_map_ram_ptr(RAMBlock *block, ram_addr_t addr)
++{
++    return qemu_map_ram_ptr_internal(block, addr, 0, false);
++}
++
++void *qemu_map_ram_ptr_sized(RAMBlock *block, ram_addr_t addr, hwaddr length)
++{
++    return qemu_map_ram_ptr_internal(block, addr, length, false);
++}
++
++void *qemu_map_ram_ptr_for_accel(RAMBlock *block, ram_addr_t addr)
++{
++    return qemu_map_ram_ptr_internal(block, addr, 0, true);
++}
++
+ /* Return a host pointer to guest's ram. Similar to qemu_map_ram_ptr
+  * but takes a size argument.
+  *
+  * Called within RCU critical section.
+  */
+ static void *qemu_ram_ptr_length(RAMBlock *ram_block, ram_addr_t addr,
+-                                 hwaddr *size, bool lock)
++                                 hwaddr *size, bool lock, bool report_owner)
+ {
+     RAMBlock *block = ram_block;
+     if (*size == 0) {
+@@ -2781,6 +3062,11 @@ static void *qemu_ram_ptr_length(RAMBlock *ram_block, ram_addr_t addr,
+         block->host = xen_map_cache(block->offset, block->max_length, 1, lock);
+     }
+ 
++    if (!report_owner) {
++        ram_audit_note(block, addr, *size, "sized-ram-access");
++    } else {
++        ram_audit_report_map(block, addr, *size);
++    }
+     return ramblock_ptr(block, addr);
+ }
+ 
+@@ -2943,16 +3229,16 @@ static void notdirty_mem_write(void *opaque, hwaddr ram_addr,
+ 
+     switch (size) {
+     case 1:
+-        stb_p(qemu_map_ram_ptr(NULL, ram_addr), val);
++        stb_p(qemu_map_ram_ptr_sized(NULL, ram_addr, size), val);
+         break;
+     case 2:
+-        stw_p(qemu_map_ram_ptr(NULL, ram_addr), val);
++        stw_p(qemu_map_ram_ptr_sized(NULL, ram_addr, size), val);
+         break;
+     case 4:
+-        stl_p(qemu_map_ram_ptr(NULL, ram_addr), val);
++        stl_p(qemu_map_ram_ptr_sized(NULL, ram_addr, size), val);
+         break;
+     case 8:
+-        stq_p(qemu_map_ram_ptr(NULL, ram_addr), val);
++        stq_p(qemu_map_ram_ptr_sized(NULL, ram_addr, size), val);
+         break;
+     default:
+         abort();
+@@ -3570,7 +3856,7 @@ static MemTxResult flatview_write_continue(FlatView *fv, hwaddr addr,
+                         " ignored. Offset = 0x%llx, size = %llx\n",
+                         GOLDFISH_ADDRESS_SPACE_AREA_NAME, addr1, l);
+             } else {
+-                ptr = qemu_ram_ptr_length(mr->ram_block, addr1, &l, false);
++                ptr = qemu_ram_ptr_length(mr->ram_block, addr1, &l, false, false);
+                 memcpy(ptr, buf, l);
+                 invalidate_and_set_dirty(mr, addr1, l);
+             }
+@@ -3677,7 +3963,7 @@ MemTxResult flatview_read_continue(FlatView *fv, hwaddr addr,
+                         GOLDFISH_ADDRESS_SPACE_AREA_NAME, addr1, l);
+                 memset(buf, 0xFF, l);
+             } else {
+-                ptr = qemu_ram_ptr_length(mr->ram_block, addr1, &l, false);
++                ptr = qemu_ram_ptr_length(mr->ram_block, addr1, &l, false, false);
+                 memcpy(buf, ptr, l);
+             }
+         }
+@@ -3789,7 +4075,7 @@ static inline void cpu_physical_memory_write_rom_internal(AddressSpace *as,
+             l = memory_access_size(mr, l, addr1);
+         } else {
+             /* ROM/RAM case */
+-            ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++            ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+             switch (type) {
+             case WRITE_DATA:
+                 memcpy(ptr, buf, l);
+@@ -3988,10 +4274,10 @@ flatview_extend_translation(FlatView *fv, hwaddr addr,
+  * Use cpu_register_map_client() to know when retrying the map operation is
+  * likely to succeed.
+  */
+-void *address_space_map(AddressSpace *as,
++static void *address_space_map_internal(AddressSpace *as,
+                         hwaddr addr,
+                         hwaddr *plen,
+-                        bool is_write)
++                        bool is_write, bool report_owner)
+ {
+     hwaddr len = *plen;
+     hwaddr l, xlat;
+@@ -4035,12 +4321,24 @@ void *address_space_map(AddressSpace *as,
+     memory_region_ref(mr);
+     *plen = flatview_extend_translation(fv, addr, len, mr, xlat,
+                                              l, is_write);
+-    ptr = qemu_ram_ptr_length(mr->ram_block, xlat, plen, true);
++    ptr = qemu_ram_ptr_length(mr->ram_block, xlat, plen, true, report_owner);
+     rcu_read_unlock();
+ 
+     return ptr;
+ }
+ 
++void *address_space_map(AddressSpace *as, hwaddr addr, hwaddr *plen,
++                         bool is_write)
++{
++    return address_space_map_internal(as, addr, plen, is_write, false);
++}
++
++void *address_space_map_report(AddressSpace *as, hwaddr addr, hwaddr *plen,
++                                bool is_write)
++{
++    return address_space_map_internal(as, addr, plen, is_write, true);
++}
++
+ /* Unmaps a memory region previously mapped by address_space_map().
+  * Will also mark the memory as dirty if is_write == 1.  access_len gives
+  * the amount of memory that was actually read or written by the caller.
+@@ -4091,6 +4389,7 @@ void *cpu_physical_memory_get_addr(hwaddr addr) {
+     hwaddr len = 4096;
+     void* hva = cpu_physical_memory_map(addr, &len, 1);
+     cpu_physical_memory_unmap(hva, len, 1, len);
++    qemu_ram_audit_host_pointer(hva, 0, "unsized-physical-memory-lookup");
+     return hva;
+ }
+ 
+@@ -4229,6 +4528,7 @@ int qemu_ram_foreach_block(RAMBlockIterFunc func, void *opaque)
+ 
+     rcu_read_lock();
+     RAMBLOCK_FOREACH(block) {
++        ram_audit_note(block, 0, 0, "ram-iterator");
+         ret = func(block->idstr, block->host, block->offset,
+                    block->used_length, opaque);
+         if (ret) {
+@@ -4244,11 +4544,15 @@ int qemu_ram_foreach_migrate_block_with_file_info(RAMBlockIterFuncWithFileInfo f
+     RAMBlock *block;
+     int ret = 0;
+ 
++    /* Actual registration hands whole-block host pointers to snapshot workers.
++     * Future allocations must also remain excluded after this transition. */
++    qemu_ram_audit_inhibit("snapshot-ram-registration");
+     rcu_read_lock();
+     RAMBLOCK_FOREACH(block) {
+         ret = 0;
+ 
+         if (block->migrate) {
++            ram_audit_note(block, 0, 0, "snapshot-ram-iterator");
+             ret = func(block->idstr, block->host, block->offset,
+                        block->used_length,
+                        block->flags,
+diff --git a/hw/virtio/virtio-balloon.c b/hw/virtio/virtio-balloon.c
+index d928b2c1..3016e600 100644
+--- a/hw/virtio/virtio-balloon.c
++++ b/hw/virtio/virtio-balloon.c
+@@ -223,8 +223,24 @@ static void virtio_balloon_handle_report(VirtIODevice *vdev, VirtQueue *vq)
+     VirtIOBalloon *dev = VIRTIO_BALLOON(vdev);
+     VirtQueueElement *elem;
+ 
+-    while ((elem = virtqueue_pop(vq, sizeof(VirtQueueElement)))) {
++    while ((elem = virtqueue_pop_report(vq, sizeof(VirtQueueElement)))) {
+         unsigned int i;
++        const char *audit_skip = qemu_balloon_is_inhibited() ?
++            "report-inhibited" : dev->poison_val ? "report-guest-poison" : NULL;
++
++        /* Observe even skipped reports. The original discard path below is
++         * unchanged; these counters are not permission to replace memory. */
++        for (i = 0; qemu_ram_audit_is_enabled() && i < elem->in_num; i++) {
++            ram_addr_t offset;
++            RAMBlock *block = qemu_ram_block_from_host(elem->in_sg[i].iov_base,
++                                                       false, &offset);
++            if (block) {
++                qemu_ram_audit_report(block, offset, elem->in_sg[i].iov_len,
++                                      audit_skip);
++            } else {
++                qemu_ram_audit_untracked_report(elem->in_sg[i].iov_len);
++            }
++        }
+ 
+         /*
+          * When we discard the page it has the effect of removing the page
+diff --git a/hw/virtio/virtio.c b/hw/virtio/virtio.c
+index 31e9b99b..7ab78c52 100644
+--- a/hw/virtio/virtio.c
++++ b/hw/virtio/virtio.c
+@@ -734,7 +734,7 @@ int virtqueue_avail_bytes(VirtQueue *vq, unsigned int in_bytes,
+ static bool virtqueue_map_desc(VirtIODevice *vdev, unsigned int *p_num_sg,
+                                hwaddr *addr, struct iovec *iov,
+                                unsigned int max_num_sg, bool is_write,
+-                               hwaddr pa, size_t sz)
++                               hwaddr pa, size_t sz, bool report_owner)
+ {
+     bool ok = false;
+     unsigned num_sg = *p_num_sg;
+@@ -754,10 +754,15 @@ static bool virtqueue_map_desc(VirtIODevice *vdev, unsigned int *p_num_sg,
+             goto out;
+         }
+ 
+-        iov[num_sg].iov_base = dma_memory_map(vdev->dma_as, pa, &len,
++        if (report_owner && is_write) {
++            iov[num_sg].iov_base = address_space_map_report(vdev->dma_as,
++                                                           pa, &len, true);
++        } else {
++            iov[num_sg].iov_base = dma_memory_map(vdev->dma_as, pa, &len,
+                                               is_write ?
+                                               DMA_DIRECTION_FROM_DEVICE :
+                                               DMA_DIRECTION_TO_DEVICE);
++        }
+         if (!iov[num_sg].iov_base) {
+             virtio_error(vdev, "virtio: bogus descriptor or out of resources");
+             goto out;
+@@ -849,7 +854,7 @@ static void *virtqueue_alloc_element(size_t sz, unsigned out_num, unsigned in_nu
+     return elem;
+ }
+ 
+-void *virtqueue_pop(VirtQueue *vq, size_t sz)
++static void *virtqueue_pop_internal(VirtQueue *vq, size_t sz, bool report_owner)
+ {
+     unsigned int i, head, max;
+     VRingMemoryRegionCaches *caches;
+@@ -931,7 +936,7 @@ void *virtqueue_pop(VirtQueue *vq, size_t sz)
+             map_ok = virtqueue_map_desc(vdev, &in_num, addr + out_num,
+                                         iov + out_num,
+                                         VIRTQUEUE_MAX_SIZE - out_num, true,
+-                                        desc.addr, desc.len);
++                                        desc.addr, desc.len, report_owner);
+         } else {
+             if (in_num) {
+                 virtio_error(vdev, "Incorrect order for descriptors");
+@@ -939,7 +944,7 @@ void *virtqueue_pop(VirtQueue *vq, size_t sz)
+             }
+             map_ok = virtqueue_map_desc(vdev, &out_num, addr, iov,
+                                         VIRTQUEUE_MAX_SIZE, false,
+-                                        desc.addr, desc.len);
++                                        desc.addr, desc.len, false);
+         }
+         if (!map_ok) {
+             goto err_undo_map;
+@@ -984,6 +989,16 @@ err_undo_map:
+     goto done;
+ }
+ 
++void *virtqueue_pop(VirtQueue *vq, size_t sz)
++{
++    return virtqueue_pop_internal(vq, sz, false);
++}
++
++void *virtqueue_pop_report(VirtQueue *vq, size_t sz)
++{
++    return virtqueue_pop_internal(vq, sz, true);
++}
++
+ /* virtqueue_drop_all:
+  * @vq: The #VirtQueue
+  * Drops all queued buffers and indicates them to the guest
+diff --git a/include/exec/memory.h b/include/exec/memory.h
+index bb0d04d8..5c57d4ae 100644
+--- a/include/exec/memory.h
++++ b/include/exec/memory.h
+@@ -1959,6 +1959,20 @@ MemTxResult flatview_read_continue(FlatView *fv, hwaddr addr,
+                                    int len, hwaddr addr1, hwaddr l,
+                                    MemoryRegion *mr);
+ void *qemu_map_ram_ptr(RAMBlock *ram_block, ram_addr_t addr);
++void *qemu_map_ram_ptr_sized(RAMBlock *ram_block, ram_addr_t addr, hwaddr length);
++/* Internal accelerator mapping, not a host pointer escape. */
++void *qemu_map_ram_ptr_for_accel(RAMBlock *ram_block, ram_addr_t addr);
++void *memory_region_get_ram_ptr_for_accel(MemoryRegion *mr);
++/* Experimental audit only; these APIs never replace or discard memory.
++ * Diagnostic reason strings must have static storage duration. */
++bool qemu_ram_audit_is_enabled(void);
++void qemu_ram_audit_host_pointer(void *host, uint64_t length, const char *reason);
++void qemu_ram_audit_inhibit(const char *reason);
++void qemu_ram_audit_report(RAMBlock *rb, uint64_t offset, uint64_t length,
++                           const char *skip_reason);
++void qemu_ram_audit_untracked_report(uint64_t length);
++void *address_space_map_report(AddressSpace *as, hwaddr addr, hwaddr *plen,
++                               bool is_write);
+ 
+ static inline bool memory_access_is_direct(MemoryRegion *mr, bool is_write)
+ {
+@@ -2001,7 +2015,7 @@ MemTxResult address_space_read(AddressSpace *as, hwaddr addr,
+             l = len;
+             mr = flatview_translate(fv, addr, &addr1, &l, false);
+             if (len == l && memory_access_is_direct(mr, false)) {
+-                ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++                ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, len);
+                 memcpy(buf, ptr, len);
+             } else {
+                 result = flatview_read_continue(fv, addr, attrs, buf, len,
+diff --git a/include/exec/ram-reclaim-audit-model.h b/include/exec/ram-reclaim-audit-model.h
+new file mode 100644
+index 00000000..a2be3098
+--- /dev/null
++++ b/include/exec/ram-reclaim-audit-model.h
+@@ -0,0 +1,210 @@
++/* Experimental metadata only. No host memory replacement or discard API. */
++#ifndef RAM_RECLAIM_AUDIT_MODEL_H
++#define RAM_RECLAIM_AUDIT_MODEL_H
++
++#include <stdbool.h>
++#include <stddef.h>
++#include <stdint.h>
++#include <stdlib.h>
++#include <string.h>
++
++typedef enum RraBacking {
++    RRA_UNKNOWN, RRA_PRIVATE, RRA_SHARED, RRA_FILE, RRA_EXTERNAL,
++    RRA_RESIZABLE, RRA_CUSTOM,
++} RraBacking;
++
++typedef struct RraCause {
++    const char *name; /* Caller supplies a static string. */
++    uint64_t calls, bytes, invalid;
++} RraCause;
++
++/* All access, including reads, requires the caller's registry mutex. */
++typedef struct RraState {
++    uint64_t size, page_size, pages, generation;
++    uint64_t tainted_pages, exposures, exposure_bytes;
++    uint64_t reports, report_bytes, candidate_bytes, reports_skipped;
++    uint64_t report_maps, report_map_bytes;
++    uint64_t reservation_id, next_id, reserved_start, reserved_length;
++    uint8_t *bits;
++    RraBacking backing;
++    const char *whole_reason;
++    RraCause causes[16];
++    unsigned causes_used;
++} RraState;
++
++typedef struct RraReservation {
++    uint64_t id, generation, start, length;
++} RraReservation;
++
++static inline uint64_t rra_add(uint64_t a, uint64_t b)
++{
++    return b > UINT64_MAX - a ? UINT64_MAX : a + b;
++}
++
++static inline bool rra_range(const RraState *s, uint64_t start, uint64_t length)
++{
++    return length && start < s->size && length <= s->size - start;
++}
++
++static inline bool rra_init(RraState *s, uint64_t size, uint64_t page_size,
++                            RraBacking backing)
++{
++    uint64_t bytes;
++    memset(s, 0, sizeof(*s));
++    s->size = size;
++    s->page_size = page_size;
++    s->generation = s->next_id = 1;
++    s->backing = backing;
++    if (!size || !page_size || (page_size & (page_size - 1))) {
++        s->whole_reason = "invalid-metadata";
++        return false;
++    }
++    s->pages = size / page_size + (size % page_size != 0);
++    bytes = s->pages / 8 + (s->pages % 8 != 0);
++    if (bytes > SIZE_MAX || !(s->bits = calloc((size_t)bytes, 1))) {
++        s->whole_reason = "bitmap-allocation-failed";
++        s->tainted_pages = s->pages;
++        return false;
++    }
++    return true;
++}
++
++static inline bool rra_taint_all(RraState *s, const char *reason)
++{
++    if (s->reservation_id) {
++        return false;
++    }
++    if (!s->whole_reason) {
++        s->whole_reason = reason;
++    }
++    s->tainted_pages = s->pages;
++    return true;
++}
++
++/* Unknown or overflowing extents exclude the whole block. A future mutating
++ * backend would wait/retry before returning any pointer on false. */
++static inline bool rra_expose(RraState *s, uint64_t start, uint64_t length,
++                              const char *reason)
++{
++    uint64_t first, last, page;
++    unsigned cause;
++    bool valid = rra_range(s, start, length);
++    if (s->reservation_id && (!valid ||
++        (start < s->reserved_start + s->reserved_length &&
++         s->reserved_start < start + length))) {
++        return false;
++    }
++    s->exposures = rra_add(s->exposures, 1);
++    s->exposure_bytes = rra_add(s->exposure_bytes, length);
++    for (cause = 0; cause < s->causes_used; cause++) {
++        if (!strcmp(s->causes[cause].name, reason)) {
++            break;
++        }
++    }
++    if (cause == s->causes_used) {
++        if (cause == sizeof(s->causes) / sizeof(s->causes[0])) {
++            return rra_taint_all(s, "unclassified-ingress");
++        }
++        s->causes[cause].name = reason;
++        s->causes_used++;
++    }
++    s->causes[cause].calls = rra_add(s->causes[cause].calls, 1);
++    s->causes[cause].bytes = rra_add(s->causes[cause].bytes, length);
++    s->causes[cause].invalid = rra_add(s->causes[cause].invalid, !valid);
++    if (!valid) {
++        return rra_taint_all(s, reason);
++    }
++    if (s->whole_reason) {
++        return true;
++    }
++    first = start / s->page_size;
++    last = (start + length - 1) / s->page_size;
++    for (page = first; page <= last; page++) {
++        uint8_t mask = (uint8_t)(1u << (page % 8));
++        if (!(s->bits[page / 8] & mask)) {
++            s->bits[page / 8] |= mask;
++            s->tainted_pages++;
++        }
++    }
++    return true;
++}
++
++/* Only balloon report data receives this exemption; ring/descriptor reads
++ * remain normal exposures. This does not assert that other users are absent. */
++static inline bool rra_map(RraState *s, uint64_t start, uint64_t length,
++                           bool report_owner, const char *reason)
++{
++    if (!report_owner) {
++        return rra_expose(s, start, length, reason);
++    }
++    s->report_maps = rra_add(s->report_maps, 1);
++    s->report_map_bytes = rra_add(s->report_map_bytes, length);
++    return rra_range(s, start, length) ||
++           rra_taint_all(s, "invalid-report-map");
++}
++
++static inline uint64_t rra_candidates(const RraState *s, uint64_t start,
++                                       uint64_t length)
++{
++    uint64_t page, end, count = 0;
++    if (s->backing != RRA_PRIVATE || s->whole_reason ||
++        !rra_range(s, start, length) ||
++        ((start | length) & (s->page_size - 1))) {
++        return 0;
++    }
++    page = start / s->page_size;
++    end = (start + length) / s->page_size;
++    for (; page < end; page++) {
++        count += !(s->bits[page / 8] & (1u << (page % 8)));
++    }
++    return count * s->page_size;
++}
++
++/* Deliberately not called by QEMU. Tests exercise the reservation contract;
++ * this prototype has no executable reclaim/remap entry point. */
++static inline bool rra_reserve(RraState *s, uint64_t start, uint64_t length,
++                               uint64_t generation, RraReservation *r)
++{
++    if (s->reservation_id || generation != s->generation ||
++        !s->next_id || s->next_id == UINT64_MAX ||
++        rra_candidates(s, start, length) != length || !length) {
++        return false;
++    }
++    r->id = s->reservation_id = s->next_id++;
++    r->generation = s->generation;
++    r->start = s->reserved_start = start;
++    r->length = s->reserved_length = length;
++    return true;
++}
++
++static inline bool rra_reservation_valid(const RraState *s,
++                                         const RraReservation *r)
++{
++    return r->id && r->id == s->reservation_id &&
++           r->generation == s->generation &&
++           r->start == s->reserved_start && r->length == s->reserved_length &&
++           s->backing == RRA_PRIVATE && !s->whole_reason;
++}
++
++static inline void rra_release(RraState *s, const RraReservation *r)
++{
++    if (rra_reservation_valid(s, r)) {
++        s->reservation_id = 0;
++    }
++}
++
++static inline void rra_invalidate(RraState *s, const char *reason)
++{
++    s->generation = rra_add(s->generation, 1);
++    s->reservation_id = 0;
++    s->backing = RRA_UNKNOWN;
++    s->whole_reason = reason;
++    s->tainted_pages = s->pages;
++}
++
++static inline void rra_destroy(RraState *s)
++{
++    free(s->bits);
++    s->bits = NULL;
++}
++#endif
+diff --git a/include/exec/ram_addr.h b/include/exec/ram_addr.h
+index cce3c04e..164ccd59 100644
+--- a/include/exec/ram_addr.h
++++ b/include/exec/ram_addr.h
+@@ -43,6 +43,8 @@ struct RAMBlock {
+     /* Tracking file path for this RAMBlock, if any. */
+     const char* path;
+     size_t page_size;
++    /* Experimental, opt-in audit metadata; never authorizes replacement. */
++    struct RraState *reclaim_audit;
+     /* dirty bitmap used during migration */
+     unsigned long *bmap;
+     /* bitmap of pages that haven't been sent even once
+diff --git a/include/hw/virtio/virtio.h b/include/hw/virtio/virtio.h
+index 098bdaae..27251449 100644
+--- a/include/hw/virtio/virtio.h
++++ b/include/hw/virtio/virtio.h
+@@ -176,6 +176,8 @@ void virtqueue_fill(VirtQueue *vq, const VirtQueueElement *elem,
+ 
+ void virtqueue_map(VirtIODevice *vdev, VirtQueueElement *elem);
+ void *virtqueue_pop(VirtQueue *vq, size_t sz);
++/* Only the balloon free-page reporting queue may use this owner class. */
++void *virtqueue_pop_report(VirtQueue *vq, size_t sz);
+ unsigned int virtqueue_drop_all(VirtQueue *vq);
+ void *qemu_get_virtqueue_element(VirtIODevice *vdev, QEMUFile *f, size_t sz);
+ void qemu_put_virtqueue_element(QEMUFile *f, VirtQueueElement *elem);
+diff --git a/memory.c b/memory.c
+index a19d8ed3..32db2a0b 100644
+--- a/memory.c
++++ b/memory.c
+@@ -2090,7 +2090,7 @@ int memory_region_get_fd(MemoryRegion *mr)
+     return fd;
+ }
+ 
+-void *memory_region_get_ram_ptr(MemoryRegion *mr)
++static void *memory_region_ram_ptr_internal(MemoryRegion *mr, bool accel)
+ {
+     void *ptr;
+     uint64_t offset = 0;
+@@ -2101,12 +2101,23 @@ void *memory_region_get_ram_ptr(MemoryRegion *mr)
+         mr = mr->alias;
+     }
+     assert(mr->ram_block);
+-    ptr = qemu_map_ram_ptr(mr->ram_block, offset);
++    ptr = accel ? qemu_map_ram_ptr_for_accel(mr->ram_block, offset) :
++                  qemu_map_ram_ptr(mr->ram_block, offset);
+     rcu_read_unlock();
+ 
+     return ptr;
+ }
+ 
++void *memory_region_get_ram_ptr(MemoryRegion *mr)
++{
++    return memory_region_ram_ptr_internal(mr, false);
++}
++
++void *memory_region_get_ram_ptr_for_accel(MemoryRegion *mr)
++{
++    return memory_region_ram_ptr_internal(mr, true);
++}
++
+ MemoryRegion *memory_region_from_host(void *ptr, ram_addr_t *offset)
+ {
+     RAMBlock *block;
+diff --git a/memory_ldst.inc.c b/memory_ldst.inc.c
+index a30060cf..2cefef16 100644
+--- a/memory_ldst.inc.c
++++ b/memory_ldst.inc.c
+@@ -50,7 +50,7 @@ static inline uint32_t glue(address_space_ldl_internal, SUFFIX)(ARG1_DECL,
+ #endif
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             val = ldl_le_p(ptr);
+@@ -144,7 +144,7 @@ static inline uint64_t glue(address_space_ldq_internal, SUFFIX)(ARG1_DECL,
+ #endif
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             val = ldq_le_p(ptr);
+@@ -227,7 +227,7 @@ uint32_t glue(address_space_ldub, SUFFIX)(ARG1_DECL,
+         r = memory_region_dispatch_read(mr, addr1, &val, 1, attrs);
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         val = ldub_p(ptr);
+         r = MEMTX_OK;
+     }
+@@ -278,7 +278,7 @@ static inline uint32_t glue(address_space_lduw_internal, SUFFIX)(ARG1_DECL,
+ #endif
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             val = lduw_le_p(ptr);
+@@ -362,7 +362,7 @@ void glue(address_space_stl_notdirty, SUFFIX)(ARG1_DECL,
+ 
+         r = memory_region_dispatch_write(mr, addr1, val, 4, attrs);
+     } else {
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         stl_p(ptr, val);
+ 
+         dirty_log_mask = memory_region_get_dirty_log_mask(mr);
+@@ -415,7 +415,7 @@ static inline void glue(address_space_stl_internal, SUFFIX)(ARG1_DECL,
+         r = memory_region_dispatch_write(mr, addr1, val, 4, attrs);
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             stl_le_p(ptr, val);
+@@ -495,7 +495,7 @@ void glue(address_space_stb, SUFFIX)(ARG1_DECL,
+         r = memory_region_dispatch_write(mr, addr1, val, 1, attrs);
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         stb_p(ptr, val);
+         invalidate_and_set_dirty(mr, addr1, 1);
+         r = MEMTX_OK;
+@@ -544,7 +544,7 @@ static inline void glue(address_space_stw_internal, SUFFIX)(ARG1_DECL,
+         r = memory_region_dispatch_write(mr, addr1, val, 2, attrs);
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             stw_le_p(ptr, val);
+@@ -635,7 +635,7 @@ static void glue(address_space_stq_internal, SUFFIX)(ARG1_DECL,
+         r = memory_region_dispatch_write(mr, addr1, val, 8, attrs);
+     } else {
+         /* RAM case */
+-        ptr = qemu_map_ram_ptr(mr->ram_block, addr1);
++        ptr = qemu_map_ram_ptr_sized(mr->ram_block, addr1, l);
+         switch (endian) {
+         case DEVICE_LITTLE_ENDIAN:
+             stq_le_p(ptr, val);
+diff --git a/migration/ram.c b/migration/ram.c
+index 109cf956..4ee1bd53 100644
+--- a/migration/ram.c
++++ b/migration/ram.c
+@@ -2265,6 +2265,7 @@ static int ram_save_setup(QEMUFile *f, void *opaque)
+     RAMState **rsp = opaque;
+     RAMBlock *block;
+ 
++    qemu_ram_audit_inhibit("migration-or-snapshot");
+     /* migration has already setup the bitmap, reuse it. */
+     if (!migration_in_colo_state()) {
+         if (ram_init_all(rsp) != 0) {
+@@ -2907,6 +2908,7 @@ static int ram_load(QEMUFile *f, void *opaque, int version_id)
+     /* ADVISE is earlier, it shows the source has the postcopy capability on */
+     bool postcopy_advised = postcopy_is_advised();
+ 
++    qemu_ram_audit_inhibit("migration-or-snapshot");
+     seq_iter++;
+ 
+     if (version_id != 4) {
+diff --git a/numa.c b/numa.c
+index d7c46744..100d9baf 100644
+--- a/numa.c
++++ b/numa.c
+@@ -611,6 +611,7 @@ MemdevList *qmp_query_memdev(Error **errp)
+ 
+ void ram_block_notifier_add(RAMBlockNotifier *n)
+ {
++    qemu_ram_audit_inhibit("external-ram-notifier");
+     QLIST_INSERT_HEAD(&ram_list.ramblock_notifiers, n, next);
+ }
+ 
+diff --git a/target/arm/hvf.c b/target/arm/hvf.c
+index 8ca26b63..4ce558e4 100644
+--- a/target/arm/hvf.c
++++ b/target/arm/hvf.c
+@@ -256,7 +256,9 @@ void* hvf_gpa2hva(uint64_t gpa, bool* found) {
+         if (gpa >= mslot->gpa_start &&
+             gpa < mslot->gpa_start + mslot->size) {
+             *found = true;
+-            return (void*)((char*)(mslot->hva) + (gpa - mslot->gpa_start));
++            void *host = (void*)((char*)mslot->hva + (gpa - mslot->gpa_start));
++            qemu_ram_audit_host_pointer(host, 0, "unsized-hvf-gpa-lookup");
++            return host;
+         }
+     }
+ 
+@@ -324,6 +326,7 @@ int __hvf_set_memory(hvf_slot *slot);
+ int __hvf_set_memory_with_flags_locked(hvf_slot *slot, hv_memory_flags_t flags);
+ 
+ int hvf_map_safe(void* hva, uint64_t gpa, uint64_t size, uint64_t flags) {
++    qemu_ram_audit_host_pointer(hva, size, "hvf-map-alias");
+     if (!hva) {
+         return -EINVAL;
+     }
+@@ -416,6 +419,7 @@ int hvf_unmap_safe(uint64_t gpa, uint64_t size) {
+ }
+ 
+ int hvf_protect_safe(uint64_t gpa, uint64_t size, uint64_t flags) {
++    qemu_ram_audit_inhibit("hvf-protect-untracked-permissions");
+     pthread_rwlock_wrlock(&mem_lock);
+     int res = hv_vm_protect(gpa, size, flags);
+     pthread_rwlock_unlock(&mem_lock);
+@@ -423,6 +427,7 @@ int hvf_protect_safe(uint64_t gpa, uint64_t size, uint64_t flags) {
+ }
+ 
+ int hvf_remap_safe(void* hva, uint64_t gpa, uint64_t size, uint64_t flags) {
++    qemu_ram_audit_inhibit("hvf-snapshot-remap");
+     pthread_rwlock_wrlock(&mem_lock);
+     int res = hv_vm_unmap(gpa, size);
+     check_hvf_ok(res);
+@@ -508,7 +513,7 @@ void hvf_set_phys_mem(MemoryRegionSection* section, bool add) {
+     if (mem && add) {
+         if (mem->size == int128_get64(section->size) &&
+                 mem->start == section->offset_within_address_space &&
+-                mem->mem == (memory_region_get_ram_ptr(area) + section->offset_within_region))
++                mem->mem == (memory_region_get_ram_ptr_for_accel(area) + section->offset_within_region))
+             return; // Same region was attempted to register, go away.
+     }
+ 
+@@ -532,7 +537,7 @@ void hvf_set_phys_mem(MemoryRegionSection* section, bool add) {
+     }
+ 
+     mem->size = int128_get64(section->size);
+-    mem->mem = memory_region_get_ram_ptr(area) + section->offset_within_region;
++    mem->mem = memory_region_get_ram_ptr_for_accel(area) + section->offset_within_region;
+     mem->start = section->offset_within_address_space;
+ 
+     if (__hvf_set_memory(mem)) {

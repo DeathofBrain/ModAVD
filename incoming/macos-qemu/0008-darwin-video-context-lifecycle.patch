@@ -1,0 +1,126 @@
+diff --git a/android/emu/media/src/android/emulation/MediaH264DecoderDefault.cpp b/android/emu/media/src/android/emulation/MediaH264DecoderDefault.cpp
+index 4fa82dc1..9231d911 100644
+--- a/android/emu/media/src/android/emulation/MediaH264DecoderDefault.cpp
++++ b/android/emu/media/src/android/emulation/MediaH264DecoderDefault.cpp
+@@ -44,6 +44,18 @@ MediaH264DecoderPlugin* makeDecoderPlugin(uint64_t pluginid,
+ }; // anon namespace
+ 
+ 
++MediaH264DecoderDefault::~MediaH264DecoderDefault() {
++    std::unordered_map<uint64_t, MediaH264DecoderPlugin*> decoders;
++    {
++        std::lock_guard<std::mutex> g(mMapLock);
++        decoders.swap(mDecoders);
++    }
++    // Plugin teardown can enter the renderer; do not hold the map lock there.
++    for (const auto& decoder : decoders) {
++        delete decoder.second;
++    }
++}
++
+ uint64_t MediaH264DecoderDefault::readId(void* ptr) {
+     if (nullptr == ptr)
+         return 0;
+diff --git a/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.cpp b/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.cpp
+index 0485ca78..a5f4d647 100644
+--- a/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.cpp
++++ b/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.cpp
+@@ -45,6 +45,18 @@ MediaHevcDecoderPlugin* makeDecoderPlugin(uint64_t pluginid,
+ 
+ };  // namespace
+ 
++MediaHevcDecoderDefault::~MediaHevcDecoderDefault() {
++    std::unordered_map<uint64_t, MediaHevcDecoderPlugin*> decoders;
++    {
++        std::lock_guard<std::mutex> g(mMapLock);
++        decoders.swap(mDecoders);
++    }
++    // Plugin teardown can enter the renderer; do not hold the map lock there.
++    for (const auto& decoder : decoders) {
++        delete decoder.second;
++    }
++}
++
+ uint64_t MediaHevcDecoderDefault::readId(void* ptr) {
+     if (nullptr == ptr)
+         return 0;
+diff --git a/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.h b/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.h
+index 3f387206..86504d0f 100644
+--- a/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.h
++++ b/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.h
+@@ -28,7 +28,7 @@ namespace emulation {
+ class MediaHevcDecoderDefault : public MediaHevcDecoder {
+ public:
+     MediaHevcDecoderDefault() = default;
+-    virtual ~MediaHevcDecoderDefault() = default;
++    ~MediaHevcDecoderDefault() override;
+ 
+     // This is the entry point
+     virtual void handlePing(MediaCodecType type,
+diff --git a/android/emu/media/src/android/emulation/MediaVpxDecoder.cpp b/android/emu/media/src/android/emulation/MediaVpxDecoder.cpp
+index 09026bfc..89cc7d06 100644
+--- a/android/emu/media/src/android/emulation/MediaVpxDecoder.cpp
++++ b/android/emu/media/src/android/emulation/MediaVpxDecoder.cpp
+@@ -42,7 +42,7 @@ namespace {
+ class MediaVpxDecoderImpl : public MediaVpxDecoder {
+ public:
+     MediaVpxDecoderImpl() = default;
+-    virtual ~MediaVpxDecoderImpl() = default;
++    ~MediaVpxDecoderImpl() override;
+     virtual void handlePing(MediaCodecType type, MediaOperation op, void* ptr) override;
+ 
+ public:
+@@ -69,6 +69,18 @@ MediaVpxDecoderPlugin* makeDecoderPlugin(uint64_t pluginid,
+ }
+ };  // namespace
+ 
++MediaVpxDecoderImpl::~MediaVpxDecoderImpl() {
++    std::unordered_map<uint64_t, MediaVpxDecoderPlugin*> decoders;
++    {
++        std::lock_guard<std::mutex> g(mMapLock);
++        decoders.swap(mDecoders);
++    }
++    // Plugin teardown can enter the renderer; do not hold the map lock there.
++    for (const auto& decoder : decoders) {
++        delete decoder.second;
++    }
++}
++
+ uint64_t MediaVpxDecoderImpl::readId(void* ptr) {
+     if (nullptr == ptr)
+         return 0;
+diff --git a/android/android-emu/android/emulation/address_space_host_media.cpp b/android/android-emu/android/emulation/address_space_host_media.cpp
+--- a/android/android-emu/android/emulation/address_space_host_media.cpp
++++ b/android/android-emu/android/emulation/address_space_host_media.cpp
+@@ -44,6 +44,10 @@
+ }
+ 
+ AddressSpaceHostMediaContext::~AddressSpaceHostMediaContext() {
++    // Decoder/plugin teardown may still use the context mapping.
++    mVpxDecoder.reset();
++    mH264Decoder.reset();
++    mHevcDecoder.reset();
+     deallocatePages(mGuestAddr, kNumPages);
+ }
+ 
+@@ -65,6 +69,9 @@
+     if (mH264Decoder != nullptr) {
+         ++ numActiveDecoders;
+     }
++    if (mHevcDecoder != nullptr) {
++        ++ numActiveDecoders;
++    }
+ 
+     stream->putBe32(numActiveDecoders);
+     if (mVpxDecoder != nullptr) {
+@@ -85,6 +92,10 @@
+ }
+ 
+ bool AddressSpaceHostMediaContext::load(base::Stream* stream) {
++    // Decoder/plugin teardown may still use the context mapping.
++    mVpxDecoder.reset();
++    mH264Decoder.reset();
++    mHevcDecoder.reset();
+     deallocatePages(mGuestAddr, kNumPages);
+     AS_DEVICE_DPRINT("Loading Host Media snapshot");
+     mGuestAddr = stream->getBe64();

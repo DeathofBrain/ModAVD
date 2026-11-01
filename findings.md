@@ -1,0 +1,23 @@
+# Findings
+
+- Repo: https://github.com/DeathofBrain/ModAVD
+- Revision: 3f7962114938fd4c09a8ee9e3a6e8add50851ade
+- Commit: components: validate pinned adb DLLs and package revision before skipping
+- Host: macOS 26.6.2 (25G83), Apple Silicon arm64.
+- Xcode command line tools: /Library/Developer/CommandLineTools.
+- Initial tree has scripts, package, bridge, patches, manifests and docs; no top-level CMake/project file found.
+- README explicitly targets Windows 10/11 x86_64 with WHPX; current release 0.36.0 uses AOSP Emulator 37.2.10.
+- This repository is an overlay: full emulator sources are external (24 repos mentioned); manager and IME are separate repositories.
+- Current patch sets: qemu/mas36 (65), gfxstream/mas35 (23), crashpad/module-version22 (1).
+- bridge compiles Android x86_64 guest shared objects, not a macOS host emulator. Both supplied build scripts call ndk-build.cmd; nbshim also hardcodes windows-x86_64 and llvm-readelf.exe.
+- CI runs source/metadata/privacy validation on Ubuntu, not emulator compilation. CONTRIBUTING describes source plus outputs as about 124 GB.
+- 官方在线构建文档要求 Windows x86_64、VS Build Tools 2022 17.14、ATL/MFC/Windows SDK、PowerShell 7；入口实际位于另行同步的 external/qemu/android/build/python/cmake.py。
+- manifest-aosp-base.xml 包含 windows-x86 编译器/CMake/Ninja/Python、windows-x86_64 Bazel，没有对应 darwin 工具项目。
+- 本机没有在常见位置发现 Android SDK；pwsh 未安装。磁盘可用约 135 GiB，未执行约 124 GB 级别的完整同步与构建。
+- 构建受平台配置限制，不等于所有补丁都会使 macOS 核心无法编译；已抽查的多处 Win32 API 有 _WIN32 保护。
+- 已核对同一固定 AOSP base：有 DARWIN-DEV.md、darwin-aarch64 toolchain，以及 darwin_x86_64/aarch64 目标。上游支持 Mac，不应把 ModAVD 的 Windows 产品定位误解为其上游不能移植。
+- 上游 android/rebuild.sh 在 Darwin 选择 prebuilts/python/darwin-x86/bin/python3；ModAVD 清单没有该项目。上游 Configure 也只在 pinned darwin CMake/Ninja 路径查找。
+- 所有已执行仓库检查通过：metadata 退出 0；privacy 扫描 350 个文件、0 failures；当前版本 89 个 patch 的 git apply --numstat 解析与计数通过。均不等价于编译/开机。
+- 运行预检查确认 clone 无 emulator 构建树和可启动产物，无 pwsh/repo/sdkmanager/ndk-build；未进行完整编译或 Android 客体启动。
+- xcodebuild -version 退出 1：当前 developer directory 为 CommandLineTools，需要完整 Xcode；原始日志在 .local-check/logs/xcodebuild.log。
+- 已完成 macOS-compatibility-report.md，详细区分当前产品限制、上游可移植基础、实际执行检查与未验证范围。

@@ -1,0 +1,17 @@
+{
+  "overrides": [
+    {
+      "original": "/Users/azuki/ModAVD/.macos-work/aosp/hardware/google/aemu/host-common/include/host-common/DmaMap.h",
+      "override": "/Users/azuki/ModAVD/.macos-work/qemu-patch-dev/include/host-common/DmaMap.h",
+      "original_sha256": "e19a52fc1fad07979907068bc13da0d2de2d82cb46f305ce2e844357d2829e41"
+    },
+    {
+      "original": "/Users/azuki/ModAVD/.macos-work/aosp/hardware/google/aemu/host-common/include/host-common/address_space_graphics.h",
+      "override": "/Users/azuki/ModAVD/.macos-work/qemu-patch-dev/include/host-common/address_space_graphics.h",
+      "original_sha256": "764c4a2d91937b88e8b850b048c94e81c5f229c14bb3a65a8c2a1135ae9a9fb7"
+    }
+  ],
+  "includeDirs": [
+    "/Users/azuki/ModAVD/.macos-work/qemu-patch-dev/include"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "overrides": [
+    {
+      "original": "/Users/azuki/ModAVD/.macos-work/aosp/hardware/google/aemu/host-common/include/host-common/MediaH264DecoderDefault.h",
+      "override": "/Users/azuki/ModAVD/incoming/macos-qemu/experimental/media-overrides/include/host-common/MediaH264DecoderDefault.h",
+      "original_sha256": "7245b48dc5aedf7dd88bb1bc3b391d880abd994a9d4690c98b2b006b3cfa857f"
+    },
+    {
+      "original": "/Users/azuki/ModAVD/.macos-work/aosp/external/qemu/android/emu/media/src/android/emulation/MediaHevcDecoderDefault.h",
+      "override": "/Users/azuki/ModAVD/incoming/macos-qemu/experimental/media-overrides/include/android/emulation/MediaHevcDecoderDefault.h",
+      "original_sha256": "35afe04bd6e676102d688edaa6be4363d112b6cc0cabd7ee9b7197f2a9218199"
+    }
+  ],
+  "includeDirs": [
+    "/Users/azuki/ModAVD/incoming/macos-qemu/experimental/media-overrides/include"
+  ]
+}

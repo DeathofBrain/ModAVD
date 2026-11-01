@@ -1,0 +1,402 @@
+{
+  "schema": "modavd-private-v7-final-handoff-2",
+  "updated_utc": "2026-10-31T22:24:24.782568+00:00",
+  "path_base": "repository_root",
+  "supersedes_stage": "Private v7 built and installed; all four signatures strictly verified; no guest start, quota retained by root for productionD9 lifecycle QA",
+  "stage": "All four private guest windows completed and stopped; quota released to root. Final documentation/evidence handoff only; no production promotion.",
+  "private_qemu_base_head": "568f0a3e755118d5dddd13bbdd821146d75f5711",
+  "production_source_layer": "D9; later production changes require rebase and fresh validation",
+  "main_default_modified": false,
+  "production_default_promoted": false,
+  "all_owned_guests_stopped": true,
+  "guest_quota_owner": "root",
+  "guest_quota_released": true,
+  "current_private_distribution": {
+    "path": ".macos-work/reclaim-audit-objects/distribution/emulator",
+    "variant": "v7 + telemetry + read-only tail diagnostic",
+    "guest_running": false,
+    "installed_receipt": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-installed/installed.json",
+      "sha256": "2f5b53c262ead736a635be2ddd7e28b19f0abb99cc3cc5b723bb085d22fce4f3"
+    }
+  },
+  "decision": "Retain private opt-in. Actual per-object resident-page release and bounded correctness pass; net memory saving, total kernel metadata cost and a shared paused-BH work bound remain unestablished.",
+  "final_decision_document": {
+    "path": "incoming/macos-qemu/experimental/V7-VALIDATION-DECISION.md",
+    "sha256": "d0ed9346d1be7009417362477b957b15b63e031a5783ba979b0128d219df2c45"
+  },
+  "versions": {
+    "original_v7": {
+      "source_receipt": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-source-pre-native/receipt.json",
+        "sha256": "eb13191297aa0b68f18e3b807a0f3d12d68e6f78c574fa5b7f12cdaf04ac26c3"
+      },
+      "build_receipt": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-qemu-build/binary-qemu-system-aarch64-headless.json",
+        "sha256": "732af8893b87453333afdc6036d94336f974cbf8c4d1cc85021ff433b194b887"
+      },
+      "installed_receipt": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-installed/installed.json",
+        "sha256": "2a80b0d595cd1e09e97620ee1ab6e1f63e75ce87c4ccdfed6a57e868a8431ba2"
+      },
+      "installed_files": {
+        "qemu/darwin-aarch64/qemu-system-aarch64-headless": "35dc1f3fb72b95934652908a5de4d053815e6030dc1f348bccf7c47ee284c187",
+        "lib64/libemugl_common.dylib": "21e6f074cc985fd74c07655bc3a727fcae18d479fec69a5a159fec7db8168929",
+        "lib64/libgfxstream_backend.dylib": "a246f2a57c3ab4c50e9850f828e5f277ff88e24a613c17592d037c0f7af6f471",
+        "emulator": "a03374408e130291f4ecc70447f5397eab7733875f53f575af72f11526666d42"
+      },
+      "patch_manifest": {
+        "path": "incoming/macos-qemu/experimental/complete-v7-patch.json",
+        "sha256": "e8b4aa68d1567947ff742d755356f73497a777644b7ff8f835e0d91c8983c771"
+      },
+      "all_four_strict_signatures_verified": true
+    },
+    "v7_with_balloon_only_telemetry": {
+      "source_receipt": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-source/receipt.json",
+        "sha256": "d4d00ae704b47865f39c15c78d9f0ed283d24b517f078758771e8a43c8f35ecb"
+      },
+      "build_receipt": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-build/receipt.json",
+        "sha256": "da56eeae8833c10ac72b053a4fc31d6c846407b18f9c96447bc96fa2e65f6520"
+      },
+      "installed_receipt": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-installed/installed.json",
+        "sha256": "412bc9b9ebb8a8c4621d38d0d0325a9bb7b46b8c696883ecfa87089603dbaf27"
+      },
+      "installed_files": {
+        "qemu/darwin-aarch64/qemu-system-aarch64-headless": "e84c349aa7346c8c4fb69ae62feab08e7de245525737be27f31efa08b5bd7e63",
+        "lib64/libemugl_common.dylib": "21e6f074cc985fd74c07655bc3a727fcae18d479fec69a5a159fec7db8168929",
+        "lib64/libgfxstream_backend.dylib": "a246f2a57c3ab4c50e9850f828e5f277ff88e24a613c17592d037c0f7af6f471",
+        "emulator": "748395347e9719fac6a950654765a7ea3bd90784146109bfabafd557be99e1e4"
+      },
+      "patch_manifest": {
+        "path": "incoming/macos-qemu/experimental/complete-v7-pause-telemetry-patch.json",
+        "sha256": "a73f04189e42005b442f5c866cb2e7378b851c2e5f8b7c0a3e87a72094b76b0b"
+      },
+      "all_four_strict_signatures_verified": true
+    },
+    "v7_with_telemetry_and_read_only_tail": {
+      "source_receipt": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-source/receipt.json",
+        "sha256": "212a194fed5295d8f88b8aa92a8798164be4e5adb353f4d5fcd2be21d8d8f899"
+      },
+      "build_receipt": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-build/receipt.json",
+        "sha256": "ae8d49084ed79c735c7703cdc636562f32e99279e001796acbdb55cdb3d77b3c"
+      },
+      "installed_receipt": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-installed/installed.json",
+        "sha256": "2f5b53c262ead736a635be2ddd7e28b19f0abb99cc3cc5b723bb085d22fce4f3"
+      },
+      "installed_files": {
+        "qemu/darwin-aarch64/qemu-system-aarch64-headless": "f02215e01baf1b31e83e91987549aa0ebeb95669abc268e5ab0fd5ec9e9dac24",
+        "lib64/libemugl_common.dylib": "21e6f074cc985fd74c07655bc3a727fcae18d479fec69a5a159fec7db8168929",
+        "lib64/libgfxstream_backend.dylib": "a246f2a57c3ab4c50e9850f828e5f277ff88e24a613c17592d037c0f7af6f471",
+        "emulator": "fc31b3adf31c7667a2d8119a443b16d84f8c50f584b6f7e985283b2462c28229"
+      },
+      "patch_manifest": {
+        "path": "incoming/macos-qemu/experimental/complete-v7-tail-diagnostic-patch.json",
+        "sha256": "ec155a5497a75730e4e89c4aba76a29bdf37633de7384b6b11ec8a70b3cfda99"
+      },
+      "all_four_strict_signatures_verified": true
+    }
+  },
+  "launches": {
+    "original_v7": {
+      "pid": 91872,
+      "stopped_normally": true,
+      "installed_files": {
+        "qemu/darwin-aarch64/qemu-system-aarch64-headless": "35dc1f3fb72b95934652908a5de4d053815e6030dc1f348bccf7c47ee284c187",
+        "lib64/libemugl_common.dylib": "21e6f074cc985fd74c07655bc3a727fcae18d479fec69a5a159fec7db8168929",
+        "lib64/libgfxstream_backend.dylib": "a246f2a57c3ab4c50e9850f828e5f277ff88e24a613c17592d037c0f7af6f471",
+        "emulator": "a03374408e130291f4ecc70447f5397eab7733875f53f575af72f11526666d42"
+      },
+      "evidence": {
+        "capture.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-guest/capture.json",
+          "sha256": "6eec214577508157363d704c4a5afffd29d139b7e2eec109e7aedbe2eefe06c1"
+        },
+        "physical-counter-scope.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-guest/physical-counter-scope.json",
+          "sha256": "8abce32ab36552b4312f0c37e51fa4f11487e45c2c9b11ba1040901070319278"
+        },
+        "emulator.log": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-guest/emulator.log",
+          "sha256": "f59a36ebb306e6cb8dfb4f73b41dd72aa88c93374be064e489eefcf4fa8a31da"
+        },
+        "installed.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-guest/installed.json",
+          "sha256": "2a80b0d595cd1e09e97620ee1ab6e1f63e75ce87c4ccdfed6a57e868a8431ba2"
+        },
+        "start.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-guest/start.json",
+          "sha256": "4bfb01c8dba7a91732be98040a0e0b33fd3888d98685b40201373ae432e0ea01"
+        }
+      },
+      "result": {
+        "commits": 262,
+        "resident_commits": 0,
+        "query_or_cleanup_errors": 0,
+        "physical_scope": "All 262 actual cold guest windows exact zero; retained native-global strict benefit false is separately clarified."
+      }
+    },
+    "telemetry_positive": {
+      "pid": 2276,
+      "stopped_normally": true,
+      "installed_files": {
+        "qemu/darwin-aarch64/qemu-system-aarch64-headless": "e84c349aa7346c8c4fb69ae62feab08e7de245525737be27f31efa08b5bd7e63",
+        "lib64/libemugl_common.dylib": "21e6f074cc985fd74c07655bc3a727fcae18d479fec69a5a159fec7db8168929",
+        "lib64/libgfxstream_backend.dylib": "a246f2a57c3ab4c50e9850f828e5f277ff88e24a613c17592d037c0f7af6f471",
+        "emulator": "748395347e9719fac6a950654765a7ea3bd90784146109bfabafd557be99e1e4"
+      },
+      "evidence": {
+        "capture.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/capture.json",
+          "sha256": "18889a3d124e26d0259562fa764f24ce7ef95096a7fac836c7688a817c5c9ddd"
+        },
+        "assessment.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/assessment.json",
+          "sha256": "037652f67f443bf9e053138ceb280251d9b0260f07ae2d18e54571ee4d30d910"
+        },
+        "timing-assessment.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/timing-assessment.json",
+          "sha256": "1b5654848376aa9fbb925223f4ac9c3ce850a27d6b267d7ca34423cca7386c59"
+        },
+        "physical-noise-assessment.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/physical-noise-assessment.json",
+          "sha256": "72cb8f801e4c8a078dd6cc318c366a1ca6b0a5acdaa001420b5e44454ebba3ec"
+        },
+        "emulator.log": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/emulator.log",
+          "sha256": "67ba470466168cfdb9534726d4200f2b12bb35aaeab8b1114d0cb12c55a4c3fc"
+        },
+        "installed.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/installed.json",
+          "sha256": "412bc9b9ebb8a8c4621d38d0d0325a9bb7b46b8c696883ecfa87089603dbaf27"
+        },
+        "start.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/start.json",
+          "sha256": "eebbd4187f9191430811e7834e3d899f628cd1205d35fac82ce7c920d1c37ecf"
+        },
+        "stop-receipt.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/stop-receipt.json",
+          "sha256": "73e698c03ce8105c7b0808adbc1051e2a4cc802c5ebbd0622b1a672549dd8142"
+        },
+        "analysis-script.py": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/analysis-script.py",
+          "sha256": "87a3315c47c45f1e29a4b4f1627bcd4368ed686bc78f39afc2f0109f2b534004"
+        },
+        "positive-checkpoint.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/positive-checkpoint.json",
+          "sha256": "543bccfee2f33975d355b03f4c0e3465ce6475482377524d32d1454f4413872b"
+        },
+        "positive-checkpoint.log": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/positive-checkpoint.log",
+          "sha256": "5c152ffeb04cdb40e074c0eabe0b3b46e57a24aeb638dfdea908abe3d3cd1beb"
+        }
+      },
+      "result": {
+        "commits": 266,
+        "cold_commits": 262,
+        "resident_commits": 4,
+        "resident_old_refcount": 1,
+        "host_present_pages_per_resident_object": 16,
+        "resident_free_delta_hostpages": 16,
+        "resident_speculative_delta_hostpages": 0,
+        "distinct_resident_ranges": 3,
+        "distinct_observed_address_range_bytes": 786432,
+        "cumulative_resident_window_bytes": 1048576,
+        "same_offset_distinct_old_object_generations": 2,
+        "joint_nonexact_cold_windows": 10,
+        "free_nonzero_cold_windows": 7,
+        "speculative_only_cold_windows": 3,
+        "query_or_cleanup_errors": 0,
+        "net_saving_measured": false
+      },
+      "stop_evidence_limit": "Receipt transcribes an actual successful session exec_command result; historical execution timestamp was not preserved. Frozen assessment initially checked PID absence. Do not represent the receipt as a direct subprocess capture."
+    },
+    "telemetry_map_fault": {
+      "pid": 12525,
+      "stopped_normally": true,
+      "installed_files": {
+        "qemu/darwin-aarch64/qemu-system-aarch64-headless": "e84c349aa7346c8c4fb69ae62feab08e7de245525737be27f31efa08b5bd7e63",
+        "lib64/libemugl_common.dylib": "21e6f074cc985fd74c07655bc3a727fcae18d479fec69a5a159fec7db8168929",
+        "lib64/libgfxstream_backend.dylib": "a246f2a57c3ab4c50e9850f828e5f277ff88e24a613c17592d037c0f7af6f471",
+        "emulator": "748395347e9719fac6a950654765a7ea3bd90784146109bfabafd557be99e1e4"
+      },
+      "evidence": {
+        "capture.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/capture.json",
+          "sha256": "9aa431753fed621b41700f52d9f3d51e2024ae08aedb0cffa3f8a420ba8db731"
+        },
+        "assessment.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/assessment.json",
+          "sha256": "252739850a7b54cdbb8700665673ba2c1eed6d65a848a03128bf321b921bf715"
+        },
+        "timing-assessment.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/timing-assessment.json",
+          "sha256": "e2b359e17c198c71695cd7f305b4650a23da07c0684b2e1dc840c0336d06972b"
+        },
+        "emulator.log": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/emulator.log",
+          "sha256": "3c5c87cf671b01cfc8f20b6b0bdd0175949e80532ebaae4b925ad91ae9240349"
+        },
+        "installed.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/installed.json",
+          "sha256": "412bc9b9ebb8a8c4621d38d0d0325a9bb7b46b8c696883ecfa87089603dbaf27"
+        },
+        "start.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/start.json",
+          "sha256": "aaef10d96b776f7791219dd9dee9f8281ca037d1439c372f9e27aeb4e664e273"
+        },
+        "stop-receipt.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/stop-receipt.json",
+          "sha256": "67a52a3404838cbb801d9460fb9e8dca83e97e5e35613395925825434b789f6b"
+        },
+        "analysis-script.py": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/analysis-script.py",
+          "sha256": "79cdb57af40ca680dd883c76fae88f9f006523a1893d748d3ce4d39a003dd614"
+        }
+      },
+      "result": {
+        "same_four_file_set_as_positive": true,
+        "rollbacks": 271,
+        "commits": 0,
+        "resident_rollback_windows": 9,
+        "resident_old_refcount_at_rollback_observation": 3,
+        "resident_free_and_speculative_delta_hostpages": 0,
+        "resident_hva_preserved": true,
+        "repeated_offset_old_object_identity_preserved": true,
+        "query_or_cleanup_errors": 0
+      }
+    },
+    "tail_diagnostic": {
+      "pid": 20163,
+      "stopped_normally": true,
+      "installed_files": {
+        "qemu/darwin-aarch64/qemu-system-aarch64-headless": "f02215e01baf1b31e83e91987549aa0ebeb95669abc268e5ab0fd5ec9e9dac24",
+        "lib64/libemugl_common.dylib": "21e6f074cc985fd74c07655bc3a727fcae18d479fec69a5a159fec7db8168929",
+        "lib64/libgfxstream_backend.dylib": "a246f2a57c3ab4c50e9850f828e5f277ff88e24a613c17592d037c0f7af6f471",
+        "emulator": "fc31b3adf31c7667a2d8119a443b16d84f8c50f584b6f7e985283b2462c28229"
+      },
+      "evidence": {
+        "capture.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-guest/capture.json",
+          "sha256": "44a05cfa61b6d12b68aaa23f2908a1ee86328199e48878c84b3be3bfb2a819b8"
+        },
+        "assessment.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-guest/assessment.json",
+          "sha256": "22773c9836eac04db6da8b856d55635473f88250e1d551caa11fc7c7527920e3"
+        },
+        "tail-assessment.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-guest/tail-assessment.json",
+          "sha256": "6cd3fef89905013671a6feb15023f07ba6f68cf8790f383b38f4a56509952e4d"
+        },
+        "timing-assessment.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-guest/timing-assessment.json",
+          "sha256": "6fb89e26e4d9e18666d878a3db5bf9ac44d6584d67a5980078a1b455fc221882"
+        },
+        "emulator.log": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-guest/emulator.log",
+          "sha256": "97e5a4de32e8fb6413cd16ba9b7fcde1f8eb750b3e7c5727bbc4f0bd63ca1271"
+        },
+        "installed.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-guest/installed.json",
+          "sha256": "2f5b53c262ead736a635be2ddd7e28b19f0abb99cc3cc5b723bb085d22fce4f3"
+        },
+        "start.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-guest/start.json",
+          "sha256": "66f1e9b612cab80bb6a216f5ee1b82ef4d2bd7ab84c808ac5e908a0a2127d32d"
+        },
+        "stop-receipt.json": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-guest/stop-receipt.json",
+          "sha256": "f3a016120f468eec954dde9ba6da76ceb4a269e1ae94c6b25990ad488e7a572a"
+        },
+        "analysis-script.py": {
+          "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-guest/analysis-script.py",
+          "sha256": "79cdb57af40ca680dd883c76fae88f9f006523a1893d748d3ce4d39a003dd614"
+        }
+      },
+      "result": {
+        "cold_head_commits": 262,
+        "resident_commits": 0,
+        "cold_sgs": 131,
+        "native_head_objects_per_sg": 2,
+        "read_only_tail_objects_per_sg": 14,
+        "distinct_256k_tail_ranges": 1834,
+        "covered_tail_bytes": 480772096,
+        "overlapping_128k_ranges": 3668,
+        "all_covered_hostpages_present": 0,
+        "pagedout_reusable_queryerrors_budgetskips": 0,
+        "mach_query_calls": 29344,
+        "mach_query_calls_per_sg": 224,
+        "original_query_budget_remaining_per_sg": 32,
+        "observed_resident_tail_starvation": false,
+        "derived_64k_16k_resident_upperbound_in_exact_covered_tails_bytes": 0,
+        "smaller_bitmap_groups_instrumented": false,
+        "scope_limit": "No inference for exposure-rejected hot SGs, unqueried addresses, native permissions or aliases. 128/256 KiB groups cover the same pages and must not be added."
+      }
+    }
+  },
+  "native_component": {
+    "path": ".macos-work/qa/exact-v7-native-20261101/assessment.json",
+    "sha256": "ee1cdf6edeb162655cdec1fa93b9c0e1e53c4608dafc26cbca14cd203469a85a"
+  },
+  "construction_cost": {
+    "path": ".macos-work/qa/dcr-construction-cost-20261101/assessment.json",
+    "sha256": "0990d4f4a3a55eff7c95eaacce4ad19adfe3699e0f192df019c906ecf47fea05"
+  },
+  "original_renderer_build": {
+    "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-renderer-build/binary-gfxstream_backend.json",
+    "sha256": "fad6212c0e3577418726164ad9e9f685f273a46387de481b25ea9e367cca4312"
+  },
+  "independent_reviews": {
+    "positive_and_same_binary_map_fault": {
+      "path": ".macos-work/qa/v7-timing-positive-independent-review-20261101/assessment.json",
+      "sha256": "4d4b187635dd5db082ae896b1d6e93e25946387659f4d435c65100347f2cf61a",
+      "checks_total": 67,
+      "all_checks_pass": true
+    },
+    "cold_tail_identity_and_raw": {
+      "path": ".macos-work/qa/v7-cold-tail-independent-review-20261101/assessment.json",
+      "sha256": "d709399559fdccfba8508457b630501791e2fefe137c9a125f300af91f764221",
+      "checks_total": 159,
+      "all_checks_pass": true
+    },
+    "telemetry_static": {
+      "path": ".macos-work/qa/v7-independent-static-review-20261101/telemetry-only-review.json",
+      "sha256": "a818af210b2d68fddfb4868e2602c26e16f25eccd09a2dc3b5f359a69052b820"
+    },
+    "tail_static": {
+      "path": ".macos-work/qa/v7-independent-static-review-20261101/tail-diagnostic-only-review.json",
+      "sha256": "3969922413bc355772f7ad6388a8d0f90049ef360429b65ed6b40f00c49522a9"
+    }
+  },
+  "tail_source_receipt_history": {
+    "current_source_receipt": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-source/receipt.json",
+      "sha256": "212a194fed5295d8f88b8aa92a8798164be4e5adb353f4d5fcd2be21d8d8f899"
+    },
+    "historical_reviewed_source_receipt_sha256": "e1e4b5da9b76400bbfed06e1e5b8ffbf5afc8bdfbc2bf67bee11759ef490918b",
+    "meaning": "Stage metadata was updated while keeping the original 21:53:19 UTC source-capture timestamp. Before/after source and patch hashes still agree with the held-candidate review. Actual activation dates derive from separate 22:11:48 build, 22:13:49 install and 22:13:52 launch receipts; original receipt and initial review preserved."
+  },
+  "budget_and_timing": {
+    "caps_scope": "2 native attempts /32 inspections per qemu_ram_reclaim_report SG/range, not a shared paused-BH budget",
+    "shared_bh_budget_implemented": false,
+    "observed_max_native_attempts_per_bh": 64,
+    "observed_max_inspections_per_bh": 498,
+    "positive_max_request_to_resume_return_us": 14068,
+    "positive_max_instrumented_bh_us": 15144,
+    "scope": "Observed values include diagnostic work; instrumented BH begins after initial snapshot/GArray setup and excludes final timing log. Pause API duration includes drain/resume bookkeeping and is not each vCPU exact off-run time; no bound/SLA established."
+  },
+  "limitations": [
+    "Positive global physical exact flag remains false: 10/262 noisy cold windows; all four resident windows exact. Historical native-global strict benefit false retained.",
+    "768 KiB observed distinct addresses and 1 MiB cumulative resident windows are not steady-state or net saving.",
+    "Construction task footprint does not measure all kernel VM object/map/HVF metadata; large construction cases are one-run local observations.",
+    "Snapshot operations intentionally inhibit later replacement; SIMD exercised one busy worker on guest CPU0, not all-vCPU/suspend/game coverage.",
+    "Cold-tail absence of resident candidates is confined to completely queried tails; no coverage inference for exposure-rejected hot SGs or unqueried addresses.",
+    "Complete 0006/0007/0008 patches are alternative full diffs against the same private HEAD, not sequential. Experimental patches are not loaded by main bootstrap.",
+    "Frozen source/build/install receipts record their original stage; final launch status is indexed here. Positive stop evidence is a transparent session-result transcription, not direct subprocess capture."
+  ]
+}

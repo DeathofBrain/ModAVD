@@ -1,0 +1,175 @@
+{
+  "captured_utc": "2026-10-31T20:50:08.913496+00:00",
+  "application": "Private v6 whole2MiB receipt/transactions plus bounded read-only128/256KiB subobject diagnostic relative to productionD8. Independent Q30/Qt/VT/D8 dispatcher fixes excluded. Alternatives, not sequential.",
+  "sha256": "a2cc5decc7da9316011665bcbbba62877e1c70a0aab4b040ce3aeb52a8ec46e9",
+  "apply_check_exit": 0,
+  "skipped_independent_or_identical": [
+    "android/android-emu/android/console_unittest.cpp",
+    "android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp",
+    "android/emu/media/src/android/emulation/MediaH264DecoderDefault.cpp",
+    "android/emu/media/src/android/emulation/MediaH264DecoderVideoToolBox.cpp",
+    "android/emu/media/src/android/emulation/MediaHevcDecoderDefault.cpp",
+    "android/emu/media/src/android/emulation/MediaHevcDecoderDefault.h",
+    "android/emu/media/src/android/emulation/MediaVideoToolBoxHevcVideoHelper.cpp",
+    "android/emu/media/src/android/emulation/MediaVideoToolBoxVideoHelper.cpp",
+    "android/emu/media/src/android/emulation/MediaVpxDecoder.cpp"
+  ],
+  "files": {
+    "android-qemu2-glue/emulation/DmaMap.cpp": {
+      "original_sha256": "b2ef413367912710267885ea418f2e50c319035743988b12d46dca48fe062e91",
+      "target_sha256": "9f1b80e10925cde0544256d5e08aef3c2351943b667947d4239709afb46aec1f"
+    },
+    "android-qemu2-glue/qemu-vm-operations-impl.cpp": {
+      "original_sha256": "904437c05e406cf4753216936661d46fa0ddfd2ae91a394ffe7a27a57b555f31",
+      "target_sha256": "f0491b50126774c3bc05a9f0f5d86c93cf822b4a1d942156bd215fd0a20142f4"
+    },
+    "android/android-emu/android/emulation/DmaMap.cpp": {
+      "original_sha256": "5174800f730d5936647be1fd1d2dd8f978c7fc44ef441f0aed0affca3a77e1ab",
+      "target_sha256": "cd7ed51f147dc04458d3922cbff7b76f944b51778c55d91d15f0b3813f1e27e6"
+    },
+    "android/android-emu/android/emulation/GoldfishDma.cpp": {
+      "original_sha256": "3b1af28d69b81f5df43afd4ba11090f6c08599dd9caac4af27d4c9aacf2d9b53",
+      "target_sha256": "5b44f461c1eaad1a1d753cfa8ee1e694e4d201c26ab244b8f85536436e7f3172"
+    },
+    "android/android-emu/android/emulation/address_space_device.cpp": {
+      "original_sha256": "971cb89e07ae0470a51f284dbd24c6ac13009907250a31e188f93f5a2cdc38e3",
+      "target_sha256": "be81c40980229168c0d83ee1fbdec9731e3039a13f3837cb1b9183abbce513ad"
+    },
+    "android/android-emu/android/emulation/address_space_graphics.cpp": {
+      "original_sha256": "d9cf2aa71965a872693b174b7601c2a617bda4781f49eea88684b043b0f7a28b",
+      "target_sha256": "b7d2c0f1e0525ca43330a5e0dc8c83b687cf3a1c2a27f0911783960acf376888"
+    },
+    "android/android-emu/android/emulation/address_space_host_media.cpp": {
+      "original_sha256": "f46c65bfeee48aced9406ee69666381f9c01a1b318ba67c6c63952bacb4456b7",
+      "target_sha256": "0a662378726d1ce3f269f243ca7d279373d1766f8543a709ca743cab5f814e2e"
+    },
+    "android/android-emu/android/opengles.cpp": {
+      "original_sha256": "c3cadfc8cc87b1a86ccc53245dca47dd12a003c129783e77ca3b66deae19a14e",
+      "target_sha256": "a652f32b47038d3322cd606cbcd5ae3bf0983386938dbbe297e7ef342506f8bb"
+    },
+    "cpus.c": {
+      "original_sha256": "18cdd4b284a3bab23f8d949a8df6e341aebbf2f196f40d2c57860b9a9ee1ef01",
+      "target_sha256": "1dd37969cd70c43cf271f7273865708a174abf85f2d6f95fe4b742b8db8f3751"
+    },
+    "exec.c": {
+      "original_sha256": "f76d033fdd9f8460abd9a5a0dd505330d3e59364f769f17de4d5bdd41b8e9fdd",
+      "target_sha256": "c5220ecd6a8f68c0c597eff762ec2027bd746f5c471409ddebd83282c19b3821"
+    },
+    "hw/display/framebuffer.c": {
+      "original_sha256": "84be635490f88252405d1526d83965e4943a913a8714d056f6d2d214a963586b",
+      "target_sha256": "413c62c258200795a8a21af5e568a4d5b1482ce24f5acfc4fab8c00764ea9212"
+    },
+    "hw/virtio/virtio-balloon.c": {
+      "original_sha256": "58b40e7f12c14ddd641712442614cb2a741fabb1928dd71a193b09a7ce6848fd",
+      "target_sha256": "066af32c3da3e5b3687268ee15b6a6b2bb4450e2ea02fef9030cf66d0a077abe"
+    },
+    "hw/virtio/virtio.c": {
+      "original_sha256": "1e0c4fbe9955808d0394f777e32209a7245026998e02eae95292c25a13369023",
+      "target_sha256": "d0aa4f34ab6966deb8b5f756ccc4ac630c183306f73a6dfb7a20194374de831e"
+    },
+    "include/exec/darwin-hvf-reclaim-transaction.h": {
+      "original_sha256": null,
+      "target_sha256": "57ef9ef0c84e716e07e25f703e2e541390a70a1609cb5a89903e642b798ae72b"
+    },
+    "include/exec/hvf-map-registry.h": {
+      "original_sha256": null,
+      "target_sha256": "785a89128df7e6ae7f74c0598c9b58672b9925849438ada66e7059ef68ec7683"
+    },
+    "include/exec/memory.h": {
+      "original_sha256": "25791756fccfc8dec5566f6bf95fcb01c1e77778441acd5cb98eaedbd7972e4e",
+      "target_sha256": "bf573bce3f4412fd1e552c12e1835637922004577ba0be423c2710471838221e"
+    },
+    "include/exec/ram-reclaim-audit-model.h": {
+      "original_sha256": null,
+      "target_sha256": "eb518e9deb2e133efb0d1103c45e659312df18efd45d33f3a8ab5cdb975bfeac"
+    },
+    "include/exec/ram_addr.h": {
+      "original_sha256": "0f54715280629e04e3915455853d1068f25f55dd9277706bdb245fbfe6055254",
+      "target_sha256": "c10470dbf292a7e2d56a389f46b02ae6c11add2a326266548d66a5d8d43b3573"
+    },
+    "include/exec/report-pause-lifecycle.h": {
+      "original_sha256": null,
+      "target_sha256": "aefcac479daf998db8de20c979aaaf50fcde3278f76c3da668e73ab421ffa024"
+    },
+    "include/host-common/DmaMap.h": {
+      "original_sha256": null,
+      "target_sha256": "16cdff5ad8561e2c11a9999513f597b20ebe490cebdab65783215756e200a291"
+    },
+    "include/host-common/address_space_graphics.h": {
+      "original_sha256": null,
+      "target_sha256": "f55446c0b661d9919d111afa653c3b2e39e9b3de08ee2d40b6f7308b8b872bb8"
+    },
+    "include/hw/virtio/virtio-balloon.h": {
+      "original_sha256": "e7798c6d8b205727c046a616a6bac812efa7baf3ac4bcc7b6bb90c291dea0965",
+      "target_sha256": "4754fc1da1e4fc08c6d47cd5218c19bdd98e19f2811c45c9efa09e60187764ad"
+    },
+    "include/hw/virtio/virtio.h": {
+      "original_sha256": "dae48fb1add45579f2967fd0e24513c81eef91f84729a4ec688c9b9f8e7f52c9",
+      "target_sha256": "1bced34e16ef115ae6ca8f8751381c4369f582c8b11ce0adb7ff5500ce50f27a"
+    },
+    "include/qemu/darwin-chunked-ram.h": {
+      "original_sha256": null,
+      "target_sha256": "bf90b3c44dbe1eb739368562b77848ca53de34e591328522ac8557cfa5d4bbf2"
+    },
+    "include/qemu/darwin-ram-receipt.h": {
+      "original_sha256": null,
+      "target_sha256": "2b5ccc57b5aa64d2120ef38c40d60ab3e105fd256857252dbbd389b2818847bd"
+    },
+    "include/sysemu/address-space-sized.h": {
+      "original_sha256": null,
+      "target_sha256": "3013b87f6007828087924d912317346b4d8f3dbe02d086e4fe86dd6a5deb255d"
+    },
+    "include/sysemu/cpus.h": {
+      "original_sha256": "90c0c3285f5fb07b375351b4dc3a8b811a0fd295d90f1cefa9a90129ebc35d78",
+      "target_sha256": "b6f0534bde91395a6af712dd9ddc2e7769af319f71c2b061d0e44ee876895f7a"
+    },
+    "include/sysemu/dma-sized.h": {
+      "original_sha256": null,
+      "target_sha256": "b5a5967816969a3a5c3b5f3d6251625ca41956cffef6f4d43d0b6cdcf616321b"
+    },
+    "include/sysemu/hvf-reclaim.h": {
+      "original_sha256": null,
+      "target_sha256": "8aa94f50f220e08bb39aab630c2b0784a263c632c281b8ac404cb2eb9c8dc814"
+    },
+    "include/sysemu/hvf.h": {
+      "original_sha256": "5f486edcfcb3725a87df5d12b7670acb57a504bd71227c6b6d4132eeda41eb9c",
+      "target_sha256": "7889635ef2a543a189bc93c918b88aa49646a98541bd9a342ff7d676bc646930"
+    },
+    "include/sysemu/sysemu.h": {
+      "original_sha256": "fddf49c5dc2d9344e04f92ab7e074a90b501dca82954cb9cb80e164691a2b0ec",
+      "target_sha256": "8cb3b4d6a7390a6c62ace20e6df72ae1acafccc7b67eb641086bc7066b7a9ecf"
+    },
+    "memory.c": {
+      "original_sha256": "5ca2c26f772ed08e0df922f2aef5dc8d8d165ece90eaabde60faf13a8b97de84",
+      "target_sha256": "6532c56e8b346b6e00fe77ce186ef648fb9bfca8e8d74aedb3176dd3beff5fd1"
+    },
+    "memory_ldst.inc.c": {
+      "original_sha256": "b234e710c6a354ab757414eda69e08ed1595482d9f0024773a050d5f97032add",
+      "target_sha256": "3a467972b1bc6207cc9834923ae138ddf2ae1330a38c2efe050eb7721188520a"
+    },
+    "migration/ram.c": {
+      "original_sha256": "7fc6803830b6cc694536f06bc18ab4ee208d345566826c02261f368118bde75e",
+      "target_sha256": "7f8eef8407f951f029bc6008426dd4678e7971205567f0556c4c850c289e8afd"
+    },
+    "migration/savevm.c": {
+      "original_sha256": "6d741e13937061d4fee42933f212766cbbc0c40eb2125c1881a472393a24f69e",
+      "target_sha256": "cbb1ab031886d53690d772fcacd3dbb31254da654434f01e613855b4bb7a3551"
+    },
+    "numa.c": {
+      "original_sha256": "d912f6253676eed3e15cec6a5d6811518d356bc0f8d012f246b68568b0578bf9",
+      "target_sha256": "e867c17bd40bcd9706b06e25eeffa3e3362c3b1f9c8716d8b9a76bcc7ceff82a"
+    },
+    "target/arm/hvf.c": {
+      "original_sha256": "569a33ec463e1d735c8f9538e90736c338bc5d35b8721f41b9249db529b5fbe4",
+      "target_sha256": "bbbfafd0b14100618f0aefc1c633a36fcdba3d3fff447a7f075a21185cda36ac"
+    },
+    "util/oslib-posix.c": {
+      "original_sha256": "0c79d378a19f5e49b348161e49b112b6dbb1af81b2a49705646e051b8b0e1016",
+      "target_sha256": "ed907da5ecebc920217224eab4a3dac4d4548e3c6af4a208612bb6ed60c2de66"
+    },
+    "vl.c": {
+      "original_sha256": "c609c6aafb56cb10fc44db6237a0df21c41e588ae769ecf309fa61d6c4f9cb41",
+      "target_sha256": "1ef6b60e2854e606830225bfad19d71c8e63ea4e86b567aa69ea1ad7a1d0e1d2"
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "captured_utc": "2026-10-31T22:47:47.904231+00:00",
+  "kind": "execution selection overlay; prior pinned assessment/plan preserved",
+  "prior_assessment": {
+    "path": "incoming/macos-qemu/experimental/REPORTING-ORDER-ASSESSMENT.json",
+    "sha256": "aa14606cb5635a4bd123b3fa2d009e6c424310dd28d5c2bbcd79f30f26e33db0"
+  },
+  "prior_plan": {
+    "path": "incoming/macos-qemu/experimental/REPORTING-ORDER-COMPARISON-PLAN.json",
+    "sha256": "741b0e28602542b81db28f917464040383e88e6f9215bae8eaf1297bb0cfc08d"
+  },
+  "authorization": "Root explicitly transferred the sole Android guest quota after stopping G2 Qt/headless and authorized immediate A9 then B6 fresh boot execution. This is a transcript of the instruction, not an original tool timestamp receipt.",
+  "selection": {
+    "orders": [
+      9,
+      6
+    ],
+    "fresh_guest_per_order": true,
+    "instrumentation": "existing frozen f022 four-file private D9 binary set; no compilation; full BH body unavailable",
+    "supersedes_only": "unselected wrapper instrumentation alternative in the earlier plan",
+    "TAIL_DIAG": 0,
+    "host_backing_granule_bytes": 262144,
+    "per_SG_native_attempt_limit": 2,
+    "per_SG_inspection_limit": 32,
+    "safety_gates": "unchanged",
+    "workload": [
+      "explicit root order write/readback",
+      "idle 10 seconds",
+      "256 MiB x 3 rounds, release 8 seconds",
+      "512 MiB x 3 rounds, release 8 seconds",
+      "idle 10 seconds",
+      "normal sync/stop before next guest"
+    ],
+    "memory_request_MiB": 2048,
+    "timing_fields": [
+      "request_to_resume_return_us",
+      "bh_to_before_final_log_us"
+    ],
+    "private_D9_independent_of_G2": true
+  },
+  "runner": {
+    "path": "incoming/macos-qemu/experimental/run-reporting-order-comparison.py",
+    "sha256": "bb9a64876fd6ca4f3409d6246e674c2f780c1baa5438091a15d10d29707a6ca6"
+  },
+  "analyzer": {
+    "path": "incoming/macos-qemu/experimental/analyze-reporting-order-run.py",
+    "sha256": "ea017998af0fd5d2293e5f2a22fae6eb2b53bfd54bb2637bccd3735aad497dbc"
+  },
+  "selected_preflight": {
+    "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-order-comparison-retry1/preflight.json",
+    "sha256": "2e0eaa7b714542f6af682b9317e22954ce1198dc71f6d8aae0e1fdbef273a61b"
+  },
+  "selected_evidence_directory": "incoming/macos-qemu/experimental/evidence/20261101-v7-order-comparison-retry1",
+  "failed_attempt": {
+    "directory": "incoming/macos-qemu/experimental/evidence/20261101-v7-order-comparison",
+    "outcome": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-order-comparison/order9/outcome.json",
+      "sha256": "26c1dc1a5a9d8c8cd283f46d03b13feebf86fc4a0acf0b6f7091a23c15acfcdb"
+    },
+    "explicit_setting": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-order-comparison/order9/explicit-order-setting.json",
+      "sha256": "8da1b76783bac9167654d08a85d38a37baff153433fe2fab67e4bf087beac33b"
+    },
+    "stop": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-order-comparison/order9/stop-receipt.json",
+      "sha256": "6ca44ae5a20b74a370650136a57fc9fe0cd1cc3008494950cf2edb6055dab066"
+    },
+    "measurement_window_entered": false,
+    "reason": "Android printf write to sysfs returned Invalid argument; no successful readback. Replaced only sysfs write with literal echo as used by existing Manager; original receipts preserved."
+  },
+  "analyzer_review_correction": {
+    "description": "Reject missing physical partner at subsequent transaction, BH end and EOF; existing physical lacks block field, so direct partner equality uses offset/length/result. Old positive/fault fixtures replayed unchanged and deletion negative cases rejected.",
+    "initial_preflight": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-order-comparison-preflight/preflight.json",
+      "sha256": "b428aae5a452a91289628e57269b4c8b6ba023a10db23261e03c5dae3b5459d9"
+    },
+    "failed_attempt_preflight": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-order-comparison/preflight.json",
+      "sha256": "32795bd4f12c3e218e91a19017148c4158b5816ca818cdcd3338dfbbffa78760"
+    },
+    "selected_retry_preflight": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-order-comparison-retry1/preflight.json",
+      "sha256": "2e0eaa7b714542f6af682b9317e22954ce1198dc71f6d8aae0e1fdbef273a61b"
+    }
+  },
+  "interpretation": {
+    "full_bh_body_available": false,
+    "strict_global_physical_pass": false,
+    "net_memory_saving_measured": false,
+    "kernel_metadata_cost_measured": false,
+    "production_default_promoted": false,
+    "experimental_private_opt_in_only": true
+  }
+}

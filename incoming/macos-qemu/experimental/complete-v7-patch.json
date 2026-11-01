@@ -1,0 +1,47 @@
+{
+  "captured_utc": "2026-10-31T21:25:54.284814+00:00",
+  "base_head": "568f0a3e755118d5dddd13bbdd821146d75f5711",
+  "file": "0006-darwin-hvf-256k-v7-complete.patch",
+  "sha256": "819c026161890bebcb879ff3229f68ce955306fd9ae229c53c1f947bcba0401b",
+  "ram_only": {
+    "file": "ram-only-256k-v7-after-d9.patch",
+    "receipt": "ram-only-256k-v7-after-d9.json",
+    "sha256": "d34691f88705cbd3c5d6651d9103ba3d40a6fdcbee84dc38f9aeb24877a3b54f"
+  },
+  "native_source_receipt": "evidence/20261101-v7-source-pre-native/receipt.json",
+  "d9_layer_receipt": "evidence/20261101-v7-d9-source-layer/receipt.json",
+  "native_transaction_header_sha256": "57ef9ef0c84e716e07e25f703e2e541390a70a1609cb5a89903e642b798ae72b",
+  "chunked_backing_header_sha256": "88114bcec30c957c138bc7da9ac737414559a484ce4c017f6e268b7dd1f2a71d",
+  "guest_validation": "Original v7 PID91872 completed finite memory/network/SIMD/stop/snapshot checks and 262 cold commits, with no resident replacement. Later positive results belong to the separate telemetry binary; see validation evidence and final handoff.",
+  "build_validation": "Isolated renderer23 + headless583 translation units compiled; six modified native sources match frozen build receipt, allocator wrapper is unchanged in privateHEAD/mainD9; all seven match native checkpoint; private four-file strict signature verification passed.",
+  "installed_receipt": "evidence/20261101-v7-installed/installed.json",
+  "updated_utc": "2026-10-31T22:24:24.782568+00:00",
+  "validation_path_base": "repository_root",
+  "validation_evidence": {
+    "capture.json": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-guest/capture.json",
+      "sha256": "6eec214577508157363d704c4a5afffd29d139b7e2eec109e7aedbe2eefe06c1"
+    },
+    "physical-counter-scope.json": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-guest/physical-counter-scope.json",
+      "sha256": "8abce32ab36552b4312f0c37e51fa4f11487e45c2c9b11ba1040901070319278"
+    },
+    "emulator.log": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-guest/emulator.log",
+      "sha256": "f59a36ebb306e6cb8dfb4f73b41dd72aa88c93374be064e489eefcf4fa8a31da"
+    },
+    "installed.json": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-guest/installed.json",
+      "sha256": "2a80b0d595cd1e09e97620ee1ab6e1f63e75ce87c4ccdfed6a57e868a8431ba2"
+    },
+    "start.json": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-guest/start.json",
+      "sha256": "4bfb01c8dba7a91732be98040a0e0b33fd3888d98685b40201373ae432e0ea01"
+    }
+  },
+  "production_default_promoted": false,
+  "final_decision": {
+    "path": "incoming/macos-qemu/experimental/V7-VALIDATION-DECISION.md",
+    "sha256": "d0ed9346d1be7009417362477b957b15b63e031a5783ba979b0128d219df2c45"
+  }
+}

@@ -1,0 +1,52 @@
+diff --git a/slirp/tcp_subr.c b/slirp/tcp_subr.c
+index e05554fd..296e81fa 100644
+--- a/slirp/tcp_subr.c
++++ b/slirp/tcp_subr.c
+@@ -448,11 +448,21 @@ static int socket_fallback(struct sockaddr_storage * addr, unsigned short type)
+  * ANDROID_EMU_SLIRP_TCP_KEEPALIVE=<idle>,<intvl>,<cnt> overrides the timers;
+  * "0" turns keepalive off.
+  */
++static void tcp_set_keepalive_option(int s, int level, int option, int value)
++{
++    static bool warned;
++
++    if (qemu_setsockopt(s, level, option, &value, sizeof(value)) < 0 &&
++        !warned) {
++        warned = true;
++        fprintf(stderr, "slirp: cannot set TCP keepalive option %d: %s\n",
++                option, strerror(errno));
++    }
++}
++
+ static void tcp_set_keepalive(int s)
+ {
+     static int idle = -1, intvl, cnt;
+-    int opt = 1;
+-
+     if (idle < 0) {
+         const char *env = getenv("ANDROID_EMU_SLIRP_TCP_KEEPALIVE");
+         int a, b, c, n;
+@@ -474,11 +484,18 @@ static void tcp_set_keepalive(int s)
+     if (!idle) {
+         return;
+     }
+-    qemu_setsockopt(s, SOL_SOCKET, SO_KEEPALIVE, &opt, sizeof(opt));
+-#if defined(TCP_KEEPIDLE) && defined(TCP_KEEPINTVL) && defined(TCP_KEEPCNT)
+-    qemu_setsockopt(s, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(idle));
+-    qemu_setsockopt(s, IPPROTO_TCP, TCP_KEEPINTVL, &intvl, sizeof(intvl));
+-    qemu_setsockopt(s, IPPROTO_TCP, TCP_KEEPCNT, &cnt, sizeof(cnt));
++    tcp_set_keepalive_option(s, SOL_SOCKET, SO_KEEPALIVE, 1);
++#if defined(TCP_KEEPIDLE)
++    tcp_set_keepalive_option(s, IPPROTO_TCP, TCP_KEEPIDLE, idle);
++#elif defined(__APPLE__) && defined(TCP_KEEPALIVE)
++    /* Darwin names the idle timer TCP_KEEPALIVE, not TCP_KEEPIDLE. */
++    tcp_set_keepalive_option(s, IPPROTO_TCP, TCP_KEEPALIVE, idle);
++#endif
++#ifdef TCP_KEEPINTVL
++    tcp_set_keepalive_option(s, IPPROTO_TCP, TCP_KEEPINTVL, intvl);
++#endif
++#ifdef TCP_KEEPCNT
++    tcp_set_keepalive_option(s, IPPROTO_TCP, TCP_KEEPCNT, cnt);
+ #endif
+ }
+ 

@@ -1,0 +1,59 @@
+{
+  "generated_utc": "2026-10-31T15:06:22.652675+00:00",
+  "host": {
+    "machine": "arm64",
+    "macos": "26.6.2"
+  },
+  "base_commit": "568f0a3e755118d5dddd13bbdd821146d75f5711",
+  "patch_sha256": "5f92aef960f3eb6c4864d496061d5d718d3c52ea32604b8110a25caf3aae98be",
+  "checks": [
+    {
+      "name": "model-compile",
+      "returncode": 0
+    },
+    {
+      "name": "model-run",
+      "returncode": 0
+    },
+    {
+      "name": "exec.c",
+      "returncode": 0
+    },
+    {
+      "name": "memory.c",
+      "returncode": 0
+    },
+    {
+      "name": "hw_virtio_virtio.c",
+      "returncode": 0
+    },
+    {
+      "name": "hw_virtio_virtio-balloon.c",
+      "returncode": 0
+    },
+    {
+      "name": "migration_ram.c",
+      "returncode": 0
+    },
+    {
+      "name": "numa.c",
+      "returncode": 0
+    },
+    {
+      "name": "target_arm_hvf.c",
+      "returncode": 0
+    }
+  ],
+  "final_exec_recheck_returncode": 0,
+  "model_run_output": "PASS: ranges, owner classes, overflow, backing, generations, 20,000 randomized operations and 500 two-thread races",
+  "checksums": {
+    "test-ram-reclaim-audit-model.c": "5835f66d4f8856f7b632aede8ae9788be6c6b0bfcf7a5fa3a72b3a0a4c87161d",
+    "verify-audit-prototype.py": "7ca24dcf4a0608f41b17f9c373670a2d3db700e3a51197305aa2cc7ab718be5d",
+    "summarize-ram-audit.py": "21caf2f1fbfe708a919584b8a7643f6368b78bd11c75314bb1ba45fd492a1a24"
+  },
+  "limitations": [
+    "Translation-unit compilation only; experimental binary not linked or booted.",
+    "No Android whole-emulator coverage collected.",
+    "No production reclaim/remap enabled; no physical memory benefit established."
+  ]
+}

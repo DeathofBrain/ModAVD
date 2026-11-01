@@ -1,0 +1,252 @@
+diff --git a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp
+index 88f07db3..f3454b0c 100644
+--- a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp
++++ b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp
+@@ -348,8 +348,15 @@ static uint32_t hostImeEditingKeycode(int key) {
+ // Identifies a physical key from press to release; key() and text() can
+ // change in between when modifiers do.
+ static quint32 hostImeKeyId(const QKeyEvent& event) {
++#ifdef __APPLE__
++    // Cocoa reports its physical keyCode in nativeVirtualKey; zero is the
++    // valid A key, and nativeScanCode is not a usable physical identifier.
++    return event.key() == 0 && event.nativeVirtualKey() == 0
++                   ? 0x80000000u : event.nativeVirtualKey();
++#else
+     return event.nativeScanCode() ? event.nativeScanCode()
+                                   : (0x80000000u | quint32(event.key()));
++#endif
+ }
+ 
+ static qint64 hostImeNowMs() {
+@@ -3446,11 +3453,10 @@ void EmulatorQtWindow::onHostImeState(bool connected,
+     mHostImeInputType = inputType;
+     mHostImeHasCursor = hasCursor;
+     mHostImeGuestCursor = guestCursor;
+-#ifdef _WIN32
++#if defined(_WIN32) || defined(__APPLE__)
+     const bool textMode = connected && active;
+ #else
+-    // Elsewhere the native event filters still forward keys themselves with
+-    // keycode forwarding on, so they would reach the guest twice.
++    // X11's native event filter still forwards keys itself in text mode.
+     const bool textMode = false;
+ #endif
+     if (textMode != mHostImeTextMode) {
+@@ -3523,6 +3529,10 @@ void EmulatorQtWindow::setHostImeTextMode(bool on) {
+ // calls a new press an auto-repeat when Qt missed the last release.
+ bool EmulatorQtWindow::hostImeKeyPress(const QKeyEvent& event) {
+     const quint32 id = hostImeKeyId(event);
++#ifdef __APPLE__
++    // Include modifier keys delivered as Cocoa flagsChanged / Qt key events.
++    mHostImeNativeDown.insert(id);
++#endif
+     HostImeNativeKey native = {};
+     const bool hasNative = hostImeTakeNativeKey(event, &native);
+     const bool newPress = hasNative ? native.newPress : !event.isAutoRepeat();
+@@ -3576,12 +3586,15 @@ bool EmulatorQtWindow::hostImeKeyPress(const QKeyEvent& event) {
+         mHostImeReleaseAfterPress = true;
+     }
+     if (hasNative && native.deferred) {
+-        hostImeForwardNativeKey(native.forwardScancode);
++        hostImeForwardNativeKey(native.forwardScancode, native.modifiers);
+     }
+     return false;
+ }
+ 
+ bool EmulatorQtWindow::hostImeKeyRelease(const QKeyEvent& event) {
++#ifdef __APPLE__
++    mHostImeNativeDown.erase(hostImeKeyId(event));
++#endif
+     auto held = mHostImeHeld.find(hostImeKeyId(event));
+     if (held == mHostImeHeld.end()) {
+         return false;
+@@ -3596,6 +3609,8 @@ bool EmulatorQtWindow::hostImeKeyRelease(const QKeyEvent& event) {
+ bool EmulatorQtWindow::hostImeKeyIsDown(const HostImeKey& key) const {
+ #ifdef _WIN32
+     return mHostImeNativeDown.count(key.nativeScanCode) > 0;
++#elif defined(__APPLE__)
++    return mHostImeNativeDown.count(key.nativeVirtualKey) > 0;
+ #else
+     return true;
+ #endif
+@@ -3658,7 +3673,14 @@ bool EmulatorQtWindow::hostImeSendKey(const QKeyEvent& event) {
+     // Printable text, AltGr (Ctrl+Alt on Windows) included. Ctrl or Alt
+     // alone make shortcuts, not text.
+     const QString text = event.text();
+-    if (!text.isEmpty() && ctrl == alt &&
++#ifdef __APPLE__
++    // Option modifies printable characters on Mac (including dead keys).
++    // Qt maps Command to ControlModifier, which remains a shortcut.
++    const bool printableModifiers = !ctrl;
++#else
++    const bool printableModifiers = ctrl == alt;
++#endif
++    if (!text.isEmpty() && printableModifiers &&
+         std::all_of(text.begin(), text.end(), [](QChar c) {
+             return c.unicode() >= 0x20 && c.unicode() != 0x7f;
+         })) {
+@@ -3715,7 +3737,8 @@ void EmulatorQtWindow::hostImeNativeKeyDown(quint32 nativeScancode,
+                                            bool modifier,
+                                            quint32 forwardScancode,
+                                            bool forwarded,
+-                                           bool deferred) {
++                                           bool deferred,
++                                           quint32 modifiers) {
+     mHostImeNativeDown.insert(nativeScancode);
+     if (modifier && !newPress) {
+         return;  // Qt reports no auto-repeats of modifiers
+@@ -3726,7 +3749,7 @@ void EmulatorQtWindow::hostImeNativeKeyDown(quint32 nativeScancode,
+     }
+     mHostImeNativeKeys.push_back({nativeScancode, forwardScancode,
+                                   hostImeNowMs(), newPress, forwarded,
+-                                  deferred, false});
++                                  deferred, false, modifiers});
+ }
+ 
+ void EmulatorQtWindow::hostImeExpireNativeKeys() {
+@@ -3737,13 +3760,13 @@ void EmulatorQtWindow::hostImeExpireNativeKeys() {
+     }
+ }
+ 
+-// Takes the native event filter's record of |event|'s WM_KEYDOWN, if any.
++// Takes the native event filter's record of this physical key press, if any.
+ bool EmulatorQtWindow::hostImeTakeNativeKey(const QKeyEvent& event,
+                                             HostImeNativeKey* key) {
+     hostImeExpireNativeKeys();
+     for (auto it = mHostImeNativeKeys.begin(); it != mHostImeNativeKeys.end();
+          ++it) {
+-        if (it->nativeScancode == event.nativeScanCode()) {
++        if (it->nativeScancode == hostImeKeyId(event)) {
+             *key = *it;
+             mHostImeNativeKeys.erase(it);
+             return true;
+@@ -3752,15 +3775,16 @@ bool EmulatorQtWindow::hostImeTakeNativeKey(const QKeyEvent& event,
+     return false;
+ }
+ 
+-// Sends a WM_KEYDOWN the native event filter left to the key event, the way
+-// the filter forwards keys.
+-void EmulatorQtWindow::hostImeForwardNativeKey(quint32 scancode) {
++// Sends a native key press deferred to the Qt key event, preserving the
++// same scancode and modifier state the native event filter would forward.
++void EmulatorQtWindow::hostImeForwardNativeKey(quint32 scancode,
++                                               quint32 modifiers) {
+     if (!getConsoleAgents()->settings->use_keycode_forwarding()) {
+         return;
+     }
+     NativeKeyboardEventHandler::KeyEvent keyEv;
+     keyEv.scancode = static_cast<int>(scancode);
+-    keyEv.modifiers = 0;
++    keyEv.modifiers = modifiers;
+     keyEv.eventType = kEventKeyDown;
+     std::optional<SkinEvent> maybeEvent =
+             NativeKeyboardEventHandler::getInstance()->handleKeyEvent(keyEv);
+diff --git a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.h b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.h
+index b13feee0..70e26552 100644
+--- a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.h
++++ b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.h
+@@ -291,7 +291,8 @@ public:
+                               bool modifier,
+                               quint32 forwardScancode,
+                               bool forwarded,
+-                              bool deferred);
++                              bool deferred,
++                              quint32 modifiers = 0);
+     // A WM_KEYUP or WM_SYSKEYUP; |takenByIme| when the host input method
+     // took it (VK_PROCESSKEY in text mode), and Qt drops it.
+     void hostImeNativeKeyUp(quint32 nativeScancode, bool takenByIme);
+@@ -536,7 +537,7 @@ private:
+     struct HostImeNativeKey;
+     void hostImeExpireNativeKeys();
+     bool hostImeTakeNativeKey(const QKeyEvent& event, HostImeNativeKey* key);
+-    void hostImeForwardNativeKey(quint32 scancode);
++    void hostImeForwardNativeKey(quint32 scancode, quint32 modifiers = 0);
+     struct HostImeKey;
+     bool hostImeKeyIsDown(const HostImeKey& key) const;
+     void hostImeReleaseRawKey(const HostImeKey& key);
+@@ -626,6 +627,7 @@ private:
+         bool forwarded;          // keycode forwarding sent it already
+         bool deferred;           // keycode forwarding left it to us
+         bool releaseTakenByIme;  // the input method took its release
++        quint32 modifiers;      // native flags for a deferred Cocoa key
+     };
+     std::deque<HostImeNativeKey> mHostImeNativeKeys;
+     // Set by hostImeKeyPress() for keyPressEvent(): the key went the usual
+diff --git a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/mac-native-event-filter.mm b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/mac-native-event-filter.mm
+index accc5ed3..268c0ac3 100644
+--- a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/mac-native-event-filter.mm
++++ b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/mac-native-event-filter.mm
+@@ -28,32 +28,49 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray& eventType,
+                                           qintptr*) {
+     if (eventType.compare("mac_generic_NSEvent") == 0) {
+         NSEvent* event = static_cast<NSEvent*>(message);
+-        if ([event type] == NSKeyDown) {
+-            EmulatorQtWindow* emuWindow = EmulatorQtWindow::getInstance();
+-            if (emuWindow != nullptr) {
+-                unsigned short keycode = [event keyCode];
+-                if (([event modifierFlags] & NSEventModifierFlagNumericPad) &&
+-                        skin_keycode_native_is_keypad(keycode)) {
+-                    keycode = skin_keycode_native_map_keypad(keycode);
+-                }
+-                if (getConsoleAgents()->settings->use_keycode_forwarding()) {
+-                    if (emuWindow->isActiveWindow()) {
+-                        NativeKeyboardEventHandler* handler =
+-                                NativeKeyboardEventHandler::getInstance();
+-                        NativeKeyboardEventHandler::KeyEvent ev;
+-                        ev.scancode = keycode;
+-                        ev.modifiers = [event modifierFlags];
+-                        ev.eventType = kEventKeyDown;
+-
+-                        std::optional<SkinEvent> maybeEvent =
+-                                NativeKeyboardEventHandler::getInstance()
+-                                        ->handleKeyEvent(ev);
+-                        if (maybeEvent.has_value())
+-                            emuWindow->queueSkinEvent(
+-                                    std::move(maybeEvent.value()));
+-                    }
++        EmulatorQtWindow* emuWindow = EmulatorQtWindow::getInstance();
++        if (!emuWindow) {
++            return false;
++        }
++        if ([event type] != NSEventTypeKeyDown && [event type] != NSEventTypeKeyUp) {
++            return false;
++        }
++        const unsigned short nativeKeycode = [event keyCode];
++        if ([event type] == NSEventTypeKeyUp) {
++            emuWindow->hostImeNativeKeyUp(nativeKeycode, false);
++        } else if ([event type] == NSEventTypeKeyDown) {
++            // Extended controls have their own editors. Only the emulator's
++            // native NSWindow may forward keys or add IME routing records.
++            NSView* view = reinterpret_cast<NSView*>(emuWindow->hostImeKeyWindow());
++            if (!view || [event window] != [view window] ||
++                !emuWindow->isActiveWindow()) {
++                return false;
++            }
++            unsigned short keycode = nativeKeycode;
++            if (([event modifierFlags] & NSEventModifierFlagNumericPad) &&
++                skin_keycode_native_is_keypad(keycode)) {
++                keycode = skin_keycode_native_map_keypad(keycode);
++            }
++            const bool deferred = emuWindow->hostImeDefersNativeKey(nativeKeycode);
++            bool forwarded = false;
++            if (getConsoleAgents()->settings->use_keycode_forwarding() && !deferred) {
++                NativeKeyboardEventHandler::KeyEvent ev;
++                ev.scancode = keycode;
++                ev.modifiers = [event modifierFlags];
++                ev.eventType = kEventKeyDown;
++                auto maybeEvent = NativeKeyboardEventHandler::getInstance()
++                                          ->handleKeyEvent(ev);
++                if (maybeEvent.has_value()) {
++                    emuWindow->queueSkinEvent(std::move(maybeEvent.value()));
+                 }
++                forwarded = true;
+             }
++            // Cocoa can consume the key for composition before Qt emits a
++            // QKeyEvent. Defer text-mode keys and forward only a Qt-rejected
++            // key later, preserving its Option/Command/modifier state.
++            emuWindow->hostImeNativeKeyDown(
++                    nativeKeycode, ![event isARepeat], false, keycode,
++                    forwarded, deferred, [event modifierFlags]);
+         }
+     }
+     return false;

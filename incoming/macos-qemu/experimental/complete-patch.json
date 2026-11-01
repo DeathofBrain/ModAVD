@@ -1,0 +1,19 @@
+{
+  "captured_utc": "2026-10-31T19:40:20.046593+00:00",
+  "base_head": "568f0a3e755118d5dddd13bbdd821146d75f5711",
+  "sha256": "6bd2e2b62d11cd26fa7dde496b6088a108440ad24490d91634e0890a3381ecbe",
+  "application": "complete alternative to audit-only0001 againstbaseHEAD; not sequential; privateexperimental",
+  "ram_only_after_vt_array_fix": {
+    "file": "ram-only-after-vt-array-fix.patch",
+    "receipt": "ram-only-after-vt-array-fix.json",
+    "sha256": "c9cce59c83a737850c4af7b82fed9dad1f8edd12e35bc31878a072239064a8d5",
+    "application": "Pure remaining private RAM/guards/telemetry delta relative to captured main working-tree contents; main includes production Q30/Qt and VT D0007 fixes. Not sequential after complete0002."
+  },
+  "renderer_overrides": [
+    "dma-overrides/manifest.json",
+    "dma-qemu-overrides.json",
+    "media-overrides/manifest.json"
+  ],
+  "scope": "nativeDarwinarm64HVFoptin;notbootstraploaded",
+  "native_transaction_header_sha256": "56fc59ca24fad46664ccd69e7e9128159f72a22797e1e9e4002ff3b844b2a822"
+}

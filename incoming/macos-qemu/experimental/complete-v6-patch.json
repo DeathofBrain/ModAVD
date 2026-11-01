@@ -1,0 +1,14 @@
+{
+  "captured_utc": "2026-10-31T20:19:25.515975+00:00",
+  "base_head": "568f0a3e755118d5dddd13bbdd821146d75f5711",
+  "sha256": "c17cdf18dabe4801e026c3ab06bb5e98ffe0831c50d9b11c0a33ef3ce8ae66bc",
+  "file": "0003-darwin-hvf-chunked-reclaim-complete.patch",
+  "application": "Private v6 complete alternative against base, not sequential after0002; bootstrap does not load.",
+  "ram_only": {
+    "file": "ram-only-after-d8.patch",
+    "sha256": "68a1c919817b4e6d1f460bcde9e5decd1c3d87a8c56d9f5ed64ce4633722b2da",
+    "receipt": "ram-only-after-d8.json"
+  },
+  "native_transaction_header_sha256": "57ef9ef0c84e716e07e25f703e2e541390a70a1609cb5a89903e642b798ae72b",
+  "chunked_backing_header_sha256": "bf90b3c44dbe1eb739368562b77848ca53de34e591328522ac8557cfa5d4bbf2"
+}

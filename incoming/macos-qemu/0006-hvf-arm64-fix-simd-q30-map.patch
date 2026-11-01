@@ -1,0 +1,12 @@
+diff --git a/target/arm/hvf.c b/target/arm/hvf.c
+--- a/target/arm/hvf.c
++++ b/target/arm/hvf.c
+@@ -747,7 +747,7 @@ static hv_simd_fp_reg_t regno_to_hv_simd_fp_reg_type(int i) {
+         case 29:
+             return HV_SIMD_FP_REG_Q29;
+         case 30:
+-            return HV_SIMD_FP_REG_Q20;
++            return HV_SIMD_FP_REG_Q30;
+         case 31:
+             return HV_SIMD_FP_REG_Q31;
+     }

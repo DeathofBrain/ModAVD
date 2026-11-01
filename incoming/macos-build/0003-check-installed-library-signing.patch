@@ -1,0 +1,36 @@
+diff --git a/android/build/cmake/android.cmake b/android/build/cmake/android.cmake
+index 5eefe953..942eb4f7 100644
+--- a/android/build/cmake/android.cmake
++++ b/android/build/cmake/android.cmake
+@@ -554,7 +554,10 @@ function(android_sign)
+   if(sign_INSTALL)
+     install(
+       CODE "message(STATUS \"Signing   : ${sign_INSTALL}\")
+-      execute_process(COMMAND codesign --deep -s - --entitlements ${ANDROID_QEMU2_TOP_DIR}/entitlements.plist ${sign_INSTALL})"
++      execute_process(COMMAND codesign --force --deep -s - --entitlements \"${ANDROID_QEMU2_TOP_DIR}/entitlements.plist\" \"${sign_INSTALL}\" RESULT_VARIABLE android_sign_result)
++      if(NOT android_sign_result EQUAL 0)
++        message(FATAL_ERROR \"Unable to sign ${sign_INSTALL}: \${android_sign_result}\")
++      endif()"
+     )
+   else()
+     # Code signing cannot be done when cross compiling, unless we port something
+@@ -1718,10 +1721,10 @@ function(android_install_shared_library)
+     API_KEY "${BREAKPAD_API_KEY}" URI "${BREAKPAD_API_URL}")
+   android_install_license(${inst_TARGET}
+                           ${inst_TARGET}${CMAKE_SHARED_LIBRARY_SUFFIX})
+-  # Account for lib prefix when signing
++  # Use the installed target's real filename, including any OUTPUT_NAME/prefix.
+   android_sign(
+     INSTALL
+-      ${CMAKE_INSTALL_PREFIX}/lib64/lib${TGT}${CMAKE_SHARED_LIBRARY_SUFFIX})
++      ${CMAKE_INSTALL_PREFIX}/lib64/$<TARGET_FILE_NAME:${inst_TARGET}>)
+ 
+   if(LINUX_AARCH64)
+     install(
+@@ -1806,4 +1809,4 @@ function(add_resource)
+ 
+     target_sources(${RES_TARGET} PRIVATE "${RES_OUTPUT}")
+     set_source_files_properties("${RES_OUTPUT}" PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+-endfunction()
+\ No newline at end of file
++endfunction()

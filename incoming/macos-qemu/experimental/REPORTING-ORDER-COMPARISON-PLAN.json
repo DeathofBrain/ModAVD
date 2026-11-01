@@ -1,0 +1,159 @@
+{
+  "schema": "modavd-reporting-order-comparison-preparation-1",
+  "prepared_utc": "2026-10-31T22:33:11.323385+00:00",
+  "status": "prepared only; await root G2 acceptance and explicit guest-quota release/start decision",
+  "guest_started": false,
+  "parameter_written": false,
+  "source_changed": false,
+  "build_or_install_performed": false,
+  "audit": {
+    "path": "incoming/macos-qemu/experimental/REPORTING-ORDER-ASSESSMENT.json",
+    "sha256": "aa14606cb5635a4bd123b3fa2d009e6c424310dd28d5c2bbcd79f30f26e33db0"
+  },
+  "audit_document": {
+    "path": "incoming/macos-qemu/experimental/REPORTING-ORDER-ASSESSMENT.md",
+    "sha256": "4ef32e9cb707fbdc82fe06af57c67902ad28199a4a837b99fb4231fd38023ea8"
+  },
+  "plan_document": {
+    "path": "incoming/macos-qemu/experimental/REPORTING-ORDER-COMPARISON-PLAN.md",
+    "sha256": "504ec146ffd84926c946f1c345033ad1793f4b63ddbebb86fab23001853f7f9e"
+  },
+  "fixed_backing_granule": 262144,
+  "same_binary_required": true,
+  "all_existing_safety_gates_and_per_sg_caps_preserved": true,
+  "environment": {
+    "MODAVD_HVF_RAM_AUDIT": "1",
+    "MODAVD_HVF_RAM_PAUSE_AUDIT": "1",
+    "MODAVD_HVF_RAM_RECLAIM": "1",
+    "MODAVD_HVF_RAM_RECLAIM_RESIDENCY": "1",
+    "MODAVD_HVF_RAM_RECLAIM_TAIL_DIAG": "0",
+    "MODAVD_HVF_RAM_RECLAIM_FAULT": "unset"
+  },
+  "runs": [
+    {
+      "run": "A",
+      "explicit_desired_reporting_order": 9,
+      "smallest_guest_buddy_sg_bytes": 2097152
+    },
+    {
+      "run": "B",
+      "explicit_desired_reporting_order": 6,
+      "smallest_guest_buddy_sg_bytes": 262144
+    }
+  ],
+  "run_requirements": [
+    "Root G2 acceptance ends and root explicitly releases quota/authorizes start; no guest beforehand.",
+    "Same four signed files and source/build/install identity in both runs; no reinstall or code change between runs.",
+    "Before a literal per-run sysfs write, verify private PID/process-start/executable/AVD/guest boot UUID/completedboot/kernel/page size; write/readback must succeed and preserve UUID.",
+    "Keep pre-write boot reports and any boundary-crossing BH separate; write alone does not flush worker.",
+    "10s idle,256MiBx3x8s probe,512MiBx3x8s probe,10s idle; same existing probe binary SHA and phase metadata sampling in both.",
+    "No snapshots before comparison complete; no guest pressure/compaction/dropcaches or native gate/granule changes.",
+    "Actual subprocess normal stop receipt and frozen log required before second guest starts."
+  ],
+  "metrics": [
+    "actual SG count/byte-length/derived-order and unique physical ranges, candidate bytes and skip reasons, not just configured minimum",
+    "resident and cold commits, oldobject identity/refcount/PRESENT, HVA outcome, counter windows and all errors, cumulative and unique values separately",
+    "perBH pop/ack/SG/reclaimcall counts, attempts/inspections/bytes, exact matching phases, pause API interval and complete callback body when instrumented",
+    "memory probe live/zero/reuse result, guard/livecheck errors, unchanged boot/process identity, UUID-path cleanup",
+    "sameboot phase-correlated order/buddy/pagetype/zoneinfo/meminfo/vmstat and initialboot report baseline"
+  ],
+  "full_bh_measurement": {
+    "existing_binary_covers_complete_body": false,
+    "current_timer_starts_after_initial_snapshot_and_array_allocation": true,
+    "current_timer_excludes_its_final_log": true,
+    "prepared_observer_design": "One reviewed opt-in outer wrapper times the unchanged original BH body, carries local sequence only, includes initial allocation through existing final timing log and cleanup, emits after body return with no device-pointer read after unref. Build/sign/freeze once before both runs.",
+    "new_wrapper_or_build_executed": false,
+    "field_name": "callback_body_including_timing_log_us",
+    "excluded": "Wrapper lookup/timestamps and new envelope emission; scheduler waiting and exact per-vCPU off-run time remain unmeasured.",
+    "fallback": "If current binary is reused without new observer, report only existing intervals and mark complete-body unavailable; no relabeling."
+  },
+  "existing_v7_report_sg_histograms": [
+    {
+      "launch": "20261101-v7-reclaim-guest",
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-reclaim-guest/emulator.log",
+        "sha256": "f59a36ebb306e6cb8dfb4f73b41dd72aa88c93374be064e489eefcf4fa8a31da"
+      },
+      "sg_length_histogram": [
+        {
+          "block": "mach-virt.ram",
+          "sg_length": 4194304,
+          "derived_guest_order": 10,
+          "count": 161
+        }
+      ],
+      "distinct_report_ranges": 146,
+      "observed_gpa_minus_ram_offset": [
+        1073741824
+      ],
+      "note": "Actual input mapped audit SGs; chosen minimum order was not sampled through sysfs in V7."
+    },
+    {
+      "launch": "20261101-v7-pause-telemetry-guest",
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-guest/emulator.log",
+        "sha256": "67ba470466168cfdb9534726d4200f2b12bb35aaeab8b1114d0cb12c55a4c3fc"
+      },
+      "sg_length_histogram": [
+        {
+          "block": "mach-virt.ram",
+          "sg_length": 4194304,
+          "derived_guest_order": 10,
+          "count": 220
+        }
+      ],
+      "distinct_report_ranges": 183,
+      "observed_gpa_minus_ram_offset": [
+        1073741824
+      ],
+      "note": "Actual input mapped audit SGs; chosen minimum order was not sampled through sysfs in V7."
+    },
+    {
+      "launch": "20261101-v7-pause-telemetry-fault-map",
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-pause-telemetry-fault-map/emulator.log",
+        "sha256": "3c5c87cf671b01cfc8f20b6b0bdd0175949e80532ebaae4b925ad91ae9240349"
+      },
+      "sg_length_histogram": [
+        {
+          "block": "mach-virt.ram",
+          "sg_length": 4194304,
+          "derived_guest_order": 10,
+          "count": 171
+        }
+      ],
+      "distinct_report_ranges": 152,
+      "observed_gpa_minus_ram_offset": [
+        1073741824
+      ],
+      "note": "Actual input mapped audit SGs; chosen minimum order was not sampled through sysfs in V7."
+    },
+    {
+      "launch": "20261101-v7-budget-tail-guest",
+      "source": {
+        "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-budget-tail-guest/emulator.log",
+        "sha256": "97e5a4de32e8fb6413cd16ba9b7fcde1f8eb750b3e7c5727bbc4f0bd63ca1271"
+      },
+      "sg_length_histogram": [
+        {
+          "block": "mach-virt.ram",
+          "sg_length": 4194304,
+          "derived_guest_order": 10,
+          "count": 131
+        }
+      ],
+      "distinct_report_ranges": 131,
+      "observed_gpa_minus_ram_offset": [
+        1073741824
+      ],
+      "note": "Actual input mapped audit SGs; chosen minimum order was not sampled through sysfs in V7."
+    }
+  ],
+  "interpretation_limits": [
+    "Matching Manager order9 does not reproduce complete Manager environment.",
+    "Lower minimum does not split existing higher-order SGs;4MiB tails can remain in order6 run.",
+    "One boot per setting gives finite observations with boot/run-order variance, not causal performance bounds.",
+    "Old V6 buddy structural byte bounds are not V7 residency or future reclaimable bytes.",
+    "More SGs can increase aggregate work; keep strictglobalfalse/net-cost limitations and privateoptin decision."
+  ]
+}

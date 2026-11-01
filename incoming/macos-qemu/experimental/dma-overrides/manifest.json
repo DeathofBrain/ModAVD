@@ -1,0 +1,38 @@
+{
+  "overrides": [
+    {
+      "original": "/Users/azuki/ModAVD/.macos-work/aosp/hardware/google/gfxstream/host/common/dma_device.cpp",
+      "override": "/Users/azuki/ModAVD/incoming/macos-qemu/experimental/dma-overrides/host/common/dma_device.cpp",
+      "original_sha256": "60b36ddfe44ad366dcfa7c2f978fc68b3dbe3d0285dbf90544651e9e502b6a8a"
+    },
+    {
+      "original": "/Users/azuki/ModAVD/.macos-work/aosp/hardware/google/gfxstream/host/gl/gles2_dec/gles_v2_decoder.cpp",
+      "override": "/Users/azuki/ModAVD/incoming/macos-qemu/experimental/dma-overrides/host/gl/gles2_dec/gles_v2_decoder.cpp",
+      "original_sha256": "7c96906cd3ed94d4a8a34a669a9c07e0ed66757c631739e405f79c72bf249183"
+    },
+    {
+      "original": "/Users/azuki/ModAVD/.macos-work/aosp/hardware/google/gfxstream/host/renderControl_dec/renderControl_dec.cpp",
+      "override": "/Users/azuki/ModAVD/incoming/macos-qemu/experimental/dma-overrides/host/renderControl_dec/renderControl_dec.cpp",
+      "original_sha256": "73cea3e158cf7d3f7a4577388a3b1234076ab36bc735860a8aec3e77c0398c11"
+    },
+    {
+      "original": "/Users/azuki/ModAVD/.macos-work/aosp/hardware/google/gfxstream/host/render_control.cpp",
+      "override": "/Users/azuki/ModAVD/incoming/macos-qemu/experimental/dma-overrides/host/render_control.cpp",
+      "original_sha256": "86c0a2630d3daf9311879190d64c0f3ecfc5402650b831bec66d0690a589e25c"
+    },
+    {
+      "original": "/Users/azuki/ModAVD/.macos-work/aosp/hardware/google/gfxstream/host/gl/color_buffer_gl.cpp",
+      "override": "/Users/azuki/ModAVD/incoming/macos-qemu/experimental/dma-overrides/host/gl/color_buffer_gl.cpp",
+      "original_sha256": "3b4d8805dc799dce0439077516562240627bc7c78c974ba0813f5b011d2cc6ba"
+    },
+    {
+      "original": "/Users/azuki/ModAVD/.macos-work/aosp/hardware/google/gfxstream/host/virtio_gpu_context.cpp",
+      "override": "/Users/azuki/ModAVD/incoming/macos-qemu/experimental/dma-overrides/host/virtio_gpu_context.cpp",
+      "original_sha256": "ae80650bdc613170402e88aeb52130e5337601f8e8efb65d9c863f6bee21081a"
+    }
+  ],
+  "includeDirs": [
+    "/Users/azuki/ModAVD/incoming/macos-qemu/experimental/dma-overrides/include"
+  ],
+  "scope": "Private checked-DMA experiment; original sources unchanged."
+}

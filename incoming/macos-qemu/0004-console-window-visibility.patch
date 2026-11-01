@@ -1,0 +1,289 @@
+diff --git a/android/android-emu/android/console.cpp b/android/android-emu/android/console.cpp
+index 465f8d0f..946a032b 100644
+--- a/android/android-emu/android/console.cpp
++++ b/android/android-emu/android/console.cpp
+@@ -51,6 +51,7 @@
+ #include "android/network/wifi.h"
+ #include "android/recording/screen-recorder-constants.h"
+ #include "android/shaper.h"
++#include "android/skin/winsys.h"
+ #include "android/snapshot/Icebox.h"
+ #include "android/snapshot/PathUtils.h"
+ #include "android/snapshot/SnapshotUtils.h"
+@@ -4527,6 +4528,40 @@ static int do_ime_delete(ControlClient client, char* args) {
+                      error);
+ }
+ 
++static int do_window_visibility(ControlClient client, char* args, bool visible) {
++    if (args && *args) {
++        control_write(client, "KO: window show|hide takes no arguments\r\n");
++        return -1;
++    }
++    if (getConsoleAgents()->settings->host_emulator_is_headless()) {
++        control_write(client, "KO: window visibility is unsupported in headless mode\r\n");
++        return -1;
++    }
++    if (skin_winsys_set_window_visible(visible) != 0) {
++        control_write(client, "KO: Qt window is not ready or has closed\r\n");
++        return -1;
++    }
++    control_write(client, "windows=1\r\n");
++    return 0;
++}
++
++static int do_window_show(ControlClient client, char* args) {
++    return do_window_visibility(client, args, true);
++}
++
++static int do_window_hide(ControlClient client, char* args) {
++    return do_window_visibility(client, args, false);
++}
++
++static const CommandDefRec window_commands[] = {
++        {"show", "show this instance's Qt window",
++         "'window show' shows a Qt instance; headless mode is unsupported\r\n",
++         NULL, do_window_show, NULL},
++        {"hide", "hide this instance's Qt window",
++         "'window hide' hides a Qt instance without stopping Android\r\n",
++         NULL, do_window_hide, NULL},
++        {NULL, NULL, NULL, NULL, NULL, NULL}};
++
+ static const CommandDefRec ime_commands[] = {
+         {"status", "show the host input method channel state",
+          "'ime status' shows whether the guest input method (ModAVD Host "
+@@ -4998,6 +5033,10 @@ extern const CommandDefRec main_commands[] = {
+          "Usage: phonenumber <gsm-formatted number>.\n", NULL,
+          do_set_phone_number, NULL},
+ 
++        {"window", "show or hide this instance's Qt window",
++         "'window show|hide' controls Qt instances without Accessibility permission\r\n",
++         NULL, NULL, window_commands},
++
+         {"ime", "host input method commands",
+          "allows you to type text in any language into the focused editor "
+          "through the\r\n"
+diff --git a/android/android-emu/android/console_unittest.cpp b/android/android-emu/android/console_unittest.cpp
+index 4e9be584..d28edf2e 100644
+--- a/android/android-emu/android/console_unittest.cpp
++++ b/android/android-emu/android/console_unittest.cpp
+@@ -20,6 +20,13 @@
+ 
+ #include "android/emulation/testing/MockAndroidEmulatorWindowAgent.h"
+ 
++// This console test binary has no Qt window system. Keep the window-control
++// dependency explicit and exercise the unavailable-window response below.
++extern "C" int skin_winsys_set_window_visible(bool visible) {
++    (void)visible;
++    return -1;
++}
++
+ #ifdef __APPLE__
+ // Mac linker has a lot of problems determining that modem_driver.o is
+ // a dependency, even though we use |android_modem| throughout console.c.
+@@ -41,6 +48,40 @@ namespace console {
+ // the help printout.
+ static const int STUDIO_BUFF_SIZE = 1024;
+ 
++TEST(Console, WindowCommandsRejectUnavailableUI) {
++    const char expected[] = "KO: Qt window is not ready or has closed\r\n";
++    for (const char* command : {"window show", "window hide"}) {
++        int sock[2];
++        ASSERT_EQ(0, socketCreatePair(&sock[0], &sock[1]));
++        void* client = test_control_client_create(sock[1]);
++        ASSERT_NE(nullptr, client);
++        send_test_string(client, command);
++        char response[sizeof(expected)] = {};
++        socketRecvAll(sock[0], response, sizeof(expected) - 1);
++        EXPECT_STREQ(expected, response);
++        test_control_client_close(client);
++        socketClose(sock[1]);
++        socketClose(sock[0]);
++    }
++}
++
++TEST(Console, WindowCommandsRejectExtraArguments) {
++    const char expected[] = "KO: window show|hide takes no arguments\r\n";
++    for (const char* command : {"window show extra", "window hide extra"}) {
++        int sock[2];
++        ASSERT_EQ(0, socketCreatePair(&sock[0], &sock[1]));
++        void* client = test_control_client_create(sock[1]);
++        ASSERT_NE(nullptr, client);
++        send_test_string(client, command);
++        char response[sizeof(expected)] = {};
++        socketRecvAll(sock[0], response, sizeof(expected) - 1);
++        EXPECT_STREQ(expected, response);
++        test_control_client_close(client);
++        socketClose(sock[1]);
++        socketClose(sock[0]);
++    }
++}
++
+ TEST(Console, postauth_help_size_max) {
+ #ifdef __APPLE__
+     // The compiler may still optimize the modem_driver.o dependency out, so
+diff --git a/android/android-ui/modules/aemu-ui-headless/src/android/skin/winsys-headless.cpp b/android/android-ui/modules/aemu-ui-headless/src/android/skin/winsys-headless.cpp
+index a8383046..e725106e 100644
+--- a/android/android-ui/modules/aemu-ui-headless/src/android/skin/winsys-headless.cpp
++++ b/android/android-ui/modules/aemu-ui-headless/src/android/skin/winsys-headless.cpp
+@@ -345,6 +345,11 @@ extern void skin_winsys_update_rotation(SkinRotation rotation) {
+     (void)rotation;
+ }
+ 
++int skin_winsys_set_window_visible(bool visible) {
++    (void)visible;
++    return -1;
++}
++
+ extern void skin_winsys_show_virtual_scene_controls(bool show) {
+     (void)show;
+ }
+diff --git a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp
+index e6f05ccc..76ac373d 100644
+--- a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp
++++ b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.cpp
+@@ -2001,6 +2001,39 @@ void EmulatorQtWindow::show() {
+                      &EmulatorQtWindow::onScreenConfigChanged);
+ }
+ 
++bool EmulatorQtWindow::setHostWindowVisible(bool visible) {
++    if (mClosed || (visible && (!mBackingSurface || !mHostWindowRect.isValid()))) {
++        return false;
++    }
++    mHostVisibilityOverridden = true;
++    mHostWindowHidden = !visible;
++    if (visible) {
++        mContainer.showNormal();
++        slot_showWindow(mBackingSurface, mHostWindowRect);
++        if (mCarClusterWindow) {
++            mCarClusterWindow->show();
++        }
++        for (auto& display : mMultiDisplayWindow) {
++            display.second->show();
++        }
++        mContainer.raise();
++        mContainer.activateWindow();
++    } else {
++        mToolWindow->hideExtendedWindow();
++        mToolWindow->hide();
++        mOverlay.hide();
++        QFrame::hide();
++        mContainer.hide();
++        if (mCarClusterWindow) {
++            mCarClusterWindow->hide();
++        }
++        for (auto& display : mMultiDisplayWindow) {
++            display.second->hide();
++        }
++    }
++    return true;
++}
++
+ void EmulatorQtWindow::setOnTop(bool onTop) {
+     setFrameOnTop(&mContainer, onTop);
+     setFrameOnTop(mToolWindow, onTop);
+@@ -2612,11 +2645,6 @@ void EmulatorQtWindow::slot_showWindow(SkinSurface* surface,
+     if (mClosed) {
+         return;
+     }
+-    if (getConsoleAgents()
+-                ->settings->android_cmdLineOptions()
+-                ->qt_hide_window) {
+-        return;
+-    }
+     if (surface != mBackingSurface) {
+         if (mBackingSurface) {
+             QSize backingSize = mBackingSurface->bitmap->size();
+@@ -2628,6 +2656,13 @@ void EmulatorQtWindow::slot_showWindow(SkinSurface* surface,
+         }
+     }
+ 
++    mHostWindowRect = rect;
++    if (mHostWindowHidden ||
++        (!mHostVisibilityOverridden && getConsoleAgents()
++                 ->settings->android_cmdLineOptions()->qt_hide_window)) {
++        return;
++    }
++
+     showNormal();
+     setFixedSize(rect.size());
+ 
+@@ -4859,7 +4894,13 @@ bool EmulatorQtWindow::addMultiDisplayWindow(uint32_t id,
+         mMultiDisplayWindow[id]->setMouseTracking(true);
+         mMultiDisplayWindow[id]->setFixedSize(
+                 QSize((int)(w * scale), (int)(h * scale)));
+-        mMultiDisplayWindow[id]->show();
++        if (mHostWindowHidden ||
++            (!mHostVisibilityOverridden && getConsoleAgents()
++                     ->settings->android_cmdLineOptions()->qt_hide_window)) {
++            mMultiDisplayWindow[id]->hide();
++        } else {
++            mMultiDisplayWindow[id]->show();
++        }
+     } else {
+         auto iter = mMultiDisplayWindow.find(id);
+         if (iter == mMultiDisplayWindow.end()) {
+diff --git a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.h b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.h
+index b1251279..b13feee0 100644
+--- a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.h
++++ b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/emulator-qt-window.h
+@@ -231,6 +231,7 @@ signals:
+     void updateMultiDisplayPage(int id);
+ 
+ public:
++    bool setHostWindowVisible(bool visible);
+     void handleTouchPoints(const QTouchEvent& touchEvents,
+                            uint32_t displayId = 0);
+     void pollEvent(SkinEvent* event, bool* hasEvent);
+@@ -565,6 +566,9 @@ private:
+     bool mStartupDone = false;
+ 
+     SkinSurface* mBackingSurface;
++    QRect mHostWindowRect;
++    bool mHostVisibilityOverridden = false;
++    bool mHostWindowHidden = false;
+ 
+     QPixmap mGuestScreenPixmap;
+     QPixmap mScaledBackingImage;
+diff --git a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/winsys-qt.cpp b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/winsys-qt.cpp
+index fd442d2c..fbd52171 100644
+--- a/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/winsys-qt.cpp
++++ b/android/android-ui/modules/aemu-ui-qt/src/android/skin/qt/winsys-qt.cpp
+@@ -696,6 +696,23 @@ extern void skin_winsys_update_rotation(SkinRotation rotation) {
+     window->updateRotation(rotation);
+ }
+ 
++int skin_winsys_set_window_visible(bool visible) {
++    auto window = EmulatorQtWindow::getInstancePtr();
++    if (!window) {
++        return -1;
++    }
++    if (onMainQtThread()) {
++        return window->setHostWindowVisible(visible) ? 0 : -1;
++    }
++    bool changed = false;
++    QSemaphore semaphore;
++    window->runOnUiThread([window, visible, &changed]() {
++        changed = window->setHostWindowVisible(visible);
++    }, &semaphore);
++    semaphore.acquire();
++    return changed ? 0 : -1;
++}
++
+ extern void skin_winsys_show_virtual_scene_controls(bool show) {
+     D("skin_winsys_show_virtual_scene_controls [%d]", show ? 1 : 0);
+     EmulatorQtWindow* window = EmulatorQtWindow::getInstance();
+diff --git a/android/android-ui/modules/aemu-ui-window/include/android/skin/winsys.h b/android/android-ui/modules/aemu-ui-window/include/android/skin/winsys.h
+index f8eb0726..fe0e421b 100644
+--- a/android/android-ui/modules/aemu-ui-window/include/android/skin/winsys.h
++++ b/android/android-ui/modules/aemu-ui-window/include/android/skin/winsys.h
+@@ -42,6 +42,10 @@ void skin_winsys_get_monitor_logical_rect(SkinRect* rect);
+ // the window. Return 0 in case of success, -1 in case of failure.
+ int skin_winsys_get_device_pixel_ratio(double* dpr);
+ 
++// Set this instance's Qt window visibility synchronously. Returns 0 on success,
++// -1 when headless or the window is not ready. Does not require Accessibility.
++int skin_winsys_set_window_visible(bool visible);
++
+ // Set main window position.
+ void skin_winsys_set_window_pos(int window_x, int window_y);
+ 

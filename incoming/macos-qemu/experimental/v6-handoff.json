@@ -1,0 +1,83 @@
+{
+  "captured_utc": "2026-10-31T21:08:26.312977+00:00",
+  "stage": "Validated v6 frozen; private v7 source awaiting exact native transaction QA, no v7 guest build/start",
+  "main_default_modified": false,
+  "guest_stopped_normally": [
+    21579,
+    32921,
+    34998,
+    48163,
+    52205
+  ],
+  "guest_quota_released": true,
+  "v6_physical_benefit_established": false,
+  "latest_distinct_resident_candidate_upperbounds": {
+    "256KiB": {
+      "ranges": 5,
+      "bytes": 1310720
+    },
+    "128KiB": {
+      "ranges": 14,
+      "bytes": 1835008
+    },
+    "limits": "The two sets overlap. Distinct totals span observations, not simultaneous memory or freed bytes. Finer allocation receipts/native mappingalias gates remain untested in guest."
+  },
+  "files": {
+    "latest_validated_v6_patch": {
+      "path": "incoming/macos-qemu/experimental/complete-v6-subobject-diagnostic-patch.json",
+      "sha256": "a4bd4ad4213c5aaf3a6b328f83c2ee07add1b70c4a5727e3b4edb71bf3b5d78e"
+    },
+    "initial_v6_guest": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-reclaim-guest/capture.json",
+      "sha256": "f9fc99021cbfb21417af633a5d2d6db1c7a68498a8c778af9eaec59e9712fe13"
+    },
+    "initial_v6_physical": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-reclaim-guest/physical-assessment.json",
+      "sha256": "3c45dee4281e7409a058dded3e2ea93e3f0f3e9ec88a8bde0c5446d785172fb9"
+    },
+    "v6_sg_root_cause": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-diagnostic-guest/eligibility-assessment.json",
+      "sha256": "35c9304d69e7392eec7aebd0b4819320d29bdc97f118a22275480635ce6f26c9"
+    },
+    "v6_fault": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-fault-map/capture.json",
+      "sha256": "6b29290443d107bef0de2d95047b8fab2877a1d7ae1ae6ee43ab2a8b824840aa"
+    },
+    "v6_fault_physical": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-fault-map/physical-assessment.json",
+      "sha256": "ebbc9b047e641b9191f102dcb6df62d99626690adc76f28a0808332f19bb84c3"
+    },
+    "v6_simd_snapshot": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-simd-snapshot/capture.json",
+      "sha256": "bc1e7f0732c7600a237ccb4176bd908735e02a2ec3629e2a8bbc92f096e84dd9"
+    },
+    "v6_subobject_first_coverage_gap": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-subobject-guest/capture.json",
+      "sha256": "701ae68aebe9c4fb2fcf3866efa7fd1e1c6bf0f4eb45afa02f4b4e18cf63b1cf"
+    },
+    "v6_subobject_directed": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-subobject-directed-guest/capture.json",
+      "sha256": "d2ab443e7a98d60c42d9057bcf0a4a6e0c8b0843366664edb2589403eff53b79"
+    },
+    "v6_subobject_deduplicated": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v6-subobject-directed-guest/subobject-assessment.json",
+      "sha256": "8b2369dac38426722db590554dc534735252f7092f87aafe56e227b2efe979ba"
+    },
+    "exact_native_v6_index": {
+      "path": ".macos-work/qa/exact-v6-native-suite-v2-20261101.json",
+      "sha256": "f8660234cda86df140c71a1f2ab5582d5a712c57d2bdbd273b31e646ffe346e1"
+    },
+    "256k_source_review": {
+      "path": ".macos-work/qa/dcr-256k-source-review-20261101/helper-native-assessment.md",
+      "sha256": "85e8267816e1318f25b23b80d72194e6e91efc8bdd4172395fb38dae763d08af"
+    },
+    "256k_native_construction_cost": {
+      "path": ".macos-work/qa/dcr-construction-cost-20261101/assessment.json",
+      "sha256": "0990d4f4a3a55eff7c95eaacce4ad19adfe3699e0f192df019c906ecf47fea05"
+    },
+    "v7_pre_native_source": {
+      "path": "incoming/macos-qemu/experimental/evidence/20261101-v7-source-pre-native/receipt.json",
+      "sha256": "eb13191297aa0b68f18e3b807a0f3d12d68e6f78c574fa5b7f12cdaf04ac26c3"
+    }
+  }
+}

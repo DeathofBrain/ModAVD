@@ -1,0 +1,13 @@
+{
+  "captured_utc": "2026-10-31T20:36:38.925282+00:00",
+  "base_head": "568f0a3e755118d5dddd13bbdd821146d75f5711",
+  "file": "0004-darwin-hvf-chunked-reclaim-diagnostic-complete.patch",
+  "sha256": "b44947521218bf3717e477683647495cae4d3e5f138430fb8203b3b7079e5d8e",
+  "ram_only": {
+    "file": "ram-only-diagnostic-after-d8.patch",
+    "receipt": "ram-only-diagnostic-after-d8.json",
+    "sha256": "697cb4231fc76956d327e62c9b50e4c5a76e77abf67a639f5041c171eab799c1"
+  },
+  "native_transaction_header_sha256": "57ef9ef0c84e716e07e25f703e2e541390a70a1609cb5a89903e642b798ae72b",
+  "chunked_backing_header_sha256": "bf90b3c44dbe1eb739368562b77848ca53de34e591328522ac8557cfa5d4bbf2"
+}
