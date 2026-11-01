@@ -1,0 +1,1395 @@
+{
+  "test": "three_fresh_clone_config32_and_official_partition_flag_retests",
+  "status": "failed",
+  "source_backup": "official_expansion_backup",
+  "requested_rounds": 3,
+  "started_unix": 1793502806.5298612,
+  "rounds": [
+    {
+      "round": 1,
+      "status": "failed",
+      "clone": "official_expand_config32_1",
+      "started_unix": 1793502806.542917,
+      "phase": "complete",
+      "free_bytes_before": 133329080320,
+      "clone_path": "${WORKSPACE}/avd/official_expand_config32_1.avd",
+      "headers_after_copy": {
+        "cache.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 69206016,
+          "cluster_bits": 16,
+          "backing_file": "cache.img",
+          "backing_file_hex": "63616368652e696d67",
+          "file_size_bytes": 196616,
+          "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+        },
+        "encryptionkey.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 18874368,
+          "cluster_bits": 16,
+          "backing_file": "encryptionkey.img",
+          "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+          "file_size_bytes": 1966080,
+          "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+        },
+        "userdata-qemu.img": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "",
+          "backing_file_hex": "",
+          "file_size_bytes": 8454144,
+          "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+        },
+        "userdata-qemu.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "userdata-qemu.img",
+          "backing_file_hex": "75736572646174612d71656d752e696d67",
+          "file_size_bytes": 1606811648,
+          "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+        }
+      },
+      "config_before": "AvdId=official_expand_config32_1\navd.ini.displayname=official_expand_config32_1\navd.ini.encoding=UTF-8\nPlayStore.enabled=false\nabi.type=arm64-v8a\ntag.id=google_apis\ntag.display=Google APIs\nimage.sysdir.1=system-images/android-34/google_apis/arm64-v8a/\nhw.cpu.arch=arm64\nhw.cpu.ncore=4\nhw.ramSize=4096\nhw.lcd.width=1280\nhw.lcd.height=720\nhw.lcd.density=240\nhw.initialOrientation=landscape\nhw.keyboard=yes\nhw.gpu.enabled=yes\nhw.gpu.mode=host\nhw.audioInput=no\nhw.battery=yes\nhw.gps=yes\nhw.accelerometer=yes\ndisk.dataPartition.size=8G\ndisk.cachePartition=yes\ndisk.cachePartition.size=66MB\nvm.heapSize=512\nfastboot.forceColdBoot=yes\nshowDeviceFrame=no\n",
+      "baseline_launch": {
+        "pid": 12308,
+        "boot_s": 12.501433041063137,
+        "args": [
+          "${WORKSPACE}/sdk/emulator/emulator",
+          "-avd",
+          "official_expand_config32_1",
+          "-no-snapshot",
+          "-gpu",
+          "host",
+          "-memory",
+          "4096",
+          "-cores",
+          "4",
+          "-ports",
+          "22160,22161",
+          "-grpc",
+          "22162",
+          "-grpc-use-jwt",
+          "-no-audio",
+          "-no-boot-anim",
+          "-no-metrics",
+          "-verbose",
+          "-no-window"
+        ],
+        "log": "${WORKSPACE}/logs/emulator-1793502806571166000-official_expand_config32_1.log",
+        "state": {
+          "pid": 12308,
+          "identity": "Sun Nov  1 11:13:26 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_expand_config32_1 -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window",
+          "args": [
+            "${WORKSPACE}/sdk/emulator/emulator",
+            "-avd",
+            "official_expand_config32_1",
+            "-no-snapshot",
+            "-gpu",
+            "host",
+            "-memory",
+            "4096",
+            "-cores",
+            "4",
+            "-ports",
+            "22160,22161",
+            "-grpc",
+            "22162",
+            "-grpc-use-jwt",
+            "-no-audio",
+            "-no-boot-anim",
+            "-no-metrics",
+            "-verbose",
+            "-no-window"
+          ],
+          "avd": "official_expand_config32_1",
+          "started_unix": 1793502806.976355,
+          "boot_started_monotonic": 761639.61408475,
+          "log": "${WORKSPACE}/logs/emulator-1793502806571166000-official_expand_config32_1.log",
+          "window": false,
+          "serial": "emulator-22160",
+          "adb_port": 22150,
+          "gpu": "host"
+        }
+      },
+      "before": {
+        "total_bytes": 8302063616,
+        "reported_mount": "/data/user/0",
+        "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39   8107484 1065208   6894820  14% /data/user/0\next3 4096 2026871 1723705\n",
+        "log": "${WORKSPACE}/logs/1793502819477765000-expansion-retest-1-df-before"
+      },
+      "before_marker": {
+        "size": 1048576,
+        "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+      },
+      "before_marker_log": "${WORKSPACE}/logs/1793502819530207000-expansion-retest-1-marker-before",
+      "before_marker_matches_host": true,
+      "baseline_hardware": {
+        "path": "${WORKSPACE}/avd/official_expand_config32_1.avd/hardware-qemu.ini",
+        "text": "hw.cpu.arch = arm64\nhw.cpu.ncore = 4\nhw.ramSize = 4096\nhw.screen = multi-touch\nhw.mainKeys = true\nhw.touchpad0 = false\nhw.touchpad0.width = 600\nhw.touchpad0.height = 400\nhw.trackBall = true\nhw.keyboard = true\nhw.keyboard.lid = false\nhw.keyboard.charmap = qwerty2\nhw.dPad = true\nhw.rotaryInput = false\nhw.gsmModem = true\nhw.gps = true\nhw.battery = true\nhw.accelerometer = true\nhw.accelerometer_uncalibrated = true\nhw.gyroscope = true\nhw.audioInput = false\nhw.audioOutput = true\nhw.sdCard = true\ndisk.cachePartition = true\ndisk.cachePartition.path = ${WORKSPACE}/avd/official_expand_config32_1.avd/cache.img\ndisk.cachePartition.size = 66m\ntest.quitAfterBootTimeOut = -1\ntest.delayAdbTillBootComplete = 0\ntest.monitorAdb = 0\nhw.lcd.width = 1280\nhw.lcd.height = 720\nhw.lcd.depth = 32\nhw.lcd.circular = false\nhw.lcd.density = 240\nhw.lcd.transparent = false\nhw.lcd.backlight = true\nhw.lcd.vsync = 60\nhw.gltransport = pipe\nhw.gltransport.asg.writeBufferSize = 1048576\nhw.gltransport.asg.writeStepSize = 4096\nhw.gltransport.asg.dataRingSize = 32768\nhw.gltransport.drawFlushInterval = 800\nhw.displayRegion.0.1.xOffset = -1\nhw.displayRegion.0.1.yOffset = -1\nhw.displayRegion.0.1.width = 0\nhw.displayRegion.0.1.height = 0\nhw.displayRegion.0.2.xOffset = -1\nhw.displayRegion.0.2.yOffset = -1\nhw.displayRegion.0.2.width = 0\nhw.displayRegion.0.2.height = 0\nhw.displayRegion.0.3.xOffset = -1\nhw.displayRegion.0.3.yOffset = -1\nhw.displayRegion.0.3.width = 0\nhw.displayRegion.0.3.height = 0\nhw.display1.width = 0\nhw.display1.height = 0\nhw.display1.density = 0\nhw.display1.xOffset = -1\nhw.display1.yOffset = -1\nhw.display1.flag = 0\nhw.display2.width = 0\nhw.display2.height = 0\nhw.display2.density = 0\nhw.display2.xOffset = -1\nhw.display2.yOffset = -1\nhw.display2.flag = 0\nhw.display3.width = 0\nhw.display3.height = 0\nhw.display3.density = 0\nhw.display3.xOffset = -1\nhw.display3.yOffset = -1\nhw.display3.flag = 0\nhw.multi_display_window = false\nhw.hotplug_multi_display = false\nhw.gpu.enabled = true\nhw.gpu.mode = host\nhw.initialOrientation = landscape\nhw.camera.back = emulated\nhw.camera.back.orientation = 90\nhw.camera.front = none\nhw.camera.front.orientation = 90\nvm.heapSize = 576\nhw.sensors.light = true\nhw.sensors.pressure = true\nhw.sensors.humidity = true\nhw.sensors.proximity = true\nhw.sensors.magnetic_field = true\nhw.sensors.magnetic_field_uncalibrated = true\nhw.sensors.gyroscope_uncalibrated = true\nhw.sensors.orientation = true\nhw.sensors.temperature = true\nhw.sensors.rgbclight = false\nhw.sensor.hinge = false\nhw.sensor.hinge.count = 0\nhw.sensor.hinge.type = 0\nhw.sensor.hinge.sub_type = 0\nhw.sensor.hinge.resizable.config = 1\nhw.sensor.hinge.fold_to_displayRegion.0.1_at_posture = 1\nhw.sensor.roll = false\nhw.sensor.roll.count = 0\nhw.sensor.roll.resize_to_displayRegion.0.1_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.2_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.3_at_posture = 6\nhw.sensors.heart_rate = false\nhw.sensors.wrist_tilt = false\nhw.sensors.heading = false\nhw.useext4 = true\nkernel.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//kernel-ranchu\nkernel.newDeviceNaming = yes\nkernel.supportsYaffs2 = no\ndisk.ramdisk.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//ramdisk.img\ndisk.systemPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img\ndisk.systemPartition.size = 4107m\ndisk.vendorPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img\ndisk.vendorPartition.size = 800m\ndisk.dataPartition.path = ${WORKSPACE}/avd/official_expand_config32_1.avd/userdata-qemu.img\ndisk.dataPartition.size = 8g\ndisk.encryptionKeyPartition.path = ${WORKSPACE}/avd/official_expand_config32_1.avd/encryptionkey.img\nPlayStore.enabled = false\navd.name = official_expand_config32_1\navd.id = official_expand_config32_1\nfastboot.forceColdBoot = true\nuserdata.useQcow2 = true\nfirstboot.bootFromDownloadableSnapshot = true\nfirstboot.bootFromLocalSnapshot = true\nfirstboot.saveToLocalSnapshot = true\nandroid.sdk.root = ${WORKSPACE}/sdk\nandroid.avd.home = ${WORKSPACE}/avd\nenvironment.width = 0\nenvironment.height = 0\n",
+        "partition_fields": {
+          "disk.cachePartition.path": "${WORKSPACE}/avd/official_expand_config32_1.avd/cache.img",
+          "disk.cachePartition.size": "66m",
+          "disk.systemPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img",
+          "disk.systemPartition.size": "4107m",
+          "disk.vendorPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img",
+          "disk.vendorPartition.size": "800m",
+          "disk.dataPartition.path": "${WORKSPACE}/avd/official_expand_config32_1.avd/userdata-qemu.img",
+          "disk.dataPartition.size": "8g",
+          "disk.encryptionKeyPartition.path": "${WORKSPACE}/avd/official_expand_config32_1.avd/encryptionkey.img"
+        }
+      },
+      "baseline_shutdown": {
+        "duration_s": 1.3702570829773322,
+        "returncode": 0,
+        "kill_started_monotonic": 761652.346250208,
+        "kill_finished_monotonic": 761652.35906025
+      },
+      "headers_before_growth": {
+        "cache.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 69206016,
+          "cluster_bits": 16,
+          "backing_file": "cache.img",
+          "backing_file_hex": "63616368652e696d67",
+          "file_size_bytes": 196616,
+          "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+        },
+        "encryptionkey.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 18874368,
+          "cluster_bits": 16,
+          "backing_file": "encryptionkey.img",
+          "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+          "file_size_bytes": 1966080,
+          "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+        },
+        "userdata-qemu.img": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "",
+          "backing_file_hex": "",
+          "file_size_bytes": 8454144,
+          "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+        },
+        "userdata-qemu.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "userdata-qemu.img",
+          "backing_file_hex": "75736572646174612d71656d752e696d67",
+          "file_size_bytes": 1608253440,
+          "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+        }
+      },
+      "config_after": "AvdId=official_expand_config32_1\navd.ini.displayname=official_expand_config32_1\navd.ini.encoding=UTF-8\nPlayStore.enabled=false\nabi.type=arm64-v8a\ntag.id=google_apis\ntag.display=Google APIs\nimage.sysdir.1=system-images/android-34/google_apis/arm64-v8a/\nhw.cpu.arch=arm64\nhw.cpu.ncore=4\nhw.ramSize=4096\nhw.lcd.width=1280\nhw.lcd.height=720\nhw.lcd.density=240\nhw.initialOrientation=landscape\nhw.keyboard=yes\nhw.gpu.enabled=yes\nhw.gpu.mode=host\nhw.audioInput=no\nhw.battery=yes\nhw.gps=yes\nhw.accelerometer=yes\ndisk.dataPartition.size=32G\ndisk.cachePartition=yes\ndisk.cachePartition.size=66MB\nvm.heapSize=512\nfastboot.forceColdBoot=yes\nshowDeviceFrame=no\n",
+      "growth_launch": {
+        "pid": 12389,
+        "boot_s": 10.221015583025292,
+        "args": [
+          "${WORKSPACE}/sdk/emulator/emulator",
+          "-avd",
+          "official_expand_config32_1",
+          "-no-snapshot",
+          "-gpu",
+          "host",
+          "-memory",
+          "4096",
+          "-cores",
+          "4",
+          "-ports",
+          "22160,22161",
+          "-grpc",
+          "22162",
+          "-grpc-use-jwt",
+          "-no-audio",
+          "-no-boot-anim",
+          "-no-metrics",
+          "-verbose",
+          "-no-window",
+          "-partition-size",
+          "32768"
+        ],
+        "log": "${WORKSPACE}/logs/emulator-1793502821020023000-official_expand_config32_1.log",
+        "state": {
+          "pid": 12389,
+          "identity": "Sun Nov  1 11:13:41 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_expand_config32_1 -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window -partition-size 32768",
+          "args": [
+            "${WORKSPACE}/sdk/emulator/emulator",
+            "-avd",
+            "official_expand_config32_1",
+            "-no-snapshot",
+            "-gpu",
+            "host",
+            "-memory",
+            "4096",
+            "-cores",
+            "4",
+            "-ports",
+            "22160,22161",
+            "-grpc",
+            "22162",
+            "-grpc-use-jwt",
+            "-no-audio",
+            "-no-boot-anim",
+            "-no-metrics",
+            "-verbose",
+            "-no-window",
+            "-partition-size",
+            "32768"
+          ],
+          "avd": "official_expand_config32_1",
+          "started_unix": 1793502821.43101,
+          "boot_started_monotonic": 761654.06890725,
+          "log": "${WORKSPACE}/logs/emulator-1793502821020023000-official_expand_config32_1.log",
+          "window": false,
+          "serial": "emulator-22160",
+          "adb_port": 22150,
+          "gpu": "host"
+        }
+      },
+      "after": {
+        "total_bytes": 8302063616,
+        "reported_mount": "/data/user/0",
+        "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39   8107484 1065116   6894912  14% /data/user/0\next3 4096 2026871 1723725\n",
+        "log": "${WORKSPACE}/logs/1793502831652018000-expansion-retest-1-df-after"
+      },
+      "after_marker": {
+        "size": 1048576,
+        "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+      },
+      "after_marker_log": "${WORKSPACE}/logs/1793502832325759000-expansion-retest-1-marker-after",
+      "after_marker_matches_host": true,
+      "marker_three_way_match": true,
+      "growth_hardware": {
+        "path": "${WORKSPACE}/avd/official_expand_config32_1.avd/hardware-qemu.ini",
+        "text": "hw.cpu.arch = arm64\nhw.cpu.ncore = 4\nhw.ramSize = 4096\nhw.screen = multi-touch\nhw.mainKeys = true\nhw.touchpad0 = false\nhw.touchpad0.width = 600\nhw.touchpad0.height = 400\nhw.trackBall = true\nhw.keyboard = true\nhw.keyboard.lid = false\nhw.keyboard.charmap = qwerty2\nhw.dPad = true\nhw.rotaryInput = false\nhw.gsmModem = true\nhw.gps = true\nhw.battery = true\nhw.accelerometer = true\nhw.accelerometer_uncalibrated = true\nhw.gyroscope = true\nhw.audioInput = false\nhw.audioOutput = true\nhw.sdCard = true\ndisk.cachePartition = true\ndisk.cachePartition.path = ${WORKSPACE}/avd/official_expand_config32_1.avd/cache.img\ndisk.cachePartition.size = 66m\ntest.quitAfterBootTimeOut = -1\ntest.delayAdbTillBootComplete = 0\ntest.monitorAdb = 0\nhw.lcd.width = 1280\nhw.lcd.height = 720\nhw.lcd.depth = 32\nhw.lcd.circular = false\nhw.lcd.density = 240\nhw.lcd.transparent = false\nhw.lcd.backlight = true\nhw.lcd.vsync = 60\nhw.gltransport = pipe\nhw.gltransport.asg.writeBufferSize = 1048576\nhw.gltransport.asg.writeStepSize = 4096\nhw.gltransport.asg.dataRingSize = 32768\nhw.gltransport.drawFlushInterval = 800\nhw.displayRegion.0.1.xOffset = -1\nhw.displayRegion.0.1.yOffset = -1\nhw.displayRegion.0.1.width = 0\nhw.displayRegion.0.1.height = 0\nhw.displayRegion.0.2.xOffset = -1\nhw.displayRegion.0.2.yOffset = -1\nhw.displayRegion.0.2.width = 0\nhw.displayRegion.0.2.height = 0\nhw.displayRegion.0.3.xOffset = -1\nhw.displayRegion.0.3.yOffset = -1\nhw.displayRegion.0.3.width = 0\nhw.displayRegion.0.3.height = 0\nhw.display1.width = 0\nhw.display1.height = 0\nhw.display1.density = 0\nhw.display1.xOffset = -1\nhw.display1.yOffset = -1\nhw.display1.flag = 0\nhw.display2.width = 0\nhw.display2.height = 0\nhw.display2.density = 0\nhw.display2.xOffset = -1\nhw.display2.yOffset = -1\nhw.display2.flag = 0\nhw.display3.width = 0\nhw.display3.height = 0\nhw.display3.density = 0\nhw.display3.xOffset = -1\nhw.display3.yOffset = -1\nhw.display3.flag = 0\nhw.multi_display_window = false\nhw.hotplug_multi_display = false\nhw.gpu.enabled = true\nhw.gpu.mode = host\nhw.initialOrientation = landscape\nhw.camera.back = emulated\nhw.camera.back.orientation = 90\nhw.camera.front = none\nhw.camera.front.orientation = 90\nvm.heapSize = 576\nhw.sensors.light = true\nhw.sensors.pressure = true\nhw.sensors.humidity = true\nhw.sensors.proximity = true\nhw.sensors.magnetic_field = true\nhw.sensors.magnetic_field_uncalibrated = true\nhw.sensors.gyroscope_uncalibrated = true\nhw.sensors.orientation = true\nhw.sensors.temperature = true\nhw.sensors.rgbclight = false\nhw.sensor.hinge = false\nhw.sensor.hinge.count = 0\nhw.sensor.hinge.type = 0\nhw.sensor.hinge.sub_type = 0\nhw.sensor.hinge.resizable.config = 1\nhw.sensor.hinge.fold_to_displayRegion.0.1_at_posture = 1\nhw.sensor.roll = false\nhw.sensor.roll.count = 0\nhw.sensor.roll.resize_to_displayRegion.0.1_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.2_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.3_at_posture = 6\nhw.sensors.heart_rate = false\nhw.sensors.wrist_tilt = false\nhw.sensors.heading = false\nhw.useext4 = true\nkernel.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//kernel-ranchu\nkernel.newDeviceNaming = yes\nkernel.supportsYaffs2 = no\ndisk.ramdisk.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//ramdisk.img\ndisk.systemPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img\ndisk.systemPartition.size = 32g\ndisk.vendorPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img\ndisk.vendorPartition.size = 32g\ndisk.dataPartition.path = ${WORKSPACE}/avd/official_expand_config32_1.avd/userdata-qemu.img\ndisk.dataPartition.size = 32g\ndisk.encryptionKeyPartition.path = ${WORKSPACE}/avd/official_expand_config32_1.avd/encryptionkey.img\nPlayStore.enabled = false\navd.name = official_expand_config32_1\navd.id = official_expand_config32_1\nfastboot.forceColdBoot = true\nuserdata.useQcow2 = true\nfirstboot.bootFromDownloadableSnapshot = true\nfirstboot.bootFromLocalSnapshot = true\nfirstboot.saveToLocalSnapshot = true\nandroid.sdk.root = ${WORKSPACE}/sdk\nandroid.avd.home = ${WORKSPACE}/avd\nenvironment.width = 0\nenvironment.height = 0\n",
+        "partition_fields": {
+          "disk.cachePartition.path": "${WORKSPACE}/avd/official_expand_config32_1.avd/cache.img",
+          "disk.cachePartition.size": "66m",
+          "disk.systemPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img",
+          "disk.systemPartition.size": "32g",
+          "disk.vendorPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img",
+          "disk.vendorPartition.size": "32g",
+          "disk.dataPartition.path": "${WORKSPACE}/avd/official_expand_config32_1.avd/userdata-qemu.img",
+          "disk.dataPartition.size": "32g",
+          "disk.encryptionKeyPartition.path": "${WORKSPACE}/avd/official_expand_config32_1.avd/encryptionkey.img"
+        }
+      },
+      "growth_shutdown": {
+        "duration_s": 1.1327837500721216,
+        "returncode": 0,
+        "kill_started_monotonic": 761665.078620625,
+        "kill_finished_monotonic": 761665.091023291
+      },
+      "headers_after_growth": {
+        "cache.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 69206016,
+          "cluster_bits": 16,
+          "backing_file": "cache.img",
+          "backing_file_hex": "63616368652e696d67",
+          "file_size_bytes": 196616,
+          "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+        },
+        "encryptionkey.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 18874368,
+          "cluster_bits": 16,
+          "backing_file": "encryptionkey.img",
+          "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+          "file_size_bytes": 1966080,
+          "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+        },
+        "userdata-qemu.img": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "",
+          "backing_file_hex": "",
+          "file_size_bytes": 8454144,
+          "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+        },
+        "userdata-qemu.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "userdata-qemu.img",
+          "backing_file_hex": "75736572646174612d71656d752e696d67",
+          "file_size_bytes": 1609236480,
+          "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+        }
+      },
+      "free_bytes_after": 133261996032,
+      "guest_capacity_grew_to_32_gib_class": false,
+      "finding": "configured capacity did not yield a 32 GiB guest filesystem",
+      "task_owned_emulator_still_running": false,
+      "ports_still_occupied": [],
+      "finished_unix": 1793502833.554059
+    },
+    {
+      "round": 2,
+      "status": "failed",
+      "clone": "official_expand_config32_2",
+      "started_unix": 1793502833.555039,
+      "phase": "complete",
+      "free_bytes_before": 133261946880,
+      "clone_path": "${WORKSPACE}/avd/official_expand_config32_2.avd",
+      "headers_after_copy": {
+        "cache.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 69206016,
+          "cluster_bits": 16,
+          "backing_file": "cache.img",
+          "backing_file_hex": "63616368652e696d67",
+          "file_size_bytes": 196616,
+          "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+        },
+        "encryptionkey.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 18874368,
+          "cluster_bits": 16,
+          "backing_file": "encryptionkey.img",
+          "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+          "file_size_bytes": 1966080,
+          "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+        },
+        "userdata-qemu.img": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "",
+          "backing_file_hex": "",
+          "file_size_bytes": 8454144,
+          "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+        },
+        "userdata-qemu.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "userdata-qemu.img",
+          "backing_file_hex": "75736572646174612d71656d752e696d67",
+          "file_size_bytes": 1606811648,
+          "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+        }
+      },
+      "config_before": "AvdId=official_expand_config32_2\navd.ini.displayname=official_expand_config32_2\navd.ini.encoding=UTF-8\nPlayStore.enabled=false\nabi.type=arm64-v8a\ntag.id=google_apis\ntag.display=Google APIs\nimage.sysdir.1=system-images/android-34/google_apis/arm64-v8a/\nhw.cpu.arch=arm64\nhw.cpu.ncore=4\nhw.ramSize=4096\nhw.lcd.width=1280\nhw.lcd.height=720\nhw.lcd.density=240\nhw.initialOrientation=landscape\nhw.keyboard=yes\nhw.gpu.enabled=yes\nhw.gpu.mode=host\nhw.audioInput=no\nhw.battery=yes\nhw.gps=yes\nhw.accelerometer=yes\ndisk.dataPartition.size=8G\ndisk.cachePartition=yes\ndisk.cachePartition.size=66MB\nvm.heapSize=512\nfastboot.forceColdBoot=yes\nshowDeviceFrame=no\n",
+      "baseline_launch": {
+        "pid": 12454,
+        "boot_s": 12.26245579100214,
+        "args": [
+          "${WORKSPACE}/sdk/emulator/emulator",
+          "-avd",
+          "official_expand_config32_2",
+          "-no-snapshot",
+          "-gpu",
+          "host",
+          "-memory",
+          "4096",
+          "-cores",
+          "4",
+          "-ports",
+          "22160,22161",
+          "-grpc",
+          "22162",
+          "-grpc-use-jwt",
+          "-no-audio",
+          "-no-boot-anim",
+          "-no-metrics",
+          "-verbose",
+          "-no-window"
+        ],
+        "log": "${WORKSPACE}/logs/emulator-1793502833589308000-official_expand_config32_2.log",
+        "state": {
+          "pid": 12454,
+          "identity": "Sun Nov  1 11:13:53 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_expand_config32_2 -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window",
+          "args": [
+            "${WORKSPACE}/sdk/emulator/emulator",
+            "-avd",
+            "official_expand_config32_2",
+            "-no-snapshot",
+            "-gpu",
+            "host",
+            "-memory",
+            "4096",
+            "-cores",
+            "4",
+            "-ports",
+            "22160,22161",
+            "-grpc",
+            "22162",
+            "-grpc-use-jwt",
+            "-no-audio",
+            "-no-boot-anim",
+            "-no-metrics",
+            "-verbose",
+            "-no-window"
+          ],
+          "avd": "official_expand_config32_2",
+          "started_unix": 1793502833.998684,
+          "boot_started_monotonic": 761666.636726,
+          "log": "${WORKSPACE}/logs/emulator-1793502833589308000-official_expand_config32_2.log",
+          "window": false,
+          "serial": "emulator-22160",
+          "adb_port": 22150,
+          "gpu": "host"
+        }
+      },
+      "before": {
+        "total_bytes": 8302063616,
+        "reported_mount": "/data/user/0",
+        "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39   8107484 1065976   6894052  14% /data/user/0\next3 4096 2026871 1723514\n",
+        "log": "${WORKSPACE}/logs/1793502846261110000-expansion-retest-2-df-before"
+      },
+      "before_marker": {
+        "size": 1048576,
+        "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+      },
+      "before_marker_log": "${WORKSPACE}/logs/1793502846297380000-expansion-retest-2-marker-before",
+      "before_marker_matches_host": true,
+      "baseline_hardware": {
+        "path": "${WORKSPACE}/avd/official_expand_config32_2.avd/hardware-qemu.ini",
+        "text": "hw.cpu.arch = arm64\nhw.cpu.ncore = 4\nhw.ramSize = 4096\nhw.screen = multi-touch\nhw.mainKeys = true\nhw.touchpad0 = false\nhw.touchpad0.width = 600\nhw.touchpad0.height = 400\nhw.trackBall = true\nhw.keyboard = true\nhw.keyboard.lid = false\nhw.keyboard.charmap = qwerty2\nhw.dPad = true\nhw.rotaryInput = false\nhw.gsmModem = true\nhw.gps = true\nhw.battery = true\nhw.accelerometer = true\nhw.accelerometer_uncalibrated = true\nhw.gyroscope = true\nhw.audioInput = false\nhw.audioOutput = true\nhw.sdCard = true\ndisk.cachePartition = true\ndisk.cachePartition.path = ${WORKSPACE}/avd/official_expand_config32_2.avd/cache.img\ndisk.cachePartition.size = 66m\ntest.quitAfterBootTimeOut = -1\ntest.delayAdbTillBootComplete = 0\ntest.monitorAdb = 0\nhw.lcd.width = 1280\nhw.lcd.height = 720\nhw.lcd.depth = 32\nhw.lcd.circular = false\nhw.lcd.density = 240\nhw.lcd.transparent = false\nhw.lcd.backlight = true\nhw.lcd.vsync = 60\nhw.gltransport = pipe\nhw.gltransport.asg.writeBufferSize = 1048576\nhw.gltransport.asg.writeStepSize = 4096\nhw.gltransport.asg.dataRingSize = 32768\nhw.gltransport.drawFlushInterval = 800\nhw.displayRegion.0.1.xOffset = -1\nhw.displayRegion.0.1.yOffset = -1\nhw.displayRegion.0.1.width = 0\nhw.displayRegion.0.1.height = 0\nhw.displayRegion.0.2.xOffset = -1\nhw.displayRegion.0.2.yOffset = -1\nhw.displayRegion.0.2.width = 0\nhw.displayRegion.0.2.height = 0\nhw.displayRegion.0.3.xOffset = -1\nhw.displayRegion.0.3.yOffset = -1\nhw.displayRegion.0.3.width = 0\nhw.displayRegion.0.3.height = 0\nhw.display1.width = 0\nhw.display1.height = 0\nhw.display1.density = 0\nhw.display1.xOffset = -1\nhw.display1.yOffset = -1\nhw.display1.flag = 0\nhw.display2.width = 0\nhw.display2.height = 0\nhw.display2.density = 0\nhw.display2.xOffset = -1\nhw.display2.yOffset = -1\nhw.display2.flag = 0\nhw.display3.width = 0\nhw.display3.height = 0\nhw.display3.density = 0\nhw.display3.xOffset = -1\nhw.display3.yOffset = -1\nhw.display3.flag = 0\nhw.multi_display_window = false\nhw.hotplug_multi_display = false\nhw.gpu.enabled = true\nhw.gpu.mode = host\nhw.initialOrientation = landscape\nhw.camera.back = emulated\nhw.camera.back.orientation = 90\nhw.camera.front = none\nhw.camera.front.orientation = 90\nvm.heapSize = 576\nhw.sensors.light = true\nhw.sensors.pressure = true\nhw.sensors.humidity = true\nhw.sensors.proximity = true\nhw.sensors.magnetic_field = true\nhw.sensors.magnetic_field_uncalibrated = true\nhw.sensors.gyroscope_uncalibrated = true\nhw.sensors.orientation = true\nhw.sensors.temperature = true\nhw.sensors.rgbclight = false\nhw.sensor.hinge = false\nhw.sensor.hinge.count = 0\nhw.sensor.hinge.type = 0\nhw.sensor.hinge.sub_type = 0\nhw.sensor.hinge.resizable.config = 1\nhw.sensor.hinge.fold_to_displayRegion.0.1_at_posture = 1\nhw.sensor.roll = false\nhw.sensor.roll.count = 0\nhw.sensor.roll.resize_to_displayRegion.0.1_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.2_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.3_at_posture = 6\nhw.sensors.heart_rate = false\nhw.sensors.wrist_tilt = false\nhw.sensors.heading = false\nhw.useext4 = true\nkernel.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//kernel-ranchu\nkernel.newDeviceNaming = yes\nkernel.supportsYaffs2 = no\ndisk.ramdisk.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//ramdisk.img\ndisk.systemPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img\ndisk.systemPartition.size = 4107m\ndisk.vendorPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img\ndisk.vendorPartition.size = 800m\ndisk.dataPartition.path = ${WORKSPACE}/avd/official_expand_config32_2.avd/userdata-qemu.img\ndisk.dataPartition.size = 8g\ndisk.encryptionKeyPartition.path = ${WORKSPACE}/avd/official_expand_config32_2.avd/encryptionkey.img\nPlayStore.enabled = false\navd.name = official_expand_config32_2\navd.id = official_expand_config32_2\nfastboot.forceColdBoot = true\nuserdata.useQcow2 = true\nfirstboot.bootFromDownloadableSnapshot = true\nfirstboot.bootFromLocalSnapshot = true\nfirstboot.saveToLocalSnapshot = true\nandroid.sdk.root = ${WORKSPACE}/sdk\nandroid.avd.home = ${WORKSPACE}/avd\nenvironment.width = 0\nenvironment.height = 0\n",
+        "partition_fields": {
+          "disk.cachePartition.path": "${WORKSPACE}/avd/official_expand_config32_2.avd/cache.img",
+          "disk.cachePartition.size": "66m",
+          "disk.systemPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img",
+          "disk.systemPartition.size": "4107m",
+          "disk.vendorPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img",
+          "disk.vendorPartition.size": "800m",
+          "disk.dataPartition.path": "${WORKSPACE}/avd/official_expand_config32_2.avd/userdata-qemu.img",
+          "disk.dataPartition.size": "8g",
+          "disk.encryptionKeyPartition.path": "${WORKSPACE}/avd/official_expand_config32_2.avd/encryptionkey.img"
+        }
+      },
+      "baseline_shutdown": {
+        "duration_s": 1.5510342080378905,
+        "returncode": 0,
+        "kill_started_monotonic": 761679.071593458,
+        "kill_finished_monotonic": 761679.084451666
+      },
+      "headers_before_growth": {
+        "cache.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 69206016,
+          "cluster_bits": 16,
+          "backing_file": "cache.img",
+          "backing_file_hex": "63616368652e696d67",
+          "file_size_bytes": 196616,
+          "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+        },
+        "encryptionkey.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 18874368,
+          "cluster_bits": 16,
+          "backing_file": "encryptionkey.img",
+          "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+          "file_size_bytes": 1966080,
+          "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+        },
+        "userdata-qemu.img": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "",
+          "backing_file_hex": "",
+          "file_size_bytes": 8454144,
+          "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+        },
+        "userdata-qemu.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "userdata-qemu.img",
+          "backing_file_hex": "75736572646174612d71656d752e696d67",
+          "file_size_bytes": 1609564160,
+          "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+        }
+      },
+      "config_after": "AvdId=official_expand_config32_2\navd.ini.displayname=official_expand_config32_2\navd.ini.encoding=UTF-8\nPlayStore.enabled=false\nabi.type=arm64-v8a\ntag.id=google_apis\ntag.display=Google APIs\nimage.sysdir.1=system-images/android-34/google_apis/arm64-v8a/\nhw.cpu.arch=arm64\nhw.cpu.ncore=4\nhw.ramSize=4096\nhw.lcd.width=1280\nhw.lcd.height=720\nhw.lcd.density=240\nhw.initialOrientation=landscape\nhw.keyboard=yes\nhw.gpu.enabled=yes\nhw.gpu.mode=host\nhw.audioInput=no\nhw.battery=yes\nhw.gps=yes\nhw.accelerometer=yes\ndisk.dataPartition.size=32G\ndisk.cachePartition=yes\ndisk.cachePartition.size=66MB\nvm.heapSize=512\nfastboot.forceColdBoot=yes\nshowDeviceFrame=no\n",
+      "growth_launch": {
+        "pid": 12521,
+        "boot_s": 12.346693082945421,
+        "args": [
+          "${WORKSPACE}/sdk/emulator/emulator",
+          "-avd",
+          "official_expand_config32_2",
+          "-no-snapshot",
+          "-gpu",
+          "host",
+          "-memory",
+          "4096",
+          "-cores",
+          "4",
+          "-ports",
+          "22160,22161",
+          "-grpc",
+          "22162",
+          "-grpc-use-jwt",
+          "-no-audio",
+          "-no-boot-anim",
+          "-no-metrics",
+          "-verbose",
+          "-no-window",
+          "-partition-size",
+          "32768"
+        ],
+        "log": "${WORKSPACE}/logs/emulator-1793502847955506000-official_expand_config32_2.log",
+        "state": {
+          "pid": 12521,
+          "identity": "Sun Nov  1 11:14:07 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_expand_config32_2 -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window -partition-size 32768",
+          "args": [
+            "${WORKSPACE}/sdk/emulator/emulator",
+            "-avd",
+            "official_expand_config32_2",
+            "-no-snapshot",
+            "-gpu",
+            "host",
+            "-memory",
+            "4096",
+            "-cores",
+            "4",
+            "-ports",
+            "22160,22161",
+            "-grpc",
+            "22162",
+            "-grpc-use-jwt",
+            "-no-audio",
+            "-no-boot-anim",
+            "-no-metrics",
+            "-verbose",
+            "-no-window",
+            "-partition-size",
+            "32768"
+          ],
+          "avd": "official_expand_config32_2",
+          "started_unix": 1793502848.365303,
+          "boot_started_monotonic": 761681.00351125,
+          "log": "${WORKSPACE}/logs/emulator-1793502847955506000-official_expand_config32_2.log",
+          "window": false,
+          "serial": "emulator-22160",
+          "adb_port": 22150,
+          "gpu": "host"
+        }
+      },
+      "after": {
+        "total_bytes": 8302063616,
+        "reported_mount": "/data/user/0",
+        "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39   8107484 1065580   6894448  14% /data/user/0\next3 4096 2026871 1723616\n",
+        "log": "${WORKSPACE}/logs/1793502860711951000-expansion-retest-2-df-after"
+      },
+      "after_marker": {
+        "size": 1048576,
+        "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+      },
+      "after_marker_log": "${WORKSPACE}/logs/1793502860827223000-expansion-retest-2-marker-after",
+      "after_marker_matches_host": true,
+      "marker_three_way_match": true,
+      "growth_hardware": {
+        "path": "${WORKSPACE}/avd/official_expand_config32_2.avd/hardware-qemu.ini",
+        "text": "hw.cpu.arch = arm64\nhw.cpu.ncore = 4\nhw.ramSize = 4096\nhw.screen = multi-touch\nhw.mainKeys = true\nhw.touchpad0 = false\nhw.touchpad0.width = 600\nhw.touchpad0.height = 400\nhw.trackBall = true\nhw.keyboard = true\nhw.keyboard.lid = false\nhw.keyboard.charmap = qwerty2\nhw.dPad = true\nhw.rotaryInput = false\nhw.gsmModem = true\nhw.gps = true\nhw.battery = true\nhw.accelerometer = true\nhw.accelerometer_uncalibrated = true\nhw.gyroscope = true\nhw.audioInput = false\nhw.audioOutput = true\nhw.sdCard = true\ndisk.cachePartition = true\ndisk.cachePartition.path = ${WORKSPACE}/avd/official_expand_config32_2.avd/cache.img\ndisk.cachePartition.size = 66m\ntest.quitAfterBootTimeOut = -1\ntest.delayAdbTillBootComplete = 0\ntest.monitorAdb = 0\nhw.lcd.width = 1280\nhw.lcd.height = 720\nhw.lcd.depth = 32\nhw.lcd.circular = false\nhw.lcd.density = 240\nhw.lcd.transparent = false\nhw.lcd.backlight = true\nhw.lcd.vsync = 60\nhw.gltransport = pipe\nhw.gltransport.asg.writeBufferSize = 1048576\nhw.gltransport.asg.writeStepSize = 4096\nhw.gltransport.asg.dataRingSize = 32768\nhw.gltransport.drawFlushInterval = 800\nhw.displayRegion.0.1.xOffset = -1\nhw.displayRegion.0.1.yOffset = -1\nhw.displayRegion.0.1.width = 0\nhw.displayRegion.0.1.height = 0\nhw.displayRegion.0.2.xOffset = -1\nhw.displayRegion.0.2.yOffset = -1\nhw.displayRegion.0.2.width = 0\nhw.displayRegion.0.2.height = 0\nhw.displayRegion.0.3.xOffset = -1\nhw.displayRegion.0.3.yOffset = -1\nhw.displayRegion.0.3.width = 0\nhw.displayRegion.0.3.height = 0\nhw.display1.width = 0\nhw.display1.height = 0\nhw.display1.density = 0\nhw.display1.xOffset = -1\nhw.display1.yOffset = -1\nhw.display1.flag = 0\nhw.display2.width = 0\nhw.display2.height = 0\nhw.display2.density = 0\nhw.display2.xOffset = -1\nhw.display2.yOffset = -1\nhw.display2.flag = 0\nhw.display3.width = 0\nhw.display3.height = 0\nhw.display3.density = 0\nhw.display3.xOffset = -1\nhw.display3.yOffset = -1\nhw.display3.flag = 0\nhw.multi_display_window = false\nhw.hotplug_multi_display = false\nhw.gpu.enabled = true\nhw.gpu.mode = host\nhw.initialOrientation = landscape\nhw.camera.back = emulated\nhw.camera.back.orientation = 90\nhw.camera.front = none\nhw.camera.front.orientation = 90\nvm.heapSize = 576\nhw.sensors.light = true\nhw.sensors.pressure = true\nhw.sensors.humidity = true\nhw.sensors.proximity = true\nhw.sensors.magnetic_field = true\nhw.sensors.magnetic_field_uncalibrated = true\nhw.sensors.gyroscope_uncalibrated = true\nhw.sensors.orientation = true\nhw.sensors.temperature = true\nhw.sensors.rgbclight = false\nhw.sensor.hinge = false\nhw.sensor.hinge.count = 0\nhw.sensor.hinge.type = 0\nhw.sensor.hinge.sub_type = 0\nhw.sensor.hinge.resizable.config = 1\nhw.sensor.hinge.fold_to_displayRegion.0.1_at_posture = 1\nhw.sensor.roll = false\nhw.sensor.roll.count = 0\nhw.sensor.roll.resize_to_displayRegion.0.1_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.2_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.3_at_posture = 6\nhw.sensors.heart_rate = false\nhw.sensors.wrist_tilt = false\nhw.sensors.heading = false\nhw.useext4 = true\nkernel.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//kernel-ranchu\nkernel.newDeviceNaming = yes\nkernel.supportsYaffs2 = no\ndisk.ramdisk.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//ramdisk.img\ndisk.systemPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img\ndisk.systemPartition.size = 32g\ndisk.vendorPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img\ndisk.vendorPartition.size = 32g\ndisk.dataPartition.path = ${WORKSPACE}/avd/official_expand_config32_2.avd/userdata-qemu.img\ndisk.dataPartition.size = 32g\ndisk.encryptionKeyPartition.path = ${WORKSPACE}/avd/official_expand_config32_2.avd/encryptionkey.img\nPlayStore.enabled = false\navd.name = official_expand_config32_2\navd.id = official_expand_config32_2\nfastboot.forceColdBoot = true\nuserdata.useQcow2 = true\nfirstboot.bootFromDownloadableSnapshot = true\nfirstboot.bootFromLocalSnapshot = true\nfirstboot.saveToLocalSnapshot = true\nandroid.sdk.root = ${WORKSPACE}/sdk\nandroid.avd.home = ${WORKSPACE}/avd\nenvironment.width = 0\nenvironment.height = 0\n",
+        "partition_fields": {
+          "disk.cachePartition.path": "${WORKSPACE}/avd/official_expand_config32_2.avd/cache.img",
+          "disk.cachePartition.size": "66m",
+          "disk.systemPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img",
+          "disk.systemPartition.size": "32g",
+          "disk.vendorPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img",
+          "disk.vendorPartition.size": "32g",
+          "disk.dataPartition.path": "${WORKSPACE}/avd/official_expand_config32_2.avd/userdata-qemu.img",
+          "disk.dataPartition.size": "32g",
+          "disk.encryptionKeyPartition.path": "${WORKSPACE}/avd/official_expand_config32_2.avd/encryptionkey.img"
+        }
+      },
+      "growth_shutdown": {
+        "duration_s": 1.3696382499765605,
+        "returncode": 0,
+        "kill_started_monotonic": 761693.597062875,
+        "kill_finished_monotonic": 761693.609254875
+      },
+      "headers_after_growth": {
+        "cache.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 69206016,
+          "cluster_bits": 16,
+          "backing_file": "cache.img",
+          "backing_file_hex": "63616368652e696d67",
+          "file_size_bytes": 196616,
+          "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+        },
+        "encryptionkey.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 18874368,
+          "cluster_bits": 16,
+          "backing_file": "encryptionkey.img",
+          "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+          "file_size_bytes": 1966080,
+          "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+        },
+        "userdata-qemu.img": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "",
+          "backing_file_hex": "",
+          "file_size_bytes": 8454144,
+          "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+        },
+        "userdata-qemu.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "userdata-qemu.img",
+          "backing_file_hex": "75736572646174612d71656d752e696d67",
+          "file_size_bytes": 1610481664,
+          "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+        }
+      },
+      "free_bytes_after": 133198880768,
+      "guest_capacity_grew_to_32_gib_class": false,
+      "finding": "configured capacity did not yield a 32 GiB guest filesystem",
+      "task_owned_emulator_still_running": false,
+      "ports_still_occupied": [],
+      "finished_unix": 1793502862.27222
+    },
+    {
+      "round": 3,
+      "status": "failed",
+      "clone": "official_expand_config32_3",
+      "started_unix": 1793502862.272665,
+      "phase": "complete",
+      "free_bytes_before": 133198835712,
+      "clone_path": "${WORKSPACE}/avd/official_expand_config32_3.avd",
+      "headers_after_copy": {
+        "cache.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 69206016,
+          "cluster_bits": 16,
+          "backing_file": "cache.img",
+          "backing_file_hex": "63616368652e696d67",
+          "file_size_bytes": 196616,
+          "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+        },
+        "encryptionkey.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 18874368,
+          "cluster_bits": 16,
+          "backing_file": "encryptionkey.img",
+          "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+          "file_size_bytes": 1966080,
+          "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+        },
+        "userdata-qemu.img": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "",
+          "backing_file_hex": "",
+          "file_size_bytes": 8454144,
+          "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+        },
+        "userdata-qemu.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "userdata-qemu.img",
+          "backing_file_hex": "75736572646174612d71656d752e696d67",
+          "file_size_bytes": 1606811648,
+          "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+        }
+      },
+      "config_before": "AvdId=official_expand_config32_3\navd.ini.displayname=official_expand_config32_3\navd.ini.encoding=UTF-8\nPlayStore.enabled=false\nabi.type=arm64-v8a\ntag.id=google_apis\ntag.display=Google APIs\nimage.sysdir.1=system-images/android-34/google_apis/arm64-v8a/\nhw.cpu.arch=arm64\nhw.cpu.ncore=4\nhw.ramSize=4096\nhw.lcd.width=1280\nhw.lcd.height=720\nhw.lcd.density=240\nhw.initialOrientation=landscape\nhw.keyboard=yes\nhw.gpu.enabled=yes\nhw.gpu.mode=host\nhw.audioInput=no\nhw.battery=yes\nhw.gps=yes\nhw.accelerometer=yes\ndisk.dataPartition.size=8G\ndisk.cachePartition=yes\ndisk.cachePartition.size=66MB\nvm.heapSize=512\nfastboot.forceColdBoot=yes\nshowDeviceFrame=no\n",
+      "baseline_launch": {
+        "pid": 12605,
+        "boot_s": 12.28172266704496,
+        "args": [
+          "${WORKSPACE}/sdk/emulator/emulator",
+          "-avd",
+          "official_expand_config32_3",
+          "-no-snapshot",
+          "-gpu",
+          "host",
+          "-memory",
+          "4096",
+          "-cores",
+          "4",
+          "-ports",
+          "22160,22161",
+          "-grpc",
+          "22162",
+          "-grpc-use-jwt",
+          "-no-audio",
+          "-no-boot-anim",
+          "-no-metrics",
+          "-verbose",
+          "-no-window"
+        ],
+        "log": "${WORKSPACE}/logs/emulator-1793502862300995000-official_expand_config32_3.log",
+        "state": {
+          "pid": 12605,
+          "identity": "Sun Nov  1 11:14:22 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_expand_config32_3 -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window",
+          "args": [
+            "${WORKSPACE}/sdk/emulator/emulator",
+            "-avd",
+            "official_expand_config32_3",
+            "-no-snapshot",
+            "-gpu",
+            "host",
+            "-memory",
+            "4096",
+            "-cores",
+            "4",
+            "-ports",
+            "22160,22161",
+            "-grpc",
+            "22162",
+            "-grpc-use-jwt",
+            "-no-audio",
+            "-no-boot-anim",
+            "-no-metrics",
+            "-verbose",
+            "-no-window"
+          ],
+          "avd": "official_expand_config32_3",
+          "started_unix": 1793502862.710658,
+          "boot_started_monotonic": 761695.349031791,
+          "log": "${WORKSPACE}/logs/emulator-1793502862300995000-official_expand_config32_3.log",
+          "window": false,
+          "serial": "emulator-22160",
+          "adb_port": 22150,
+          "gpu": "host"
+        }
+      },
+      "before": {
+        "total_bytes": 8302063616,
+        "reported_mount": "/data/user/0",
+        "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39   8107484 1065776   6894252  14% /data/user/0\next3 4096 2026871 1723563\n",
+        "log": "${WORKSPACE}/logs/1793502874992347000-expansion-retest-3-df-before"
+      },
+      "before_marker": {
+        "size": 1048576,
+        "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+      },
+      "before_marker_log": "${WORKSPACE}/logs/1793502875068614000-expansion-retest-3-marker-before",
+      "before_marker_matches_host": true,
+      "baseline_hardware": {
+        "path": "${WORKSPACE}/avd/official_expand_config32_3.avd/hardware-qemu.ini",
+        "text": "hw.cpu.arch = arm64\nhw.cpu.ncore = 4\nhw.ramSize = 4096\nhw.screen = multi-touch\nhw.mainKeys = true\nhw.touchpad0 = false\nhw.touchpad0.width = 600\nhw.touchpad0.height = 400\nhw.trackBall = true\nhw.keyboard = true\nhw.keyboard.lid = false\nhw.keyboard.charmap = qwerty2\nhw.dPad = true\nhw.rotaryInput = false\nhw.gsmModem = true\nhw.gps = true\nhw.battery = true\nhw.accelerometer = true\nhw.accelerometer_uncalibrated = true\nhw.gyroscope = true\nhw.audioInput = false\nhw.audioOutput = true\nhw.sdCard = true\ndisk.cachePartition = true\ndisk.cachePartition.path = ${WORKSPACE}/avd/official_expand_config32_3.avd/cache.img\ndisk.cachePartition.size = 66m\ntest.quitAfterBootTimeOut = -1\ntest.delayAdbTillBootComplete = 0\ntest.monitorAdb = 0\nhw.lcd.width = 1280\nhw.lcd.height = 720\nhw.lcd.depth = 32\nhw.lcd.circular = false\nhw.lcd.density = 240\nhw.lcd.transparent = false\nhw.lcd.backlight = true\nhw.lcd.vsync = 60\nhw.gltransport = pipe\nhw.gltransport.asg.writeBufferSize = 1048576\nhw.gltransport.asg.writeStepSize = 4096\nhw.gltransport.asg.dataRingSize = 32768\nhw.gltransport.drawFlushInterval = 800\nhw.displayRegion.0.1.xOffset = -1\nhw.displayRegion.0.1.yOffset = -1\nhw.displayRegion.0.1.width = 0\nhw.displayRegion.0.1.height = 0\nhw.displayRegion.0.2.xOffset = -1\nhw.displayRegion.0.2.yOffset = -1\nhw.displayRegion.0.2.width = 0\nhw.displayRegion.0.2.height = 0\nhw.displayRegion.0.3.xOffset = -1\nhw.displayRegion.0.3.yOffset = -1\nhw.displayRegion.0.3.width = 0\nhw.displayRegion.0.3.height = 0\nhw.display1.width = 0\nhw.display1.height = 0\nhw.display1.density = 0\nhw.display1.xOffset = -1\nhw.display1.yOffset = -1\nhw.display1.flag = 0\nhw.display2.width = 0\nhw.display2.height = 0\nhw.display2.density = 0\nhw.display2.xOffset = -1\nhw.display2.yOffset = -1\nhw.display2.flag = 0\nhw.display3.width = 0\nhw.display3.height = 0\nhw.display3.density = 0\nhw.display3.xOffset = -1\nhw.display3.yOffset = -1\nhw.display3.flag = 0\nhw.multi_display_window = false\nhw.hotplug_multi_display = false\nhw.gpu.enabled = true\nhw.gpu.mode = host\nhw.initialOrientation = landscape\nhw.camera.back = emulated\nhw.camera.back.orientation = 90\nhw.camera.front = none\nhw.camera.front.orientation = 90\nvm.heapSize = 576\nhw.sensors.light = true\nhw.sensors.pressure = true\nhw.sensors.humidity = true\nhw.sensors.proximity = true\nhw.sensors.magnetic_field = true\nhw.sensors.magnetic_field_uncalibrated = true\nhw.sensors.gyroscope_uncalibrated = true\nhw.sensors.orientation = true\nhw.sensors.temperature = true\nhw.sensors.rgbclight = false\nhw.sensor.hinge = false\nhw.sensor.hinge.count = 0\nhw.sensor.hinge.type = 0\nhw.sensor.hinge.sub_type = 0\nhw.sensor.hinge.resizable.config = 1\nhw.sensor.hinge.fold_to_displayRegion.0.1_at_posture = 1\nhw.sensor.roll = false\nhw.sensor.roll.count = 0\nhw.sensor.roll.resize_to_displayRegion.0.1_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.2_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.3_at_posture = 6\nhw.sensors.heart_rate = false\nhw.sensors.wrist_tilt = false\nhw.sensors.heading = false\nhw.useext4 = true\nkernel.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//kernel-ranchu\nkernel.newDeviceNaming = yes\nkernel.supportsYaffs2 = no\ndisk.ramdisk.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//ramdisk.img\ndisk.systemPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img\ndisk.systemPartition.size = 4107m\ndisk.vendorPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img\ndisk.vendorPartition.size = 800m\ndisk.dataPartition.path = ${WORKSPACE}/avd/official_expand_config32_3.avd/userdata-qemu.img\ndisk.dataPartition.size = 8g\ndisk.encryptionKeyPartition.path = ${WORKSPACE}/avd/official_expand_config32_3.avd/encryptionkey.img\nPlayStore.enabled = false\navd.name = official_expand_config32_3\navd.id = official_expand_config32_3\nfastboot.forceColdBoot = true\nuserdata.useQcow2 = true\nfirstboot.bootFromDownloadableSnapshot = true\nfirstboot.bootFromLocalSnapshot = true\nfirstboot.saveToLocalSnapshot = true\nandroid.sdk.root = ${WORKSPACE}/sdk\nandroid.avd.home = ${WORKSPACE}/avd\nenvironment.width = 0\nenvironment.height = 0\n",
+        "partition_fields": {
+          "disk.cachePartition.path": "${WORKSPACE}/avd/official_expand_config32_3.avd/cache.img",
+          "disk.cachePartition.size": "66m",
+          "disk.systemPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img",
+          "disk.systemPartition.size": "4107m",
+          "disk.vendorPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img",
+          "disk.vendorPartition.size": "800m",
+          "disk.dataPartition.path": "${WORKSPACE}/avd/official_expand_config32_3.avd/userdata-qemu.img",
+          "disk.dataPartition.size": "8g",
+          "disk.encryptionKeyPartition.path": "${WORKSPACE}/avd/official_expand_config32_3.avd/encryptionkey.img"
+        }
+      },
+      "baseline_shutdown": {
+        "duration_s": 1.580314457998611,
+        "returncode": 0,
+        "kill_started_monotonic": 761707.854072875,
+        "kill_finished_monotonic": 761707.867925083
+      },
+      "headers_before_growth": {
+        "cache.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 69206016,
+          "cluster_bits": 16,
+          "backing_file": "cache.img",
+          "backing_file_hex": "63616368652e696d67",
+          "file_size_bytes": 196616,
+          "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+        },
+        "encryptionkey.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 18874368,
+          "cluster_bits": 16,
+          "backing_file": "encryptionkey.img",
+          "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+          "file_size_bytes": 1966080,
+          "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+        },
+        "userdata-qemu.img": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "",
+          "backing_file_hex": "",
+          "file_size_bytes": 8454144,
+          "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+        },
+        "userdata-qemu.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "userdata-qemu.img",
+          "backing_file_hex": "75736572646174612d71656d752e696d67",
+          "file_size_bytes": 1609891840,
+          "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+        }
+      },
+      "config_after": "AvdId=official_expand_config32_3\navd.ini.displayname=official_expand_config32_3\navd.ini.encoding=UTF-8\nPlayStore.enabled=false\nabi.type=arm64-v8a\ntag.id=google_apis\ntag.display=Google APIs\nimage.sysdir.1=system-images/android-34/google_apis/arm64-v8a/\nhw.cpu.arch=arm64\nhw.cpu.ncore=4\nhw.ramSize=4096\nhw.lcd.width=1280\nhw.lcd.height=720\nhw.lcd.density=240\nhw.initialOrientation=landscape\nhw.keyboard=yes\nhw.gpu.enabled=yes\nhw.gpu.mode=host\nhw.audioInput=no\nhw.battery=yes\nhw.gps=yes\nhw.accelerometer=yes\ndisk.dataPartition.size=32G\ndisk.cachePartition=yes\ndisk.cachePartition.size=66MB\nvm.heapSize=512\nfastboot.forceColdBoot=yes\nshowDeviceFrame=no\n",
+      "growth_launch": {
+        "pid": 12680,
+        "boot_s": 12.990307292086072,
+        "args": [
+          "${WORKSPACE}/sdk/emulator/emulator",
+          "-avd",
+          "official_expand_config32_3",
+          "-no-snapshot",
+          "-gpu",
+          "host",
+          "-memory",
+          "4096",
+          "-cores",
+          "4",
+          "-ports",
+          "22160,22161",
+          "-grpc",
+          "22162",
+          "-grpc-use-jwt",
+          "-no-audio",
+          "-no-boot-anim",
+          "-no-metrics",
+          "-verbose",
+          "-no-window",
+          "-partition-size",
+          "32768"
+        ],
+        "log": "${WORKSPACE}/logs/emulator-1793502876744432000-official_expand_config32_3.log",
+        "state": {
+          "pid": 12680,
+          "identity": "Sun Nov  1 11:14:36 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_expand_config32_3 -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window -partition-size 32768",
+          "args": [
+            "${WORKSPACE}/sdk/emulator/emulator",
+            "-avd",
+            "official_expand_config32_3",
+            "-no-snapshot",
+            "-gpu",
+            "host",
+            "-memory",
+            "4096",
+            "-cores",
+            "4",
+            "-ports",
+            "22160,22161",
+            "-grpc",
+            "22162",
+            "-grpc-use-jwt",
+            "-no-audio",
+            "-no-boot-anim",
+            "-no-metrics",
+            "-verbose",
+            "-no-window",
+            "-partition-size",
+            "32768"
+          ],
+          "avd": "official_expand_config32_3",
+          "started_unix": 1793502877.153514,
+          "boot_started_monotonic": 761709.792054083,
+          "log": "${WORKSPACE}/logs/emulator-1793502876744432000-official_expand_config32_3.log",
+          "window": false,
+          "serial": "emulator-22160",
+          "adb_port": 22150,
+          "gpu": "host"
+        }
+      },
+      "after": {
+        "total_bytes": 8302063616,
+        "reported_mount": "/data/user/0",
+        "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39   8107484 1065996   6894032  14% /data/user/0\next3 4096 2026871 1723513\n",
+        "log": "${WORKSPACE}/logs/1793502890143834000-expansion-retest-3-df-after"
+      },
+      "after_marker": {
+        "size": 1048576,
+        "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+      },
+      "after_marker_log": "${WORKSPACE}/logs/1793502890179853000-expansion-retest-3-marker-after",
+      "after_marker_matches_host": true,
+      "marker_three_way_match": true,
+      "growth_hardware": {
+        "path": "${WORKSPACE}/avd/official_expand_config32_3.avd/hardware-qemu.ini",
+        "text": "hw.cpu.arch = arm64\nhw.cpu.ncore = 4\nhw.ramSize = 4096\nhw.screen = multi-touch\nhw.mainKeys = true\nhw.touchpad0 = false\nhw.touchpad0.width = 600\nhw.touchpad0.height = 400\nhw.trackBall = true\nhw.keyboard = true\nhw.keyboard.lid = false\nhw.keyboard.charmap = qwerty2\nhw.dPad = true\nhw.rotaryInput = false\nhw.gsmModem = true\nhw.gps = true\nhw.battery = true\nhw.accelerometer = true\nhw.accelerometer_uncalibrated = true\nhw.gyroscope = true\nhw.audioInput = false\nhw.audioOutput = true\nhw.sdCard = true\ndisk.cachePartition = true\ndisk.cachePartition.path = ${WORKSPACE}/avd/official_expand_config32_3.avd/cache.img\ndisk.cachePartition.size = 66m\ntest.quitAfterBootTimeOut = -1\ntest.delayAdbTillBootComplete = 0\ntest.monitorAdb = 0\nhw.lcd.width = 1280\nhw.lcd.height = 720\nhw.lcd.depth = 32\nhw.lcd.circular = false\nhw.lcd.density = 240\nhw.lcd.transparent = false\nhw.lcd.backlight = true\nhw.lcd.vsync = 60\nhw.gltransport = pipe\nhw.gltransport.asg.writeBufferSize = 1048576\nhw.gltransport.asg.writeStepSize = 4096\nhw.gltransport.asg.dataRingSize = 32768\nhw.gltransport.drawFlushInterval = 800\nhw.displayRegion.0.1.xOffset = -1\nhw.displayRegion.0.1.yOffset = -1\nhw.displayRegion.0.1.width = 0\nhw.displayRegion.0.1.height = 0\nhw.displayRegion.0.2.xOffset = -1\nhw.displayRegion.0.2.yOffset = -1\nhw.displayRegion.0.2.width = 0\nhw.displayRegion.0.2.height = 0\nhw.displayRegion.0.3.xOffset = -1\nhw.displayRegion.0.3.yOffset = -1\nhw.displayRegion.0.3.width = 0\nhw.displayRegion.0.3.height = 0\nhw.display1.width = 0\nhw.display1.height = 0\nhw.display1.density = 0\nhw.display1.xOffset = -1\nhw.display1.yOffset = -1\nhw.display1.flag = 0\nhw.display2.width = 0\nhw.display2.height = 0\nhw.display2.density = 0\nhw.display2.xOffset = -1\nhw.display2.yOffset = -1\nhw.display2.flag = 0\nhw.display3.width = 0\nhw.display3.height = 0\nhw.display3.density = 0\nhw.display3.xOffset = -1\nhw.display3.yOffset = -1\nhw.display3.flag = 0\nhw.multi_display_window = false\nhw.hotplug_multi_display = false\nhw.gpu.enabled = true\nhw.gpu.mode = host\nhw.initialOrientation = landscape\nhw.camera.back = emulated\nhw.camera.back.orientation = 90\nhw.camera.front = none\nhw.camera.front.orientation = 90\nvm.heapSize = 576\nhw.sensors.light = true\nhw.sensors.pressure = true\nhw.sensors.humidity = true\nhw.sensors.proximity = true\nhw.sensors.magnetic_field = true\nhw.sensors.magnetic_field_uncalibrated = true\nhw.sensors.gyroscope_uncalibrated = true\nhw.sensors.orientation = true\nhw.sensors.temperature = true\nhw.sensors.rgbclight = false\nhw.sensor.hinge = false\nhw.sensor.hinge.count = 0\nhw.sensor.hinge.type = 0\nhw.sensor.hinge.sub_type = 0\nhw.sensor.hinge.resizable.config = 1\nhw.sensor.hinge.fold_to_displayRegion.0.1_at_posture = 1\nhw.sensor.roll = false\nhw.sensor.roll.count = 0\nhw.sensor.roll.resize_to_displayRegion.0.1_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.2_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.3_at_posture = 6\nhw.sensors.heart_rate = false\nhw.sensors.wrist_tilt = false\nhw.sensors.heading = false\nhw.useext4 = true\nkernel.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//kernel-ranchu\nkernel.newDeviceNaming = yes\nkernel.supportsYaffs2 = no\ndisk.ramdisk.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//ramdisk.img\ndisk.systemPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img\ndisk.systemPartition.size = 32g\ndisk.vendorPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img\ndisk.vendorPartition.size = 32g\ndisk.dataPartition.path = ${WORKSPACE}/avd/official_expand_config32_3.avd/userdata-qemu.img\ndisk.dataPartition.size = 32g\ndisk.encryptionKeyPartition.path = ${WORKSPACE}/avd/official_expand_config32_3.avd/encryptionkey.img\nPlayStore.enabled = false\navd.name = official_expand_config32_3\navd.id = official_expand_config32_3\nfastboot.forceColdBoot = true\nuserdata.useQcow2 = true\nfirstboot.bootFromDownloadableSnapshot = true\nfirstboot.bootFromLocalSnapshot = true\nfirstboot.saveToLocalSnapshot = true\nandroid.sdk.root = ${WORKSPACE}/sdk\nandroid.avd.home = ${WORKSPACE}/avd\nenvironment.width = 0\nenvironment.height = 0\n",
+        "partition_fields": {
+          "disk.cachePartition.path": "${WORKSPACE}/avd/official_expand_config32_3.avd/cache.img",
+          "disk.cachePartition.size": "66m",
+          "disk.systemPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img",
+          "disk.systemPartition.size": "32g",
+          "disk.vendorPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img",
+          "disk.vendorPartition.size": "32g",
+          "disk.dataPartition.path": "${WORKSPACE}/avd/official_expand_config32_3.avd/userdata-qemu.img",
+          "disk.dataPartition.size": "32g",
+          "disk.encryptionKeyPartition.path": "${WORKSPACE}/avd/official_expand_config32_3.avd/encryptionkey.img"
+        }
+      },
+      "growth_shutdown": {
+        "duration_s": 2.074588042101823,
+        "returncode": 0,
+        "kill_started_monotonic": 761722.93597475,
+        "kill_finished_monotonic": 761722.949978625
+      },
+      "headers_after_growth": {
+        "cache.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 69206016,
+          "cluster_bits": 16,
+          "backing_file": "cache.img",
+          "backing_file_hex": "63616368652e696d67",
+          "file_size_bytes": 196616,
+          "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+        },
+        "encryptionkey.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 18874368,
+          "cluster_bits": 16,
+          "backing_file": "encryptionkey.img",
+          "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+          "file_size_bytes": 1966080,
+          "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+        },
+        "userdata-qemu.img": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "",
+          "backing_file_hex": "",
+          "file_size_bytes": 8454144,
+          "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+        },
+        "userdata-qemu.img.qcow2": {
+          "version": 3,
+          "virtual_size_bytes": 8589934592,
+          "cluster_bits": 16,
+          "backing_file": "userdata-qemu.img",
+          "backing_file_hex": "75736572646174612d71656d752e696d67",
+          "file_size_bytes": 1611726848,
+          "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+        }
+      },
+      "free_bytes_after": 133132623872,
+      "guest_capacity_grew_to_32_gib_class": false,
+      "finding": "configured capacity did not yield a 32 GiB guest filesystem",
+      "task_owned_emulator_still_running": false,
+      "ports_still_occupied": [],
+      "finished_unix": 1793502892.3017752
+    }
+  ],
+  "method": "Each stopped APFS clone is first booted at the preserved 8 GiB configuration to verify marker and df, stopped with sync, configured to disk.dataPartition.size=32G, then launched with official -partition-size 32768. No wipe, image conversion, image resize, overlay deletion, or manual guest filesystem resizing.",
+  "source_protection": "Source backup is only read and copied. It is never launched or opened for write. Configuration, file sizes/mtimes, and qcow-header fingerprints are compared before and after.",
+  "reserve_bytes": 21474836480,
+  "expected_marker": {
+    "host_path": "${WORKSPACE}/results/expansion-marker.bin",
+    "guest_path": "/data/local/tmp/official-baseline/expansion-marker.bin",
+    "size": 1048576,
+    "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+  },
+  "source_before": {
+    "config_sha256": "e2df36fc1d79d20f852bbca7d99bb28f2c54a59005d3fadbf948f8b9de53a1d9",
+    "files": {
+      "AVD.conf": {
+        "size": 183,
+        "mtime_ns": 1793496716594402162
+      },
+      "bootcompleted.ini": {
+        "size": 0,
+        "mtime_ns": 1793500511312087975
+      },
+      "cache.img": {
+        "size": 69206016,
+        "mtime_ns": 1793496709343727480
+      },
+      "cache.img.qcow2": {
+        "size": 196616,
+        "mtime_ns": 1793496715483548688
+      },
+      "config.ini": {
+        "size": 645,
+        "mtime_ns": 1793500514367915557
+      },
+      "emu-launch-params.txt": {
+        "size": 276,
+        "mtime_ns": 1793500499892827649
+      },
+      "emulator-user.ini": {
+        "size": 113,
+        "mtime_ns": 1793500513445240389
+      },
+      "encryptionkey.img": {
+        "size": 18874368,
+        "mtime_ns": 1793496709342950330
+      },
+      "encryptionkey.img.qcow2": {
+        "size": 1966080,
+        "mtime_ns": 1793500512636437626
+      },
+      "hardware-qemu.ini": {
+        "size": 4162,
+        "mtime_ns": 1793500500327799409
+      },
+      "initrd": {
+        "size": 1793532,
+        "mtime_ns": 1793500500237015974
+      },
+      "modem_simulator/etc/modem_simulator/files/numeric_operator.xml": {
+        "size": 297,
+        "mtime_ns": 1793500500077729539
+      },
+      "modem_simulator/iccprofile_for_carrierapitests.xml": {
+        "size": 16537,
+        "mtime_ns": 1793500500078165661
+      },
+      "modem_simulator/iccprofile_for_sim0.xml": {
+        "size": 14747,
+        "mtime_ns": 1793500513446164258
+      },
+      "modem_simulator/modem_nvram.json": {
+        "size": 164,
+        "mtime_ns": 1793500513445765094
+      },
+      "netsim.ini": {
+        "size": 38,
+        "mtime_ns": 1793496716385239447
+      },
+      "qemu-version.txt": {
+        "size": 1,
+        "mtime_ns": 1793496708085522379
+      },
+      "read-snapshot.txt": {
+        "size": 0,
+        "mtime_ns": 1793500500331323886
+      },
+      "tmpAdbCmds/adbcommand04bd2ca0-5d45-4a59-91b3-b43e7fcd166b": {
+        "size": 14,
+        "mtime_ns": 1793499536589424440
+      },
+      "tmpAdbCmds/adbcommand096a8ad0-9b27-483b-98cc-15c2ff44227f": {
+        "size": 14,
+        "mtime_ns": 1793499597217706477
+      },
+      "tmpAdbCmds/adbcommand1203b312-5ad9-4928-abf3-9f8030d73efe": {
+        "size": 14,
+        "mtime_ns": 1793499961910102772
+      },
+      "tmpAdbCmds/adbcommand1f1327ff-5e6d-4130-b553-222f3e63928b": {
+        "size": 14,
+        "mtime_ns": 1793499976451759106
+      },
+      "tmpAdbCmds/adbcommand31557600-16ab-44e8-ad14-bdc045396a52": {
+        "size": 14,
+        "mtime_ns": 1793499932105236301
+      },
+      "tmpAdbCmds/adbcommand52fed6a1-4f79-43e3-8e3c-90b06548d272": {
+        "size": 0,
+        "mtime_ns": 1793499549902367188
+      },
+      "tmpAdbCmds/adbcommand5a4b7503-debf-481c-bb5a-e9633ae5a274": {
+        "size": 149,
+        "mtime_ns": 1793499519115331882
+      },
+      "tmpAdbCmds/adbcommand8492a227-4017-4d10-b119-30e9d59cfb95": {
+        "size": 14,
+        "mtime_ns": 1793499844061560838
+      },
+      "tmpAdbCmds/adbcommanda847c2be-a6b8-453f-97ad-266dc5473797": {
+        "size": 14,
+        "mtime_ns": 1793499903134392929
+      },
+      "tmpAdbCmds/adbcommandb55c8b7e-5c65-492b-b0fb-4f82d90d1ebd": {
+        "size": 14,
+        "mtime_ns": 1793499873115754505
+      },
+      "tmpAdbCmds/adbcommandbfccf1cf-a56f-42e0-8fd3-f34d10725f95": {
+        "size": 14,
+        "mtime_ns": 1793499858606034945
+      },
+      "tmpAdbCmds/adbcommandd05204a9-a2e4-41a4-8de2-a11563867254": {
+        "size": 14,
+        "mtime_ns": 1793499581741759156
+      },
+      "tmpAdbCmds/adbcommandd145a71f-4197-43d0-a682-110335321fac": {
+        "size": 14,
+        "mtime_ns": 1793499947495847330
+      },
+      "tmpAdbCmds/adbcommandd84fab72-7773-40c2-b743-52aa510281a8": {
+        "size": 14,
+        "mtime_ns": 1793499888638790108
+      },
+      "tmpAdbCmds/adbcommanddac5cb0c-7184-4451-a051-4cd55b77c4c0": {
+        "size": 14,
+        "mtime_ns": 1793500514193009476
+      },
+      "tmpAdbCmds/adbcommanded2f4146-6a3f-420a-ad09-76d86ca95406": {
+        "size": 14,
+        "mtime_ns": 1793499823578581656
+      },
+      "tmpAdbCmds/adbcommandf82f66de-dc5c-4f8b-9e93-fc66e3e84823": {
+        "size": 179,
+        "mtime_ns": 1793499916521925868
+      },
+      "tmpAdbCmds/adbcommandf859f435-3e3e-4635-989f-b9dba1585bd9": {
+        "size": 14,
+        "mtime_ns": 1793499566383918342
+      },
+      "userdata-qemu.img": {
+        "size": 8454144,
+        "mtime_ns": 1793496709326839593
+      },
+      "userdata-qemu.img.qcow2": {
+        "size": 1606811648,
+        "mtime_ns": 1793500512836793079
+      },
+      "version_num.cache": {
+        "size": 9,
+        "mtime_ns": 1793496715484914034
+      }
+    },
+    "qcow_headers": {
+      "cache.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 69206016,
+        "cluster_bits": 16,
+        "backing_file": "cache.img",
+        "backing_file_hex": "63616368652e696d67",
+        "file_size_bytes": 196616,
+        "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+      },
+      "encryptionkey.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 18874368,
+        "cluster_bits": 16,
+        "backing_file": "encryptionkey.img",
+        "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+        "file_size_bytes": 1966080,
+        "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+      },
+      "userdata-qemu.img": {
+        "version": 3,
+        "virtual_size_bytes": 8589934592,
+        "cluster_bits": 16,
+        "backing_file": "",
+        "backing_file_hex": "",
+        "file_size_bytes": 8454144,
+        "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+      },
+      "userdata-qemu.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 8589934592,
+        "cluster_bits": 16,
+        "backing_file": "userdata-qemu.img",
+        "backing_file_hex": "75736572646174612d71656d752e696d67",
+        "file_size_bytes": 1606811648,
+        "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+      }
+    }
+  },
+  "source_config": "AvdId=official_expansion_backup\navd.ini.displayname=official_expansion_backup\navd.ini.encoding=UTF-8\nPlayStore.enabled=false\nabi.type=arm64-v8a\ntag.id=google_apis\ntag.display=Google APIs\nimage.sysdir.1=system-images/android-34/google_apis/arm64-v8a/\nhw.cpu.arch=arm64\nhw.cpu.ncore=4\nhw.ramSize=4096\nhw.lcd.width=1280\nhw.lcd.height=720\nhw.lcd.density=240\nhw.initialOrientation=landscape\nhw.keyboard=yes\nhw.gpu.enabled=yes\nhw.gpu.mode=host\nhw.audioInput=no\nhw.battery=yes\nhw.gps=yes\nhw.accelerometer=yes\ndisk.dataPartition.size=8G\ndisk.cachePartition=yes\ndisk.cachePartition.size=66MB\nvm.heapSize=512\nfastboot.forceColdBoot=yes\nshowDeviceFrame=no\n",
+  "first_trial_reference": "${WORKSPACE}/results/partition_expansion.json",
+  "first_trial_marker_matches_host": true,
+  "source_after": {
+    "config_sha256": "e2df36fc1d79d20f852bbca7d99bb28f2c54a59005d3fadbf948f8b9de53a1d9",
+    "files": {
+      "AVD.conf": {
+        "size": 183,
+        "mtime_ns": 1793496716594402162
+      },
+      "bootcompleted.ini": {
+        "size": 0,
+        "mtime_ns": 1793500511312087975
+      },
+      "cache.img": {
+        "size": 69206016,
+        "mtime_ns": 1793496709343727480
+      },
+      "cache.img.qcow2": {
+        "size": 196616,
+        "mtime_ns": 1793496715483548688
+      },
+      "config.ini": {
+        "size": 645,
+        "mtime_ns": 1793500514367915557
+      },
+      "emu-launch-params.txt": {
+        "size": 276,
+        "mtime_ns": 1793500499892827649
+      },
+      "emulator-user.ini": {
+        "size": 113,
+        "mtime_ns": 1793500513445240389
+      },
+      "encryptionkey.img": {
+        "size": 18874368,
+        "mtime_ns": 1793496709342950330
+      },
+      "encryptionkey.img.qcow2": {
+        "size": 1966080,
+        "mtime_ns": 1793500512636437626
+      },
+      "hardware-qemu.ini": {
+        "size": 4162,
+        "mtime_ns": 1793500500327799409
+      },
+      "initrd": {
+        "size": 1793532,
+        "mtime_ns": 1793500500237015974
+      },
+      "modem_simulator/etc/modem_simulator/files/numeric_operator.xml": {
+        "size": 297,
+        "mtime_ns": 1793500500077729539
+      },
+      "modem_simulator/iccprofile_for_carrierapitests.xml": {
+        "size": 16537,
+        "mtime_ns": 1793500500078165661
+      },
+      "modem_simulator/iccprofile_for_sim0.xml": {
+        "size": 14747,
+        "mtime_ns": 1793500513446164258
+      },
+      "modem_simulator/modem_nvram.json": {
+        "size": 164,
+        "mtime_ns": 1793500513445765094
+      },
+      "netsim.ini": {
+        "size": 38,
+        "mtime_ns": 1793496716385239447
+      },
+      "qemu-version.txt": {
+        "size": 1,
+        "mtime_ns": 1793496708085522379
+      },
+      "read-snapshot.txt": {
+        "size": 0,
+        "mtime_ns": 1793500500331323886
+      },
+      "tmpAdbCmds/adbcommand04bd2ca0-5d45-4a59-91b3-b43e7fcd166b": {
+        "size": 14,
+        "mtime_ns": 1793499536589424440
+      },
+      "tmpAdbCmds/adbcommand096a8ad0-9b27-483b-98cc-15c2ff44227f": {
+        "size": 14,
+        "mtime_ns": 1793499597217706477
+      },
+      "tmpAdbCmds/adbcommand1203b312-5ad9-4928-abf3-9f8030d73efe": {
+        "size": 14,
+        "mtime_ns": 1793499961910102772
+      },
+      "tmpAdbCmds/adbcommand1f1327ff-5e6d-4130-b553-222f3e63928b": {
+        "size": 14,
+        "mtime_ns": 1793499976451759106
+      },
+      "tmpAdbCmds/adbcommand31557600-16ab-44e8-ad14-bdc045396a52": {
+        "size": 14,
+        "mtime_ns": 1793499932105236301
+      },
+      "tmpAdbCmds/adbcommand52fed6a1-4f79-43e3-8e3c-90b06548d272": {
+        "size": 0,
+        "mtime_ns": 1793499549902367188
+      },
+      "tmpAdbCmds/adbcommand5a4b7503-debf-481c-bb5a-e9633ae5a274": {
+        "size": 149,
+        "mtime_ns": 1793499519115331882
+      },
+      "tmpAdbCmds/adbcommand8492a227-4017-4d10-b119-30e9d59cfb95": {
+        "size": 14,
+        "mtime_ns": 1793499844061560838
+      },
+      "tmpAdbCmds/adbcommanda847c2be-a6b8-453f-97ad-266dc5473797": {
+        "size": 14,
+        "mtime_ns": 1793499903134392929
+      },
+      "tmpAdbCmds/adbcommandb55c8b7e-5c65-492b-b0fb-4f82d90d1ebd": {
+        "size": 14,
+        "mtime_ns": 1793499873115754505
+      },
+      "tmpAdbCmds/adbcommandbfccf1cf-a56f-42e0-8fd3-f34d10725f95": {
+        "size": 14,
+        "mtime_ns": 1793499858606034945
+      },
+      "tmpAdbCmds/adbcommandd05204a9-a2e4-41a4-8de2-a11563867254": {
+        "size": 14,
+        "mtime_ns": 1793499581741759156
+      },
+      "tmpAdbCmds/adbcommandd145a71f-4197-43d0-a682-110335321fac": {
+        "size": 14,
+        "mtime_ns": 1793499947495847330
+      },
+      "tmpAdbCmds/adbcommandd84fab72-7773-40c2-b743-52aa510281a8": {
+        "size": 14,
+        "mtime_ns": 1793499888638790108
+      },
+      "tmpAdbCmds/adbcommanddac5cb0c-7184-4451-a051-4cd55b77c4c0": {
+        "size": 14,
+        "mtime_ns": 1793500514193009476
+      },
+      "tmpAdbCmds/adbcommanded2f4146-6a3f-420a-ad09-76d86ca95406": {
+        "size": 14,
+        "mtime_ns": 1793499823578581656
+      },
+      "tmpAdbCmds/adbcommandf82f66de-dc5c-4f8b-9e93-fc66e3e84823": {
+        "size": 179,
+        "mtime_ns": 1793499916521925868
+      },
+      "tmpAdbCmds/adbcommandf859f435-3e3e-4635-989f-b9dba1585bd9": {
+        "size": 14,
+        "mtime_ns": 1793499566383918342
+      },
+      "userdata-qemu.img": {
+        "size": 8454144,
+        "mtime_ns": 1793496709326839593
+      },
+      "userdata-qemu.img.qcow2": {
+        "size": 1606811648,
+        "mtime_ns": 1793500512836793079
+      },
+      "version_num.cache": {
+        "size": 9,
+        "mtime_ns": 1793496715484914034
+      }
+    },
+    "qcow_headers": {
+      "cache.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 69206016,
+        "cluster_bits": 16,
+        "backing_file": "cache.img",
+        "backing_file_hex": "63616368652e696d67",
+        "file_size_bytes": 196616,
+        "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+      },
+      "encryptionkey.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 18874368,
+        "cluster_bits": 16,
+        "backing_file": "encryptionkey.img",
+        "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+        "file_size_bytes": 1966080,
+        "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+      },
+      "userdata-qemu.img": {
+        "version": 3,
+        "virtual_size_bytes": 8589934592,
+        "cluster_bits": 16,
+        "backing_file": "",
+        "backing_file_hex": "",
+        "file_size_bytes": 8454144,
+        "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+      },
+      "userdata-qemu.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 8589934592,
+        "cluster_bits": 16,
+        "backing_file": "userdata-qemu.img",
+        "backing_file_hex": "75736572646174612d71656d752e696d67",
+        "file_size_bytes": 1606811648,
+        "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+      }
+    }
+  },
+  "source_backup_unchanged": true,
+  "restored_runtime_avd_name": "official_clean",
+  "source_avd_was_started": false,
+  "finished_unix": 1793502892.307717
+}

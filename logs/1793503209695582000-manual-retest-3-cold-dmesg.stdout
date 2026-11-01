@@ -1,0 +1,120 @@
+[    9.290880] servicemanager: Could not find android.hardware.secure_element.ISecureElement/SIM1 in the VINTF manifest.
+[    9.298723] servicemanager: VINTF HALs require names in the format type/instance (e.g. some.package.foo.IFoo/default) but got: suspend_control
+[    9.298810] servicemanager: Found android.hardware.bluetooth.IBluetoothHci/default in device VINTF manifest.
+[    9.373621] servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.
+[    9.403539] servicemanager: Found android.hardware.radio.data.IRadioData/slot1 in device VINTF manifest.
+[    9.409293] servicemanager: Found android.hardware.bluetooth.audio.IBluetoothAudioProviderFactory/default in device VINTF manifest.
+[    9.409495] servicemanager: Found android.hardware.bluetooth.audio.IBluetoothAudioProviderFactory/default in device VINTF manifest.
+[    9.411446] servicemanager: Found android.hardware.radio.data.IRadioData/slot1 in device VINTF manifest.
+[    9.411804] servicemanager: Found android.hardware.radio.messaging.IRadioMessaging/slot1 in device VINTF manifest.
+[    9.412079] servicemanager: Found android.hardware.radio.modem.IRadioModem/slot1 in device VINTF manifest.
+[    9.412108] servicemanager: Found android.hardware.radio.network.IRadioNetwork/slot1 in device VINTF manifest.
+[    9.412147] servicemanager: Found android.hardware.radio.sim.IRadioSim/slot1 in device VINTF manifest.
+[    9.413507] servicemanager: Found android.hardware.radio.voice.IRadioVoice/slot1 in device VINTF manifest.
+[    9.413846] servicemanager: Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.
+[    9.415215] servicemanager: Found android.hardware.radio.modem.IRadioModem/slot1 in device VINTF manifest.
+[    9.424500] servicemanager: Found android.hardware.radio.data.IRadioData/slot1 in device VINTF manifest.
+[    9.425191] servicemanager: Found android.hardware.radio.messaging.IRadioMessaging/slot1 in device VINTF manifest.
+[    9.425393] servicemanager: Found android.hardware.radio.network.IRadioNetwork/slot1 in device VINTF manifest.
+[    9.425563] servicemanager: Found android.hardware.radio.sim.IRadioSim/slot1 in device VINTF manifest.
+[    9.425853] servicemanager: Found android.hardware.radio.voice.IRadioVoice/slot1 in device VINTF manifest.
+[    9.426185] servicemanager: Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.
+[    9.426210] servicemanager: Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.
+[    9.490064] servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.
+[    9.516659] servicemanager: Found android.hardware.radio.config.IRadioConfig/default in device VINTF manifest.
+[    9.812984] servicemanager: Found android.hardware.power.IPower/default in device VINTF manifest.
+[    9.837376] apexd: markBootCompleted() received by ApexService
+[    9.842701] init: processing action (sys.boot_completed=1) from (/system/etc/init/hw/init.rc:1224)
+[    9.842760] init: starting service 'exec 20 (/bin/rm -rf /data/per_boot)'...
+[    9.843287] init: ... started service 'exec 20 (/bin/rm -rf /data/per_boot)' has pid 1325
+[    9.843294] init: SVC_EXEC service 'exec 20 (/bin/rm -rf /data/per_boot)' pid 1325 (uid 1000 gid 1000+0 context default) started; waiting...
+[    9.848208] init: Service 'exec 20 (/bin/rm -rf /data/per_boot)' (pid 1325) exited with status 0 waiting took 0.005000 seconds
+[    9.848213] init: Sending signal 9 to service 'exec 20 (/bin/rm -rf /data/per_boot)' (pid 1325) process group...
+[    9.848239] libprocessgroup: Successfully killed process cgroup uid 1000 pid 1325 in 0ms
+[    9.848611] init: Encryption policy of /data/per_boot set to 96ffc271c070dff74507174e62472092 v2 modes 1/4 flags 0x2
+[    9.848617] init: processing action (sys.boot_completed=1) from (/vendor/etc/init/hw/init.ranchu.rc:195)
+[    9.848698] init: processing action (sys.boot_completed=1 && sys.bootstat.first_boot_completed=0) from (/system/etc/init/bootstat.rc:67)
+[    9.848735] init: starting service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)'...
+[    9.849154] init: ... started service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)' has pid 1327
+[    9.849390] init: processing action (sys.boot_completed=1) from (/system/etc/init/dmesgd.rc:4)
+[    9.849724] init: processing action (sys.boot_completed=1) from (/system/etc/init/flags_health_check.rc:7)
+[    9.852273] init: processing action (persist.dbg.keep_debugfs_mounted= && ro.product.debugfs_restrictions.enabled=true && sys.boot_completed=1) from (/system/etc/init/init-debug.rc:15)
+[    9.852693] init: processing action (lmkd.reinit=0 && sys.boot_completed=1) from (/system/etc/init/lmkd.rc:14)
+[    9.852803] init: processing action (sys.boot_completed=1) from (/system/etc/init/logd.rc:34)
+[    9.852838] init: starting service 'logd-auditctl'...
+[    9.853915] init: ... started service 'logd-auditctl' has pid 1329
+[    9.853927] init: processing action (sys.boot_completed=1) from (/system/etc/init/perfetto.rc:130)
+[    9.853963] init: starting service 'exec 22 (/system/bin/perfetto -c /data/misc/perfetto-configs/stopboottracetrigger.pbtxt --txt)'...
+[    9.854186] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[    9.854288] init: ... started service 'exec 22 (/system/bin/perfetto -c /data/misc/perfetto-configs/stopboottracetrigger.pbtxt --txt)' has pid 1330
+[    9.854293] init: SVC_EXEC service 'exec 22 (/system/bin/perfetto -c /data/misc/perfetto-configs/stopboottracetrigger.pbtxt --txt)' pid 1330 (uid 0 gid 0+0 context default) started; waiting...
+[    9.856406] init: Service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)' (pid 1327) exited with status 0 oneshot service took 0.007000 seconds in background
+[    9.856408] init: Sending signal 9 to service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)' (pid 1327) process group...
+[    9.856427] libprocessgroup: Successfully killed process cgroup uid 1000 pid 1327 in 0ms
+[    9.857130] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[    9.857511] selinux: SELinux: Skipping restorecon on directory(/data/system_ce/0)
+[    9.858035] selinux: SELinux: Skipping restorecon on directory(/data/vendor_ce/0)
+[    9.858352] selinux: SELinux: Skipping restorecon on directory(/data/misc_ce/0)
+[    9.858860] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[    9.859633] init: Service 'logd-auditctl' (pid 1329) exited with status 0 oneshot service took 0.006000 seconds in background
+[    9.859635] init: Sending signal 9 to service 'logd-auditctl' (pid 1329) process group...
+[    9.859649] libprocessgroup: Successfully killed process cgroup uid 1036 pid 1329 in 0ms
+[    9.861096] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[    9.863789] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[    9.864767] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[    9.869812] init: Service 'exec 22 (/system/bin/perfetto -c /data/misc/perfetto-configs/stopboottracetrigger.pbtxt --txt)' (pid 1330) exited with status 1 waiting took 0.015000 seconds
+[    9.869815] init: Sending signal 9 to service 'exec 22 (/system/bin/perfetto -c /data/misc/perfetto-configs/stopboottracetrigger.pbtxt --txt)' (pid 1330) process group...
+[    9.869835] libprocessgroup: Successfully killed process cgroup uid 0 pid 1330 in 0ms
+[    9.869868] init: processing action (sys.boot_completed=1 && sys.wifitracing.started=0) from (/system/etc/init/wifi.rc:28)
+[    9.869914] selinux: SELinux: Could not get canonical path for /sys/kernel/debug/tracing/instances/wifi restorecon: No such file or directory.
+[    9.877800] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[    9.881344] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.
+[    9.898813] apexd: destroyCeSnapshotsNotSpecified() received by ApexService user_id : 0 retain_rollback_ids : []
+[    9.912097] init: processing action (dev.bootcomplete=1 && vendor.qemu.dev.bootcomplete=0) from (/vendor/etc/init/hw/init.ranchu.rc:107)
+[    9.912366] init: starting service 'qemu-props-bootcomplete'...
+[    9.913203] init: ... started service 'qemu-props-bootcomplete' has pid 1368
+[    9.913259] init: starting service 'ranchu-setup'...
+[    9.914085] init: ... started service 'ranchu-setup' has pid 1369
+[    9.914107] init: processing action (persist.sys.zram_enabled=1 && sys-boot-completed-set) from (/vendor/etc/init/hw/init.ranchu.rc:198)
+[    9.915369] zram0: detected capacity change from 0 to 6025224
+[    9.919591] mkswap: Swapspace size: 3012608k, UUID=ef46349b-2c4a-4c87-9431-099e564716a3
+[    9.920132] Adding 3012608k swap on /dev/block/zram0.  Priority:-2 extents:1 across:3012608k SS
+[    9.923551] init: Service 'qemu-props-bootcomplete' (pid 1368) exited with status 0 oneshot service took 0.010000 seconds in background
+[    9.923555] init: Sending signal 9 to service 'qemu-props-bootcomplete' (pid 1368) process group...
+[    9.923587] libprocessgroup: Successfully killed process cgroup uid 0 pid 1368 in 0ms
+[    9.924437] init: Service 'ranchu-setup' (pid 1369) exited with status 0 oneshot service took 0.010000 seconds in background
+[    9.924440] init: Sending signal 9 to service 'ranchu-setup' (pid 1369) process group...
+[    9.924450] libprocessgroup: Successfully killed process cgroup uid 0 pid 1369 in 0ms
+[    9.925318] init: processing action (bootreceiver.enable=1 && dmesgd.start=1 && ro.product.cpu.abilist64=*) from (/system/etc/init/dmesgd.rc:12)
+[    9.925379] init: starting service 'dmesgd'...
+[    9.926852] init: ... started service 'dmesgd' has pid 1375
+[    9.927086] init: processing action (lmkd.reinit=1) from (/system/etc/init/lmkd.rc:10)
+[    9.927124] init: starting service 'exec 23 (/system/bin/lmkd --reinit)'...
+[    9.927626] init: ... started service 'exec 23 (/system/bin/lmkd --reinit)' has pid 1376
+[    9.927832] init: processing action (sys.user.0.ce_available=true) from (/system/etc/init/wifi.rc:21)
+[    9.928004] selinux: SELinux: Skipping restorecon on directory(/data/misc_ce/0/apexdata/com.android.wifi)
+[    9.928123] init: processing action (sys.boot_completed=1 && sys.wifitracing.started=1 && wifi.interface=*) from (/system/etc/init/wifi.rc:98)
+[    9.963319] init: Service 'dmesgd' (pid 1375) exited with status 0 oneshot service took 0.037000 seconds in background
+[    9.963324] init: Sending signal 9 to service 'dmesgd' (pid 1375) process group...
+[    9.963358] libprocessgroup: Successfully killed process cgroup uid 1086 pid 1375 in 0ms
+[    9.978266] init: Service 'exec 23 (/system/bin/lmkd --reinit)' (pid 1376) exited with status 0 oneshot service took 0.050000 seconds in background
+[    9.978273] init: Sending signal 9 to service 'exec 23 (/system/bin/lmkd --reinit)' (pid 1376) process group...
+[    9.978303] libprocessgroup: Successfully killed process cgroup uid 0 pid 1376 in 0ms
+[   10.182512] servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.
+[   10.604699] servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.
+[   11.046103] servicemanager: Notifying android.hardware.gnss.IGnss/default they do (previously: don't) have clients when we now have a record of a client
+[   11.046147] servicemanager: Notifying apexservice they don't (previously: do) have clients when we now have no record of a client
+[   11.046237] AidlLazyServiceRegistrar: Process has 0 (of 1 available) client(s) in use after notification apexservice has clients: 0
+[   11.046242] AidlLazyServiceRegistrar: Shutdown prevented by forcePersist override flag.
+[   11.371658] servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.
+[   11.575086] type=1400 audit(1793503208.016:8): avc:  denied  { getattr } for  comm="df" path="/metadata" dev="vdd1" ino=2 scontext=u:r:shell:s0 tcontext=u:object_r:metadata_file:s0 tclass=dir permissive=0
+[   11.575179] type=1400 audit(1793503208.020:9): avc:  denied  { getattr } for  comm="df" path="/system_dlkm" dev="dm-1" ino=38 scontext=u:r:shell:s0 tcontext=u:object_r:system_dlkm_file:s0 tclass=dir permissive=0
+[   11.575190] type=1400 audit(1793503208.020:10): avc:  denied  { getattr } for  comm="df" path="/linkerconfig" dev="tmpfs" ino=3 scontext=u:r:shell:s0 tcontext=u:object_r:linkerconfig_file:s0 tclass=dir permissive=0
+[   11.575195] type=1400 audit(1793503208.020:11): avc:  denied  { getattr } for  comm="df" path="/linkerconfig" dev="tmpfs" ino=3 scontext=u:r:shell:s0 tcontext=u:object_r:linkerconfig_file:s0 tclass=dir permissive=0
+[   11.575200] type=1400 audit(1793503208.020:12): avc:  denied  { getattr } for  comm="df" path="/data_mirror" dev="tmpfs" ino=1 scontext=u:r:shell:s0 tcontext=u:object_r:mirror_data_file:s0 tclass=dir permissive=0
+[   11.692826] init: Service 'adbd' (pid 418) exited with status 1
+[   11.692836] init: Sending signal 9 to service 'adbd' (pid 418) process group...
+[   11.692887] libprocessgroup: Successfully killed process cgroup uid 0 pid 418 in 0ms
+[   12.064798] init: starting service 'adbd'...
+[   12.065035] init: Created socket '/dev/socket/adbd', mode 660, user 1000, group 1000
+[   12.077970] init: ... started service 'adbd' has pid 2610

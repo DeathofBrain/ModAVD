@@ -1,0 +1,46 @@
+tune2fs 1.46.6 (1-Feb-2023)
+Filesystem volume name:   <none>
+Last mounted on:          /data
+Filesystem UUID:          57f8f4bc-abf4-655f-bf67-946fc0f9f25b
+Filesystem magic number:  0xEF53
+Filesystem revision #:    1 (dynamic)
+Filesystem features:      has_journal ext_attr resize_inode filetype needs_recovery extent encrypt casefold sparse_super large_file uninit_bg quota project verity
+Filesystem flags:         unsigned_directory_hash 
+Default mount options:    (none)
+Filesystem state:         clean
+Errors behavior:          Remount read-only
+Filesystem OS type:       Linux
+Inode count:              663552
+Block count:              2654208
+Reserved block count:     38327
+Overhead clusters:        79019
+Free blocks:              2308734
+Free inodes:              655272
+First block:              0
+Block size:               4096
+Fragment size:            4096
+Reserved GDT blocks:      511
+Blocks per group:         32768
+Fragments per group:      32768
+Inodes per group:         8192
+Inode blocks per group:   512
+Last mount time:          Sun Nov  1 11:19:46 2026
+Last write time:          Sun Nov  1 11:19:46 2026
+Mount count:              1
+Maximum mount count:      -1
+Last checked:             Sun Nov  1 11:19:46 2026
+Check interval:           0 (<none>)
+Lifetime writes:          21 MB
+Reserved blocks uid:      0 (user root)
+Reserved blocks gid:      1065 (group reserved_disk)
+First inode:              11
+Inode size:	          256
+Required extra isize:     28
+Desired extra isize:      28
+Journal inode:            8
+Default directory hash:   tea
+Journal backup:           inode blocks
+User quota inode:         3
+Group quota inode:        4
+Project quota inode:      38
+Character encoding:       utf8-12.1

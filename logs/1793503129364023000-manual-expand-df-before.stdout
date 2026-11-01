@@ -1,0 +1,3 @@
+Filesystem       1K-blocks    Used Available Use% Mounted on
+/dev/block/dm-39   8107484 1065672   6894356  14% /data/user/0
+ext3 4096 2026871 1723587

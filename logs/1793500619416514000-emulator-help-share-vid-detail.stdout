@@ -1,0 +1,12 @@
+
+  Share the current video state in a shared memory region..
+
+  A πexshared memory region will be created that is available under
+  the handle videmulatorXXXX where XXXX is the port number of the emulator
+
+  For example:
+
+  -ports 6000,6001 -share-vid
+
+  will create the shared memory region videmulator6000
+

@@ -1,0 +1,155 @@
+{
+  "test": "prelogin_game_launch_three_cold_retests",
+  "started_unix": 1793511570.34532,
+  "trials": [
+    {
+      "trial": 1,
+      "stdout": "${WORKSPACE}/logs/game-prelogin-retest-1-1793511570345333000-prepare.json",
+      "started_unix": 1793511570.345342,
+      "status": "installed_and_launched",
+      "run_id": "1793511570345675000-94855282",
+      "report": "${WORKSPACE}/results/game/runs/1793511570345675000-94855282/game.json",
+      "continuous_logcat": "${WORKSPACE}/logs/game-prelogin-retest-1-1793511583886516000-logcat-all.log",
+      "pid_after": "2758",
+      "application_launch": {
+        "returncode": 0,
+        "stdout": "Starting: Intent { cmp=com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext }\nStatus: ok\nLaunchState: COLD\nActivity: com.hypergryph.arknights.bilibili/com.hypergryph.userprotocolplugin.UserProtocolNoticeActivity\nTotalTime: 1592\nWaitTime: 1603\nComplete\n",
+        "stderr": "",
+        "log": "${WORKSPACE}/logs/1793511584094341000-game-launch"
+      },
+      "screenshots": [
+        {
+          "path": "${WORKSPACE}/results/game/runs/1793511570345675000-94855282/launch-5s-1793511590881007000-884be39b.png",
+          "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+          "bytes": 152498,
+          "command_log": "${WORKSPACE}/logs/1793511590770908000-game-launch-5s",
+          "duration_s": 0.10918050003238022
+        },
+        {
+          "path": "${WORKSPACE}/results/game/runs/1793511570345675000-94855282/launch-15s-1793511601024505000-b3e110d9.png",
+          "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+          "bytes": 152498,
+          "command_log": "${WORKSPACE}/logs/1793511600910518000-game-launch-15s",
+          "duration_s": 0.1129240000154823
+        },
+        {
+          "path": "${WORKSPACE}/results/game/runs/1793511570345675000-94855282/launch-30s-1793511616171180000-6816ec99.png",
+          "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+          "bytes": 152498,
+          "command_log": "${WORKSPACE}/logs/1793511616046678000-game-launch-30s",
+          "duration_s": 0.12308587494771928
+        }
+      ],
+      "post_trial_sync_stop": {
+        "duration_s": 1.6397334999637678,
+        "returncode": 0,
+        "kill_started_monotonic": 770449.133295916,
+        "kill_finished_monotonic": 770449.143242166
+      },
+      "owned_after": false,
+      "ports_after": [],
+      "collector_returncode": 255,
+      "finished_unix": 1793511617.9066648
+    },
+    {
+      "trial": 2,
+      "stdout": "${WORKSPACE}/logs/game-prelogin-retest-2-1793511617907013000-prepare.json",
+      "started_unix": 1793511617.9070332,
+      "status": "installed_and_launched",
+      "run_id": "1793511617907559000-e142eb1e",
+      "report": "${WORKSPACE}/results/game/runs/1793511617907559000-e142eb1e/game.json",
+      "continuous_logcat": "${WORKSPACE}/logs/game-prelogin-retest-2-1793511630014386000-logcat-all.log",
+      "pid_after": "2243",
+      "application_launch": {
+        "returncode": 0,
+        "stdout": "Starting: Intent { cmp=com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext }\nStatus: ok\nLaunchState: COLD\nActivity: com.hypergryph.arknights.bilibili/com.hypergryph.userprotocolplugin.UserProtocolNoticeActivity\nTotalTime: 1773\nWaitTime: 1776\nComplete\n",
+        "stderr": "",
+        "log": "${WORKSPACE}/logs/1793511630217262000-game-launch"
+      },
+      "screenshots": [
+        {
+          "path": "${WORKSPACE}/results/game/runs/1793511617907559000-e142eb1e/launch-5s-1793511637205123000-220893b9.png",
+          "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+          "bytes": 152498,
+          "command_log": "${WORKSPACE}/logs/1793511637046401000-game-launch-5s",
+          "duration_s": 0.1575279589742422
+        },
+        {
+          "path": "${WORKSPACE}/results/game/runs/1793511617907559000-e142eb1e/launch-15s-1793511647363562000-ba1bc862.png",
+          "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+          "bytes": 152498,
+          "command_log": "${WORKSPACE}/logs/1793511647226171000-game-launch-15s",
+          "duration_s": 0.13658329099416733
+        },
+        {
+          "path": "${WORKSPACE}/results/game/runs/1793511617907559000-e142eb1e/launch-30s-1793511662495496000-3dbfd44b.png",
+          "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+          "bytes": 152498,
+          "command_log": "${WORKSPACE}/logs/1793511662382811000-game-launch-30s",
+          "duration_s": 0.11162829108070582
+        }
+      ],
+      "post_trial_sync_stop": {
+        "duration_s": 1.806567957974039,
+        "returncode": 0,
+        "kill_started_monotonic": 770495.405396083,
+        "kill_finished_monotonic": 770495.416241166
+      },
+      "owned_after": false,
+      "ports_after": [],
+      "collector_returncode": 255,
+      "finished_unix": 1793511664.393833
+    },
+    {
+      "trial": 3,
+      "stdout": "${WORKSPACE}/logs/game-prelogin-retest-3-1793511664394595000-prepare.json",
+      "started_unix": 1793511664.394609,
+      "status": "installed_and_launched",
+      "run_id": "1793511664394977000-b055cb9e",
+      "report": "${WORKSPACE}/results/game/runs/1793511664394977000-b055cb9e/game.json",
+      "continuous_logcat": "${WORKSPACE}/logs/game-prelogin-retest-3-1793511677888185000-logcat-all.log",
+      "pid_after": "2566",
+      "application_launch": {
+        "returncode": 0,
+        "stdout": "Starting: Intent { cmp=com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext }\nStatus: ok\nLaunchState: COLD\nActivity: com.hypergryph.arknights.bilibili/com.hypergryph.userprotocolplugin.UserProtocolNoticeActivity\nTotalTime: 1594\nWaitTime: 1611\nComplete\n",
+        "stderr": "",
+        "log": "${WORKSPACE}/logs/1793511678093679000-game-launch"
+      },
+      "screenshots": [
+        {
+          "path": "${WORKSPACE}/results/game/runs/1793511664394977000-b055cb9e/launch-5s-1793511684840346000-6ac7c501.png",
+          "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+          "bytes": 152498,
+          "command_log": "${WORKSPACE}/logs/1793511684739163000-game-launch-5s",
+          "duration_s": 0.10065525001846254
+        },
+        {
+          "path": "${WORKSPACE}/results/game/runs/1793511664394977000-b055cb9e/launch-15s-1793511694984815000-8a89370a.png",
+          "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+          "bytes": 152498,
+          "command_log": "${WORKSPACE}/logs/1793511694868843000-game-launch-15s",
+          "duration_s": 0.11521724995691329
+        },
+        {
+          "path": "${WORKSPACE}/results/game/runs/1793511664394977000-b055cb9e/launch-30s-1793511710138985000-3ea2474c.png",
+          "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+          "bytes": 152498,
+          "command_log": "${WORKSPACE}/logs/1793511710013024000-game-launch-30s",
+          "duration_s": 0.12388716696295887
+        }
+      ],
+      "post_trial_sync_stop": {
+        "duration_s": 1.5727980830706656,
+        "returncode": 0,
+        "kill_started_monotonic": 770543.045272625,
+        "kill_finished_monotonic": 770543.054982416
+      },
+      "owned_after": false,
+      "ports_after": [],
+      "collector_returncode": 255,
+      "finished_unix": 1793511711.801172
+    }
+  ],
+  "no_game_ui_input": true,
+  "finished_unix": 1793511711.801476
+}

@@ -1,0 +1,22 @@
+{
+  "package": "platform-tools",
+  "revision": "37.0.1",
+  "metadata": "repository2-3.xml",
+  "host_os": "macosx",
+  "host_arch": null,
+  "destination": "platform-tools",
+  "zip_root": "platform-tools",
+  "filename": "platform-tools_r37.0.1-darwin.zip",
+  "url": "https://dl.google.com/android/repository/platform-tools_r37.0.1-darwin.zip",
+  "official_size": 16110554,
+  "official_sha1": "6ae73f4de6452dc57e62ec02b68eed92a4c21661",
+  "license_reference": "android-sdk-license",
+  "local_sha256": "ee39ad5967e95c2a07f04dbcbde96b1a0c916ba376096db5d2f498b7727a5d1d",
+  "archive_sha1_verified": true,
+  "zip_crc_verified": true,
+  "expanded_bytes": 38814256,
+  "zip_entries": 14,
+  "installed_at_utc": "2026-11-01T01:22:56.168181+00:00",
+  "installed_path": "${WORKSPACE}/sdk/platform-tools",
+  "license_acceptance_recorded": false
+}

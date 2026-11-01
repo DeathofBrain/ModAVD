@@ -1,0 +1,249 @@
+{
+  "test": "prelogin_maa_connection_and_frame_only",
+  "started_unix": 1793511829.426257,
+  "report_path": "${WORKSPACE}/results/game/prelogin-maa-probe-1793511829426254000.json",
+  "no_control_home": true,
+  "no_game_daily": true,
+  "sessions": [
+    {
+      "attempt": 0,
+      "returncode": 0,
+      "duration_s": 7.105661167064682,
+      "command_log": "${WORKSPACE}/logs/1793511842222686000-prelogin-maa-probe-0",
+      "stdout": "{\n  \"session\": \"${WORKSPACE}/maa/sessions/20261101-134402-probe\",\n  \"connected_device\": {\n    \"id\": \"device-95e9c97e5c29\",\n    \"name\": \"官方 AVD 基线\",\n    \"address\": \"emulator-22160\",\n    \"state\": \"idle\",\n    \"coreVersion\": \"v6.20.1\",\n    \"resourceVersion\": \"mirrorchyan:2026-10-31 16:10:56.000\",\n    \"captureMethod\": \"RawWithGzip\",\n    \"dataSync\": {\n      \"operatorsAt\": null,\n      \"depotAt\": null\n    }\n  },\n  \"launcher_control\": {\n    \"requested\": false\n  }\n}\n",
+      "stderr": "",
+      "session_paths": [
+        "${WORKSPACE}/maa/sessions/20261101-134402-probe"
+      ],
+      "new_service_processes_after": [],
+      "cleanup_verified": true
+    }
+  ],
+  "boot_seconds": 10.236632082960568,
+  "launch": {
+    "pid": 29501,
+    "identity": "Sun Nov  1 13:43:49 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_game -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window",
+    "args": [
+      "${WORKSPACE}/sdk/emulator/emulator",
+      "-avd",
+      "official_game",
+      "-no-snapshot",
+      "-gpu",
+      "host",
+      "-memory",
+      "4096",
+      "-cores",
+      "4",
+      "-ports",
+      "22160,22161",
+      "-grpc",
+      "22162",
+      "-grpc-use-jwt",
+      "-no-audio",
+      "-no-boot-anim",
+      "-no-metrics",
+      "-verbose",
+      "-no-window"
+    ],
+    "avd": "official_game",
+    "started_unix": 1793511829.846879,
+    "boot_started_monotonic": 770662.566479583,
+    "log": "${WORKSPACE}/logs/emulator-1793511829431824000-official_game.log",
+    "window": false,
+    "serial": "emulator-22160",
+    "adb_port": 22150,
+    "gpu": "host"
+  },
+  "application_launch": "Starting: Intent { cmp=com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext }\nStatus: ok\nLaunchState: COLD\nActivity: com.hypergryph.arknights.bilibili/com.hypergryph.userprotocolplugin.UserProtocolNoticeActivity\nTotalTime: 1990\nWaitTime: 2001\nComplete\n",
+  "guest_df": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39  32847728 3132208  29568064  10% /data/user/0\n",
+  "selected_application_version": "0.1.3",
+  "selected_components": {
+    "core": {
+      "source": "${HOME}/Library/Application Support/Maa Verge/MaaCore/data-241dfb25c5d38f837f2d8102ba3b56e2/generations/core-50dd47da97964525a62ece40482672bf",
+      "clone": "${WORKSPACE}/maa/components/core/generations/core-50dd47da97964525a62ece40482672bf",
+      "clone_method": "/bin/cp -cR (APFS copy on write)",
+      "version": "v6.20.1",
+      "installedHash": "2cdb2ae9327e0ec69607487880952670ad21068d9cf680aa60f6d97f2af42c63",
+      "files": 10086,
+      "full_payload_integrity_verified": true,
+      "resource_version": {
+        "activity": {
+          "name": "昨日海",
+          "time": 1791500400
+        },
+        "gacha": {
+          "pool": "海渊巡游",
+          "time": 1791500400
+        },
+        "last_updated": "2026-10-20 00:59:49.000"
+      }
+    },
+    "resource": {
+      "source": "${HOME}/Library/Application Support/Maa Verge/MaaResource/data-241dfb25c5d38f837f2d8102ba3b56e2/generations/resource-9880ece1c9ec4fdfa9cbad5a1bda5d74",
+      "clone": "${WORKSPACE}/maa/components/resource/generations/resource-9880ece1c9ec4fdfa9cbad5a1bda5d74",
+      "clone_method": "/bin/cp -cR (APFS copy on write)",
+      "version": "mirrorchyan:2026-10-31 16:10:56.000",
+      "installedHash": "27547756e174d0f7d0d5780a83164f307729bc59d31496e884efe45f0671dfe4",
+      "files": 10094,
+      "full_payload_integrity_verified": true,
+      "resource_version": {
+        "activity": {
+          "name": "视相博物馆：演化",
+          "time": 1792848600
+        },
+        "gacha": {
+          "pool": "海渊巡游",
+          "time": 1791500400
+        },
+        "last_updated": "2026-10-31 16:10:56.000"
+      }
+    }
+  },
+  "database_active_combo": {
+    "core": {
+      "version": "v6.20.1",
+      "installedHash": "2cdb2ae9327e0ec69607487880952670ad21068d9cf680aa60f6d97f2af42c63",
+      "path": "${WORKSPACE}/maa/components/core/generations/core-50dd47da97964525a62ece40482672bf",
+      "resourceVersion": null,
+      "resourceTimestamp": null
+    },
+    "resource": {
+      "version": "mirrorchyan:2026-10-31 16:10:56.000",
+      "installedHash": "27547756e174d0f7d0d5780a83164f307729bc59d31496e884efe45f0671dfe4",
+      "path": "${WORKSPACE}/maa/components/resource/generations/resource-9880ece1c9ec4fdfa9cbad5a1bda5d74",
+      "resourceVersion": {
+        "activity": {
+          "name": "视相博物馆：演化",
+          "time": 1792848600
+        },
+        "gacha": {
+          "pool": "海渊巡游",
+          "time": 1791500400
+        },
+        "last_updated": "2026-10-31 16:10:56.000"
+      },
+      "resourceTimestamp": "2026-10-31 16:10:56.000"
+    }
+  },
+  "database_capture": {
+    "method": "adb",
+    "emulatorPath": "",
+    "instanceIndex": 0
+  },
+  "database_connection": {
+    "adbPath": "${WORKSPACE}/sdk/platform-tools/adb",
+    "address": "emulator-22160",
+    "config": "General",
+    "touchMode": "maatouch",
+    "adbLite": false,
+    "clientType": "Bilibili"
+  },
+  "service_processes_before": [],
+  "status": "connected_frame_obtained",
+  "foreground": "    topResumedActivity=ActivityRecord{f162eba u0 com.hypergryph.arknights.bilibili/com.hypergryph.userprotocolplugin.UserProtocolNoticeActivity t6}\n",
+  "game_pid": "1446",
+  "finished_unix": 1793511849.3909261,
+  "rpc_costs": [
+    {
+      "method": "app.snapshot",
+      "round_trip_ms": 393.296
+    },
+    {
+      "method": "device.connect",
+      "round_trip_ms": 5427.961
+    },
+    {
+      "method": "app.snapshot",
+      "round_trip_ms": 3.009
+    },
+    {
+      "method": "app.snapshot",
+      "round_trip_ms": 3.357
+    },
+    {
+      "method": "device.frame",
+      "round_trip_ms": 85.51899999999999
+    }
+  ],
+  "actual_capture_events": [
+    {
+      "id": 4,
+      "type": "device.capture",
+      "message": "核心实际截图方式：RawWithGzip",
+      "createdAt": "2026-11-01T05:44:09.103Z",
+      "data": {
+        "deviceId": "device-95e9c97e5c29",
+        "method": "RawWithGzip",
+        "cost": 73
+      }
+    }
+  ],
+  "frame_metadata": {
+    "canControl": true,
+    "height": 720,
+    "mimeType": "image/png",
+    "width": 1280,
+    "deviceId": "device-95e9c97e5c29",
+    "frameId": "177c8719-6fdf-40cd-8d63-b288be189602",
+    "capturedAt": "2026-11-01T05:44:09.157Z",
+    "latencyMs": 84,
+    "saved_png_sha256": "0d3e7a6bac8a10e4c949f11944b8f7e782a2c579d0763c416cd7c267208d3afa",
+    "saved_png_bytes": 217153
+  },
+  "frame_png_validation": {
+    "width": 1280,
+    "height": 720,
+    "bitdepth": 8,
+    "color_type": 2,
+    "inflated_bytes": 2765520,
+    "pixel_sha256": "7533a470b5a7966bd6814f8e3dbcdcabb33be8e2a2483b4d9c6297d23de9ef6a"
+  },
+  "visual_review": "Valid 1280x720 screenshot shows the unaccepted user agreement/privacy policy prompt; no tap, login, game entry, OCR task or daily task performed.",
+  "original_game_sync_shutdown": {
+    "duration_s": 1.1243722909130156,
+    "returncode": 0,
+    "kill_started_monotonic": 770860.681774875,
+    "kill_finished_monotonic": 770860.69143375
+  },
+  "stopped_state": {
+    "pid": 29501,
+    "identity": "Sun Nov  1 13:43:49 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_game -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window",
+    "args": [
+      "${WORKSPACE}/sdk/emulator/emulator",
+      "-avd",
+      "official_game",
+      "-no-snapshot",
+      "-gpu",
+      "host",
+      "-memory",
+      "4096",
+      "-cores",
+      "4",
+      "-ports",
+      "22160,22161",
+      "-grpc",
+      "22162",
+      "-grpc-use-jwt",
+      "-no-audio",
+      "-no-boot-anim",
+      "-no-metrics",
+      "-verbose",
+      "-no-window"
+    ],
+    "avd": "official_game",
+    "started_unix": 1793511829.846879,
+    "boot_started_monotonic": 770662.566479583,
+    "log": "${WORKSPACE}/logs/emulator-1793511829431824000-official_game.log",
+    "window": false,
+    "serial": "emulator-22160",
+    "adb_port": 22150,
+    "gpu": "host",
+    "stopped_unix": 1793512029.06108,
+    "stop_sync": true,
+    "stop_duration_s": 1.1241786659229547,
+    "stop_returncode": 0,
+    "still_alive": false
+  },
+  "owned_after_stop": false,
+  "ports_after_stop": []
+}

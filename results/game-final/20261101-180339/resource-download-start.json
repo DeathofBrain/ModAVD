@@ -1,0 +1,24 @@
+{
+  "event": "user_confirms_resource_download_started",
+  "at_unix": 1793527941.0046458,
+  "source": "user_message",
+  "timestamp_uncertainty": "Host receipt/observation time; exact first game download byte may precede this marker.",
+  "screenshot": "${WORKSPACE}/results/game-final/20261101-180339/resource-download-start.png",
+  "screenshot_sha256": "9d6ebf0db9b5b2c1751480bb39d65b956d441a4fc506bef25cb80a72cf1a2b1b",
+  "version_name": [
+    "2.7.91"
+  ],
+  "version_code": [
+    "210"
+  ],
+  "package_log": "${WORKSPACE}/logs/1793527941552207000-game-final-updated-package",
+  "guest_df": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39  32847728 3681156  29019116  12% /data/user/0\n",
+  "host_free_bytes": 120968355840,
+  "visual_review": {
+    "state": "resource_release_or_unpack_progress",
+    "display_text": "正在释放神经递质（51MB/12057MB）",
+    "percent": "0%",
+    "client_version_visible": "2.7.91",
+    "limitation": "User reports resource phase started; screenshot specifically shows release/unpacking, not proof of concurrent network transfer or completed download."
+  }
+}

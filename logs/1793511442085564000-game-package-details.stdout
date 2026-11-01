@@ -1,0 +1,362 @@
+Activity Resolver Table:
+  Schemes:
+      ark-hypergryph:
+        2f27e2a com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext filter ba03391
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "ark-hypergryph"
+      tencent:
+        e4fccc com.hypergryph.arknights.bilibili/com.tencent.tauth.AuthActivity filter 84dfb15
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "tencent"
+      tencent1108300877:
+        2f41964 com.hypergryph.arknights.bilibili/com.tencent.tauth.AuthActivity filter 90377cd
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "tencent1108300877"
+      http:
+        2f27e2a com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext filter 3cb19b8
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "http"
+          Scheme: "https"
+          Authority: "ak.hypergryph.com": -1
+          Authority: "ak.hypergryph.com": -1
+          Authority: "ak.hypergryph.com": -1
+          Authority: "ak.hypergryph.com": -1
+          Path: "PatternMatcher{PREFIX: /share/}"
+          Path: "PatternMatcher{LITERAL: /share}"
+          Path: "PatternMatcher{PREFIX: /share/}"
+          Path: "PatternMatcher{LITERAL: /share}"
+          AutoVerify=true
+      https:
+        2f27e2a com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext filter 3cb19b8
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "http"
+          Scheme: "https"
+          Authority: "ak.hypergryph.com": -1
+          Authority: "ak.hypergryph.com": -1
+          Authority: "ak.hypergryph.com": -1
+          Authority: "ak.hypergryph.com": -1
+          Path: "PatternMatcher{PREFIX: /share/}"
+          Path: "PatternMatcher{LITERAL: /share}"
+          Path: "PatternMatcher{PREFIX: /share/}"
+          Path: "PatternMatcher{LITERAL: /share}"
+          AutoVerify=true
+
+  Non-Data Actions:
+      cn.jpush.android.ui.PushActivity:
+        bdce6d2 com.hypergryph.arknights.bilibili/cn.jpush.android.ui.PushActivity filter 3ce73a3
+          Action: "cn.jpush.android.ui.PushActivity"
+          Category: "android.intent.category.DEFAULT"
+          Category: "com.hypergryph.arknights.bilibili"
+      android.intent.action.MAIN:
+        2f27e2a com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext filter 22cb41b
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+      android.intent.action.VIEW:
+        61252f6 com.hypergryph.arknights.bilibili/.douyinapi.DouYinEntryActivity filter b5876f7
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+      cn.android.service.JTransitActivity:
+        b7e9e1e com.hypergryph.arknights.bilibili/cn.android.service.JTransitActivity filter 24aa6ff
+          Action: "cn.android.service.JTransitActivity"
+          Category: "android.intent.category.DEFAULT"
+          Category: "com.hypergryph.arknights.bilibili"
+      cn.jpush.android.intent.JNotifyActivity:
+        93516a0 com.hypergryph.arknights.bilibili/cn.jpush.android.service.JNotifyActivity filter 83f9259
+          Action: "cn.jpush.android.intent.JNotifyActivity"
+          Category: "android.intent.category.DEFAULT"
+          Category: "com.hypergryph.arknights.bilibili"
+      cn.jpush.android.ui.PopWinActivity:
+        5617b34 com.hypergryph.arknights.bilibili/cn.jpush.android.ui.PopWinActivity filter c437d5d
+          Action: "cn.jpush.android.ui.PopWinActivity"
+          Category: "android.intent.category.DEFAULT"
+          Category: "com.hypergryph.arknights.bilibili"
+      com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY:
+        a88a882 com.hypergryph.arknights.bilibili/com.sina.weibo.sdk.share.ShareTransActivity filter 6138b93
+          Action: "com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"
+          Category: "android.intent.category.DEFAULT"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY:
+        18b67d0 com.hypergryph.arknights.bilibili/cn.jpush.android.service.PushReceiver filter cdcc3c9
+          Action: "cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"
+          Category: "com.hypergryph.arknights.bilibili"
+          mPriority=1000, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+      cn.jpush.android.intent.RECEIVER_MESSAGE:
+        41ccace com.hypergryph.arknights.bilibili/com.hypergryph.adtrack.jiguang.JPushReceiver filter f614def
+          Action: "cn.jpush.android.intent.RECEIVER_MESSAGE"
+          Category: "com.hypergryph.arknights.bilibili"
+
+Service Resolver Table:
+  Non-Data Actions:
+      cn.jiguang.user.service.action:
+        742a394 com.hypergryph.arknights.bilibili/com.hypergryph.adtrack.jiguang.JPushService filter daeee3d
+          Action: "cn.jiguang.user.service.action"
+      com.ace.gshell.GP6Service:
+        9bec5da com.hypergryph.arknights.bilibili/com.ace.gshell.GP6Service filter 71eda0b
+          Action: "com.ace.gshell.GP6Service"
+      cn.jpush.android.intent.PUSH_TIME:
+        f5365a6 com.hypergryph.arknights.bilibili/cn.jpush.android.service.PushService filter 3df0be7
+          Action: "cn.jpush.android.intent.PUSH_TIME"
+          Action: "cn.jpush.android.intent.REPORT"
+          Action: "cn.jpush.android.intent.PushService"
+          Action: "cn.jpush.android.intent.REGISTER"
+      cn.jpush.android.intent.REPORT:
+        f5365a6 com.hypergryph.arknights.bilibili/cn.jpush.android.service.PushService filter 3df0be7
+          Action: "cn.jpush.android.intent.PUSH_TIME"
+          Action: "cn.jpush.android.intent.REPORT"
+          Action: "cn.jpush.android.intent.PushService"
+          Action: "cn.jpush.android.intent.REGISTER"
+      com.ace.gshell.GP7Worker:
+        80730fc com.hypergryph.arknights.bilibili/com.ace.gshell.GP7Worker filter ae4d385
+          Action: "com.ace.gshell.GP7Worker"
+      com.ace.gshell.GP7Service:
+        e1460e8 com.hypergryph.arknights.bilibili/com.ace.gshell.GP7Service filter fa42301
+          Action: "com.ace.gshell.GP7Service"
+      cn.jpush.android.intent.PushService:
+        f5365a6 com.hypergryph.arknights.bilibili/cn.jpush.android.service.PushService filter 3df0be7
+          Action: "cn.jpush.android.intent.PUSH_TIME"
+          Action: "cn.jpush.android.intent.REPORT"
+          Action: "cn.jpush.android.intent.PushService"
+          Action: "cn.jpush.android.intent.REGISTER"
+      cn.jpush.android.intent.REGISTER:
+        f5365a6 com.hypergryph.arknights.bilibili/cn.jpush.android.service.PushService filter 3df0be7
+          Action: "cn.jpush.android.intent.PUSH_TIME"
+          Action: "cn.jpush.android.intent.REPORT"
+          Action: "cn.jpush.android.intent.PushService"
+          Action: "cn.jpush.android.intent.REGISTER"
+
+Domain verification status:
+  com.hypergryph.arknights.bilibili:
+    ID: eb71ecab-b6af-451c-a73b-fc5a2ab94e9b
+    Signatures: [8D:99:75:B3:08:C7:9D:52:B1:70:39:00:AF:E3:5F:39:AF:D5:D4:0A:4D:01:C8:D2:90:64:28:80:78:A7:AF:7D]
+    Domain verification state:
+      ak.hypergryph.com: none
+    User all:
+      Verification link handling allowed: true
+      Selection state:
+        Disabled:
+          ak.hypergryph.com
+
+Permissions:
+  Permission [com.hypergryph.arknights.bilibili.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (ba944c0):
+    sourcePackage=com.hypergryph.arknights.bilibili
+    uid=10192 gids=[] type=0 prot=signature
+    perm=PermissionInfo{684f5f9 com.hypergryph.arknights.bilibili.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+    flags=0x0
+
+Permissions:
+  Permission [com.hypergryph.arknights.bilibili.permission.JPUSH_MESSAGE] (124c93e):
+    sourcePackage=com.hypergryph.arknights.bilibili
+    uid=10192 gids=[] type=0 prot=signature
+    perm=PermissionInfo{5eec39f com.hypergryph.arknights.bilibili.permission.JPUSH_MESSAGE}
+    flags=0x0
+
+Registered ContentProviders:
+  com.hypergryph.arknights.bilibili/com.base.bgcplugin.delegate.LocalContentProvider:
+    Provider{23decec com.hypergryph.arknights.bilibili/com.base.bgcplugin.delegate.LocalContentProvider}
+  com.hypergryph.arknights.bilibili/cn.jpush.android.service.DataProvider:
+    Provider{d15f8b5 com.hypergryph.arknights.bilibili/cn.jpush.android.service.DataProvider}
+  com.hypergryph.arknights.bilibili/cn.jpush.android.service.InitProvider:
+    Provider{5203b4a com.hypergryph.arknights.bilibili/cn.jpush.android.service.InitProvider}
+  com.hypergryph.arknights.bilibili/com.bilibili.bplus.followingshare.content.FileProvider:
+    Provider{605fabb com.hypergryph.arknights.bilibili/com.bilibili.bplus.followingshare.content.FileProvider}
+  com.hypergryph.arknights.bilibili/com.hypergryph.gameupdate.core.GameUpdateApkProvider:
+    Provider{a92ebd8 com.hypergryph.arknights.bilibili/com.hypergryph.gameupdate.core.GameUpdateApkProvider}
+  com.hypergryph.arknights.bilibili/com.hypergryph.platform.sharesdk.fileprovider.HGShareProvider:
+    Provider{57a6b31 com.hypergryph.arknights.bilibili/com.hypergryph.platform.sharesdk.fileprovider.HGShareProvider}
+  com.hypergryph.arknights.bilibili/com.taptap.sdk.update.download.OkDownloadProvider:
+    Provider{aaec216 com.hypergryph.arknights.bilibili/com.taptap.sdk.update.download.OkDownloadProvider}
+  com.hypergryph.arknights.bilibili/com.google.mlkit.common.internal.MlKitInitProvider:
+    Provider{e8f8797 com.hypergryph.arknights.bilibili/com.google.mlkit.common.internal.MlKitInitProvider}
+  com.hypergryph.arknights.bilibili/com.sina.weibo.sdk.content.WeiboSDKFileProvider:
+    Provider{436ed84 com.hypergryph.arknights.bilibili/com.sina.weibo.sdk.content.WeiboSDKFileProvider}
+  com.hypergryph.arknights.bilibili/com.taptap.sdk.themis.lite.ThemisProvider:
+    Provider{fd9896d com.hypergryph.arknights.bilibili/com.taptap.sdk.themis.lite.ThemisProvider}
+  com.hypergryph.arknights.bilibili/com.taptap.sdk.update.internal.TapUpdateFileProvider:
+    Provider{ecce9a2 com.hypergryph.arknights.bilibili/com.taptap.sdk.update.internal.TapUpdateFileProvider}
+  com.hypergryph.arknights.bilibili/com.sina.weibo.sdk.content.FileProvider:
+    Provider{1bb0633 com.hypergryph.arknights.bilibili/com.sina.weibo.sdk.content.FileProvider}
+  com.hypergryph.arknights.bilibili/android.support.v4.content.FileProvider:
+    Provider{6f75df0 com.hypergryph.arknights.bilibili/android.support.v4.content.FileProvider}
+  com.hypergryph.arknights.bilibili/androidx.startup.InitializationProvider:
+    Provider{d924f69 com.hypergryph.arknights.bilibili/androidx.startup.InitializationProvider}
+  com.hypergryph.arknights.bilibili/com.taptap.sdk.kit.internal.TapTapKitInitProvider:
+    Provider{fb3fdee com.hypergryph.arknights.bilibili/com.taptap.sdk.kit.internal.TapTapKitInitProvider}
+
+ContentProvider Authorities:
+  [com.hypergryph.arknights.bilibili.DataProvider]:
+    Provider{d15f8b5 com.hypergryph.arknights.bilibili/cn.jpush.android.service.DataProvider}
+      applicationInfo=ApplicationInfo{80c691c com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.apkprovider]:
+    Provider{a92ebd8 com.hypergryph.arknights.bilibili/com.hypergryph.gameupdate.core.GameUpdateApkProvider}
+      applicationInfo=ApplicationInfo{cf77925 com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.wbsdk.fileprovider]:
+    Provider{436ed84 com.hypergryph.arknights.bilibili/com.sina.weibo.sdk.content.WeiboSDKFileProvider}
+      applicationInfo=ApplicationInfo{3e60afa com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.share-to-follow-file-provider]:
+    Provider{605fabb com.hypergryph.arknights.bilibili/com.bilibili.bplus.followingshare.content.FileProvider}
+      applicationInfo=ApplicationInfo{7a708ab com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.bgc.local.Provider]:
+    Provider{23decec com.hypergryph.arknights.bilibili/com.base.bgcplugin.delegate.LocalContentProvider}
+      applicationInfo=ApplicationInfo{604fb08 com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.fileprovider]:
+    Provider{1bb0633 com.hypergryph.arknights.bilibili/com.sina.weibo.sdk.content.FileProvider}
+      applicationInfo=ApplicationInfo{4cb82a1 com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.mlkitinitprovider]:
+    Provider{e8f8797 com.hypergryph.arknights.bilibili/com.google.mlkit.common.internal.MlKitInitProvider}
+      applicationInfo=ApplicationInfo{5f9dcc6 com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.jiguang.InitProvider]:
+    Provider{5203b4a com.hypergryph.arknights.bilibili/cn.jpush.android.service.InitProvider}
+      applicationInfo=ApplicationInfo{3cb8487 com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.hgShareProvider]:
+    Provider{57a6b31 com.hypergryph.arknights.bilibili/com.hypergryph.platform.sharesdk.fileprovider.HGShareProvider}
+      applicationInfo=ApplicationInfo{772bfb4 com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.TapTapKitInitProvider]:
+    Provider{fb3fdee com.hypergryph.arknights.bilibili/com.taptap.sdk.kit.internal.TapTapKitInitProvider}
+      applicationInfo=ApplicationInfo{b7ca7dd com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.androidx-startup]:
+    Provider{d924f69 com.hypergryph.arknights.bilibili/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{126ff52 com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.themisLite]:
+    Provider{fd9896d com.hypergryph.arknights.bilibili/com.taptap.sdk.themis.lite.ThemisProvider}
+      applicationInfo=ApplicationInfo{ad1e223 com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.com.taptap.sdk.update.internal.fileProvider]:
+    Provider{ecce9a2 com.hypergryph.arknights.bilibili/com.taptap.sdk.update.internal.TapUpdateFileProvider}
+      applicationInfo=ApplicationInfo{8562320 com.hypergryph.arknights.bilibili}
+  [com.hypergryph.arknights.bilibili.com.taptap.services.update.okdownload]:
+    Provider{aaec216 com.hypergryph.arknights.bilibili/com.taptap.sdk.update.download.OkDownloadProvider}
+      applicationInfo=ApplicationInfo{620e4d9 com.hypergryph.arknights.bilibili}
+
+Key Set Manager:
+  [com.hypergryph.arknights.bilibili]
+      Signing KeySets: 56
+
+Packages:
+  Package [com.hypergryph.arknights.bilibili] (a91be9e):
+    appId=10192
+    pkg=Package{4567d7f com.hypergryph.arknights.bilibili}
+    codePath=/data/app/~~8h7vBd68LGxR8H03MKObiA==/com.hypergryph.arknights.bilibili-ZpWq88YoBT0Tc5vI11stOQ==
+    resourcePath=/data/app/~~8h7vBd68LGxR8H03MKObiA==/com.hypergryph.arknights.bilibili-ZpWq88YoBT0Tc5vI11stOQ==
+    legacyNativeLibraryDir=/data/app/~~8h7vBd68LGxR8H03MKObiA==/com.hypergryph.arknights.bilibili-ZpWq88YoBT0Tc5vI11stOQ==/lib
+    extractNativeLibs=true
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=200 minSdk=24 targetSdk=35
+    minExtensionVersions=[]
+    versionName=2.7.81
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=2
+    flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP LARGE_HEAP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE HAS_DOMAIN_URLS PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesPackages=[com.taptap, com.taptap.global, com.ss.android.ugc.aweme, com.ss.android.ugc.aweme.lite, tv.danmaku.bili, tv.danmaku.bilibilihd, com.tencent.tim, com.tencent.mobileqq, com.tencent.mm, com.hypergryph.skland, com.taptap.global.lite, com.ss.android.ugc.aweme, com.ss.android.ugc.aweme.lite, tv.danmaku.bili, com.tencent.tim, com.tencent.mobileqq, com.tencent.mm, com.taptap, com.sina.weibo, com.hypergryph.skland, tv.danmaku.bili, com.eg.android.AlipayGphone, com.tencent.mm, com.vrviu.ls.bridge, com.android.creator, com.zhuoyi.security.lite, com.freeme.secureguard, com.android.secureguard, com.mdid.msa, com.samsung.android.deviceidservice, com.coolpad.deviceidsupport, com.heytap.openid, com.qiku.id, com.eg.android.AlipayGphoneRC, hk.alipay.wallet]
+    queriesIntents=[Intent { act=* dat=tbopen:/... }]
+    dataDir=/data/user/0/com.hypergryph.arknights.bilibili
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      org.apache.http.legacy
+    usesLibraryFiles:
+      /system/framework/org.apache.http.legacy.jar
+    timeStamp=2026-11-01 13:37:14
+    lastUpdateTime=2026-11-01 13:37:20
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=com.android.shell
+    originatingPackageName=null
+    packageSource=1
+    appMetadataFilePath=null
+    signatures=PackageSignatures{24a514c version:2, signatures:[8fdec6da], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP LARGE_HEAP ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE HAS_DOMAIN_URLS PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    declared permissions:
+      com.hypergryph.arknights.bilibili.permission.JPUSH_MESSAGE: prot=signature
+      com.hypergryph.arknights.bilibili.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature
+    requested permissions:
+      com.hypergryph.arknights.bilibili.permission.JPUSH_MESSAGE
+      android.permission.QUERY_ALL_PACKAGES
+      android.permission.CAMERA
+      com.google.android.gms.permission.AD_ID
+      com.hypergryph.arknights.bilibili.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+      android.permission.REQUEST_INSTALL_PACKAGES
+      android.permission.POST_NOTIFICATIONS
+      android.permission.FOREGROUND_SERVICE_DATA_SYNC
+      android.permission.INTERNET
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.ACCESS_WIFI_STATE
+      android.permission.FOREGROUND_SERVICE
+      android.permission.WRITE_EXTERNAL_STORAGE
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.READ_PHONE_STATE
+      android.permission.WRITE_SETTINGS
+      com.asus.msa.SupplementaryDID.ACCESS
+      freemme.permission.msa
+      freemme.permission.msa.SECURITY_ACCESS
+      oplus.permission.settings.LAUNCH_FOR_EXPORT
+      com.vivo.identifier.permission.OAID_STATE_DIALOG
+    install permissions:
+      android.permission.WRITE_SETTINGS: granted=false
+      android.permission.FOREGROUND_SERVICE: granted=true
+      com.hypergryph.arknights.bilibili.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      android.permission.INTERNET: granted=true
+      com.hypergryph.arknights.bilibili.permission.JPUSH_MESSAGE: granted=true
+      android.permission.FOREGROUND_SERVICE_DATA_SYNC: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      android.permission.REQUEST_INSTALL_PACKAGES: granted=false
+      android.permission.QUERY_ALL_PACKAGES: granted=true
+      com.google.android.gms.permission.AD_ID: granted=true
+    User 0: ceDataInode=656275 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false
+      installReason=0
+      firstInstallTime=2026-11-01 13:37:20
+      uninstallReason=0
+      gids=[3003]
+      runtime permissions:
+        android.permission.POST_NOTIFICATIONS: granted=false
+        android.permission.READ_EXTERNAL_STORAGE: granted=false, flags=[ RESTRICTION_INSTALLER_EXEMPT]
+        android.permission.READ_PHONE_STATE: granted=false
+        android.permission.CAMERA: granted=false
+        android.permission.WRITE_EXTERNAL_STORAGE: granted=false, flags=[ RESTRICTION_INSTALLER_EXEMPT]
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  queries via package name:
+  queries via component:
+    com.google.android.settings.intelligence:
+      com.hypergryph.arknights.bilibili
+    com.google.android.apps.messaging:
+      com.hypergryph.arknights.bilibili
+    com.google.android.gm:
+      com.hypergryph.arknights.bilibili
+    com.google.android.contacts:
+      com.hypergryph.arknights.bilibili
+    com.google.android.youtube:
+      com.hypergryph.arknights.bilibili
+  queryable via interaction:
+    User 0:
+  queryable via uses-library:
+
+Dexopt state:
+  [com.hypergryph.arknights.bilibili]
+    path: /data/app/~~8h7vBd68LGxR8H03MKObiA==/com.hypergryph.arknights.bilibili-ZpWq88YoBT0Tc5vI11stOQ==/base.apk
+      arm64: [status=verify] [reason=install] [primary-abi]
+        [location is /data/app/~~8h7vBd68LGxR8H03MKObiA==/com.hypergryph.arknights.bilibili-ZpWq88YoBT0Tc5vI11stOQ==/oat/arm64/base.odex]
+
+Compiler stats:
+  [com.hypergryph.arknights.bilibili]
+     base.apk - 911

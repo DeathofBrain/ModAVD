@@ -1,0 +1,390 @@
+{
+  "sample_count": 403,
+  "duration_seconds": 2010.006,
+  "metrics": {
+    "host_rss_bytes": {
+      "first": 2557755392.0,
+      "last": 578191360.0,
+      "min": 187138048.0,
+      "max": 3309109248.0,
+      "change": -1979564032.0,
+      "slope_bytes_per_hour": -880481286.1841868
+    },
+    "host_phys_footprint_bytes": {
+      "first": 5544679592.0,
+      "last": 7104552520.0,
+      "min": 5544679592.0,
+      "max": 7109123656.0,
+      "change": 1559872928.0,
+      "slope_bytes_per_hour": 170787048.7701999
+    },
+    "host_compressor_physical_bytes": {
+      "first": 5896962048.0,
+      "last": 5166481408.0,
+      "min": 4679958528.0,
+      "max": 7202373632.0,
+      "change": -730480640.0,
+      "slope_bytes_per_hour": -366533636.69386333
+    },
+    "host_swap_used_bytes": {
+      "first": 4550421381.0,
+      "last": 4391037829.0,
+      "min": 4391037829.0,
+      "max": 4550421381.0,
+      "change": -159383552.0,
+      "slope_bytes_per_hour": -187865324.355275
+    },
+    "guest_MemAvailable_bytes": {
+      "first": 2580275200.0,
+      "last": 2642251776.0,
+      "min": 1311625216.0,
+      "max": 2687791104.0,
+      "change": 61976576.0,
+      "slope_bytes_per_hour": 686713432.882168
+    }
+  },
+  "phases": {
+    "baseline": {
+      "samples": 6,
+      "elapsed_start": 0.001,
+      "elapsed_end": 25.006,
+      "host_rss_bytes": {
+        "first": 2557755392.0,
+        "last": 3309109248.0,
+        "max": 3309109248.0,
+        "min": 2557755392.0,
+        "median_last_12_samples": 3255410688.0
+      },
+      "host_phys_footprint_bytes": {
+        "first": 5544679592.0,
+        "last": 6869114368.0,
+        "max": 6876765696.0,
+        "min": 5544679592.0,
+        "median_last_12_samples": 6868336128.0
+      },
+      "host_compressor_physical_bytes": {
+        "first": 5896962048.0,
+        "last": 5697470464.0,
+        "max": 6440648704.0,
+        "min": 5697470464.0,
+        "median_last_12_samples": 5888098304.0
+      },
+      "host_swap_used_bytes": {
+        "first": 4550421381.0,
+        "last": 4550421381.0,
+        "max": 4550421381.0,
+        "min": 4550421381.0,
+        "median_last_12_samples": 4550421381.0
+      },
+      "guest_MemAvailable_bytes": {
+        "first": 2580275200.0,
+        "last": 2200182784.0,
+        "max": 2580275200.0,
+        "min": 2033430528.0,
+        "median_last_12_samples": 2170275840.0
+      }
+    },
+    "round_1_allocate_hold": {
+      "samples": 13,
+      "elapsed_start": 30.006,
+      "elapsed_end": 90.006,
+      "host_rss_bytes": {
+        "first": 2703065088.0,
+        "last": 1123696640.0,
+        "max": 3188555776.0,
+        "min": 715292672.0,
+        "median_last_12_samples": 1090510848.0
+      },
+      "host_phys_footprint_bytes": {
+        "first": 6870113792.0,
+        "last": 7041637984.0,
+        "max": 7043096160.0,
+        "min": 6870113792.0,
+        "median_last_12_samples": 7029456480.0
+      },
+      "host_compressor_physical_bytes": {
+        "first": 6005653504.0,
+        "last": 5595430912.0,
+        "max": 6636945408.0,
+        "min": 5595430912.0,
+        "median_last_12_samples": 5705105408.0
+      },
+      "host_swap_used_bytes": {
+        "first": 4550421381.0,
+        "last": 4525255557.0,
+        "max": 4550421381.0,
+        "min": 4525255557.0,
+        "median_last_12_samples": 4525255557.0
+      },
+      "guest_MemAvailable_bytes": {
+        "first": 2201485312.0,
+        "last": 1373593600.0,
+        "max": 2201485312.0,
+        "min": 1311625216.0,
+        "median_last_12_samples": 1350002688.0
+      }
+    },
+    "round_1_released_observe": {
+      "samples": 120,
+      "elapsed_start": 95.006,
+      "elapsed_end": 690.006,
+      "host_rss_bytes": {
+        "first": 1105231872.0,
+        "last": 535658496.0,
+        "max": 1329004544.0,
+        "min": 187138048.0,
+        "median_last_12_samples": 532193280.0
+      },
+      "host_phys_footprint_bytes": {
+        "first": 7048666720.0,
+        "last": 7081418312.0,
+        "max": 7085956680.0,
+        "min": 7048666720.0,
+        "median_last_12_samples": 7081483848.0
+      },
+      "host_compressor_physical_bytes": {
+        "first": 5595463680.0,
+        "last": 6105825280.0,
+        "max": 7202373632.0,
+        "min": 4997726208.0,
+        "median_last_12_samples": 6391808000.0
+      },
+      "host_swap_used_bytes": {
+        "first": 4525255557.0,
+        "last": 4424592261.0,
+        "max": 4525255557.0,
+        "min": 4424592261.0,
+        "median_last_12_samples": 4424592261.0
+      },
+      "guest_MemAvailable_bytes": {
+        "first": 2446753792.0,
+        "last": 2674454528.0,
+        "max": 2687791104.0,
+        "min": 2416832512.0,
+        "median_last_12_samples": 2676643840.0
+      }
+    },
+    "round_2_allocate_hold": {
+      "samples": 12,
+      "elapsed_start": 695.006,
+      "elapsed_end": 750.006,
+      "host_rss_bytes": {
+        "first": 1891368960.0,
+        "last": 1939095552.0,
+        "max": 1949237248.0,
+        "min": 1887076352.0,
+        "median_last_12_samples": 1924423680.0
+      },
+      "host_phys_footprint_bytes": {
+        "first": 7086546504.0,
+        "last": 7095098952.0,
+        "max": 7096770120.0,
+        "min": 7085973064.0,
+        "median_last_12_samples": 7089815112.0
+      },
+      "host_compressor_physical_bytes": {
+        "first": 5944131584.0,
+        "last": 5750538240.0,
+        "max": 5944131584.0,
+        "min": 5736972288.0,
+        "median_last_12_samples": 5819170816.0
+      },
+      "host_swap_used_bytes": {
+        "first": 4424592261.0,
+        "last": 4424592261.0,
+        "max": 4424592261.0,
+        "min": 4424592261.0,
+        "median_last_12_samples": 4424592261.0
+      },
+      "guest_MemAvailable_bytes": {
+        "first": 1594392576.0,
+        "last": 1556414464.0,
+        "max": 1594392576.0,
+        "min": 1556414464.0,
+        "median_last_12_samples": 1572141056.0
+      }
+    },
+    "round_2_released_observe": {
+      "samples": 120,
+      "elapsed_start": 755.006,
+      "elapsed_end": 1350.011,
+      "host_rss_bytes": {
+        "first": 1949941760.0,
+        "last": 855048192.0,
+        "max": 1963311104.0,
+        "min": 332021760.0,
+        "median_last_12_samples": 918052864.0
+      },
+      "host_phys_footprint_bytes": {
+        "first": 7099309640.0,
+        "last": 7105044040.0,
+        "max": 7105175112.0,
+        "min": 7095000648.0,
+        "median_last_12_samples": 7100890696.0
+      },
+      "host_compressor_physical_bytes": {
+        "first": 5666095104.0,
+        "last": 5898485760.0,
+        "max": 6241665024.0,
+        "min": 4679958528.0,
+        "median_last_12_samples": 5718343680.0
+      },
+      "host_swap_used_bytes": {
+        "first": 4424592261.0,
+        "last": 4416203653.0,
+        "max": 4424592261.0,
+        "min": 4416203653.0,
+        "median_last_12_samples": 4416203653.0
+      },
+      "guest_MemAvailable_bytes": {
+        "first": 2639593472.0,
+        "last": 2630627328.0,
+        "max": 2656268288.0,
+        "min": 2624077824.0,
+        "median_last_12_samples": 2632427520.0
+      }
+    },
+    "round_3_allocate_hold": {
+      "samples": 12,
+      "elapsed_start": 1355.011,
+      "elapsed_end": 1410.011,
+      "host_rss_bytes": {
+        "first": 1837580288.0,
+        "last": 1734000640.0,
+        "max": 1849393152.0,
+        "min": 1734000640.0,
+        "median_last_12_samples": 1803501568.0
+      },
+      "host_phys_footprint_bytes": {
+        "first": 7105125960.0,
+        "last": 7104601672.0,
+        "max": 7108992584.0,
+        "min": 7101161032.0,
+        "median_last_12_samples": 7104683592.0
+      },
+      "host_compressor_physical_bytes": {
+        "first": 6481526784.0,
+        "last": 6439075840.0,
+        "max": 6481526784.0,
+        "min": 6228049920.0,
+        "median_last_12_samples": 6373670912.0
+      },
+      "host_swap_used_bytes": {
+        "first": 4416203653.0,
+        "last": 4416203653.0,
+        "max": 4416203653.0,
+        "min": 4416203653.0,
+        "median_last_12_samples": 4416203653.0
+      },
+      "guest_MemAvailable_bytes": {
+        "first": 1561477120.0,
+        "last": 1550807040.0,
+        "max": 1564901376.0,
+        "min": 1542369280.0,
+        "median_last_12_samples": 1555730432.0
+      }
+    },
+    "round_3_released_observe": {
+      "samples": 120,
+      "elapsed_start": 1415.011,
+      "elapsed_end": 2010.006,
+      "host_rss_bytes": {
+        "first": 1733312512.0,
+        "last": 578191360.0,
+        "max": 1756299264.0,
+        "min": 453148672.0,
+        "median_last_12_samples": 570294272.0
+      },
+      "host_phys_footprint_bytes": {
+        "first": 7108943432.0,
+        "last": 7104552520.0,
+        "max": 7109123656.0,
+        "min": 7103864392.0,
+        "median_last_12_samples": 7104536136.0
+      },
+      "host_compressor_physical_bytes": {
+        "first": 6513901568.0,
+        "last": 5166481408.0,
+        "max": 6641876992.0,
+        "min": 5126225920.0,
+        "median_last_12_samples": 5211095040.0
+      },
+      "host_swap_used_bytes": {
+        "first": 4416203653.0,
+        "last": 4391037829.0,
+        "max": 4416203653.0,
+        "min": 4391037829.0,
+        "median_last_12_samples": 4391037829.0
+      },
+      "guest_MemAvailable_bytes": {
+        "first": 2636185600.0,
+        "last": 2642251776.0,
+        "max": 2652958720.0,
+        "min": 2622709760.0,
+        "median_last_12_samples": 2642272256.0
+      }
+    }
+  },
+  "reclamation_rounds": [
+    {
+      "round": 1,
+      "observed_release_seconds": 595.0,
+      "host_phys_footprint_bytes": {
+        "hold_median_last_3": 7041637984.0,
+        "after_median_last_12": 7081483848.0,
+        "change_after_minus_hold": 39845864.0
+      },
+      "host_rss_bytes": {
+        "hold_median_last_3": 1119076352.0,
+        "after_median_last_12": 532193280.0,
+        "change_after_minus_hold": -586883072.0
+      },
+      "guest_MemAvailable_bytes": {
+        "hold_median_last_3": 1357631488.0,
+        "after_median_last_12": 2676643840.0,
+        "change_after_minus_hold": 1319012352.0
+      }
+    },
+    {
+      "round": 2,
+      "observed_release_seconds": 595.005,
+      "host_phys_footprint_bytes": {
+        "hold_median_last_3": 7095098952.0,
+        "after_median_last_12": 7100890696.0,
+        "change_after_minus_hold": 5791744.0
+      },
+      "host_rss_bytes": {
+        "hold_median_last_3": 1940537344.0,
+        "after_median_last_12": 918052864.0,
+        "change_after_minus_hold": -1022484480.0
+      },
+      "guest_MemAvailable_bytes": {
+        "hold_median_last_3": 1559023616.0,
+        "after_median_last_12": 2632427520.0,
+        "change_after_minus_hold": 1073403904.0
+      }
+    },
+    {
+      "round": 3,
+      "observed_release_seconds": 594.9950000000001,
+      "host_phys_footprint_bytes": {
+        "hold_median_last_3": 7104699976.0,
+        "after_median_last_12": 7104536136.0,
+        "change_after_minus_hold": -163840.0
+      },
+      "host_rss_bytes": {
+        "hold_median_last_3": 1800257536.0,
+        "after_median_last_12": 570294272.0,
+        "change_after_minus_hold": -1229963264.0
+      },
+      "guest_MemAvailable_bytes": {
+        "hold_median_last_3": 1554046976.0,
+        "after_median_last_12": 2642272256.0,
+        "change_after_minus_hold": 1088225280.0
+      }
+    }
+  ],
+  "host_error_samples": 0,
+  "guest_error_samples": 0,
+  "note": "phys_footprint and RSS describe the emulator process; compression and swap describe the entire host. System changes cannot be attributed solely to the emulator."
+}

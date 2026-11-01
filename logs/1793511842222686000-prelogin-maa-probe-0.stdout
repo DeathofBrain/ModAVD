@@ -1,0 +1,19 @@
+{
+  "session": "${WORKSPACE}/maa/sessions/20261101-134402-probe",
+  "connected_device": {
+    "id": "device-95e9c97e5c29",
+    "name": "官方 AVD 基线",
+    "address": "emulator-22160",
+    "state": "idle",
+    "coreVersion": "v6.20.1",
+    "resourceVersion": "mirrorchyan:2026-10-31 16:10:56.000",
+    "captureMethod": "RawWithGzip",
+    "dataSync": {
+      "operatorsAt": null,
+      "depotAt": null
+    }
+  },
+  "launcher_control": {
+    "requested": false
+  }
+}

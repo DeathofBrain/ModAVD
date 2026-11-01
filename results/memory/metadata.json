@@ -1,0 +1,22 @@
+{
+  "adb": "${WORKSPACE}/sdk/platform-tools/adb",
+  "adb_port": 22150,
+  "serial": "emulator-22160",
+  "emulator_pid": 7667,
+  "output": "results/memory",
+  "sample_interval": 5,
+  "command": "memory",
+  "rounds": 3,
+  "allocation_bytes": 1073741824,
+  "hold_seconds": 60,
+  "observe_seconds": 600,
+  "baseline_seconds": 30,
+  "guest_page_size": 4096,
+  "started_utc": "2026-11-01T02:38:29.405015+00:00",
+  "status": "completed",
+  "test": "1 GiB anonymous guest allocation/touch/release",
+  "guest_payload": "/data/local/tmp/official_avd_probe",
+  "finished_utc": "2026-11-01T03:12:01.115217+00:00",
+  "elapsed_seconds": 2011.77836191596,
+  "completed_rounds": 3
+}

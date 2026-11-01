@@ -1,0 +1,153 @@
+{
+  "test": "fresh_Arknights_bilibili_install_launch",
+  "started_unix": 1793511664.395081,
+  "status": "installed_and_launched",
+  "avd": "official_game",
+  "package": "com.hypergryph.arknights.bilibili",
+  "run_id": "1793511664394977000-b055cb9e",
+  "report_path": "${WORKSPACE}/results/game/runs/1793511664394977000-b055cb9e/game.json",
+  "checkpoints": [
+    {
+      "stage": "preconditions",
+      "at_unix": 1793511664.3954282
+    },
+    {
+      "stage": "environment_prepared",
+      "at_unix": 1793511665.117285
+    },
+    {
+      "stage": "avd_started",
+      "at_unix": 1793511665.53437
+    },
+    {
+      "stage": "avd_booted",
+      "at_unix": 1793511677.7261581
+    },
+    {
+      "stage": "installation_preconditions",
+      "at_unix": 1793511677.7848089
+    },
+    {
+      "stage": "package_inspected",
+      "at_unix": 1793511677.8630688
+    },
+    {
+      "stage": "application_launch_requested",
+      "at_unix": 1793511679.7364259
+    },
+    {
+      "stage": "capture_5s",
+      "at_unix": 1793511684.858294
+    },
+    {
+      "stage": "capture_15s",
+      "at_unix": 1793511695.0025332
+    },
+    {
+      "stage": "capture_30s",
+      "at_unix": 1793511710.158156
+    },
+    {
+      "stage": "launch_observation_complete",
+      "at_unix": 1793511710.22007
+    },
+    {
+      "stage": "finished",
+      "at_unix": 1793511710.220628
+    }
+  ],
+  "game_signin_attempted": false,
+  "game_ui_input_performed": false,
+  "game_daily": "blocked until a test account is signed in",
+  "actual_game_cache_no_sync": "not tested until resources/settings exist",
+  "previous_latest_report_preserved": "${WORKSPACE}/results/game/history/game-1793511664395109000-7dd73c1b.json",
+  "phase": "finished",
+  "apk": {
+    "path": "${HOME}/Downloads/mrfz_2.7.81_20260918_112651_8bff8.apk",
+    "bytes": 1886746222,
+    "sha256": "9106db6d9038d11a732cdc35773e68d79895834283718895c6f929d496577df9"
+  },
+  "host_free_before_bytes": 127928958976,
+  "avd_reused": true,
+  "launch": {
+    "pid": 29282,
+    "identity": "Sun Nov  1 13:41:05 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_game -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window",
+    "args": [
+      "${WORKSPACE}/sdk/emulator/emulator",
+      "-avd",
+      "official_game",
+      "-no-snapshot",
+      "-gpu",
+      "host",
+      "-memory",
+      "4096",
+      "-cores",
+      "4",
+      "-ports",
+      "22160,22161",
+      "-grpc",
+      "22162",
+      "-grpc-use-jwt",
+      "-no-audio",
+      "-no-boot-anim",
+      "-no-metrics",
+      "-verbose",
+      "-no-window"
+    ],
+    "avd": "official_game",
+    "started_unix": 1793511665.5326731,
+    "boot_started_monotonic": 770498.317121916,
+    "log": "${WORKSPACE}/logs/emulator-1793511665123922000-official_game.log",
+    "window": false,
+    "serial": "emulator-22160",
+    "adb_port": 22150,
+    "gpu": "host"
+  },
+  "boot_seconds": 12.193523250054568,
+  "guest_disk_before_install": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39  32847728 3111240  29589032  10% /data/user/0\n",
+  "packages_before": "package:com.hypergryph.arknights.bilibili\n",
+  "package_details_log": "${WORKSPACE}/logs/1793511677785355000-game-package-details",
+  "version_name": [
+    "2.7.81"
+  ],
+  "version_code": [
+    "200"
+  ],
+  "launcher_component": "com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext",
+  "application_launch": {
+    "returncode": 0,
+    "stdout": "Starting: Intent { cmp=com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext }\nStatus: ok\nLaunchState: COLD\nActivity: com.hypergryph.arknights.bilibili/com.hypergryph.userprotocolplugin.UserProtocolNoticeActivity\nTotalTime: 1594\nWaitTime: 1611\nComplete\n",
+    "stderr": "",
+    "log": "${WORKSPACE}/logs/1793511678093679000-game-launch"
+  },
+  "screenshots": [
+    {
+      "path": "${WORKSPACE}/results/game/runs/1793511664394977000-b055cb9e/launch-5s-1793511684840346000-6ac7c501.png",
+      "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+      "bytes": 152498,
+      "command_log": "${WORKSPACE}/logs/1793511684739163000-game-launch-5s",
+      "duration_s": 0.10065525001846254
+    },
+    {
+      "path": "${WORKSPACE}/results/game/runs/1793511664394977000-b055cb9e/launch-15s-1793511694984815000-8a89370a.png",
+      "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+      "bytes": 152498,
+      "command_log": "${WORKSPACE}/logs/1793511694868843000-game-launch-15s",
+      "duration_s": 0.11521724995691329
+    },
+    {
+      "path": "${WORKSPACE}/results/game/runs/1793511664394977000-b055cb9e/launch-30s-1793511710138985000-3ea2474c.png",
+      "sha256": "20746d1650aeb7b27133bef3fcba6a0565f18b8977e78a4bf6e86d016206b95e",
+      "bytes": 152498,
+      "command_log": "${WORKSPACE}/logs/1793511710013024000-game-launch-30s",
+      "duration_s": 0.12388716696295887
+    }
+  ],
+  "pid": "2566",
+  "logcat_log": "${WORKSPACE}/logs/1793511710158840000-game-logcat",
+  "foreground": "    topResumedActivity=ActivityRecord{4365038 u0 com.hypergryph.arknights.bilibili/com.hypergryph.userprotocolplugin.UserProtocolNoticeActivity t14}\n",
+  "disk": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39  32847728 3132124  29568148  10% /data/user/0\n",
+  "host_free_after_bytes": 127887798272,
+  "visual_result": "requires review of saved screenshots; process existence alone is not proof of playability",
+  "finished_unix": 1793511710.220624
+}

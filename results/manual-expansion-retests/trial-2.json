@@ -1,0 +1,1121 @@
+{
+  "test": "official_qemu_img_and_guest_resize2fs_preserved_data_expansion",
+  "status": "failed",
+  "phase": "guest_online_ext4_resize",
+  "source_backup": "official_expansion_backup",
+  "clone": "official_expand_manual32_retest2",
+  "started_unix": 1793503116.4723148,
+  "target_bytes": 34359738368,
+  "reserve_bytes": 21474836480,
+  "method": "Fresh stopped APFS clone; baseline marker and df; sync shutdown; official qemu-img resize of clone base then overlay from 8 to 32 GiB; config 32G and -partition-size 32768; inspect guest ext4 mounted device, use guest-bundled resize2fs online only if that device itself grew; sync cold-boot verification. No wipe, conversion, overlay deletion, rebase, dm table changes, or host resize2fs on qcow.",
+  "previous_report_preserved": "${WORKSPACE}/results/history/manual_expansion-1793503116472341000.json",
+  "free_bytes_before": 132743008256,
+  "expected_marker": {
+    "host_path": "${WORKSPACE}/results/expansion-marker.bin",
+    "guest_path": "/data/local/tmp/official-baseline/expansion-marker.bin",
+    "size": 1048576,
+    "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+  },
+  "source_before": {
+    "config_sha256": "e2df36fc1d79d20f852bbca7d99bb28f2c54a59005d3fadbf948f8b9de53a1d9",
+    "files": {
+      "AVD.conf": {
+        "size": 183,
+        "mtime_ns": 1793496716594402162
+      },
+      "bootcompleted.ini": {
+        "size": 0,
+        "mtime_ns": 1793500511312087975
+      },
+      "cache.img": {
+        "size": 69206016,
+        "mtime_ns": 1793496709343727480
+      },
+      "cache.img.qcow2": {
+        "size": 196616,
+        "mtime_ns": 1793496715483548688
+      },
+      "config.ini": {
+        "size": 645,
+        "mtime_ns": 1793500514367915557
+      },
+      "emu-launch-params.txt": {
+        "size": 276,
+        "mtime_ns": 1793500499892827649
+      },
+      "emulator-user.ini": {
+        "size": 113,
+        "mtime_ns": 1793500513445240389
+      },
+      "encryptionkey.img": {
+        "size": 18874368,
+        "mtime_ns": 1793496709342950330
+      },
+      "encryptionkey.img.qcow2": {
+        "size": 1966080,
+        "mtime_ns": 1793500512636437626
+      },
+      "hardware-qemu.ini": {
+        "size": 4162,
+        "mtime_ns": 1793500500327799409
+      },
+      "initrd": {
+        "size": 1793532,
+        "mtime_ns": 1793500500237015974
+      },
+      "modem_simulator/etc/modem_simulator/files/numeric_operator.xml": {
+        "size": 297,
+        "mtime_ns": 1793500500077729539
+      },
+      "modem_simulator/iccprofile_for_carrierapitests.xml": {
+        "size": 16537,
+        "mtime_ns": 1793500500078165661
+      },
+      "modem_simulator/iccprofile_for_sim0.xml": {
+        "size": 14747,
+        "mtime_ns": 1793500513446164258
+      },
+      "modem_simulator/modem_nvram.json": {
+        "size": 164,
+        "mtime_ns": 1793500513445765094
+      },
+      "netsim.ini": {
+        "size": 38,
+        "mtime_ns": 1793496716385239447
+      },
+      "qemu-version.txt": {
+        "size": 1,
+        "mtime_ns": 1793496708085522379
+      },
+      "read-snapshot.txt": {
+        "size": 0,
+        "mtime_ns": 1793500500331323886
+      },
+      "tmpAdbCmds/adbcommand04bd2ca0-5d45-4a59-91b3-b43e7fcd166b": {
+        "size": 14,
+        "mtime_ns": 1793499536589424440
+      },
+      "tmpAdbCmds/adbcommand096a8ad0-9b27-483b-98cc-15c2ff44227f": {
+        "size": 14,
+        "mtime_ns": 1793499597217706477
+      },
+      "tmpAdbCmds/adbcommand1203b312-5ad9-4928-abf3-9f8030d73efe": {
+        "size": 14,
+        "mtime_ns": 1793499961910102772
+      },
+      "tmpAdbCmds/adbcommand1f1327ff-5e6d-4130-b553-222f3e63928b": {
+        "size": 14,
+        "mtime_ns": 1793499976451759106
+      },
+      "tmpAdbCmds/adbcommand31557600-16ab-44e8-ad14-bdc045396a52": {
+        "size": 14,
+        "mtime_ns": 1793499932105236301
+      },
+      "tmpAdbCmds/adbcommand52fed6a1-4f79-43e3-8e3c-90b06548d272": {
+        "size": 0,
+        "mtime_ns": 1793499549902367188
+      },
+      "tmpAdbCmds/adbcommand5a4b7503-debf-481c-bb5a-e9633ae5a274": {
+        "size": 149,
+        "mtime_ns": 1793499519115331882
+      },
+      "tmpAdbCmds/adbcommand8492a227-4017-4d10-b119-30e9d59cfb95": {
+        "size": 14,
+        "mtime_ns": 1793499844061560838
+      },
+      "tmpAdbCmds/adbcommanda847c2be-a6b8-453f-97ad-266dc5473797": {
+        "size": 14,
+        "mtime_ns": 1793499903134392929
+      },
+      "tmpAdbCmds/adbcommandb55c8b7e-5c65-492b-b0fb-4f82d90d1ebd": {
+        "size": 14,
+        "mtime_ns": 1793499873115754505
+      },
+      "tmpAdbCmds/adbcommandbfccf1cf-a56f-42e0-8fd3-f34d10725f95": {
+        "size": 14,
+        "mtime_ns": 1793499858606034945
+      },
+      "tmpAdbCmds/adbcommandd05204a9-a2e4-41a4-8de2-a11563867254": {
+        "size": 14,
+        "mtime_ns": 1793499581741759156
+      },
+      "tmpAdbCmds/adbcommandd145a71f-4197-43d0-a682-110335321fac": {
+        "size": 14,
+        "mtime_ns": 1793499947495847330
+      },
+      "tmpAdbCmds/adbcommandd84fab72-7773-40c2-b743-52aa510281a8": {
+        "size": 14,
+        "mtime_ns": 1793499888638790108
+      },
+      "tmpAdbCmds/adbcommanddac5cb0c-7184-4451-a051-4cd55b77c4c0": {
+        "size": 14,
+        "mtime_ns": 1793500514193009476
+      },
+      "tmpAdbCmds/adbcommanded2f4146-6a3f-420a-ad09-76d86ca95406": {
+        "size": 14,
+        "mtime_ns": 1793499823578581656
+      },
+      "tmpAdbCmds/adbcommandf82f66de-dc5c-4f8b-9e93-fc66e3e84823": {
+        "size": 179,
+        "mtime_ns": 1793499916521925868
+      },
+      "tmpAdbCmds/adbcommandf859f435-3e3e-4635-989f-b9dba1585bd9": {
+        "size": 14,
+        "mtime_ns": 1793499566383918342
+      },
+      "userdata-qemu.img": {
+        "size": 8454144,
+        "mtime_ns": 1793496709326839593
+      },
+      "userdata-qemu.img.qcow2": {
+        "size": 1606811648,
+        "mtime_ns": 1793500512836793079
+      },
+      "version_num.cache": {
+        "size": 9,
+        "mtime_ns": 1793496715484914034
+      }
+    },
+    "qcow_headers": {
+      "cache.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 69206016,
+        "cluster_bits": 16,
+        "backing_file": "cache.img",
+        "backing_file_hex": "63616368652e696d67",
+        "file_size_bytes": 196616,
+        "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+      },
+      "encryptionkey.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 18874368,
+        "cluster_bits": 16,
+        "backing_file": "encryptionkey.img",
+        "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+        "file_size_bytes": 1966080,
+        "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+      },
+      "userdata-qemu.img": {
+        "version": 3,
+        "virtual_size_bytes": 8589934592,
+        "cluster_bits": 16,
+        "backing_file": "",
+        "backing_file_hex": "",
+        "file_size_bytes": 8454144,
+        "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+      },
+      "userdata-qemu.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 8589934592,
+        "cluster_bits": 16,
+        "backing_file": "userdata-qemu.img",
+        "backing_file_hex": "75736572646174612d71656d752e696d67",
+        "file_size_bytes": 1606811648,
+        "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+      }
+    }
+  },
+  "clone_path": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd",
+  "fresh_clone_chain": {
+    "command": {
+      "args": [
+        "${WORKSPACE}/sdk/emulator/qemu-img",
+        "info",
+        "--output=json",
+        "--backing-chain",
+        "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2"
+      ],
+      "returncode": 0,
+      "stdout": "[\n    {\n        \"backing-filename-format\": \"qcow2\",\n        \"virtual-size\": 8589934592,\n        \"filename\": \"${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2\",\n        \"cluster-size\": 65536,\n        \"format\": \"qcow2\",\n        \"actual-size\": 1606811648,\n        \"format-specific\": {\n            \"type\": \"qcow2\",\n            \"data\": {\n                \"compat\": \"1.1\",\n                \"lazy-refcounts\": false,\n                \"refcount-bits\": 16,\n                \"corrupt\": false\n            }\n        },\n        \"full-backing-filename\": \"${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img\",\n        \"backing-filename\": \"userdata-qemu.img\",\n        \"dirty-flag\": false\n    },\n    {\n        \"virtual-size\": 8589934592,\n        \"filename\": \"${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img\",\n        \"cluster-size\": 65536,\n        \"format\": \"qcow2\",\n        \"actual-size\": 8454144,\n        \"format-specific\": {\n            \"type\": \"qcow2\",\n            \"data\": {\n                \"compat\": \"1.1\",\n                \"lazy-refcounts\": false,\n                \"refcount-bits\": 16,\n                \"corrupt\": false\n            }\n        },\n        \"dirty-flag\": false\n    }\n]\n",
+      "stderr": "",
+      "duration_s": 0.020238582976162434,
+      "log": "${WORKSPACE}/logs/1793503116496820000-manual-expand-fresh-clone-chain"
+    },
+    "chain": [
+      {
+        "backing-filename-format": "qcow2",
+        "virtual-size": 8589934592,
+        "filename": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2",
+        "cluster-size": 65536,
+        "format": "qcow2",
+        "actual-size": 1606811648,
+        "format-specific": {
+          "type": "qcow2",
+          "data": {
+            "compat": "1.1",
+            "lazy-refcounts": false,
+            "refcount-bits": 16,
+            "corrupt": false
+          }
+        },
+        "full-backing-filename": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+        "backing-filename": "userdata-qemu.img",
+        "dirty-flag": false
+      },
+      {
+        "virtual-size": 8589934592,
+        "filename": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+        "cluster-size": 65536,
+        "format": "qcow2",
+        "actual-size": 8454144,
+        "format-specific": {
+          "type": "qcow2",
+          "data": {
+            "compat": "1.1",
+            "lazy-refcounts": false,
+            "refcount-bits": 16,
+            "corrupt": false
+          }
+        },
+        "dirty-flag": false
+      }
+    ],
+    "resize_order": [
+      "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+      "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2"
+    ]
+  },
+  "baseline_launch": {
+    "pid": 13430,
+    "boot_s": 12.429103416972794,
+    "args": [
+      "${WORKSPACE}/sdk/emulator/emulator",
+      "-avd",
+      "official_expand_manual32_retest2",
+      "-no-snapshot",
+      "-gpu",
+      "host",
+      "-memory",
+      "4096",
+      "-cores",
+      "4",
+      "-ports",
+      "22160,22161",
+      "-grpc",
+      "22162",
+      "-grpc-use-jwt",
+      "-no-audio",
+      "-no-boot-anim",
+      "-no-metrics",
+      "-verbose",
+      "-no-window"
+    ],
+    "log": "${WORKSPACE}/logs/emulator-1793503116526298000-official_expand_manual32_retest2.log",
+    "state": {
+      "pid": 13430,
+      "identity": "Sun Nov  1 11:18:36 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_expand_manual32_retest2 -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window",
+      "args": [
+        "${WORKSPACE}/sdk/emulator/emulator",
+        "-avd",
+        "official_expand_manual32_retest2",
+        "-no-snapshot",
+        "-gpu",
+        "host",
+        "-memory",
+        "4096",
+        "-cores",
+        "4",
+        "-ports",
+        "22160,22161",
+        "-grpc",
+        "22162",
+        "-grpc-use-jwt",
+        "-no-audio",
+        "-no-boot-anim",
+        "-no-metrics",
+        "-verbose",
+        "-no-window"
+      ],
+      "avd": "official_expand_manual32_retest2",
+      "started_unix": 1793503116.9348822,
+      "boot_started_monotonic": 761949.499116833,
+      "log": "${WORKSPACE}/logs/emulator-1793503116526298000-official_expand_manual32_retest2.log",
+      "window": false,
+      "serial": "emulator-22160",
+      "adb_port": 22150,
+      "gpu": "host"
+    }
+  },
+  "before": {
+    "total_bytes": 8302063616,
+    "reported_mount": "/data/user/0",
+    "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39   8107484 1065672   6894356  14% /data/user/0\next3 4096 2026871 1723587\n",
+    "log": "${WORKSPACE}/logs/1793503129364023000-manual-expand-df-before"
+  },
+  "before_marker": {
+    "size": 1048576,
+    "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+  },
+  "before_marker_log": "${WORKSPACE}/logs/1793503129410721000-manual-expand-marker-before",
+  "before_marker_matches_host": true,
+  "baseline_hardware": {
+    "path": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/hardware-qemu.ini",
+    "text": "hw.cpu.arch = arm64\nhw.cpu.ncore = 4\nhw.ramSize = 4096\nhw.screen = multi-touch\nhw.mainKeys = true\nhw.touchpad0 = false\nhw.touchpad0.width = 600\nhw.touchpad0.height = 400\nhw.trackBall = true\nhw.keyboard = true\nhw.keyboard.lid = false\nhw.keyboard.charmap = qwerty2\nhw.dPad = true\nhw.rotaryInput = false\nhw.gsmModem = true\nhw.gps = true\nhw.battery = true\nhw.accelerometer = true\nhw.accelerometer_uncalibrated = true\nhw.gyroscope = true\nhw.audioInput = false\nhw.audioOutput = true\nhw.sdCard = true\ndisk.cachePartition = true\ndisk.cachePartition.path = ${WORKSPACE}/avd/official_expand_manual32_retest2.avd/cache.img\ndisk.cachePartition.size = 66m\ntest.quitAfterBootTimeOut = -1\ntest.delayAdbTillBootComplete = 0\ntest.monitorAdb = 0\nhw.lcd.width = 1280\nhw.lcd.height = 720\nhw.lcd.depth = 32\nhw.lcd.circular = false\nhw.lcd.density = 240\nhw.lcd.transparent = false\nhw.lcd.backlight = true\nhw.lcd.vsync = 60\nhw.gltransport = pipe\nhw.gltransport.asg.writeBufferSize = 1048576\nhw.gltransport.asg.writeStepSize = 4096\nhw.gltransport.asg.dataRingSize = 32768\nhw.gltransport.drawFlushInterval = 800\nhw.displayRegion.0.1.xOffset = -1\nhw.displayRegion.0.1.yOffset = -1\nhw.displayRegion.0.1.width = 0\nhw.displayRegion.0.1.height = 0\nhw.displayRegion.0.2.xOffset = -1\nhw.displayRegion.0.2.yOffset = -1\nhw.displayRegion.0.2.width = 0\nhw.displayRegion.0.2.height = 0\nhw.displayRegion.0.3.xOffset = -1\nhw.displayRegion.0.3.yOffset = -1\nhw.displayRegion.0.3.width = 0\nhw.displayRegion.0.3.height = 0\nhw.display1.width = 0\nhw.display1.height = 0\nhw.display1.density = 0\nhw.display1.xOffset = -1\nhw.display1.yOffset = -1\nhw.display1.flag = 0\nhw.display2.width = 0\nhw.display2.height = 0\nhw.display2.density = 0\nhw.display2.xOffset = -1\nhw.display2.yOffset = -1\nhw.display2.flag = 0\nhw.display3.width = 0\nhw.display3.height = 0\nhw.display3.density = 0\nhw.display3.xOffset = -1\nhw.display3.yOffset = -1\nhw.display3.flag = 0\nhw.multi_display_window = false\nhw.hotplug_multi_display = false\nhw.gpu.enabled = true\nhw.gpu.mode = host\nhw.initialOrientation = landscape\nhw.camera.back = emulated\nhw.camera.back.orientation = 90\nhw.camera.front = none\nhw.camera.front.orientation = 90\nvm.heapSize = 576\nhw.sensors.light = true\nhw.sensors.pressure = true\nhw.sensors.humidity = true\nhw.sensors.proximity = true\nhw.sensors.magnetic_field = true\nhw.sensors.magnetic_field_uncalibrated = true\nhw.sensors.gyroscope_uncalibrated = true\nhw.sensors.orientation = true\nhw.sensors.temperature = true\nhw.sensors.rgbclight = false\nhw.sensor.hinge = false\nhw.sensor.hinge.count = 0\nhw.sensor.hinge.type = 0\nhw.sensor.hinge.sub_type = 0\nhw.sensor.hinge.resizable.config = 1\nhw.sensor.hinge.fold_to_displayRegion.0.1_at_posture = 1\nhw.sensor.roll = false\nhw.sensor.roll.count = 0\nhw.sensor.roll.resize_to_displayRegion.0.1_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.2_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.3_at_posture = 6\nhw.sensors.heart_rate = false\nhw.sensors.wrist_tilt = false\nhw.sensors.heading = false\nhw.useext4 = true\nkernel.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//kernel-ranchu\nkernel.newDeviceNaming = yes\nkernel.supportsYaffs2 = no\ndisk.ramdisk.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//ramdisk.img\ndisk.systemPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img\ndisk.systemPartition.size = 4107m\ndisk.vendorPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img\ndisk.vendorPartition.size = 800m\ndisk.dataPartition.path = ${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img\ndisk.dataPartition.size = 8g\ndisk.encryptionKeyPartition.path = ${WORKSPACE}/avd/official_expand_manual32_retest2.avd/encryptionkey.img\nPlayStore.enabled = false\navd.name = official_expand_manual32_retest2\navd.id = official_expand_manual32_retest2\nfastboot.forceColdBoot = true\nuserdata.useQcow2 = true\nfirstboot.bootFromDownloadableSnapshot = true\nfirstboot.bootFromLocalSnapshot = true\nfirstboot.saveToLocalSnapshot = true\nandroid.sdk.root = ${WORKSPACE}/sdk\nandroid.avd.home = ${WORKSPACE}/avd\nenvironment.width = 0\nenvironment.height = 0\n",
+    "partition_fields": {
+      "disk.cachePartition.path": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/cache.img",
+      "disk.cachePartition.size": "66m",
+      "disk.systemPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img",
+      "disk.systemPartition.size": "4107m",
+      "disk.vendorPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img",
+      "disk.vendorPartition.size": "800m",
+      "disk.dataPartition.path": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+      "disk.dataPartition.size": "8g",
+      "disk.encryptionKeyPartition.path": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/encryptionkey.img"
+    }
+  },
+  "baseline_shutdown": {
+    "duration_s": 1.3530810410156846,
+    "returncode": 0,
+    "kill_started_monotonic": 761962.099906166,
+    "kill_finished_monotonic": 761962.113231125
+  },
+  "chain_before": {
+    "command": {
+      "args": [
+        "${WORKSPACE}/sdk/emulator/qemu-img",
+        "info",
+        "--output=json",
+        "--backing-chain",
+        "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2"
+      ],
+      "returncode": 0,
+      "stdout": "[\n    {\n        \"backing-filename-format\": \"qcow2\",\n        \"virtual-size\": 8589934592,\n        \"filename\": \"${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2\",\n        \"cluster-size\": 65536,\n        \"format\": \"qcow2\",\n        \"actual-size\": 1623588864,\n        \"format-specific\": {\n            \"type\": \"qcow2\",\n            \"data\": {\n                \"compat\": \"1.1\",\n                \"lazy-refcounts\": false,\n                \"refcount-bits\": 16,\n                \"corrupt\": false\n            }\n        },\n        \"full-backing-filename\": \"${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img\",\n        \"backing-filename\": \"userdata-qemu.img\",\n        \"dirty-flag\": false\n    },\n    {\n        \"virtual-size\": 8589934592,\n        \"filename\": \"${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img\",\n        \"cluster-size\": 65536,\n        \"format\": \"qcow2\",\n        \"actual-size\": 8454144,\n        \"format-specific\": {\n            \"type\": \"qcow2\",\n            \"data\": {\n                \"compat\": \"1.1\",\n                \"lazy-refcounts\": false,\n                \"refcount-bits\": 16,\n                \"corrupt\": false\n            }\n        },\n        \"dirty-flag\": false\n    }\n]\n",
+      "stderr": "",
+      "duration_s": 0.019487250014208257,
+      "log": "${WORKSPACE}/logs/1793503130844895000-manual-expand-chain-before"
+    },
+    "chain": [
+      {
+        "backing-filename-format": "qcow2",
+        "virtual-size": 8589934592,
+        "filename": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2",
+        "cluster-size": 65536,
+        "format": "qcow2",
+        "actual-size": 1623588864,
+        "format-specific": {
+          "type": "qcow2",
+          "data": {
+            "compat": "1.1",
+            "lazy-refcounts": false,
+            "refcount-bits": 16,
+            "corrupt": false
+          }
+        },
+        "full-backing-filename": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+        "backing-filename": "userdata-qemu.img",
+        "dirty-flag": false
+      },
+      {
+        "virtual-size": 8589934592,
+        "filename": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+        "cluster-size": 65536,
+        "format": "qcow2",
+        "actual-size": 8454144,
+        "format-specific": {
+          "type": "qcow2",
+          "data": {
+            "compat": "1.1",
+            "lazy-refcounts": false,
+            "refcount-bits": 16,
+            "corrupt": false
+          }
+        },
+        "dirty-flag": false
+      }
+    ],
+    "resize_order": [
+      "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+      "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2"
+    ]
+  },
+  "headers_before": {
+    "cache.img.qcow2": {
+      "version": 3,
+      "virtual_size_bytes": 69206016,
+      "cluster_bits": 16,
+      "backing_file": "cache.img",
+      "backing_file_hex": "63616368652e696d67",
+      "file_size_bytes": 196616,
+      "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+    },
+    "encryptionkey.img.qcow2": {
+      "version": 3,
+      "virtual_size_bytes": 18874368,
+      "cluster_bits": 16,
+      "backing_file": "encryptionkey.img",
+      "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+      "file_size_bytes": 1966080,
+      "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+    },
+    "userdata-qemu.img": {
+      "version": 3,
+      "virtual_size_bytes": 8589934592,
+      "cluster_bits": 16,
+      "backing_file": "",
+      "backing_file_hex": "",
+      "file_size_bytes": 8454144,
+      "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+    },
+    "userdata-qemu.img.qcow2": {
+      "version": 3,
+      "virtual_size_bytes": 8589934592,
+      "cluster_bits": 16,
+      "backing_file": "userdata-qemu.img",
+      "backing_file_hex": "75736572646174612d71656d752e696d67",
+      "file_size_bytes": 1608515584,
+      "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+    }
+  },
+  "qemu_img_resize": [
+    {
+      "args": [
+        "${WORKSPACE}/sdk/emulator/qemu-img",
+        "resize",
+        "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+        "32G"
+      ],
+      "returncode": 0,
+      "stdout": "Image resized.\n",
+      "stderr": "",
+      "duration_s": 0.015375499962829053,
+      "log": "${WORKSPACE}/logs/1793503130873119000-manual-expand-qemu-img-resize"
+    },
+    {
+      "args": [
+        "${WORKSPACE}/sdk/emulator/qemu-img",
+        "resize",
+        "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2",
+        "32G"
+      ],
+      "returncode": 0,
+      "stdout": "Image resized.\n",
+      "stderr": "",
+      "duration_s": 0.013952082954347134,
+      "log": "${WORKSPACE}/logs/1793503130892505000-manual-expand-qemu-img-resize"
+    }
+  ],
+  "chain_after_resize": {
+    "command": {
+      "args": [
+        "${WORKSPACE}/sdk/emulator/qemu-img",
+        "info",
+        "--output=json",
+        "--backing-chain",
+        "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2"
+      ],
+      "returncode": 0,
+      "stdout": "[\n    {\n        \"backing-filename-format\": \"qcow2\",\n        \"virtual-size\": 34359738368,\n        \"filename\": \"${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2\",\n        \"cluster-size\": 65536,\n        \"format\": \"qcow2\",\n        \"actual-size\": 1623588864,\n        \"format-specific\": {\n            \"type\": \"qcow2\",\n            \"data\": {\n                \"compat\": \"1.1\",\n                \"lazy-refcounts\": false,\n                \"refcount-bits\": 16,\n                \"corrupt\": false\n            }\n        },\n        \"full-backing-filename\": \"${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img\",\n        \"backing-filename\": \"userdata-qemu.img\",\n        \"dirty-flag\": false\n    },\n    {\n        \"virtual-size\": 34359738368,\n        \"filename\": \"${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img\",\n        \"cluster-size\": 65536,\n        \"format\": \"qcow2\",\n        \"actual-size\": 9502720,\n        \"format-specific\": {\n            \"type\": \"qcow2\",\n            \"data\": {\n                \"compat\": \"1.1\",\n                \"lazy-refcounts\": false,\n                \"refcount-bits\": 16,\n                \"corrupt\": false\n            }\n        },\n        \"dirty-flag\": false\n    }\n]\n",
+      "stderr": "",
+      "duration_s": 0.013475124957039952,
+      "log": "${WORKSPACE}/logs/1793503130907680000-manual-expand-chain-after"
+    },
+    "chain": [
+      {
+        "backing-filename-format": "qcow2",
+        "virtual-size": 34359738368,
+        "filename": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2",
+        "cluster-size": 65536,
+        "format": "qcow2",
+        "actual-size": 1623588864,
+        "format-specific": {
+          "type": "qcow2",
+          "data": {
+            "compat": "1.1",
+            "lazy-refcounts": false,
+            "refcount-bits": 16,
+            "corrupt": false
+          }
+        },
+        "full-backing-filename": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+        "backing-filename": "userdata-qemu.img",
+        "dirty-flag": false
+      },
+      {
+        "virtual-size": 34359738368,
+        "filename": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+        "cluster-size": 65536,
+        "format": "qcow2",
+        "actual-size": 9502720,
+        "format-specific": {
+          "type": "qcow2",
+          "data": {
+            "compat": "1.1",
+            "lazy-refcounts": false,
+            "refcount-bits": 16,
+            "corrupt": false
+          }
+        },
+        "dirty-flag": false
+      }
+    ],
+    "resize_order": [
+      "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+      "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img.qcow2"
+    ]
+  },
+  "config_before": "AvdId=official_expand_manual32_retest2\navd.ini.displayname=official_expand_manual32_retest2\navd.ini.encoding=UTF-8\nPlayStore.enabled=false\nabi.type=arm64-v8a\ntag.id=google_apis\ntag.display=Google APIs\nimage.sysdir.1=system-images/android-34/google_apis/arm64-v8a/\nhw.cpu.arch=arm64\nhw.cpu.ncore=4\nhw.ramSize=4096\nhw.lcd.width=1280\nhw.lcd.height=720\nhw.lcd.density=240\nhw.initialOrientation=landscape\nhw.keyboard=yes\nhw.gpu.enabled=yes\nhw.gpu.mode=host\nhw.audioInput=no\nhw.battery=yes\nhw.gps=yes\nhw.accelerometer=yes\ndisk.dataPartition.size=8G\ndisk.cachePartition=yes\ndisk.cachePartition.size=66MB\nvm.heapSize=512\nfastboot.forceColdBoot=yes\nshowDeviceFrame=no\n",
+  "config_after": "AvdId=official_expand_manual32_retest2\navd.ini.displayname=official_expand_manual32_retest2\navd.ini.encoding=UTF-8\nPlayStore.enabled=false\nabi.type=arm64-v8a\ntag.id=google_apis\ntag.display=Google APIs\nimage.sysdir.1=system-images/android-34/google_apis/arm64-v8a/\nhw.cpu.arch=arm64\nhw.cpu.ncore=4\nhw.ramSize=4096\nhw.lcd.width=1280\nhw.lcd.height=720\nhw.lcd.density=240\nhw.initialOrientation=landscape\nhw.keyboard=yes\nhw.gpu.enabled=yes\nhw.gpu.mode=host\nhw.audioInput=no\nhw.battery=yes\nhw.gps=yes\nhw.accelerometer=yes\ndisk.dataPartition.size=32G\ndisk.cachePartition=yes\ndisk.cachePartition.size=66MB\nvm.heapSize=512\nfastboot.forceColdBoot=yes\nshowDeviceFrame=no\n",
+  "growth_launch": {
+    "pid": 13511,
+    "boot_s": 12.370783833088353,
+    "args": [
+      "${WORKSPACE}/sdk/emulator/emulator",
+      "-avd",
+      "official_expand_manual32_retest2",
+      "-no-snapshot",
+      "-gpu",
+      "host",
+      "-memory",
+      "4096",
+      "-cores",
+      "4",
+      "-ports",
+      "22160,22161",
+      "-grpc",
+      "22162",
+      "-grpc-use-jwt",
+      "-no-audio",
+      "-no-boot-anim",
+      "-no-metrics",
+      "-verbose",
+      "-no-window",
+      "-partition-size",
+      "32768"
+    ],
+    "log": "${WORKSPACE}/logs/emulator-1793503130929709000-official_expand_manual32_retest2.log",
+    "state": {
+      "pid": 13511,
+      "identity": "Sun Nov  1 11:18:50 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_expand_manual32_retest2 -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window -partition-size 32768",
+      "args": [
+        "${WORKSPACE}/sdk/emulator/emulator",
+        "-avd",
+        "official_expand_manual32_retest2",
+        "-no-snapshot",
+        "-gpu",
+        "host",
+        "-memory",
+        "4096",
+        "-cores",
+        "4",
+        "-ports",
+        "22160,22161",
+        "-grpc",
+        "22162",
+        "-grpc-use-jwt",
+        "-no-audio",
+        "-no-boot-anim",
+        "-no-metrics",
+        "-verbose",
+        "-no-window",
+        "-partition-size",
+        "32768"
+      ],
+      "avd": "official_expand_manual32_retest2",
+      "started_unix": 1793503131.339438,
+      "boot_started_monotonic": 761963.903750083,
+      "log": "${WORKSPACE}/logs/emulator-1793503130929709000-official_expand_manual32_retest2.log",
+      "window": false,
+      "serial": "emulator-22160",
+      "adb_port": 22150,
+      "gpu": "host"
+    }
+  },
+  "after_image_resize": {
+    "total_bytes": 8302063616,
+    "reported_mount": "/data/user/0",
+    "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39   8107484 1065376   6894652  14% /data/user/0\next3 4096 2026871 1723663\n",
+    "log": "${WORKSPACE}/logs/1793503143710260000-manual-expand-df-after-image-resize"
+  },
+  "growth_hardware": {
+    "path": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/hardware-qemu.ini",
+    "text": "hw.cpu.arch = arm64\nhw.cpu.ncore = 4\nhw.ramSize = 4096\nhw.screen = multi-touch\nhw.mainKeys = true\nhw.touchpad0 = false\nhw.touchpad0.width = 600\nhw.touchpad0.height = 400\nhw.trackBall = true\nhw.keyboard = true\nhw.keyboard.lid = false\nhw.keyboard.charmap = qwerty2\nhw.dPad = true\nhw.rotaryInput = false\nhw.gsmModem = true\nhw.gps = true\nhw.battery = true\nhw.accelerometer = true\nhw.accelerometer_uncalibrated = true\nhw.gyroscope = true\nhw.audioInput = false\nhw.audioOutput = true\nhw.sdCard = true\ndisk.cachePartition = true\ndisk.cachePartition.path = ${WORKSPACE}/avd/official_expand_manual32_retest2.avd/cache.img\ndisk.cachePartition.size = 66m\ntest.quitAfterBootTimeOut = -1\ntest.delayAdbTillBootComplete = 0\ntest.monitorAdb = 0\nhw.lcd.width = 1280\nhw.lcd.height = 720\nhw.lcd.depth = 32\nhw.lcd.circular = false\nhw.lcd.density = 240\nhw.lcd.transparent = false\nhw.lcd.backlight = true\nhw.lcd.vsync = 60\nhw.gltransport = pipe\nhw.gltransport.asg.writeBufferSize = 1048576\nhw.gltransport.asg.writeStepSize = 4096\nhw.gltransport.asg.dataRingSize = 32768\nhw.gltransport.drawFlushInterval = 800\nhw.displayRegion.0.1.xOffset = -1\nhw.displayRegion.0.1.yOffset = -1\nhw.displayRegion.0.1.width = 0\nhw.displayRegion.0.1.height = 0\nhw.displayRegion.0.2.xOffset = -1\nhw.displayRegion.0.2.yOffset = -1\nhw.displayRegion.0.2.width = 0\nhw.displayRegion.0.2.height = 0\nhw.displayRegion.0.3.xOffset = -1\nhw.displayRegion.0.3.yOffset = -1\nhw.displayRegion.0.3.width = 0\nhw.displayRegion.0.3.height = 0\nhw.display1.width = 0\nhw.display1.height = 0\nhw.display1.density = 0\nhw.display1.xOffset = -1\nhw.display1.yOffset = -1\nhw.display1.flag = 0\nhw.display2.width = 0\nhw.display2.height = 0\nhw.display2.density = 0\nhw.display2.xOffset = -1\nhw.display2.yOffset = -1\nhw.display2.flag = 0\nhw.display3.width = 0\nhw.display3.height = 0\nhw.display3.density = 0\nhw.display3.xOffset = -1\nhw.display3.yOffset = -1\nhw.display3.flag = 0\nhw.multi_display_window = false\nhw.hotplug_multi_display = false\nhw.gpu.enabled = true\nhw.gpu.mode = host\nhw.initialOrientation = landscape\nhw.camera.back = emulated\nhw.camera.back.orientation = 90\nhw.camera.front = none\nhw.camera.front.orientation = 90\nvm.heapSize = 576\nhw.sensors.light = true\nhw.sensors.pressure = true\nhw.sensors.humidity = true\nhw.sensors.proximity = true\nhw.sensors.magnetic_field = true\nhw.sensors.magnetic_field_uncalibrated = true\nhw.sensors.gyroscope_uncalibrated = true\nhw.sensors.orientation = true\nhw.sensors.temperature = true\nhw.sensors.rgbclight = false\nhw.sensor.hinge = false\nhw.sensor.hinge.count = 0\nhw.sensor.hinge.type = 0\nhw.sensor.hinge.sub_type = 0\nhw.sensor.hinge.resizable.config = 1\nhw.sensor.hinge.fold_to_displayRegion.0.1_at_posture = 1\nhw.sensor.roll = false\nhw.sensor.roll.count = 0\nhw.sensor.roll.resize_to_displayRegion.0.1_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.2_at_posture = 6\nhw.sensor.roll.resize_to_displayRegion.0.3_at_posture = 6\nhw.sensors.heart_rate = false\nhw.sensors.wrist_tilt = false\nhw.sensors.heading = false\nhw.useext4 = true\nkernel.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//kernel-ranchu\nkernel.newDeviceNaming = yes\nkernel.supportsYaffs2 = no\ndisk.ramdisk.path = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//ramdisk.img\ndisk.systemPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img\ndisk.systemPartition.size = 32g\ndisk.vendorPartition.initPath = ${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img\ndisk.vendorPartition.size = 32g\ndisk.dataPartition.path = ${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img\ndisk.dataPartition.size = 32g\ndisk.encryptionKeyPartition.path = ${WORKSPACE}/avd/official_expand_manual32_retest2.avd/encryptionkey.img\nPlayStore.enabled = false\navd.name = official_expand_manual32_retest2\navd.id = official_expand_manual32_retest2\nfastboot.forceColdBoot = true\nuserdata.useQcow2 = true\nfirstboot.bootFromDownloadableSnapshot = true\nfirstboot.bootFromLocalSnapshot = true\nfirstboot.saveToLocalSnapshot = true\nandroid.sdk.root = ${WORKSPACE}/sdk\nandroid.avd.home = ${WORKSPACE}/avd\nenvironment.width = 0\nenvironment.height = 0\n",
+    "partition_fields": {
+      "disk.cachePartition.path": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/cache.img",
+      "disk.cachePartition.size": "66m",
+      "disk.systemPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//system.img",
+      "disk.systemPartition.size": "32g",
+      "disk.vendorPartition.initPath": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a//vendor.img",
+      "disk.vendorPartition.size": "32g",
+      "disk.dataPartition.path": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/userdata-qemu.img",
+      "disk.dataPartition.size": "32g",
+      "disk.encryptionKeyPartition.path": "${WORKSPACE}/avd/official_expand_manual32_retest2.avd/encryptionkey.img"
+    }
+  },
+  "adb_root": {
+    "args": [
+      "${WORKSPACE}/sdk/platform-tools/adb",
+      "-H",
+      "127.0.0.1",
+      "-P",
+      "22150",
+      "-s",
+      "emulator-22160",
+      "root"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "",
+    "duration_s": 1.232019792078063,
+    "log": "${WORKSPACE}/logs/1793503143767858000-manual-expand-adb-root"
+  },
+  "adb_wait_for_root": {
+    "args": [
+      "${WORKSPACE}/sdk/platform-tools/adb",
+      "-H",
+      "127.0.0.1",
+      "-P",
+      "22150",
+      "-s",
+      "emulator-22160",
+      "wait-for-device"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "",
+    "duration_s": 0.012870916980318725,
+    "log": "${WORKSPACE}/logs/1793503145000719000-manual-expand-wait-root"
+  },
+  "root_id": {
+    "args": [
+      "${WORKSPACE}/sdk/platform-tools/adb",
+      "-H",
+      "127.0.0.1",
+      "-P",
+      "22150",
+      "-s",
+      "emulator-22160",
+      "shell",
+      "id -u"
+    ],
+    "returncode": 0,
+    "stdout": "0\n",
+    "stderr": "",
+    "duration_s": 0.04963758401572704,
+    "log": "${WORKSPACE}/logs/1793503145014396000-manual-expand-root-id"
+  },
+  "topology_before_filesystem_resize": {
+    "mounts_command": {
+      "args": [
+        "${WORKSPACE}/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "22150",
+        "-s",
+        "emulator-22160",
+        "shell",
+        "cat /proc/mounts"
+      ],
+      "returncode": 0,
+      "stdout": "/dev/block/dm-0 / ext4 ro,seclabel,relatime 0 0\ntmpfs /dev tmpfs rw,seclabel,nosuid,relatime,mode=755 0 0\ndevpts /dev/pts devpts rw,seclabel,relatime,mode=600,ptmxmode=000 0 0\nproc /proc proc rw,relatime,gid=3009,hidepid=invisible 0 0\nsysfs /sys sysfs rw,seclabel,relatime 0 0\nselinuxfs /sys/fs/selinux selinuxfs rw,relatime 0 0\ntmpfs /mnt tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\ntmpfs /mnt/installer tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\ntmpfs /mnt/androidwritable tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\n/dev/block/platform/a003c00.virtio_mmio/by-name/metadata /metadata ext4 rw,seclabel,nosuid,nodev,noatime 0 0\n/dev/block/dm-4 /vendor ext4 ro,seclabel,relatime 0 0\n/dev/block/dm-3 /product ext4 ro,seclabel,relatime 0 0\n/dev/block/dm-1 /system_dlkm erofs ro,seclabel,relatime,user_xattr,acl,cache_strategy=readaround 0 0\n/dev/block/dm-2 /system_ext ext4 ro,seclabel,relatime 0 0\ntmpfs /apex tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755 0 0\ntmpfs /linkerconfig tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755 0 0\nnone /dev/blkio cgroup rw,nosuid,nodev,noexec,relatime,blkio 0 0\nnone /sys/fs/cgroup cgroup2 rw,nosuid,nodev,noexec,relatime,memory_recursiveprot 0 0\nnone /dev/cpuctl cgroup rw,nosuid,nodev,noexec,relatime,cpu 0 0\nnone /dev/cpuset cgroup rw,nosuid,nodev,noexec,relatime,cpuset,noprefix,release_agent=/sbin/cpuset_release_agent 0 0\nnone /dev/memcg cgroup rw,nosuid,nodev,noexec,relatime,memory 0 0\ntracefs /sys/kernel/tracing tracefs rw,seclabel,relatime,gid=3012 0 0\nnone /config configfs rw,nosuid,nodev,noexec,relatime 0 0\nbinder /dev/binderfs binder rw,relatime,max=1048576,stats=global 0 0\nnone /sys/fs/fuse/connections fusectl rw,relatime 0 0\nbpf /sys/fs/bpf bpf rw,nosuid,nodev,noexec,relatime 0 0\npstore /sys/fs/pstore pstore rw,seclabel,nosuid,nodev,noexec,relatime 0 0\ntmpfs /storage tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\n/dev/block/dm-39 /data ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\ntmpfs /linkerconfig tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755 0 0\ntmpfs /data_mirror tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=700,gid=1000 0 0\n/dev/block/dm-39 /data_mirror/data_ce/null ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data_mirror/data_de/null ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data_mirror/misc_ce/null ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data_mirror/misc_de/null ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data_mirror/cur_profiles ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data_mirror/ref_profiles ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/loop6 /apex/com.android.vndk.v34@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop11 /apex/com.google.mainline.primary.libs@340724000 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop6 /apex/com.android.vndk.v34 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop5 /apex/com.android.runtime@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop14 /apex/com.android.btservices@340815010 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop5 /apex/com.android.runtime ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop9 /apex/com.google.android.widevine@340720000 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop14 /apex/com.android.btservices ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop10 /apex/com.android.devicelock@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop9 /apex/com.google.android.widevine ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop10 /apex/com.android.devicelock ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop20 /apex/com.android.tzdata@340818040 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop20 /apex/com.android.tzdata ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop4 /apex/com.android.virt@2 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop4 /apex/com.android.virt ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop13 /apex/com.android.apex.cts.shim@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop13 /apex/com.android.apex.cts.shim ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-38 /apex/com.android.permission@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-13 /apex/com.android.art@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-38 /apex/com.android.permission ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-13 /apex/com.android.art ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-25 /apex/com.android.tethering@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-25 /apex/com.android.tethering ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-37 /apex/com.android.configinfrastructure@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-33 /apex/com.android.healthfitness@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-30 /apex/com.android.cellbroadcast@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-35 /apex/com.android.appsearch@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-28 /apex/com.android.scheduling@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-37 /apex/com.android.configinfrastructure ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-28 /apex/com.android.scheduling ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-30 /apex/com.android.cellbroadcast ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-33 /apex/com.android.healthfitness ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-35 /apex/com.android.appsearch ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-31 /apex/com.android.neuralnetworks@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-16 /apex/com.android.resolv@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-32 /apex/com.android.sdkext@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-31 /apex/com.android.neuralnetworks ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-16 /apex/com.android.resolv ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-32 /apex/com.android.sdkext ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-27 /apex/com.android.conscrypt@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop36 /apex/com.android.i18n@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop36 /apex/com.android.i18n ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-27 /apex/com.android.conscrypt ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-5 /apex/com.android.mediaprovider@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-5 /apex/com.android.mediaprovider ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-11 /apex/com.android.ondevicepersonalization@340818040 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-9 /apex/com.android.uwb@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-22 /apex/com.android.media.swcodec@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-21 /apex/com.android.adbd@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-11 /apex/com.android.ondevicepersonalization ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-9 /apex/com.android.uwb ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-20 /apex/com.android.media@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-22 /apex/com.android.media.swcodec ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-21 /apex/com.android.adbd ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-20 /apex/com.android.media ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-10 /apex/com.android.extservices@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-10 /apex/com.android.extservices ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-19 /apex/com.android.os.statsd@340818060 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-18 /apex/com.android.rkpd@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-14 /apex/com.android.adservices@340818040 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-6 /apex/com.android.ipsec@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-14 /apex/com.android.adservices ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-7 /apex/com.android.wifi@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-18 /apex/com.android.rkpd ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-19 /apex/com.android.os.statsd ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-7 /apex/com.android.wifi ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-6 /apex/com.android.ipsec ext4 ro,dirsync,seclabel,nodev,noatime 0 0\ntmpfs /apex/apex-info-list.xml tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755 0 0\n/dev/block/dm-39 /data_mirror/data_ce/null/0 ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data/user/0 ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/fuse /mnt/installer/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/fuse /mnt/androidwritable/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/fuse /mnt/user/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/fuse /storage/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/block/dm-39 /mnt/pass_through/0/emulated ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n",
+      "stderr": "",
+      "duration_s": 0.022421333007514477,
+      "log": "${WORKSPACE}/logs/1793503145064600000-manual-expand-topology-mounts"
+    },
+    "data_mounts": [
+      {
+        "device": "/dev/block/dm-39",
+        "mount": "/data",
+        "filesystem": "ext4",
+        "options": "rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic"
+      }
+    ],
+    "device_realpath_command": {
+      "args": [
+        "${WORKSPACE}/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "22150",
+        "-s",
+        "emulator-22160",
+        "shell",
+        "readlink -f /dev/block/dm-39"
+      ],
+      "returncode": 0,
+      "stdout": "/dev/block/dm-39\n",
+      "stderr": "",
+      "duration_s": 0.033470625057816505,
+      "log": "${WORKSPACE}/logs/1793503145087633000-manual-expand-topology-device-realpath"
+    },
+    "mounted_device": "/dev/block/dm-39",
+    "mounted_block_size_command": {
+      "args": [
+        "${WORKSPACE}/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "22150",
+        "-s",
+        "emulator-22160",
+        "shell",
+        "blockdev --getsize64 /dev/block/dm-39"
+      ],
+      "returncode": 0,
+      "stdout": "34359738368\n",
+      "stderr": "",
+      "duration_s": 0.01893437502440065,
+      "log": "${WORKSPACE}/logs/1793503145121925000-manual-expand-topology-mounted-block-size"
+    },
+    "mounted_block_bytes": 34359738368,
+    "underlying_userdata_command": {
+      "args": [
+        "${WORKSPACE}/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "22150",
+        "-s",
+        "emulator-22160",
+        "shell",
+        "for p in /dev/block/by-name/userdata /dev/block/platform/*/by-name/userdata; do if [ -e \"$p\" ]; then readlink -f \"$p\"; blockdev --getsize64 \"$p\"; fi; done"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "duration_s": 0.052789333974942565,
+      "log": "${WORKSPACE}/logs/1793503145141677000-manual-expand-topology-underlying-userdata"
+    },
+    "slaves_command": {
+      "args": [
+        "${WORKSPACE}/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "22150",
+        "-s",
+        "emulator-22160",
+        "shell",
+        "ls -l /sys/class/block/dm-39/slaves"
+      ],
+      "returncode": 0,
+      "stdout": "total 0\nlrwxrwxrwx 1 root root 0 2026-11-01 11:19 vdc -> ../../../../platform/a003a00.virtio_mmio/virtio4/block/vdc\n",
+      "stderr": "",
+      "duration_s": 0.06388341693673283,
+      "log": "${WORKSPACE}/logs/1793503145195313000-manual-expand-topology-dm-slaves"
+    }
+  },
+  "guest_resize2fs_probe": {
+    "args": [
+      "${WORKSPACE}/sdk/platform-tools/adb",
+      "-H",
+      "127.0.0.1",
+      "-P",
+      "22150",
+      "-s",
+      "emulator-22160",
+      "shell",
+      "command -v resize2fs"
+    ],
+    "returncode": 0,
+    "stdout": "/system/bin/resize2fs\n",
+    "stderr": "",
+    "duration_s": 0.02526374999433756,
+    "log": "${WORKSPACE}/logs/1793503145260252000-manual-expand-guest-resize2fs"
+  },
+  "guest_resize2fs": {
+    "args": [
+      "${WORKSPACE}/sdk/platform-tools/adb",
+      "-H",
+      "127.0.0.1",
+      "-P",
+      "22150",
+      "-s",
+      "emulator-22160",
+      "shell",
+      "/system/bin/resize2fs /dev/block/dm-39"
+    ],
+    "returncode": 1,
+    "stdout": "Filesystem at /dev/block/dm-39 is mounted on /data; on-line resizing required\nold_desc_blocks = 1, new_desc_blocks = 2\n",
+    "stderr": "resize2fs 1.46.6 (1-Feb-2023)\n/system/bin/resize2fs: Invalid argument While checking for on-line resizing support\n",
+    "duration_s": 0.11600191600155085,
+    "log": "${WORKSPACE}/logs/1793503145286653000-manual-expand-guest-resize2fs-run"
+  },
+  "after_guest_resize": {
+    "total_bytes": 10547974144,
+    "reported_mount": "/mnt/pass_through/0/emulated",
+    "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39  10300756 1066640   9234116  11% /mnt/pass_through/0/emulated\next3 4096 2575189 2266105\n",
+    "log": "${WORKSPACE}/logs/1793503145403468000-manual-expand-df-after-guest-resize"
+  },
+  "guest_failure_diagnostics": {
+    "dmesg_last_120": {
+      "args": [
+        "${WORKSPACE}/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "22150",
+        "-s",
+        "emulator-22160",
+        "shell",
+        "dmesg | tail -n 120"
+      ],
+      "returncode": 0,
+      "stdout": "[    9.664715] servicemanager: Found android.hardware.radio.modem.IRadioModem/slot1 in device VINTF manifest.\n[    9.664739] servicemanager: Found android.hardware.radio.network.IRadioNetwork/slot1 in device VINTF manifest.\n[    9.664760] servicemanager: Found android.hardware.radio.sim.IRadioSim/slot1 in device VINTF manifest.\n[    9.664780] servicemanager: Found android.hardware.radio.voice.IRadioVoice/slot1 in device VINTF manifest.\n[    9.664796] servicemanager: Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.\n[    9.665029] servicemanager: Found android.hardware.radio.modem.IRadioModem/slot1 in device VINTF manifest.\n[    9.667216] servicemanager: Found android.hardware.radio.data.IRadioData/slot1 in device VINTF manifest.\n[    9.667834] servicemanager: Found android.hardware.radio.messaging.IRadioMessaging/slot1 in device VINTF manifest.\n[    9.669178] servicemanager: Found android.hardware.radio.network.IRadioNetwork/slot1 in device VINTF manifest.\n[    9.669354] servicemanager: Found android.hardware.radio.sim.IRadioSim/slot1 in device VINTF manifest.\n[    9.669500] servicemanager: Found android.hardware.radio.voice.IRadioVoice/slot1 in device VINTF manifest.\n[    9.669628] servicemanager: Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.\n[    9.669641] servicemanager: Found android.hardware.radio.ims.IRadioIms/slot1 in device VINTF manifest.\n[    9.674434] servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.\n[    9.679713] servicemanager: VINTF HALs require names in the format type/instance (e.g. some.package.foo.IFoo/default) but got: suspend_control\n[    9.679786] servicemanager: Found android.hardware.bluetooth.IBluetoothHci/default in device VINTF manifest.\n[    9.745979] servicemanager: Found android.hardware.radio.config.IRadioConfig/default in device VINTF manifest.\n[    9.798999] servicemanager: Found android.hardware.bluetooth.audio.IBluetoothAudioProviderFactory/default in device VINTF manifest.\n[    9.799016] servicemanager: Found android.hardware.bluetooth.audio.IBluetoothAudioProviderFactory/default in device VINTF manifest.\n[   10.085592] servicemanager: Found android.hardware.power.IPower/default in device VINTF manifest.\n[   10.089977] apexd: markBootCompleted() received by ApexService\n[   10.091970] init: processing action (sys.boot_completed=1) from (/system/etc/init/hw/init.rc:1224)\n[   10.092033] init: starting service 'exec 20 (/bin/rm -rf /data/per_boot)'...\n[   10.106088] selinux: SELinux: Skipping restorecon on directory(/data/system_ce/0)\n[   10.106869] selinux: SELinux: Skipping restorecon on directory(/data/vendor_ce/0)\n[   10.107508] init: ... started service 'exec 20 (/bin/rm -rf /data/per_boot)' has pid 1328\n[   10.107513] init: SVC_EXEC service 'exec 20 (/bin/rm -rf /data/per_boot)' pid 1328 (uid 1000 gid 1000+0 context default) started; waiting...\n[   10.107948] selinux: SELinux: Skipping restorecon on directory(/data/misc_ce/0)\n[   10.112107] init: Service 'exec 20 (/bin/rm -rf /data/per_boot)' (pid 1328) exited with status 0 waiting took 0.019000 seconds\n[   10.112111] init: Sending signal 9 to service 'exec 20 (/bin/rm -rf /data/per_boot)' (pid 1328) process group...\n[   10.112134] libprocessgroup: Successfully killed process cgroup uid 1000 pid 1328 in 0ms\n[   10.112196] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.\n[   10.112365] init: Encryption policy of /data/per_boot set to 218a85656ae864324604b072eb45fe32 v2 modes 1/4 flags 0x2\n[   10.112371] init: processing action (sys.boot_completed=1) from (/vendor/etc/init/hw/init.ranchu.rc:195)\n[   10.112411] init: processing action (sys.boot_completed=1 && sys.bootstat.first_boot_completed=0) from (/system/etc/init/bootstat.rc:67)\n[   10.112446] init: starting service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)'...\n[   10.112998] init: ... started service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)' has pid 1343\n[   10.113108] init: processing action (sys.boot_completed=1) from (/system/etc/init/dmesgd.rc:4)\n[   10.113231] init: processing action (sys.boot_completed=1) from (/system/etc/init/flags_health_check.rc:7)\n[   10.113768] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.\n[   10.114803] init: processing action (persist.dbg.keep_debugfs_mounted= && ro.product.debugfs_restrictions.enabled=true && sys.boot_completed=1) from (/system/etc/init/init-debug.rc:15)\n[   10.115250] init: processing action (lmkd.reinit=0 && sys.boot_completed=1) from (/system/etc/init/lmkd.rc:14)\n[   10.115420] init: processing action (sys.boot_completed=1) from (/system/etc/init/logd.rc:34)\n[   10.115455] init: starting service 'logd-auditctl'...\n[   10.116835] init: ... started service 'logd-auditctl' has pid 1344\n[   10.116846] init: processing action (sys.boot_completed=1) from (/system/etc/init/perfetto.rc:130)\n[   10.116892] init: starting service 'exec 22 (/system/bin/perfetto -c /data/misc/perfetto-configs/stopboottracetrigger.pbtxt --txt)'...\n[   10.117234] init: ... started service 'exec 22 (/system/bin/perfetto -c /data/misc/perfetto-configs/stopboottracetrigger.pbtxt --txt)' has pid 1345\n[   10.117239] init: SVC_EXEC service 'exec 22 (/system/bin/perfetto -c /data/misc/perfetto-configs/stopboottracetrigger.pbtxt --txt)' pid 1345 (uid 0 gid 0+0 context default) started; waiting...\n[   10.120153] init: Service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)' (pid 1343) exited with status 0 oneshot service took 0.007000 seconds in background\n[   10.120156] init: Sending signal 9 to service 'exec 21 (/system/bin/bootstat --record_boot_complete --record_boot_reason --record_time_since_factory_reset -l)' (pid 1343) process group...\n[   10.120175] libprocessgroup: Successfully killed process cgroup uid 1000 pid 1343 in 0ms\n[   10.130696] init: Service 'logd-auditctl' (pid 1344) exited with status 0 oneshot service took 0.014000 seconds in background\n[   10.130700] init: Sending signal 9 to service 'logd-auditctl' (pid 1344) process group...\n[   10.130717] libprocessgroup: Successfully killed process cgroup uid 1036 pid 1344 in 0ms\n[   10.131199] init: Service 'exec 22 (/system/bin/perfetto -c /data/misc/perfetto-configs/stopboottracetrigger.pbtxt --txt)' (pid 1345) exited with status 1 waiting took 0.014000 seconds\n[   10.131202] init: Sending signal 9 to service 'exec 22 (/system/bin/perfetto -c /data/misc/perfetto-configs/stopboottracetrigger.pbtxt --txt)' (pid 1345) process group...\n[   10.131215] libprocessgroup: Successfully killed process cgroup uid 0 pid 1345 in 0ms\n[   10.131242] init: processing action (sys.boot_completed=1 && sys.wifitracing.started=0) from (/system/etc/init/wifi.rc:28)\n[   10.131288] selinux: SELinux: Could not get canonical path for /sys/kernel/debug/tracing/instances/wifi restorecon: No such file or directory.\n[   10.151954] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.\n[   10.152238] apexd: destroyCeSnapshotsNotSpecified() received by ApexService user_id : 0 retain_rollback_ids : []\n[   10.154910] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.\n[   10.157421] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.\n[   10.158479] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.\n[   10.158933] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.\n[   10.159280] servicemanager: Found android.hardware.wifi.IWifi/default in device VINTF manifest.\n[   10.164141] init: processing action (dev.bootcomplete=1 && vendor.qemu.dev.bootcomplete=0) from (/vendor/etc/init/hw/init.ranchu.rc:107)\n[   10.165024] init: starting service 'qemu-props-bootcomplete'...\n[   10.165921] init: ... started service 'qemu-props-bootcomplete' has pid 1372\n[   10.166159] init: starting service 'ranchu-setup'...\n[   10.166946] init: ... started service 'ranchu-setup' has pid 1374\n[   10.167008] init: processing action (persist.sys.zram_enabled=1 && sys-boot-completed-set) from (/vendor/etc/init/hw/init.ranchu.rc:198)\n[   10.169195] zram0: detected capacity change from 0 to 6025224\n[   10.173771] mkswap: Swapspace size: 3012608k, UUID=612e2a6e-c4cd-40b5-b34e-e2bf59a58633\n[   10.174285] Adding 3012608k swap on /dev/block/zram0.  Priority:-2 extents:1 across:3012608k SS\n[   10.174962] init: Service 'qemu-props-bootcomplete' (pid 1372) exited with status 0 oneshot service took 0.009000 seconds in background\n[   10.174970] init: Sending signal 9 to service 'qemu-props-bootcomplete' (pid 1372) process group...\n[   10.174998] libprocessgroup: Successfully killed process cgroup uid 0 pid 1372 in 0ms\n[   10.175455] init: processing action (bootreceiver.enable=1 && dmesgd.start=1 && ro.product.cpu.abilist64=*) from (/system/etc/init/dmesgd.rc:12)\n[   10.175503] init: starting service 'dmesgd'...\n[   10.176714] init: ... started service 'dmesgd' has pid 1377\n[   10.176969] init: processing action (lmkd.reinit=1) from (/system/etc/init/lmkd.rc:10)\n[   10.177012] init: starting service 'exec 23 (/system/bin/lmkd --reinit)'...\n[   10.177392] init: ... started service 'exec 23 (/system/bin/lmkd --reinit)' has pid 1378\n[   10.177431] init: processing action (sys.user.0.ce_available=true) from (/system/etc/init/wifi.rc:21)\n[   10.177545] selinux: SELinux: Skipping restorecon on directory(/data/misc_ce/0/apexdata/com.android.wifi)\n[   10.177556] init: processing action (sys.boot_completed=1 && sys.wifitracing.started=1 && wifi.interface=*) from (/system/etc/init/wifi.rc:98)\n[   10.197187] init: Service 'ranchu-setup' (pid 1374) exited with status 0 oneshot service took 0.030000 seconds in background\n[   10.197191] init: Sending signal 9 to service 'ranchu-setup' (pid 1374) process group...\n[   10.197224] libprocessgroup: Successfully killed process cgroup uid 0 pid 1374 in 0ms\n[   10.227849] init: Service 'exec 23 (/system/bin/lmkd --reinit)' (pid 1378) exited with status 0 oneshot service took 0.050000 seconds in background\n[   10.227854] init: Sending signal 9 to service 'exec 23 (/system/bin/lmkd --reinit)' (pid 1378) process group...\n[   10.227882] libprocessgroup: Successfully killed process cgroup uid 0 pid 1378 in 0ms\n[   10.247132] init: Service 'dmesgd' (pid 1377) exited with status 0 oneshot service took 0.071000 seconds in background\n[   10.247137] init: Sending signal 9 to service 'dmesgd' (pid 1377) process group...\n[   10.247167] libprocessgroup: Successfully killed process cgroup uid 1086 pid 1377 in 0ms\n[   10.502310] servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.\n[   10.653416] servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.\n[   10.680369] servicemanager: Notifying android.hardware.gnss.IGnss/default they do (previously: don't) have clients when we now have a record of a client\n[   10.680392] servicemanager: Notifying apexservice they don't (previously: do) have clients when we now have no record of a client\n[   10.680458] AidlLazyServiceRegistrar: Process has 0 (of 1 available) client(s) in use after notification apexservice has clients: 0\n[   10.680460] AidlLazyServiceRegistrar: Shutdown prevented by forcePersist override flag.\n[   11.001849] servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.\n[   11.237647] type=1400 audit(1793503143.704:8): avc:  denied  { getattr } for  comm=\"df\" path=\"/metadata\" dev=\"vdd1\" ino=2 scontext=u:r:shell:s0 tcontext=u:object_r:metadata_file:s0 tclass=dir permissive=0\n[   11.241861] type=1400 audit(1793503143.708:9): avc:  denied  { getattr } for  comm=\"df\" path=\"/system_dlkm\" dev=\"dm-1\" ino=38 scontext=u:r:shell:s0 tcontext=u:object_r:system_dlkm_file:s0 tclass=dir permissive=0\n[   11.241886] type=1400 audit(1793503143.708:10): avc:  denied  { getattr } for  comm=\"df\" path=\"/linkerconfig\" dev=\"tmpfs\" ino=3 scontext=u:r:shell:s0 tcontext=u:object_r:linkerconfig_file:s0 tclass=dir permissive=0\n[   11.242146] type=1400 audit(1793503143.708:11): avc:  denied  { getattr } for  comm=\"df\" path=\"/linkerconfig\" dev=\"tmpfs\" ino=3 scontext=u:r:shell:s0 tcontext=u:object_r:linkerconfig_file:s0 tclass=dir permissive=0\n[   11.242159] type=1400 audit(1793503143.708:12): avc:  denied  { getattr } for  comm=\"df\" path=\"/data_mirror\" dev=\"tmpfs\" ino=1 scontext=u:r:shell:s0 tcontext=u:object_r:mirror_data_file:s0 tclass=dir permissive=0\n[   11.273830] init: Service 'adbd' (pid 405) exited with status 1\n[   11.273840] init: Sending signal 9 to service 'adbd' (pid 405) process group...\n[   11.273894] libprocessgroup: Successfully killed process cgroup uid 0 pid 405 in 0ms\n[   12.211820] init: starting service 'adbd'...\n[   12.212484] init: Created socket '/dev/socket/adbd', mode 660, user 1000, group 1000\n[   12.213646] init: ... started service 'adbd' has pid 2631\n[   12.803782] EXT4-fs (dm-39): resizing filesystem from 2097152 to 8388608 blocks\n[   12.881231] EXT4-fs warning (device dm-39): reserve_backup_gdb:1052: reserved block 512 not at offset 511\n[   12.881253] EXT4-fs warning (device dm-39): ext4_resize_fs:2193: error (-22) occurred during file system resize\n[   12.881254] EXT4-fs (dm-39): resized filesystem to 2654208\n[   12.886055] EXT4-fs warning (device dm-39): ext4_group_extend:1863: can't shrink FS - resize aborted\n",
+      "stderr": "",
+      "duration_s": 0.03822633402887732,
+      "log": "${WORKSPACE}/logs/1793503145438296000-manual-expand-failure-dmesg"
+    },
+    "tune2fs_probe": {
+      "args": [
+        "${WORKSPACE}/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "22150",
+        "-s",
+        "emulator-22160",
+        "shell",
+        "command -v tune2fs"
+      ],
+      "returncode": 0,
+      "stdout": "/system/bin/tune2fs\n",
+      "stderr": "",
+      "duration_s": 0.018909833044745028,
+      "log": "${WORKSPACE}/logs/1793503145477149000-manual-expand-failure-tune2fs-probe"
+    },
+    "tune2fs_list": {
+      "args": [
+        "${WORKSPACE}/sdk/platform-tools/adb",
+        "-H",
+        "127.0.0.1",
+        "-P",
+        "22150",
+        "-s",
+        "emulator-22160",
+        "shell",
+        "/system/bin/tune2fs -l /dev/block/dm-39"
+      ],
+      "returncode": 0,
+      "stdout": "tune2fs 1.46.6 (1-Feb-2023)\nFilesystem volume name:   <none>\nLast mounted on:          /data\nFilesystem UUID:          57f8f4bc-abf4-655f-bf67-946fc0f9f25b\nFilesystem magic number:  0xEF53\nFilesystem revision #:    1 (dynamic)\nFilesystem features:      has_journal ext_attr resize_inode filetype needs_recovery extent encrypt casefold sparse_super large_file uninit_bg quota project verity\nFilesystem flags:         unsigned_directory_hash \nDefault mount options:    (none)\nFilesystem state:         clean\nErrors behavior:          Remount read-only\nFilesystem OS type:       Linux\nInode count:              663552\nBlock count:              2654208\nReserved block count:     38327\nOverhead clusters:        79019\nFree blocks:              2308766\nFree inodes:              655271\nFirst block:              0\nBlock size:               4096\nFragment size:            4096\nReserved GDT blocks:      511\nBlocks per group:         32768\nFragments per group:      32768\nInodes per group:         8192\nInode blocks per group:   512\nLast mount time:          Sun Nov  1 11:18:58 2026\nLast write time:          Sun Nov  1 11:18:58 2026\nMount count:              1\nMaximum mount count:      -1\nLast checked:             Sun Nov  1 11:18:58 2026\nCheck interval:           0 (<none>)\nLifetime writes:          21 MB\nReserved blocks uid:      0 (user root)\nReserved blocks gid:      1065 (group reserved_disk)\nFirst inode:              11\nInode size:\t          256\nRequired extra isize:     28\nDesired extra isize:      28\nJournal inode:            8\nDefault directory hash:   tea\nJournal backup:           inode blocks\nUser quota inode:         3\nGroup quota inode:        4\nProject quota inode:      38\nCharacter encoding:       utf8-12.1\n",
+      "stderr": "",
+      "duration_s": 0.04856858297716826,
+      "log": "${WORKSPACE}/logs/1793503145497110000-manual-expand-failure-tune2fs-list"
+    }
+  },
+  "error": "guest online resize2fs failed; log=${WORKSPACE}/logs/1793503145286653000-manual-expand-guest-resize2fs-run",
+  "traceback": "Traceback (most recent call last):\n  File \"${WORKSPACE}/manual_expansion.py\", line 266, in run_manual\n    raise RuntimeError(f\"guest online resize2fs failed; log={resize.log}\")\nRuntimeError: guest online resize2fs failed; log=${WORKSPACE}/logs/1793503145286653000-manual-expand-guest-resize2fs-run\n",
+  "cleanup_observed_df": {
+    "total_bytes": 10547974144,
+    "reported_mount": "/mnt/pass_through/0/emulated",
+    "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39  10300756 1060064   9240692  11% /mnt/pass_through/0/emulated\next3 4096 2575189 2267528\n",
+    "log": "${WORKSPACE}/logs/1793503145552135000-manual-expand-df-on-stop"
+  },
+  "cleanup_observed_marker": {
+    "size": 1048576,
+    "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+  },
+  "cleanup_observed_marker_log": "${WORKSPACE}/logs/1793503145577649000-manual-expand-marker-on-stop",
+  "cleanup_shutdown": {
+    "duration_s": 1.785052541992627,
+    "returncode": 0,
+    "kill_started_monotonic": 761978.247782166,
+    "kill_finished_monotonic": 761978.264558208
+  },
+  "source_after": {
+    "config_sha256": "e2df36fc1d79d20f852bbca7d99bb28f2c54a59005d3fadbf948f8b9de53a1d9",
+    "files": {
+      "AVD.conf": {
+        "size": 183,
+        "mtime_ns": 1793496716594402162
+      },
+      "bootcompleted.ini": {
+        "size": 0,
+        "mtime_ns": 1793500511312087975
+      },
+      "cache.img": {
+        "size": 69206016,
+        "mtime_ns": 1793496709343727480
+      },
+      "cache.img.qcow2": {
+        "size": 196616,
+        "mtime_ns": 1793496715483548688
+      },
+      "config.ini": {
+        "size": 645,
+        "mtime_ns": 1793500514367915557
+      },
+      "emu-launch-params.txt": {
+        "size": 276,
+        "mtime_ns": 1793500499892827649
+      },
+      "emulator-user.ini": {
+        "size": 113,
+        "mtime_ns": 1793500513445240389
+      },
+      "encryptionkey.img": {
+        "size": 18874368,
+        "mtime_ns": 1793496709342950330
+      },
+      "encryptionkey.img.qcow2": {
+        "size": 1966080,
+        "mtime_ns": 1793500512636437626
+      },
+      "hardware-qemu.ini": {
+        "size": 4162,
+        "mtime_ns": 1793500500327799409
+      },
+      "initrd": {
+        "size": 1793532,
+        "mtime_ns": 1793500500237015974
+      },
+      "modem_simulator/etc/modem_simulator/files/numeric_operator.xml": {
+        "size": 297,
+        "mtime_ns": 1793500500077729539
+      },
+      "modem_simulator/iccprofile_for_carrierapitests.xml": {
+        "size": 16537,
+        "mtime_ns": 1793500500078165661
+      },
+      "modem_simulator/iccprofile_for_sim0.xml": {
+        "size": 14747,
+        "mtime_ns": 1793500513446164258
+      },
+      "modem_simulator/modem_nvram.json": {
+        "size": 164,
+        "mtime_ns": 1793500513445765094
+      },
+      "netsim.ini": {
+        "size": 38,
+        "mtime_ns": 1793496716385239447
+      },
+      "qemu-version.txt": {
+        "size": 1,
+        "mtime_ns": 1793496708085522379
+      },
+      "read-snapshot.txt": {
+        "size": 0,
+        "mtime_ns": 1793500500331323886
+      },
+      "tmpAdbCmds/adbcommand04bd2ca0-5d45-4a59-91b3-b43e7fcd166b": {
+        "size": 14,
+        "mtime_ns": 1793499536589424440
+      },
+      "tmpAdbCmds/adbcommand096a8ad0-9b27-483b-98cc-15c2ff44227f": {
+        "size": 14,
+        "mtime_ns": 1793499597217706477
+      },
+      "tmpAdbCmds/adbcommand1203b312-5ad9-4928-abf3-9f8030d73efe": {
+        "size": 14,
+        "mtime_ns": 1793499961910102772
+      },
+      "tmpAdbCmds/adbcommand1f1327ff-5e6d-4130-b553-222f3e63928b": {
+        "size": 14,
+        "mtime_ns": 1793499976451759106
+      },
+      "tmpAdbCmds/adbcommand31557600-16ab-44e8-ad14-bdc045396a52": {
+        "size": 14,
+        "mtime_ns": 1793499932105236301
+      },
+      "tmpAdbCmds/adbcommand52fed6a1-4f79-43e3-8e3c-90b06548d272": {
+        "size": 0,
+        "mtime_ns": 1793499549902367188
+      },
+      "tmpAdbCmds/adbcommand5a4b7503-debf-481c-bb5a-e9633ae5a274": {
+        "size": 149,
+        "mtime_ns": 1793499519115331882
+      },
+      "tmpAdbCmds/adbcommand8492a227-4017-4d10-b119-30e9d59cfb95": {
+        "size": 14,
+        "mtime_ns": 1793499844061560838
+      },
+      "tmpAdbCmds/adbcommanda847c2be-a6b8-453f-97ad-266dc5473797": {
+        "size": 14,
+        "mtime_ns": 1793499903134392929
+      },
+      "tmpAdbCmds/adbcommandb55c8b7e-5c65-492b-b0fb-4f82d90d1ebd": {
+        "size": 14,
+        "mtime_ns": 1793499873115754505
+      },
+      "tmpAdbCmds/adbcommandbfccf1cf-a56f-42e0-8fd3-f34d10725f95": {
+        "size": 14,
+        "mtime_ns": 1793499858606034945
+      },
+      "tmpAdbCmds/adbcommandd05204a9-a2e4-41a4-8de2-a11563867254": {
+        "size": 14,
+        "mtime_ns": 1793499581741759156
+      },
+      "tmpAdbCmds/adbcommandd145a71f-4197-43d0-a682-110335321fac": {
+        "size": 14,
+        "mtime_ns": 1793499947495847330
+      },
+      "tmpAdbCmds/adbcommandd84fab72-7773-40c2-b743-52aa510281a8": {
+        "size": 14,
+        "mtime_ns": 1793499888638790108
+      },
+      "tmpAdbCmds/adbcommanddac5cb0c-7184-4451-a051-4cd55b77c4c0": {
+        "size": 14,
+        "mtime_ns": 1793500514193009476
+      },
+      "tmpAdbCmds/adbcommanded2f4146-6a3f-420a-ad09-76d86ca95406": {
+        "size": 14,
+        "mtime_ns": 1793499823578581656
+      },
+      "tmpAdbCmds/adbcommandf82f66de-dc5c-4f8b-9e93-fc66e3e84823": {
+        "size": 179,
+        "mtime_ns": 1793499916521925868
+      },
+      "tmpAdbCmds/adbcommandf859f435-3e3e-4635-989f-b9dba1585bd9": {
+        "size": 14,
+        "mtime_ns": 1793499566383918342
+      },
+      "userdata-qemu.img": {
+        "size": 8454144,
+        "mtime_ns": 1793496709326839593
+      },
+      "userdata-qemu.img.qcow2": {
+        "size": 1606811648,
+        "mtime_ns": 1793500512836793079
+      },
+      "version_num.cache": {
+        "size": 9,
+        "mtime_ns": 1793496715484914034
+      }
+    },
+    "qcow_headers": {
+      "cache.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 69206016,
+        "cluster_bits": 16,
+        "backing_file": "cache.img",
+        "backing_file_hex": "63616368652e696d67",
+        "file_size_bytes": 196616,
+        "header_sha256_first_4096": "a4a515bac3b1e142f107f9057320de5cafb18a03e72b41bc1a3d37cf017765db"
+      },
+      "encryptionkey.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 18874368,
+        "cluster_bits": 16,
+        "backing_file": "encryptionkey.img",
+        "backing_file_hex": "656e6372797074696f6e6b65792e696d67",
+        "file_size_bytes": 1966080,
+        "header_sha256_first_4096": "9cd04ebbad5578c3566e3c30fc1ad50b19650adecfda7f1a5f866179e5c780fa"
+      },
+      "userdata-qemu.img": {
+        "version": 3,
+        "virtual_size_bytes": 8589934592,
+        "cluster_bits": 16,
+        "backing_file": "",
+        "backing_file_hex": "",
+        "file_size_bytes": 8454144,
+        "header_sha256_first_4096": "2cc05834a2f42c2ec02c7677a1c0f01e494d0ef95fc3a6e992832c19f0d8df20"
+      },
+      "userdata-qemu.img.qcow2": {
+        "version": 3,
+        "virtual_size_bytes": 8589934592,
+        "cluster_bits": 16,
+        "backing_file": "userdata-qemu.img",
+        "backing_file_hex": "75736572646174612d71656d752e696d67",
+        "file_size_bytes": 1606811648,
+        "header_sha256_first_4096": "c2bd6d1ff0635bb65a0f6779a7d89187519f623015261175b5f68a7d54446495"
+      }
+    }
+  },
+  "source_backup_unchanged": true,
+  "task_owned_emulator_still_running": false,
+  "ports_still_occupied": [],
+  "free_bytes_after": 132646121472,
+  "restored_runtime_avd_name": "official_clean",
+  "source_avd_was_started": false,
+  "finished_unix": 1793503147.4315588
+}

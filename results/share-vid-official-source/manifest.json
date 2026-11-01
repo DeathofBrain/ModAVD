@@ -1,0 +1,71 @@
+{
+  "retrieved_unix": 1793496663.1483252,
+  "sources": [
+    {
+      "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/emu/cmdline/include/android/cmdline-options.h?format=TEXT",
+      "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+      "path": "${WORKSPACE}/results/share-vid-official-source/qemu-cmdline-options.h",
+      "http_status": 200,
+      "sha256": "2c575379cbc5e7a6474bab8d646947550eded65b2328c985a5c622387fc2907a"
+    },
+    {
+      "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/android-ui/modules/aemu-recording/src/android/recording/screen-recorder.cpp?format=TEXT",
+      "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+      "path": "${WORKSPACE}/results/share-vid-official-source/qemu-screen-recorder.cpp",
+      "http_status": 200,
+      "sha256": "75793786a2e1fccb1da5a47bf850d7cefa7f0ccaaa43f3be93b3b5185e770380"
+    },
+    {
+      "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.h?format=TEXT",
+      "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+      "path": "${WORKSPACE}/results/share-vid-official-source/qemu-VideoFrameSharer.h",
+      "http_status": 200,
+      "sha256": "24b8305bfa02d6a1ee0f0b5ae76a8499617c02e26396a042320a1e64151bb185"
+    },
+    {
+      "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.cpp?format=TEXT",
+      "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+      "path": "${WORKSPACE}/results/share-vid-official-source/qemu-VideoFrameSharer.cpp",
+      "http_status": 200,
+      "sha256": "e7a28e5c0952bb2c5a46eb620970000a449b87916746cc756c0a3f88fe7ca2bc"
+    },
+    {
+      "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/android-webrtc/videobridge/emulator/webrtc/capture/VideoShareCapturer.h?format=TEXT",
+      "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+      "path": "${WORKSPACE}/results/share-vid-official-source/qemu-VideoShareCapturer.h",
+      "http_status": 200,
+      "sha256": "83566af9248899f657f53663cacc48c7bec041059ad6ec33076069ccd751b212"
+    },
+    {
+      "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/android-webrtc/videobridge/emulator/webrtc/capture/VideoShareCapturer.cpp?format=TEXT",
+      "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+      "path": "${WORKSPACE}/results/share-vid-official-source/qemu-VideoShareCapturer.cpp",
+      "http_status": 200,
+      "sha256": "591ee5b70d6307b5658e92bfe51f92d6138ce134c82d50a5c111b7447d7d96db"
+    },
+    {
+      "url": "https://android.googlesource.com/platform/hardware/google/aemu/+/3c1ced8a369417db591eb7cd083af5bb2c317975/base/SharedMemory_posix.cpp?format=TEXT",
+      "commit": "3c1ced8a369417db591eb7cd083af5bb2c317975",
+      "path": "${WORKSPACE}/results/share-vid-official-source/aemu-SharedMemory_posix.cpp",
+      "http_status": 200,
+      "sha256": "86bca9be2b9518d7fa3144d735af15298292c9a04113439a8aa86f37aadeccf7"
+    },
+    {
+      "url": "https://android.googlesource.com/platform/hardware/google/aemu/+/3c1ced8a369417db591eb7cd083af5bb2c317975/base/include/aemu/base/memory/SharedMemory.h?format=TEXT",
+      "commit": "3c1ced8a369417db591eb7cd083af5bb2c317975",
+      "path": "${WORKSPACE}/results/share-vid-official-source/aemu-SharedMemory.h",
+      "http_status": 200,
+      "sha256": "287ec5449ed57bee365aa7af129c21c9f28472a14dd7589808c76a374e1de06f"
+    }
+  ],
+  "limitation": "Pinned public official source establishes a protocol reference; it is not asserted to be the exact source revision of the downloaded emulator binary. Runtime header and frame updates are validated separately.",
+  "layout": {
+    "handle": "videmulator<console_port>",
+    "header": "uint32 width,height,fps,frameNumber; uint64 tsUs",
+    "header_bytes": 24,
+    "pixel_bytes": "width*height*4",
+    "pixel_format": "ARGB8888 (official source description)",
+    "mapping": "POSIX shm_open(handle, O_RDONLY), mmap(PROT_READ, MAP_SHARED)",
+    "concurrency": "Producer overwrites pixels before publishing frameNumber; source documents possible tearing. Header stability checks do not guarantee tear-free pixels."
+  }
+}

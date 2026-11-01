@@ -1,0 +1,112 @@
+{
+  "created_utc": "2026-11-01T05:37:43.897139+00:00",
+  "generated": [
+    {
+      "name": "memory-reclamation",
+      "files": [
+        "${WORKSPACE}/reports/figures/memory-reclamation.png",
+        "${WORKSPACE}/reports/figures/memory-reclamation.svg"
+      ],
+      "sources": [
+        "${WORKSPACE}/results/memory/memory.csv",
+        "${WORKSPACE}/results/memory/metadata.json"
+      ],
+      "caption": "System compressor and swap include unrelated host processes. Shading follows sampling phases; release boundary uncertainty is one sampling interval."
+    },
+    {
+      "name": "memory-long-observation",
+      "files": [
+        "${WORKSPACE}/reports/figures/memory-long-observation.png",
+        "${WORKSPACE}/reports/figures/memory-long-observation.svg"
+      ],
+      "sources": [
+        "${WORKSPACE}/results/soak/memory.csv",
+        "${WORKSPACE}/results/soak/metadata.json"
+      ],
+      "caption": "System compressor and swap include unrelated host processes. Workload: idle_non_game_control."
+    },
+    {
+      "name": "network-continuity",
+      "files": [
+        "${WORKSPACE}/reports/figures/network-continuity.png",
+        "${WORKSPACE}/reports/figures/network-continuity.svg"
+      ],
+      "sources": [
+        "${WORKSPACE}/results/soak/host_network.jsonl",
+        "${WORKSPACE}/results/soak/guest_network.jsonl",
+        "${WORKSPACE}/results/soak/metadata.json"
+      ],
+      "caption": "Local echo through guest 10.0.2.2 versus host loopback; WAN reliability is not measured.\nhost: RTT median 0.33 ms / P95 0.41 ms\nguest: RTT median 22.69 ms / P95 27.55 ms\nClock origins are normalized independently; events are not wall-clock aligned."
+    },
+    {
+      "name": "network-remote-continuity",
+      "files": [
+        "${WORKSPACE}/reports/figures/network-remote-continuity.png",
+        "${WORKSPACE}/reports/figures/network-remote-continuity.svg"
+      ],
+      "sources": [
+        "${WORKSPACE}/results/soak/wan/host_network.jsonl",
+        "${WORKSPACE}/results/soak/wan/guest_network.jsonl",
+        "${WORKSPACE}/results/soak/wan/metadata.json"
+      ],
+      "caption": "Remote service over the configured host route; FakeIP/TUN/proxy may intervene. Direct Internet routing is not established.\nhost: RTT median 197.33 ms / P95 204.10 ms\nguest: RTT median 201.00 ms / P95 209.16 ms\nClock origins are normalized independently; events are not wall-clock aligned."
+    },
+    {
+      "name": "screenshot-latency",
+      "files": [
+        "${WORKSPACE}/reports/figures/screenshot-latency.png",
+        "${WORKSPACE}/reports/figures/screenshot-latency.svg"
+      ],
+      "sources": [
+        "${WORKSPACE}/results/screenshots.json",
+        "${WORKSPACE}/results/screenshots-static-raw.csv",
+        "${WORKSPACE}/results/screenshots-static-png.csv",
+        "${WORKSPACE}/results/screenshots-dynamic-raw.csv",
+        "${WORKSPACE}/results/screenshots-dynamic-png.csv"
+      ],
+      "caption": "All recorded timed attempts; red crosses are invalid captures. Timing includes ADB transport and excludes image validation.\nBox = quartiles/median; whiskers = 1.5 IQR. Values above whiskers remain in the ECDF and percentile calculations."
+    },
+    {
+      "name": "cold-boot",
+      "files": [
+        "${WORKSPACE}/reports/figures/cold-boot.png",
+        "${WORKSPACE}/reports/figures/cold-boot.svg"
+      ],
+      "sources": [
+        "${WORKSPACE}/results/sync_shutdown.json"
+      ],
+      "caption": "Only sync_shutdown.json boot_after_s is used. boot_before_s is excluded because it may reuse an existing start timestamp.\nGreen: payload verification passed; pink: the recorded round did not pass. These timings include only measured restarts."
+    },
+    {
+      "name": "no-sync-durability",
+      "files": [
+        "${WORKSPACE}/reports/figures/no-sync-durability.png",
+        "${WORKSPACE}/reports/figures/no-sync-durability.svg"
+      ],
+      "sources": [
+        "${WORKSPACE}/results/no_sync_shutdown.json"
+      ],
+      "caption": "Only measured file outcomes: 30 verified rounds; 0 rounds without verification are excluded.\nSynthetic workload, not game cache. adb emu kill is an orderly emulator exit, not host SIGKILL or power loss."
+    }
+  ],
+  "skipped": [],
+  "input_sha256": {
+    "${WORKSPACE}/results/memory/memory.csv": "21189c036d098ee91da39b49ed89eea40e7b81000bae5fe649e44863c4a2047e",
+    "${WORKSPACE}/results/memory/metadata.json": "f1f6ff1d6e8bca0cd9eb8d3d1d6294d2a97fe18da52605f0bc1397b541b3fac4",
+    "${WORKSPACE}/results/soak/memory.csv": "487797b2af68cebce69b0f0a8d880e4cd967f1b51d983d0e4eea1c38b0a78cc1",
+    "${WORKSPACE}/results/soak/metadata.json": "2c1feac7a7a9159930b094dc8fa68f8c61b6506d9298e0a2e3cc386ba5653a40",
+    "${WORKSPACE}/results/soak/host_network.jsonl": "2adadb3c523b5a203ee648aee5531d710d7974e9903250257ee5a27e7e8a1bf9",
+    "${WORKSPACE}/results/soak/guest_network.jsonl": "d10ab88e97a44770d1e958a852f3b42728e2ff26e23235e68a3493e45e17a997",
+    "${WORKSPACE}/results/soak/wan/host_network.jsonl": "5296f78beb404e6843d45c65b2c1bb00c06158c548baeefa3cf23d5f7e0c9ae8",
+    "${WORKSPACE}/results/soak/wan/guest_network.jsonl": "d1b53343d3101329d67ee4523230ad6d836eed5dc910a7c074f337429a26bd63",
+    "${WORKSPACE}/results/soak/wan/metadata.json": "26d2c4a731cf24a4cd5d923e116090bb4f3cc5f72dc17aec32364c81f2a52010",
+    "${WORKSPACE}/results/screenshots.json": "27069ae9a5420fedb456794fe4a13e20784de22224bdf0ba3fa49d2790834546",
+    "${WORKSPACE}/results/screenshots-static-raw.csv": "c39641e0970ed8a840bbe05ddb451532c81b8ca309a68698b69d3b6d497c5e72",
+    "${WORKSPACE}/results/screenshots-static-png.csv": "0272a6520348681eb91d5662cff7f1e87975f71222d6da8407a7f6b7dce2dc51",
+    "${WORKSPACE}/results/screenshots-dynamic-raw.csv": "27a3e505f244cb232182fc6dec9080b9426859f357e7f5062d51b2559069c940",
+    "${WORKSPACE}/results/screenshots-dynamic-png.csv": "b870e0cca658d3b1388d7a54ebe9f8f2461c5679707b2a3cf725b05cf32345b9",
+    "${WORKSPACE}/results/sync_shutdown.json": "d33c5215f44fd8f7a049a6774901d7b17a0f0400c9ccdf09c036d24b55ad8826",
+    "${WORKSPACE}/results/no_sync_shutdown.json": "c30a7e6b3aa53166f68fcc81037d36a9b7b86efd8f810f0d7da3a1efef68cd71"
+  },
+  "policy": "Measured samples only; missing inputs are skipped. Rerun after tests complete to replace partial figures."
+}

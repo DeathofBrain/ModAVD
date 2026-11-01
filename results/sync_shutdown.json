@@ -1,0 +1,254 @@
+{
+  "test": "sync_then_emu_kill",
+  "status": "passed",
+  "requested_rounds": 10,
+  "shutdown_semantics": "adb shell sync, then adb emu kill; orderly emulator console exit, not SIGKILL",
+  "avd": "official_clean",
+  "rounds": [
+    {
+      "round": 1,
+      "status": "passed",
+      "boot_before_s": 13.441402291995473,
+      "file": "/data/local/tmp/official-baseline/sync/round-01.bin",
+      "expected": {
+        "size": 1048576,
+        "sha256": "28f5fabc0f05deebd456b347a9519a1b877032b30c575391520ad41d6a9763e3"
+      },
+      "push_log": "${WORKSPACE}/logs/1793499822107998000-sync-push-1",
+      "sync_log": "${WORKSPACE}/logs/1793499822131223000-sync-before-kill-1",
+      "shutdown": {
+        "duration_s": 1.5281294169835746,
+        "returncode": 0,
+        "kill_started_monotonic": 758654.927871625,
+        "kill_finished_monotonic": 758654.945270875
+      },
+      "boot_after_s": 17.612429874949157,
+      "actual": {
+        "size": 1048576,
+        "sha256": "28f5fabc0f05deebd456b347a9519a1b877032b30c575391520ad41d6a9763e3"
+      },
+      "verify_log": "${WORKSPACE}/logs/1793499841733843000-sync-verify-1"
+    },
+    {
+      "round": 2,
+      "status": "passed",
+      "boot_before_s": 17.993709875037894,
+      "file": "/data/local/tmp/official-baseline/sync/round-02.bin",
+      "expected": {
+        "size": 1048576,
+        "sha256": "38b6bb23448807a374436bb9136c181b466797178a94c5d8cb5616a4bf7187fa"
+      },
+      "push_log": "${WORKSPACE}/logs/1793499842215378000-sync-push-2",
+      "sync_log": "${WORKSPACE}/logs/1793499842241108000-sync-before-kill-2",
+      "shutdown": {
+        "duration_s": 1.9590780830476433,
+        "returncode": 0,
+        "kill_started_monotonic": 758675.028538833,
+        "kill_finished_monotonic": 758675.040944541
+      },
+      "boot_after_s": 12.269018166000023,
+      "actual": {
+        "size": 1048576,
+        "sha256": "38b6bb23448807a374436bb9136c181b466797178a94c5d8cb5616a4bf7187fa"
+      },
+      "verify_log": "${WORKSPACE}/logs/1793499856922584000-sync-verify-2"
+    },
+    {
+      "round": 3,
+      "status": "passed",
+      "boot_before_s": 12.44767162494827,
+      "file": "/data/local/tmp/official-baseline/sync/round-03.bin",
+      "expected": {
+        "size": 1048576,
+        "sha256": "fde7c8da330ecb739c9571e1b5f79b5574fb92ea6e856416317af1c2fbf8fdd4"
+      },
+      "push_log": "${WORKSPACE}/logs/1793499857132388000-sync-push-3",
+      "sync_log": "${WORKSPACE}/logs/1793499857155011000-sync-before-kill-3",
+      "shutdown": {
+        "duration_s": 1.5445090000284836,
+        "returncode": 0,
+        "kill_started_monotonic": 758689.960035541,
+        "kill_finished_monotonic": 758689.974317
+      },
+      "boot_after_s": 12.317728250054643,
+      "actual": {
+        "size": 1048576,
+        "sha256": "fde7c8da330ecb739c9571e1b5f79b5574fb92ea6e856416317af1c2fbf8fdd4"
+      },
+      "verify_log": "${WORKSPACE}/logs/1793499871484605000-sync-verify-3"
+    },
+    {
+      "round": 4,
+      "status": "passed",
+      "boot_before_s": 12.490296541014686,
+      "file": "/data/local/tmp/official-baseline/sync/round-04.bin",
+      "expected": {
+        "size": 1048576,
+        "sha256": "7eacb42d69e1f90fff10091e3e80bc724150d577069425dbd1c40beab618931d"
+      },
+      "push_log": "${WORKSPACE}/logs/1793499871680843000-sync-push-4",
+      "sync_log": "${WORKSPACE}/logs/1793499871719481000-sync-before-kill-4",
+      "shutdown": {
+        "duration_s": 1.508735292009078,
+        "returncode": 0,
+        "kill_started_monotonic": 758704.513062041,
+        "kill_finished_monotonic": 758704.525471166
+      },
+      "boot_after_s": 12.789097375003621,
+      "actual": {
+        "size": 1048576,
+        "sha256": "7eacb42d69e1f90fff10091e3e80bc724150d577069425dbd1c40beab618931d"
+      },
+      "verify_log": "${WORKSPACE}/logs/1793499886475327000-sync-verify-4"
+    },
+    {
+      "round": 5,
+      "status": "passed",
+      "boot_before_s": 13.019409833010286,
+      "file": "/data/local/tmp/official-baseline/sync/round-05.bin",
+      "expected": {
+        "size": 1048576,
+        "sha256": "8f64950b94fffdb17eabb6fd9d74d0dbd1fabbf5fc2117b648b93a9b05d21baa"
+      },
+      "push_log": "${WORKSPACE}/logs/1793499886733120000-sync-push-5",
+      "sync_log": "${WORKSPACE}/logs/1793499886760046000-sync-before-kill-5",
+      "shutdown": {
+        "duration_s": 1.9624143750406802,
+        "returncode": 0,
+        "kill_started_monotonic": 758719.556479125,
+        "kill_finished_monotonic": 758719.57047925
+      },
+      "boot_after_s": 12.490599666023627,
+      "actual": {
+        "size": 1048576,
+        "sha256": "8f64950b94fffdb17eabb6fd9d74d0dbd1fabbf5fc2117b648b93a9b05d21baa"
+      },
+      "verify_log": "${WORKSPACE}/logs/1793499901673370000-sync-verify-5"
+    },
+    {
+      "round": 6,
+      "status": "passed",
+      "boot_before_s": 12.683549957931973,
+      "file": "/data/local/tmp/official-baseline/sync/round-06.bin",
+      "expected": {
+        "size": 1048576,
+        "sha256": "4125549ee78ee6d3c04a76f80b15b1cae73e84f5b88c6b6c9aafe046323441f4"
+      },
+      "push_log": "${WORKSPACE}/logs/1793499901932824000-sync-push-6",
+      "sync_log": "${WORKSPACE}/logs/1793499901965904000-sync-before-kill-6",
+      "shutdown": {
+        "duration_s": 1.0933314580470324,
+        "returncode": 0,
+        "kill_started_monotonic": 758734.802349708,
+        "kill_finished_monotonic": 758734.820774416
+      },
+      "boot_after_s": 12.415015625068918,
+      "actual": {
+        "size": 1048576,
+        "sha256": "4125549ee78ee6d3c04a76f80b15b1cae73e84f5b88c6b6c9aafe046323441f4"
+      },
+      "verify_log": "${WORKSPACE}/logs/1793499915968859000-sync-verify-6"
+    },
+    {
+      "round": 7,
+      "status": "passed",
+      "boot_before_s": 12.76164379203692,
+      "file": "/data/local/tmp/official-baseline/sync/round-07.bin",
+      "expected": {
+        "size": 1048576,
+        "sha256": "b697cf3781509a8c4221ab79ab0afe83348c432d1cdd5b9e45b820c0a1184091"
+      },
+      "push_log": "${WORKSPACE}/logs/1793499916365729000-sync-push-7",
+      "sync_log": "${WORKSPACE}/logs/1793499916419570000-sync-before-kill-7",
+      "shutdown": {
+        "duration_s": 1.1033497500466183,
+        "returncode": 0,
+        "kill_started_monotonic": 758749.266058541,
+        "kill_finished_monotonic": 758749.283786375
+      },
+      "boot_after_s": 12.270704416907392,
+      "actual": {
+        "size": 1048576,
+        "sha256": "b697cf3781509a8c4221ab79ab0afe83348c432d1cdd5b9e45b820c0a1184091"
+      },
+      "verify_log": "${WORKSPACE}/logs/1793499930340500000-sync-verify-7"
+    },
+    {
+      "round": 8,
+      "status": "passed",
+      "boot_before_s": 12.487491416977718,
+      "file": "/data/local/tmp/official-baseline/sync/round-08.bin",
+      "expected": {
+        "size": 1048576,
+        "sha256": "a01c4af9d445954b100965ed7c952dbdafdec271bab0c2b10271e225fce834d7"
+      },
+      "push_log": "${WORKSPACE}/logs/1793499930581495000-sync-push-8",
+      "sync_log": "${WORKSPACE}/logs/1793499930600626000-sync-before-kill-8",
+      "shutdown": {
+        "duration_s": 1.486157916020602,
+        "returncode": 0,
+        "kill_started_monotonic": 758763.411666125,
+        "kill_finished_monotonic": 758763.425013541
+      },
+      "boot_after_s": 12.81917762500234,
+      "actual": {
+        "size": 1048576,
+        "sha256": "a01c4af9d445954b100965ed7c952dbdafdec271bab0c2b10271e225fce834d7"
+      },
+      "verify_log": "${WORKSPACE}/logs/1793499945378181000-sync-verify-8"
+    },
+    {
+      "round": 9,
+      "status": "passed",
+      "boot_before_s": 12.96403495897539,
+      "file": "/data/local/tmp/official-baseline/sync/round-09.bin",
+      "expected": {
+        "size": 1048576,
+        "sha256": "fb7822b8ba84a6df090e217ded1cf2d73e245ff6d5522cbc5462312de6480b0b"
+      },
+      "push_log": "${WORKSPACE}/logs/1793499945552003000-sync-push-9",
+      "sync_log": "${WORKSPACE}/logs/1793499945589593000-sync-before-kill-9",
+      "shutdown": {
+        "duration_s": 1.9695587500464171,
+        "returncode": 0,
+        "kill_started_monotonic": 758778.397655958,
+        "kill_finished_monotonic": 758778.410797125
+      },
+      "boot_after_s": 12.307483957963996,
+      "actual": {
+        "size": 1048576,
+        "sha256": "fb7822b8ba84a6df090e217ded1cf2d73e245ff6d5522cbc5462312de6480b0b"
+      },
+      "verify_log": "${WORKSPACE}/logs/1793499960334161000-sync-verify-9"
+    },
+    {
+      "round": 10,
+      "status": "passed",
+      "boot_before_s": 12.450615790905431,
+      "file": "/data/local/tmp/official-baseline/sync/round-10.bin",
+      "expected": {
+        "size": 1048576,
+        "sha256": "8694d8ea91ece6f274ad942ced2f4dcd67723adb484388bda1a9720519b2e5ce"
+      },
+      "push_log": "${WORKSPACE}/logs/1793499960514661000-sync-push-10",
+      "sync_log": "${WORKSPACE}/logs/1793499960533180000-sync-before-kill-10",
+      "shutdown": {
+        "duration_s": 1.5360655420226976,
+        "returncode": 0,
+        "kill_started_monotonic": 758793.337275291,
+        "kill_finished_monotonic": 758793.350391708
+      },
+      "boot_after_s": 12.240311541012488,
+      "actual": {
+        "size": 1048576,
+        "sha256": "8694d8ea91ece6f274ad942ced2f4dcd67723adb484388bda1a9720519b2e5ce"
+      },
+      "verify_log": "${WORKSPACE}/logs/1793499974782417000-sync-verify-10"
+    }
+  ],
+  "started_unix": 1793499821.9940531,
+  "previous_report_preserved": "${WORKSPACE}/results/history/sync_shutdown-1793499821994128000.json",
+  "completed_rounds": 10,
+  "passed_rounds": 10,
+  "finished_unix": 1793499974.831736
+}

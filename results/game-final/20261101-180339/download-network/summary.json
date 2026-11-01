@@ -1,0 +1,160 @@
+{
+  "finished_utc": "2026-11-01T12:04:12.561196+00:00",
+  "observer_wall_elapsed_seconds": 7200.007095874986,
+  "stop_reason": "max_duration",
+  "sample_count": 1440,
+  "sample_errors": 0,
+  "samples_with_verified_route": 1440,
+  "primary_route_interface_traffic": {
+    "rx_bytes": 15399125626,
+    "tx_bytes": 220524838,
+    "valid_intervals": 1439,
+    "observed_interval_seconds": 7195.060349624992,
+    "mean_rx_bytes_per_second": 2140235.783679369,
+    "mean_tx_bytes_per_second": 30649.477180756905,
+    "interfaces": [
+      "wlan0"
+    ],
+    "status": "measured_for_verified_intervals_only"
+  },
+  "per_interface_traffic_do_not_sum": {
+    "dummy0": {
+      "rx_bytes": 0,
+      "tx_bytes": 2064,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.2868634729530206
+    },
+    "ifb0": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "ifb1": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "tunl0": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "gre0": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "gretap0": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "erspan0": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "ip_vti0": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "ip6_vti0": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "sit0": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "ip6tnl0": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "ip6gre0": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "hwsim0": {
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 0.0,
+      "mean_tx_bytes_per_second": 0.0
+    },
+    "eth0": {
+      "rx_bytes": 9535,
+      "tx_bytes": 22781,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 1.3252147357592303,
+      "mean_tx_bytes_per_second": 3.1661999890226564
+    },
+    "wlan0": {
+      "rx_bytes": 15399125626,
+      "tx_bytes": 220524838,
+      "valid_intervals": 1439,
+      "observed_interval_seconds": 7195.060349624992,
+      "counter_resets": 0,
+      "mean_rx_bytes_per_second": 2140235.783679369,
+      "mean_tx_bytes_per_second": 30649.477180756905
+    }
+  },
+  "host_netstat_snapshots": 1440,
+  "measurement_scope": "Guest interface total traffic across every app and background service; not precise game UID attribution. Primary totals include only adjacent samples with the same verified route interface; unknown routes, gaps, route changes, and counter resets are excluded. No all-interface sum is claimed. Mean rates divide measured byte deltas by actual host-monotonic intervals, including ADB timing uncertainty. Host netstat snapshots are background context and are not summed or attributed to the emulator.",
+  "game_update_completion": "Must be verified against actual game screen/state. Background Google or other traffic cannot establish successful game hot update. No payload, packet contents, credentials, or account data are collected."
+}

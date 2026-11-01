@@ -1,0 +1,54 @@
+{
+  "test": "official_partition_size_8_to_32_gib",
+  "status": "failed",
+  "method": "APFS cp -cR of stopped AVD; preserve an original backup; launch clone with official -partition-size 32768; no wipe-data, qemu-img resize, or manual filesystem resize",
+  "source_avd": "official_clean",
+  "clone_avd": "official_expansion",
+  "backup_avd": "official_expansion_backup",
+  "started_unix": 1793500499.868899,
+  "before": {
+    "total_bytes": 8302063616,
+    "reported_mount": "/data/user/0",
+    "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39   8107484 1065076   6894952  14% /data/user/0\next3 4096 2026871 1723738\n",
+    "log": "${WORKSPACE}/logs/1793500512638592000-expansion-df-before"
+  },
+  "before_files": {
+    "/data/local/tmp/official-baseline/expansion-marker.bin": {
+      "size": 1048576,
+      "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+    }
+  },
+  "stop_source": {
+    "duration_s": 1.555292334058322,
+    "returncode": 0,
+    "kill_started_monotonic": 759345.395477375,
+    "kill_finished_monotonic": 759345.40862825
+  },
+  "backup_path": "${WORKSPACE}/avd/official_expansion_backup.avd",
+  "clone_path": "${WORKSPACE}/avd/official_expansion.avd",
+  "clone_config_before": "AvdId=official_expansion\navd.ini.displayname=official_expansion\navd.ini.encoding=UTF-8\nPlayStore.enabled=false\nabi.type=arm64-v8a\ntag.id=google_apis\ntag.display=Google APIs\nimage.sysdir.1=system-images/android-34/google_apis/arm64-v8a/\nhw.cpu.arch=arm64\nhw.cpu.ncore=4\nhw.ramSize=4096\nhw.lcd.width=1280\nhw.lcd.height=720\nhw.lcd.density=240\nhw.initialOrientation=landscape\nhw.keyboard=yes\nhw.gpu.enabled=yes\nhw.gpu.mode=host\nhw.audioInput=no\nhw.battery=yes\nhw.gps=yes\nhw.accelerometer=yes\ndisk.dataPartition.size=8G\ndisk.cachePartition=yes\ndisk.cachePartition.size=66MB\nvm.heapSize=512\nfastboot.forceColdBoot=yes\nshowDeviceFrame=no\n",
+  "boot_after_s": 10.179205249994993,
+  "after": {
+    "total_bytes": 8302063616,
+    "reported_mount": "/data/user/0",
+    "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39   8107484 1065188   6894840  14% /data/user/0\next3 4096 2026871 1723656\n",
+    "log": "${WORKSPACE}/logs/1793500524977826000-expansion-df-after"
+  },
+  "after_files": {
+    "/data/local/tmp/official-baseline/expansion-marker.bin": {
+      "size": 1048576,
+      "sha256": "861a2e19cddb688fb25f2e4e4643f6a625903da083bf99d0030ad550da83257a"
+    }
+  },
+  "clone_config_after": "AvdId=official_expansion\navd.ini.displayname=official_expansion\navd.ini.encoding=UTF-8\nPlayStore.enabled=false\nabi.type=arm64-v8a\ntag.id=google_apis\ntag.display=Google APIs\nimage.sysdir.1=system-images/android-34/google_apis/arm64-v8a/\nhw.cpu.arch=arm64\nhw.cpu.ncore=4\nhw.ramSize=4096\nhw.lcd.width=1280\nhw.lcd.height=720\nhw.lcd.density=240\nhw.initialOrientation=landscape\nhw.keyboard=yes\nhw.gpu.enabled=yes\nhw.gpu.mode=host\nhw.audioInput=no\nhw.battery=yes\nhw.gps=yes\nhw.accelerometer=yes\ndisk.dataPartition.size=8G\ndisk.cachePartition=yes\ndisk.cachePartition.size=66MB\nvm.heapSize=512\nfastboot.forceColdBoot=yes\nshowDeviceFrame=no\n",
+  "capacity_grew_to_32_gib_class": false,
+  "marker_intact": true,
+  "finding": "Existing guest /data did not grow to 32 GiB using the official partition-size option. No destructive workaround was attempted.",
+  "stop_clone": {
+    "duration_s": 1.1418441659770906,
+    "returncode": 0,
+    "kill_started_monotonic": 759358.249249666,
+    "kill_finished_monotonic": 759358.260950833
+  },
+  "finished_unix": 1793500526.778539
+}

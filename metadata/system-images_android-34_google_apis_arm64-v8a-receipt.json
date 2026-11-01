@@ -1,0 +1,123 @@
+{
+  "package": "system-images;android-34;google_apis;arm64-v8a",
+  "revision": "14",
+  "metadata": "sys-img2-3.xml",
+  "host_os": null,
+  "host_arch": null,
+  "destination": "system-images/android-34/google_apis/arm64-v8a",
+  "zip_root": "arm64-v8a",
+  "filename": "arm64-v8a-34_r14.zip",
+  "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-34_r14.zip",
+  "official_size": 1610393229,
+  "official_sha1": "2fe8b46d419a3400e30f31b0152b241b50c8b99f",
+  "license_reference": "android-sdk-arm-dbt-license",
+  "local_sha256": "bd1c323cbdd3c9dd55dde54588b298d172fd126fe16e127a7bd7aeab6897890a",
+  "installation_method": "fresh_download",
+  "archive_source": "Google official repository URL in independently captured metadata",
+  "archive_sha1_verified": true,
+  "zip_crc_verified": true,
+  "expanded_bytes": 4461282324,
+  "zip_entries": 23,
+  "installed_at_utc": "2026-11-01T01:29:36.251591+00:00",
+  "installed_path": "${WORKSPACE}/sdk/system-images/android-34/google_apis/arm64-v8a",
+  "license_acceptance_recorded": false,
+  "installed_files": {
+    "NOTICE.txt": {
+      "sha256": "6e4747521a7e03aebbf02a89483749721cafb3ac46d5a4d65d2f86e09a27f740",
+      "size": 19568061
+    },
+    "VerifiedBootParams.textproto": {
+      "sha256": "c5e65260806e8904e7848c69667c21bc2ed59100175b41392574e0bcd963627d",
+      "size": 356
+    },
+    "advancedFeatures.ini": {
+      "sha256": "6777df8895e3607cf2653ba5746d1ae88e16136ca96b4196abfd9003ccfd7ce1",
+      "size": 653
+    },
+    "build.prop": {
+      "sha256": "db2fff7cd4f3470b4245ef2ceb4bfd682f10c417f312a442fd05f579dcdda35a",
+      "size": 4672
+    },
+    "data/local.prop": {
+      "sha256": "49b05d093a46d35d85df01fb99133f077fcc725cc49efe1a1bedae884d24e20b",
+      "size": 46
+    },
+    "data/misc/GoldfishSkinConfig": {
+      "sha256": "763b66cad27dc57354f456bb763e27acf8859059890e6515daba90e77c906b75",
+      "size": 783
+    },
+    "data/misc/apns/apns-conf.xml": {
+      "sha256": "c35b899f2b6296aee4a9742302651cce9eb64622669d4d8fe8d276ca11060eb6",
+      "size": 6575
+    },
+    "data/misc/emulator/config/radioconfig.xml": {
+      "sha256": "534a81b662ad62fc70ec0ea22715670524a05a066afc9fdac8e7c0f5a7789cd7",
+      "size": 1433
+    },
+    "data/misc/emulator/version.txt": {
+      "sha256": "a5ed9f83bcf53d75473ee57c82b658f4d59793e7a00c791132b7c62e4806219b",
+      "size": 61
+    },
+    "data/misc/modem_simulator/etc/modem_simulator/files/numeric_operator.xml": {
+      "sha256": "c2557e604beea20b67642cdbb14ae7b792f804e4476b3f6cf47035690234f436",
+      "size": 297
+    },
+    "data/misc/modem_simulator/iccprofile_for_carrierapitests.xml": {
+      "sha256": "dc4b5f5344f084fc44f89250bbcf2b12e452eb98c104e4ef3ec115366eb6ce32",
+      "size": 16537
+    },
+    "data/misc/modem_simulator/iccprofile_for_sim0.xml": {
+      "sha256": "a2744726a306b18d7547251026201aa5c6a9e120aa1555992eeb8b0a3b4aa6d9",
+      "size": 14647
+    },
+    "data/misc/pixel_fold/devicestate/device_state_configuration.xml": {
+      "sha256": "8bebf4943ed3fc50973ac428ab8c8c0d71700af81419f44fc95a59f52f873838",
+      "size": 1644
+    },
+    "data/misc/pixel_fold/display_settings.xml": {
+      "sha256": "2adca8f98a2c8ee0f780e10ca16587ac92641df5e93ab4437c3c47ad41b0041d",
+      "size": 303
+    },
+    "data/misc/pixel_fold/displayconfig/display_layout_configuration.xml": {
+      "sha256": "a64e2eca65bc2f9196215fb72a88c9035a584319f8b3da3606fff161be642be8",
+      "size": 1311
+    },
+    "data/misc/pixel_fold/extra_feature.xml": {
+      "sha256": "ba27b7a61457027e2a77917f8b07d716d3e918097901a14833749252b15aa38f",
+      "size": 829
+    },
+    "encryptionkey.img": {
+      "sha256": "522bd0b6a2c92e37de465059bb9487bb9597a9aae032b469a8ebe0b38146d8c3",
+      "size": 18874368
+    },
+    "kernel-ranchu": {
+      "sha256": "4076bd230e0832e23837e62c1fb03daf5eb4fd5aac731818320c26fa1bf8b2e5",
+      "size": 12784248
+    },
+    "ramdisk.img": {
+      "sha256": "5c4a40a87ea671396a683a30fde67a3e51c63a21d332a9c5a18ecf20c53e6185",
+      "size": 1791633
+    },
+    "source.properties": {
+      "sha256": "1e64d5cf821e898a2af4677e55b477567ea56d0c5681cd50add5f8b95db08cf2",
+      "size": 363
+    },
+    "system.img": {
+      "sha256": "53a061cd8eea937985357abd8d16d9581a6b34512cec241c40633051dd2a05d7",
+      "size": 4306501632
+    },
+    "userdata.img": {
+      "sha256": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+      "size": 1048576
+    },
+    "vendor.img": {
+      "sha256": "d5f44441eb7ced018ef09c09e25658bd9218d9633817f67d5b07d8f365876821",
+      "size": 100663296
+    }
+  },
+  "installed_file_count": 23,
+  "source_properties": "Pkg.Desc=System Image arm64-v8a with Google APIs.\nPkg.Revision=14\nPkg.Dependencies=emulator#34.2.16\nAndroidVersion.ApiLevel=34\nAndroidVersion.ExtensionLevel=7\nAndroidVersion.IsBaseSdk=true\nSystemImage.Abi=arm64-v8a\nSystemImage.TagId=google_apis\nSystemImage.TagDisplay=Google APIs\nSystemImage.GpuSupport=true\nAddon.VendorId=google\nAddon.VendorDisplay=Google Inc.\n\n",
+  "superseded_clone_removed": true,
+  "source_modavd_modified": false,
+  "superseded_clone_removed_at_utc": "2026-11-01T01:30:03.354708+00:00"
+}

@@ -1,0 +1,3 @@
+{"event":"memory_before_allocate","monotonic_ns":1362485840149,"value":1073741824}
+{"event":"memory_touched","monotonic_ns":1363061194482,"value":1073741824}
+{"event":"memory_released","monotonic_ns":1423106522594,"value":1073741824}

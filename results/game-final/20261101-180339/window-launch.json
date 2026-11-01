@@ -1,0 +1,41 @@
+{
+  "at_unix": 1793527454.138853,
+  "returncode": 0,
+  "stdout": "Starting: Intent { cmp=com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext }\nStatus: ok\nLaunchState: COLD\nActivity: com.hypergryph.arknights.bilibili/com.hypergryph.userprotocolplugin.UserProtocolNoticeActivity\nTotalTime: 933\nWaitTime: 937\nComplete\n",
+  "stderr": "",
+  "log": "${WORKSPACE}/logs/1793527453151599000-game-final-window-launch",
+  "monitors": [
+    {
+      "name": "download-network",
+      "pid": 38288,
+      "command": [
+        "python3",
+        "game_network_observer.py",
+        "--output",
+        "${WORKSPACE}/results/game-final/20261101-180339/download-network",
+        "--max-seconds",
+        "7200",
+        "--host-netstat"
+      ],
+      "identity": "Sun Nov  1 18:04:12 2026     python3 game_network_observer.py --output ${WORKSPACE}/results/game-final/20261101-180339/download-network --max-seconds 7200 --host-netstat",
+      "started_unix": 1793527452.14274
+    },
+    {
+      "name": "download-memory",
+      "pid": 38290,
+      "command": [
+        "python3",
+        "game_phase_memory.py",
+        "--output",
+        "${WORKSPACE}/results/game-final/20261101-180339/download-memory",
+        "--emulator-pid",
+        "38189",
+        "--max-seconds",
+        "7200"
+      ],
+      "identity": "Sun Nov  1 18:04:12 2026     python3 game_phase_memory.py --output ${WORKSPACE}/results/game-final/20261101-180339/download-memory --emulator-pid 38189 --max-seconds 7200",
+      "started_unix": 1793527452.146027
+    }
+  ],
+  "read_only_observation": "Interface counters and memory only; no account fields, packet contents, game private data or login screenshots collected automatically."
+}

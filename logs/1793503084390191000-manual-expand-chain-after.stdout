@@ -1,0 +1,39 @@
+[
+    {
+        "backing-filename-format": "qcow2",
+        "virtual-size": 34359738368,
+        "filename": "${WORKSPACE}/avd/official_expand_manual32_retest1.avd/userdata-qemu.img.qcow2",
+        "cluster-size": 65536,
+        "format": "qcow2",
+        "actual-size": 1623588864,
+        "format-specific": {
+            "type": "qcow2",
+            "data": {
+                "compat": "1.1",
+                "lazy-refcounts": false,
+                "refcount-bits": 16,
+                "corrupt": false
+            }
+        },
+        "full-backing-filename": "${WORKSPACE}/avd/official_expand_manual32_retest1.avd/userdata-qemu.img",
+        "backing-filename": "userdata-qemu.img",
+        "dirty-flag": false
+    },
+    {
+        "virtual-size": 34359738368,
+        "filename": "${WORKSPACE}/avd/official_expand_manual32_retest1.avd/userdata-qemu.img",
+        "cluster-size": 65536,
+        "format": "qcow2",
+        "actual-size": 9502720,
+        "format-specific": {
+            "type": "qcow2",
+            "data": {
+                "compat": "1.1",
+                "lazy-refcounts": false,
+                "refcount-bits": 16,
+                "corrupt": false
+            }
+        },
+        "dirty-flag": false
+    }
+]

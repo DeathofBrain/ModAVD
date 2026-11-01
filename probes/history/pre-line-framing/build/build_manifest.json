@@ -1,0 +1,34 @@
+{
+  "command": [
+    "clang",
+    "--target=aarch64-linux-android24",
+    "-O2",
+    "-c",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-fno-stack-protector",
+    "-fno-pic",
+    "-fno-unwind-tables",
+    "-fno-asynchronous-unwind-tables",
+    "-mno-outline-atomics",
+    "${WORKSPACE}/probes/avd_probe.c",
+    "-o",
+    "${WORKSPACE}/probes/build/avd_probe.o"
+  ],
+  "sha256": "23b6c5ca97cb1d865b3bb0c06c9f54b786e9d5ccc622788dfd34c99605e728ee",
+  "size_bytes": 9985,
+  "entry": "0x402508",
+  "relocations": {
+    "275": 32,
+    "277": 31,
+    "299": 1,
+    "283": 1
+  },
+  "sections": [
+    ".text",
+    ".text.start",
+    ".rodata.cst16",
+    ".rodata.str1.1"
+  ],
+  "note": "Test payload only; neither the emulator nor the official system image is modified."
+}

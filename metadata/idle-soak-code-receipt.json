@@ -1,0 +1,14 @@
+{
+  "created_unix": 1793503917.4037068,
+  "purpose": "Code receipt at formal startup; three paired remote retests and framing-aware probe; fixed before runner launch",
+  "files": {
+    "run_idle_baseline.py": "75e3341032c6adf55d7ad95ffdbeac5bd512e5b523be862e43cdaa3f75badfda",
+    "run_soak.py": "835f86a0d56b35db79f02fa044dc56dd0bf9cbf308da3ef7e625b809ea549e3d",
+    "soak_tests.py": "e74122205af13a8f04eb2df8fe910b216504ec3c98c5b6fb43ceab994c46fff8",
+    "probes/avd_probe.c": "8b85c284c5c2cf91133ec7d1f1a7326ac2a96251b1bc20eeae0fd21f5bf14bf0",
+    "probes/build/avd_probe": "8d8b76ea4b9b1ce5181ee2de338ac7fd0524b7c104bfe0b534b19a9534c95a74",
+    "probes/build/build_manifest.json": "bf9acd04af4e10fae34ef1a5ba29c5c302c9460526288403745f50ecd4acf808",
+    "avdlib.py": "007c8433474e05013c94f6d100fe0a5b5d7237389ec56562ca3a4c2ab2fc3246",
+    "watchdog.py": "18b03ab79dd833b43496d8affe7f2be683e8b9872467b5be975d8cf1108dd586"
+  }
+}

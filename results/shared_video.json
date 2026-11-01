@@ -1,0 +1,779 @@
+{
+  "test": "official_share_vid",
+  "status": "passed",
+  "requested_seconds": 60,
+  "started_unix": 1793500619.398481,
+  "help": {
+    "log": "${WORKSPACE}/logs/1793500619398609000-emulator-help-share-vid",
+    "detail_log": "${WORKSPACE}/logs/1793500619416514000-emulator-help-share-vid-detail",
+    "listed": true
+  },
+  "official_protocol": {
+    "retrieved_unix": 1793496663.1483252,
+    "sources": [
+      {
+        "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/emu/cmdline/include/android/cmdline-options.h?format=TEXT",
+        "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+        "path": "${WORKSPACE}/results/share-vid-official-source/qemu-cmdline-options.h",
+        "http_status": 200,
+        "sha256": "2c575379cbc5e7a6474bab8d646947550eded65b2328c985a5c622387fc2907a"
+      },
+      {
+        "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/android-ui/modules/aemu-recording/src/android/recording/screen-recorder.cpp?format=TEXT",
+        "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+        "path": "${WORKSPACE}/results/share-vid-official-source/qemu-screen-recorder.cpp",
+        "http_status": 200,
+        "sha256": "75793786a2e1fccb1da5a47bf850d7cefa7f0ccaaa43f3be93b3b5185e770380"
+      },
+      {
+        "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.h?format=TEXT",
+        "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+        "path": "${WORKSPACE}/results/share-vid-official-source/qemu-VideoFrameSharer.h",
+        "http_status": 200,
+        "sha256": "24b8305bfa02d6a1ee0f0b5ae76a8499617c02e26396a042320a1e64151bb185"
+      },
+      {
+        "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/android-ui/modules/aemu-recording/src/android/recording/video/VideoFrameSharer.cpp?format=TEXT",
+        "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+        "path": "${WORKSPACE}/results/share-vid-official-source/qemu-VideoFrameSharer.cpp",
+        "http_status": 200,
+        "sha256": "e7a28e5c0952bb2c5a46eb620970000a449b87916746cc756c0a3f88fe7ca2bc"
+      },
+      {
+        "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/android-webrtc/videobridge/emulator/webrtc/capture/VideoShareCapturer.h?format=TEXT",
+        "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+        "path": "${WORKSPACE}/results/share-vid-official-source/qemu-VideoShareCapturer.h",
+        "http_status": 200,
+        "sha256": "83566af9248899f657f53663cacc48c7bec041059ad6ec33076069ccd751b212"
+      },
+      {
+        "url": "https://android.googlesource.com/platform/external/qemu/+/ae9d18d2b6261179fbd57fffec720a04f7bfb053/android/android-webrtc/videobridge/emulator/webrtc/capture/VideoShareCapturer.cpp?format=TEXT",
+        "commit": "ae9d18d2b6261179fbd57fffec720a04f7bfb053",
+        "path": "${WORKSPACE}/results/share-vid-official-source/qemu-VideoShareCapturer.cpp",
+        "http_status": 200,
+        "sha256": "591ee5b70d6307b5658e92bfe51f92d6138ce134c82d50a5c111b7447d7d96db"
+      },
+      {
+        "url": "https://android.googlesource.com/platform/hardware/google/aemu/+/3c1ced8a369417db591eb7cd083af5bb2c317975/base/SharedMemory_posix.cpp?format=TEXT",
+        "commit": "3c1ced8a369417db591eb7cd083af5bb2c317975",
+        "path": "${WORKSPACE}/results/share-vid-official-source/aemu-SharedMemory_posix.cpp",
+        "http_status": 200,
+        "sha256": "86bca9be2b9518d7fa3144d735af15298292c9a04113439a8aa86f37aadeccf7"
+      },
+      {
+        "url": "https://android.googlesource.com/platform/hardware/google/aemu/+/3c1ced8a369417db591eb7cd083af5bb2c317975/base/include/aemu/base/memory/SharedMemory.h?format=TEXT",
+        "commit": "3c1ced8a369417db591eb7cd083af5bb2c317975",
+        "path": "${WORKSPACE}/results/share-vid-official-source/aemu-SharedMemory.h",
+        "http_status": 200,
+        "sha256": "287ec5449ed57bee365aa7af129c21c9f28472a14dd7589808c76a374e1de06f"
+      }
+    ],
+    "limitation": "Pinned public official source establishes a protocol reference; it is not asserted to be the exact source revision of the downloaded emulator binary. Runtime header and frame updates are validated separately.",
+    "layout": {
+      "handle": "videmulator<console_port>",
+      "header": "uint32 width,height,fps,frameNumber; uint64 tsUs",
+      "header_bytes": 24,
+      "pixel_bytes": "width*height*4",
+      "pixel_format": "ARGB8888 (official source description)",
+      "mapping": "POSIX shm_open(handle, O_RDONLY), mmap(PROT_READ, MAP_SHARED)",
+      "concurrency": "Producer overwrites pixels before publishing frameNumber; source documents possible tearing. Header stability checks do not guarantee tear-free pixels."
+    }
+  },
+  "boot_s": 12.681369542027824,
+  "launch_log": "${WORKSPACE}/logs/emulator-1793500620582064000-official_clean.log",
+  "handle": "videmulator22160",
+  "region_bytes": 3702784,
+  "initial_header": {
+    "width": 1280,
+    "height": 720,
+    "target_fps": 60,
+    "frame_number": 58,
+    "timestamp_us": 1793500633663445
+  },
+  "fixture": {
+    "fixture": "Android Settings; alternating input swipe 600,590 to 600,180 (250ms)",
+    "commands": 148,
+    "errors": []
+  },
+  "raw_frame": "${WORKSPACE}/results/shared-video-first-frame-argb8888.bin",
+  "observed_seconds": 60.007504750043154,
+  "start_frame_number": 122,
+  "end_frame_number": 3717,
+  "observed_counter_advance": 3595,
+  "observed_header_changes": 3592,
+  "counter_backwards_events": 0,
+  "measured_produced_frames_per_second": 59.90917327715438,
+  "measured_distinct_observations_per_second": 59.85917953033061,
+  "unique_pixel_hashes_at_1hz": 60,
+  "one_hz_samples": [
+    {
+      "elapsed_s": 0.0019203750416636467,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 123,
+      "timestamp_us": 1793500634763340,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "f5e362df9c7964d90fbd9eb7d4861107bb81e2f3735e0fe57105b9e0f367de50"
+    },
+    {
+      "elapsed_s": 1.0084916250780225,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 180,
+      "timestamp_us": 1793500635763311,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "c9893160d966b1fb1eeab7b9a8a8268a1f35494b26f2901249428bf156935471"
+    },
+    {
+      "elapsed_s": 2.0075513750780374,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 238,
+      "timestamp_us": 1793500636763167,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "9b9611073bd10b41615a8d7ded23b927d04695988ed7f5de9cf94271c5d83ff0"
+    },
+    {
+      "elapsed_s": 3.0008569170022383,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 298,
+      "timestamp_us": 1793500637763115,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "d3976fb07fc889786cdde01bc85a87d8d65470976fdd9706e2884573a7ef5517"
+    },
+    {
+      "elapsed_s": 4.008493083994836,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 358,
+      "timestamp_us": 1793500638763070,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "a92ab4409b84a3b8e60fe3bd0cb522aad3a940db43c48d4e7faafdbffd1295e9"
+    },
+    {
+      "elapsed_s": 5.011258125072345,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 418,
+      "timestamp_us": 1793500639763332,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "c814618ae24de742482df37fcab3fe74f7e76e04dbe2196d2bedf67e8abbe3e0"
+    },
+    {
+      "elapsed_s": 6.009006959036924,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 478,
+      "timestamp_us": 1793500640763149,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "ae4ea8a5b7df93a2fce3aa2271317b6da9615d3589e4d852679f8cb59cf8dc41"
+    },
+    {
+      "elapsed_s": 7.008206167025492,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 538,
+      "timestamp_us": 1793500641764873,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "9475459263aa25999a623a6b503c4d819583ec7e13c2397e19225de8e87b0b29"
+    },
+    {
+      "elapsed_s": 8.00890783406794,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 598,
+      "timestamp_us": 1793500642763093,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "07a2b0a818988566e2efe4bcdcdd1dabec2d42f6c8e58736eb5649575a532e2a"
+    },
+    {
+      "elapsed_s": 9.003622499993071,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 658,
+      "timestamp_us": 1793500643763033,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "6eccaab91c6212dcae675c21f959174011d000a80ee013401e947d2b4a904279"
+    },
+    {
+      "elapsed_s": 10.003854917013086,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 718,
+      "timestamp_us": 1793500644763788,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "4690068f90449803cd25e94440576a5e2e0437bf628713b40bd61d442e0bb334"
+    },
+    {
+      "elapsed_s": 11.008639084058814,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 778,
+      "timestamp_us": 1793500645763024,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "a8aec0ffd5efd666663bfb538311f4a31c203ac242234f4bece13a40fa48815d"
+    },
+    {
+      "elapsed_s": 12.003975542029366,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 838,
+      "timestamp_us": 1793500646763134,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "872738ef223d377e2615fb12add8e02b018fab469c23a9385fdfe7f1adae7d23"
+    },
+    {
+      "elapsed_s": 13.007500500069,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 898,
+      "timestamp_us": 1793500647764435,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "962491b80358ef774c16deb8ea865d9a07753cd288827ecb298ff44339f13a0d"
+    },
+    {
+      "elapsed_s": 14.005411542020738,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 958,
+      "timestamp_us": 1793500648762931,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "7f31e6c8c108723a976afc8bb6f33df669a36af56734b93135cb72af86fd485a"
+    },
+    {
+      "elapsed_s": 15.009033792070113,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1018,
+      "timestamp_us": 1793500649763176,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "61ad46dc76de9bc646892f846374d8c0200291f2c5623e62d86cf23974dba0e4"
+    },
+    {
+      "elapsed_s": 16.008302459027618,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1078,
+      "timestamp_us": 1793500650764160,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "58ac6f9b6cbf6875d40541bcfb6a3dab1021c4f3be751678f82e6d6bae732394"
+    },
+    {
+      "elapsed_s": 17.003664541989565,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1138,
+      "timestamp_us": 1793500651763110,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "66efe5dc10a70517c2a94aeaa905ad788b216ec0c90759034139067055c203e2"
+    },
+    {
+      "elapsed_s": 18.00883133406751,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1198,
+      "timestamp_us": 1793500652763247,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "02235bb80c69033c5cb6800529c4f290be3120f288c66bbaac4c6f6c17323c41"
+    },
+    {
+      "elapsed_s": 19.005359083996154,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1258,
+      "timestamp_us": 1793500653764100,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "58dd9d66ecc58498a1578d0753f56ae1242faefd7e7af89f5e54ce34b7e83c5b"
+    },
+    {
+      "elapsed_s": 20.000284584006295,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1317,
+      "timestamp_us": 1793500654746410,
+      "delta": 0,
+      "stable_header": true,
+      "pixel_sha256": "34e523b5d73e7c6de7f3e74c0e9ff7298bcac330ef6163363413ff0628050bea"
+    },
+    {
+      "elapsed_s": 21.008193250047043,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1378,
+      "timestamp_us": 1793500655763668,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "f4a1c3cda95e2ffec77d8b6df96acf8b8f6aa31d6161dab9f13f115b06e431d5"
+    },
+    {
+      "elapsed_s": 22.00813383399509,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1438,
+      "timestamp_us": 1793500656763420,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "d3531ab5e71861783fadbc5008b7c0e70984807de5b88c9a1175927b112f5b41"
+    },
+    {
+      "elapsed_s": 23.00893420900684,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1498,
+      "timestamp_us": 1793500657763603,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "de4520e203fd21f6a00f40f6b35949d165a5a964d233e0db8d9231190ee79c78"
+    },
+    {
+      "elapsed_s": 24.000359042081982,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1557,
+      "timestamp_us": 1793500658747226,
+      "delta": 0,
+      "stable_header": true,
+      "pixel_sha256": "76cf1fc6dd291f682e45b66e5523375da5bd0dfa1044cb2a08a5c0e5f23db052"
+    },
+    {
+      "elapsed_s": 25.003306334023364,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1618,
+      "timestamp_us": 1793500659764745,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "a2a63b39d3792257a8decc42eaf276ec3d2cbcd405e3faa52757ad3cdba693c1"
+    },
+    {
+      "elapsed_s": 26.00956987508107,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1678,
+      "timestamp_us": 1793500660764976,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "31bce650581131a9d42b0287b2ccd110e83a4e37be89c779f5c19f28fab9568d"
+    },
+    {
+      "elapsed_s": 27.00832675001584,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1738,
+      "timestamp_us": 1793500661763280,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "9525cdb4ace0fb28ef069389b2536bc17788b17a9d28ba7020097eb532a707b1"
+    },
+    {
+      "elapsed_s": 28.008595625055023,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1798,
+      "timestamp_us": 1793500662763178,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "e0f94c6661f7f2c1a59c1b1d3c455a42df2e703d9eb587a476c208336a20cd48"
+    },
+    {
+      "elapsed_s": 29.00763700006064,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1858,
+      "timestamp_us": 1793500663762893,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "9b2f37daa46f6e5d40aabe8d3f21d6b60f10223b9a35ab1d193389dcc4ec72b1"
+    },
+    {
+      "elapsed_s": 30.004065999994054,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1918,
+      "timestamp_us": 1793500664763278,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "3ca0e00e960a47886861c2eda722fbd19d0feaf9aab21adc1548c9a21e729ae2"
+    },
+    {
+      "elapsed_s": 31.00401979207527,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 1978,
+      "timestamp_us": 1793500665762877,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "538b32ed5b073843484092f3cdb15562fc146c67fa0300116bc4b9ccbc1ab4e7"
+    },
+    {
+      "elapsed_s": 32.00438804202713,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2038,
+      "timestamp_us": 1793500666762701,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "7f47769e88e18366b276967e79408f4c1b32ad547a6e679dcf6276c9cf56b0ac"
+    },
+    {
+      "elapsed_s": 33.0085699170595,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2098,
+      "timestamp_us": 1793500667763058,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "0077800e6141481d96e0009791c0270d1f918ee0a30384ca1482bd9bf508f5af"
+    },
+    {
+      "elapsed_s": 34.003472625045106,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2158,
+      "timestamp_us": 1793500668763069,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "8115827a593e2632f2f4d91672c3a28594e4a27427fe59cce8647fdf1e0f5026"
+    },
+    {
+      "elapsed_s": 35.00801966700237,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2218,
+      "timestamp_us": 1793500669764067,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "2187014e9707591ce19c4c04233a04dfea51877b6ad99ba05331701ea45aeb91"
+    },
+    {
+      "elapsed_s": 36.00525841698982,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2278,
+      "timestamp_us": 1793500670764756,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "2a53eed5b541b70f4b7c39ec8ccaa9cfb7adb914dbb9297f88274b6954840d52"
+    },
+    {
+      "elapsed_s": 37.00603662501089,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2338,
+      "timestamp_us": 1793500671763182,
+      "delta": 2,
+      "stable_header": true,
+      "pixel_sha256": "de5b74abaee22fd7b291323bcc414ba8d9e3a0c19e35eabd26698065ca59a66f"
+    },
+    {
+      "elapsed_s": 38.00772150000557,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2398,
+      "timestamp_us": 1793500672763415,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "084f45e8dd68ef12792af39ec9b37b9d6c61536ddcc6d2c9cd63dc3316fdebd1"
+    },
+    {
+      "elapsed_s": 39.00072391703725,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2457,
+      "timestamp_us": 1793500673746530,
+      "delta": 0,
+      "stable_header": false,
+      "pixel_sha256": "8f32e1c493006f01161d6cae59ce8a7a4a4a1088785abe8e5667b236a2fcadf9"
+    },
+    {
+      "elapsed_s": 40.00462925003376,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2518,
+      "timestamp_us": 1793500674764054,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "c34c2230c7f33b84255a62c21853dd431c4bbccadaa5b9a5ad35f7bbc7be917b"
+    },
+    {
+      "elapsed_s": 41.00934654206503,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2578,
+      "timestamp_us": 1793500675767034,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "fc7ffad67ce0b237b716c47a50601d8bfaa175cd2887e9da6c28d49af6ac29c5"
+    },
+    {
+      "elapsed_s": 42.004744167090394,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2638,
+      "timestamp_us": 1793500676763089,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "57c87c3ee782efc174de4df09e193a0c40a87545a4b5ae6d9e2fac0af9ea622d"
+    },
+    {
+      "elapsed_s": 43.00310841703322,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2698,
+      "timestamp_us": 1793500677764550,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "102b4d91c4b19ec8e8d40128bfbc7aab3e7d6ab424011b8420e06b8dfa4d836a"
+    },
+    {
+      "elapsed_s": 44.00746058404911,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2758,
+      "timestamp_us": 1793500678764601,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "3049c84f58ca638f0270b05df658b4419412632aea9be05a934796c7d068e143"
+    },
+    {
+      "elapsed_s": 45.008924334077165,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2818,
+      "timestamp_us": 1793500679763291,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "63354bd395bec9b7afd6552740e86c354135d7d34ca6c114582c8c1c319d8b89"
+    },
+    {
+      "elapsed_s": 46.007419584086165,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2878,
+      "timestamp_us": 1793500680763880,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "f33f34974d9f9d8dc47369c0802089e45c2f267a4105b05be34af204ec41d0f3"
+    },
+    {
+      "elapsed_s": 47.000480417045765,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2937,
+      "timestamp_us": 1793500681749364,
+      "delta": 0,
+      "stable_header": false,
+      "pixel_sha256": "183819cd30f298ddb8b4e8c85592c0eb46cc9adb918ed3034d9dadddf32960eb"
+    },
+    {
+      "elapsed_s": 48.009305667015724,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 2998,
+      "timestamp_us": 1793500682763434,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "bba7706d5f598358aa971aa25f8c2386429d77eff95372ad8d66db9dc1b1e4c5"
+    },
+    {
+      "elapsed_s": 49.00883479206823,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 3058,
+      "timestamp_us": 1793500683763100,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "1513e20dc2cf1920a117392eabfedf73a7aa0cafbd458f41a34f5675c5a7c768"
+    },
+    {
+      "elapsed_s": 50.00999054207932,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 3118,
+      "timestamp_us": 1793500684763629,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "81779a3235eb06c070a275311b35c99c5293c13c09f9e33a32d2e44063985bed"
+    },
+    {
+      "elapsed_s": 51.00844337500166,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 3178,
+      "timestamp_us": 1793500685763317,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "4f0c65eceb518cdb27056e86461c4136477d3ee417f62b458e8b35828a8885fd"
+    },
+    {
+      "elapsed_s": 52.003607999999076,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 3238,
+      "timestamp_us": 1793500686762877,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "a88e7c64a20ca5f92dc47f2d0b0fab6cf876063ea346c967c809a743015c36c6"
+    },
+    {
+      "elapsed_s": 53.009206625050865,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 3298,
+      "timestamp_us": 1793500687763386,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "3b5d628c345557ff0cae6836665517540b978931505a02a510b51a28f0d82d8e"
+    },
+    {
+      "elapsed_s": 54.01256662502419,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 3358,
+      "timestamp_us": 1793500688763256,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "3ac0bd56eb300c4f0b03985c305e37447ded6313518962280a0b2bdf9eddf5a0"
+    },
+    {
+      "elapsed_s": 55.00608125003055,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 3418,
+      "timestamp_us": 1793500689763055,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "788f2b530597ff5d9fcabf0c14a5f400417bff4063fe4733b68efa1ad67df369"
+    },
+    {
+      "elapsed_s": 56.00845758407377,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 3478,
+      "timestamp_us": 1793500690763755,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "ac49870edc00e1b707b6a04453c8905d8da4b59b189943a3e4810ac18523f493"
+    },
+    {
+      "elapsed_s": 57.00408600002993,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 3538,
+      "timestamp_us": 1793500691762971,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "675406b5b0378de3214f8b05350cdc78d6cf28554c4785f000174851e68241a4"
+    },
+    {
+      "elapsed_s": 58.00164712499827,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 3598,
+      "timestamp_us": 1793500692763720,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "77815fff4bff13f607603baf396bc97a1334912b0924e302f19fe665e6105089"
+    },
+    {
+      "elapsed_s": 59.0089897090802,
+      "width": 1280,
+      "height": 720,
+      "target_fps": 60,
+      "frame_number": 3658,
+      "timestamp_us": 1793500693763994,
+      "delta": 1,
+      "stable_header": true,
+      "pixel_sha256": "3fc34c2f1889462bab0358b1e2ee27e96ac73ce15f6275a1964773b41e167cf5"
+    }
+  ],
+  "csv": "${WORKSPACE}/results/shared-video-frames.csv",
+  "capability": "valid_changing_frames",
+  "stop_after_probe": {
+    "duration_s": 1.365702374954708,
+    "returncode": 0,
+    "kill_started_monotonic": 759527.659452791,
+    "kill_finished_monotonic": 759527.671229458
+  },
+  "finished_unix": 1793500696.419596
+}

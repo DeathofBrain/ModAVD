@@ -1,0 +1,63 @@
+{
+  "locked_at_utc": "2026-11-01T01:21:56.490815+00:00",
+  "reserve_bytes": 21474836480,
+  "metadata": [
+    {
+      "filename": "repository2-3.xml",
+      "url": "https://dl.google.com/android/repository/repository2-3.xml",
+      "sha1": "c2eb114d3d94018c9f97fad2006dbc2953d2fc8b",
+      "sha256": "fb1bd2fcd70b6116519563f1ff96cc578381e4e29237ab05ec8920f0864a7955"
+    },
+    {
+      "filename": "sys-img2-3.xml",
+      "url": "https://dl.google.com/android/repository/sys-img/google_apis/sys-img2-3.xml",
+      "sha1": "082994f87b757e87977aab903d501edf911433c7",
+      "sha256": "b1261b4f645125367bc74d5e0881a55cb489cf13bae26a3c9d61bdef287d228e"
+    }
+  ],
+  "license_acceptance_recorded": false,
+  "packages": [
+    {
+      "package": "emulator",
+      "revision": "37.2.13",
+      "metadata": "repository2-3.xml",
+      "host_os": "macosx",
+      "host_arch": "aarch64",
+      "destination": "emulator",
+      "zip_root": "emulator",
+      "filename": "emulator-darwin_aarch64-16740729.zip",
+      "url": "https://dl.google.com/android/repository/emulator-darwin_aarch64-16740729.zip",
+      "official_size": 416113219,
+      "official_sha1": "6c5e61b873e11c7d1d08683bea089f762baee070",
+      "license_reference": "android-sdk-license"
+    },
+    {
+      "package": "platform-tools",
+      "revision": "37.0.1",
+      "metadata": "repository2-3.xml",
+      "host_os": "macosx",
+      "host_arch": null,
+      "destination": "platform-tools",
+      "zip_root": "platform-tools",
+      "filename": "platform-tools_r37.0.1-darwin.zip",
+      "url": "https://dl.google.com/android/repository/platform-tools_r37.0.1-darwin.zip",
+      "official_size": 16110554,
+      "official_sha1": "6ae73f4de6452dc57e62ec02b68eed92a4c21661",
+      "license_reference": "android-sdk-license"
+    },
+    {
+      "package": "system-images;android-34;google_apis;arm64-v8a",
+      "revision": "14",
+      "metadata": "sys-img2-3.xml",
+      "host_os": null,
+      "host_arch": null,
+      "destination": "system-images/android-34/google_apis/arm64-v8a",
+      "zip_root": "arm64-v8a",
+      "filename": "arm64-v8a-34_r14.zip",
+      "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-34_r14.zip",
+      "official_size": 1610393229,
+      "official_sha1": "2fe8b46d419a3400e30f31b0152b241b50c8b99f",
+      "license_reference": "android-sdk-arm-dbt-license"
+    }
+  ]
+}

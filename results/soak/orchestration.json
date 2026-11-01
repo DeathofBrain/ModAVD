@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "started_utc": "2026-11-01T03:32:32.092337+00:00",
+  "duration_seconds": 7200,
+  "workload_label": "idle_non_game_control",
+  "memory_monitor_count": 1,
+  "groups": {
+    "local": "${WORKSPACE}/results/soak",
+    "wan": "${WORKSPACE}/results/soak/wan"
+  },
+  "preflight": {
+    "path": "${WORKSPACE}/results/remote-preflight-retests/round-2/guest_network.jsonl",
+    "sha256": "e86ff489cb7d565a54b045dce3e3b968316acb8d61e0acbe0cd3d849b2bc593a",
+    "checked_acks": 10,
+    "recorded_window_seconds": 10.006194588,
+    "maximum_heartbeat_ack_gap_seconds": 1.466628625,
+    "checked_config": {
+      "event": "network_config",
+      "monotonic_ns": 23159511260,
+      "payload_framing": "line64",
+      "endpoint_ipv4": "198.18.0.4",
+      "endpoint_port": 4242,
+      "duration_seconds": 10,
+      "interval_ms": 1000,
+      "payload_bytes": 64,
+      "bulk_bytes": 0
+    },
+    "endpoint_identity_note": "Endpoint and line64 framing are checked against the probe network_config event and caller configuration. Host routing may still include FakeIP/TUN/proxy."
+  },
+  "finished_utc": "2026-11-01T05:32:33.271372+00:00",
+  "elapsed_seconds": 7201.386299042031,
+  "execution_completed": true,
+  "network_statuses": {
+    "local": "passed",
+    "wan": "passed"
+  },
+  "memory_sample_count": 1441,
+  "memory_host_error_samples": 0,
+  "memory_guest_error_samples": 0
+}

@@ -1,0 +1,143 @@
+{
+  "status": "passed",
+  "pid": 2453,
+  "boot_s": 12.802796042058617,
+  "launch": {
+    "pid": 2453,
+    "identity": "Sun Nov  1 10:23:28 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_clean -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window",
+    "args": [
+      "${WORKSPACE}/sdk/emulator/emulator",
+      "-avd",
+      "official_clean",
+      "-no-snapshot",
+      "-gpu",
+      "host",
+      "-memory",
+      "4096",
+      "-cores",
+      "4",
+      "-ports",
+      "22160,22161",
+      "-grpc",
+      "22162",
+      "-grpc-use-jwt",
+      "-no-audio",
+      "-no-boot-anim",
+      "-no-metrics",
+      "-verbose",
+      "-no-window"
+    ],
+    "avd": "official_clean",
+    "started_unix": 1793499808.6389382,
+    "boot_started_monotonic": 758641.389429541,
+    "log": "${WORKSPACE}/logs/emulator-1793499808228888000-official_clean.log",
+    "window": false,
+    "serial": "emulator-22160",
+    "adb_port": 22150,
+    "gpu": "host"
+  },
+  "environment": {
+    "collected": "2026-11-01T10:23:41+0800",
+    "source": "Google official packages",
+    "avd": "official_clean",
+    "serial": "emulator-22160",
+    "launch": {
+      "pid": 2453,
+      "identity": "Sun Nov  1 10:23:28 2026     ${WORKSPACE}/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_clean -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window",
+      "args": [
+        "${WORKSPACE}/sdk/emulator/emulator",
+        "-avd",
+        "official_clean",
+        "-no-snapshot",
+        "-gpu",
+        "host",
+        "-memory",
+        "4096",
+        "-cores",
+        "4",
+        "-ports",
+        "22160,22161",
+        "-grpc",
+        "22162",
+        "-grpc-use-jwt",
+        "-no-audio",
+        "-no-boot-anim",
+        "-no-metrics",
+        "-verbose",
+        "-no-window"
+      ],
+      "avd": "official_clean",
+      "started_unix": 1793499808.6389382,
+      "boot_started_monotonic": 758641.389429541,
+      "log": "${WORKSPACE}/logs/emulator-1793499808228888000-official_clean.log",
+      "window": false,
+      "serial": "emulator-22160",
+      "adb_port": 22150,
+      "gpu": "host"
+    },
+    "free_bytes": 133234208768,
+    "emulator_version": {
+      "stdout": "Android emulator version 37.2.13.0 (build_id 16740729) (CL:N/A)\nCopyright (C) 2006-2024 The Android Open Source Project and many others.\nThis program is a derivative of the QEMU CPU emulator (www.qemu.org).\n\n  This software is licensed under the terms of the GNU General Public\n  License version 2, as published by the Free Software Foundation, and\n  may be copied, distributed, and modified under those terms.\n\n  This program is distributed in the hope that it will be useful,\n  but WITHOUT ANY WARRANTY; without even the implied warranty of\n  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n  GNU General Public License for more details.\n\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "acceleration": {
+      "stdout": "accel:\n0\nHypervisor.Framework OS X Version 26.6\naccel\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "host_arch": {
+      "stdout": "arm64\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "macos": {
+      "stdout": "ProductName:\t\tmacOS\nProductVersion:\t\t26.6.2\nBuildVersion:\t\t25G83\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "chip": {
+      "stdout": "Apple M4\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "memory_bytes": {
+      "stdout": "17179869184\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "host_page_bytes": {
+      "stdout": "16384\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "guest": {
+      "stdout": "34\narm64-v8a\n4096\nLinux localhost 6.1.23-android14-4-00257-g7e35917775b8-ab9964412 #1 SMP PREEMPT Mon Apr 17 20:50:58 UTC 2023 aarch64 Toybox\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "disk": {
+      "stdout": "Filesystem       1K-blocks    Used Available Use% Mounted on\n/dev/block/dm-39   8107484 1057512   6902516  14% /data/user/0\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "memory": {
+      "stdout": "MemTotal:        4016820 kB\nMemFree:         1184008 kB\nMemAvailable:    2603580 kB\nBuffers:           21768 kB\nCached:          1654928 kB\nSwapCached:            0 kB\nActive:          1622884 kB\nInactive:         851564 kB\nActive(anon):     800756 kB\nInactive(anon):     1324 kB\nActive(file):     822128 kB\nInactive(file):   850240 kB\nUnevictable:        3824 kB\nMlocked:            3824 kB\nSwapTotal:       3012608 kB\nSwapFree:        3012608 kB\nDirty:              6176 kB\nWriteback:             0 kB\nAnonPages:        801968 kB\nMapped:           984776 kB\nShmem:              6148 kB\nKReclaimable:      62380 kB\nSlab:             163536 kB\nSReclaimable:      61868 kB\nSUnreclaim:       101668 kB\nKernelStack:       32568 kB\nShadowCallStack:    8148 kB\nPageTables:        65152 kB\nSecPageTables:         0 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:     5021016 kB\nCommitted_AS:   58140524 kB\nVmallocTotal:   259653632 kB\nVmallocUsed:       66668 kB\nVmallocChunk:          0 kB\nPercpu:             4176 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:         0 kB\nFilePmdMapped:         0 kB\nCmaTotal:          16384 kB\nCmaFree:           15360 kB\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "graphics": {
+      "stdout": "GLES: Google (Apple), Android Emulator OpenGL ES Translator (Apple M4), OpenGL ES 3.0 (4.1 Metal - 90.5)\nRenderEngine supports protected context: 0\nRenderEngine is in protected context: 0\nRenderEngine shaders cached since last dump/primeCache: 92\nRenderEngine tracked buffers: 11\nRenderEngine AHB/BackendTexture cache size: 11\nRenderEngine runtime effects: 0\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "mounts": {
+      "stdout": "/dev/block/dm-0 / ext4 ro,seclabel,relatime 0 0\ntmpfs /dev tmpfs rw,seclabel,nosuid,relatime,mode=755 0 0\ndevpts /dev/pts devpts rw,seclabel,relatime,mode=600,ptmxmode=000 0 0\nproc /proc proc rw,relatime,gid=3009,hidepid=invisible 0 0\nsysfs /sys sysfs rw,seclabel,relatime 0 0\nselinuxfs /sys/fs/selinux selinuxfs rw,relatime 0 0\ntmpfs /mnt tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\ntmpfs /mnt/installer tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\ntmpfs /mnt/androidwritable tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\n/dev/block/platform/a003c00.virtio_mmio/by-name/metadata /metadata ext4 rw,seclabel,nosuid,nodev,noatime 0 0\n/dev/block/dm-4 /vendor ext4 ro,seclabel,relatime 0 0\n/dev/block/dm-3 /product ext4 ro,seclabel,relatime 0 0\n/dev/block/dm-1 /system_dlkm erofs ro,seclabel,relatime,user_xattr,acl,cache_strategy=readaround 0 0\n/dev/block/dm-2 /system_ext ext4 ro,seclabel,relatime 0 0\ntmpfs /apex tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755 0 0\ntmpfs /linkerconfig tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755 0 0\nnone /dev/blkio cgroup rw,nosuid,nodev,noexec,relatime,blkio 0 0\nnone /sys/fs/cgroup cgroup2 rw,nosuid,nodev,noexec,relatime,memory_recursiveprot 0 0\nnone /dev/cpuctl cgroup rw,nosuid,nodev,noexec,relatime,cpu 0 0\nnone /dev/cpuset cgroup rw,nosuid,nodev,noexec,relatime,cpuset,noprefix,release_agent=/sbin/cpuset_release_agent 0 0\nnone /dev/memcg cgroup rw,nosuid,nodev,noexec,relatime,memory 0 0\ntracefs /sys/kernel/tracing tracefs rw,seclabel,relatime,gid=3012 0 0\nnone /config configfs rw,nosuid,nodev,noexec,relatime 0 0\nbinder /dev/binderfs binder rw,relatime,max=1048576,stats=global 0 0\nnone /sys/fs/fuse/connections fusectl rw,relatime 0 0\nbpf /sys/fs/bpf bpf rw,nosuid,nodev,noexec,relatime 0 0\npstore /sys/fs/pstore pstore rw,seclabel,nosuid,nodev,noexec,relatime 0 0\ntmpfs /storage tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\n/dev/block/dm-39 /data ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\ntmpfs /linkerconfig tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755 0 0\ntmpfs /data_mirror tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=700,gid=1000 0 0\n/dev/block/dm-39 /data_mirror/data_ce/null ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data_mirror/data_de/null ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data_mirror/misc_ce/null ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data_mirror/misc_de/null ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data_mirror/cur_profiles ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data_mirror/ref_profiles ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/loop10 /apex/com.android.runtime@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop10 /apex/com.android.runtime ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop13 /apex/com.android.btservices@340815010 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop13 /apex/com.android.btservices ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop4 /apex/com.android.apex.cts.shim@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop4 /apex/com.android.apex.cts.shim ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop7 /apex/com.android.tzdata@340818040 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop11 /apex/com.google.mainline.primary.libs@340724000 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop5 /apex/com.android.vndk.v34@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop6 /apex/com.android.virt@2 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop7 /apex/com.android.tzdata ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop5 /apex/com.android.vndk.v34 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop6 /apex/com.android.virt ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop12 /apex/com.android.devicelock@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop12 /apex/com.android.devicelock ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-31 /apex/com.android.neuralnetworks@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop9 /apex/com.google.android.widevine@340720000 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-31 /apex/com.android.neuralnetworks ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop9 /apex/com.google.android.widevine ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-18 /apex/com.android.rkpd@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-18 /apex/com.android.rkpd ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-38 /apex/com.android.permission@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-38 /apex/com.android.permission ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-33 /apex/com.android.healthfitness@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-28 /apex/com.android.scheduling@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-33 /apex/com.android.healthfitness ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-32 /apex/com.android.sdkext@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-28 /apex/com.android.scheduling ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop29 /apex/com.android.i18n@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-32 /apex/com.android.sdkext ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop29 /apex/com.android.i18n ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-25 /apex/com.android.tethering@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-37 /apex/com.android.configinfrastructure@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-30 /apex/com.android.cellbroadcast@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-19 /apex/com.android.os.statsd@340818060 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-22 /apex/com.android.media.swcodec@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-37 /apex/com.android.configinfrastructure ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-27 /apex/com.android.conscrypt@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-35 /apex/com.android.appsearch@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-30 /apex/com.android.cellbroadcast ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-25 /apex/com.android.tethering ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-19 /apex/com.android.os.statsd ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-35 /apex/com.android.appsearch ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-22 /apex/com.android.media.swcodec ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-27 /apex/com.android.conscrypt ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-21 /apex/com.android.adbd@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-21 /apex/com.android.adbd ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-7 /apex/com.android.wifi@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-6 /apex/com.android.ipsec@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-10 /apex/com.android.extservices@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-14 /apex/com.android.adservices@340818040 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-16 /apex/com.android.resolv@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-7 /apex/com.android.wifi ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-10 /apex/com.android.extservices ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-6 /apex/com.android.ipsec ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-13 /apex/com.android.art@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-9 /apex/com.android.uwb@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-5 /apex/com.android.mediaprovider@340818080 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-11 /apex/com.android.ondevicepersonalization@340818040 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-16 /apex/com.android.resolv ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-20 /apex/com.android.media@340818082 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-14 /apex/com.android.adservices ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-5 /apex/com.android.mediaprovider ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-11 /apex/com.android.ondevicepersonalization ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-9 /apex/com.android.uwb ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-13 /apex/com.android.art ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-20 /apex/com.android.media ext4 ro,dirsync,seclabel,nodev,noatime 0 0\ntmpfs /apex/apex-info-list.xml tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755 0 0\n/dev/block/dm-39 /data_mirror/data_ce/null/0 ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-39 /data/user/0 ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/fuse /mnt/installer/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/fuse /mnt/androidwritable/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/fuse /mnt/user/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/fuse /storage/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/block/dm-39 /mnt/pass_through/0/emulated ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "sdk/emulator/source.properties": "Pkg.UserSrc=false\nPkg.Revision=37.2.13\nPkg.Path=emulator\nPkg.Desc=Android Emulator\nPkg.BuildId=16740729",
+    "sdk/platform-tools/source.properties": "Pkg.UserSrc=false\nPkg.Revision=37.0.1\n",
+    "sdk/system-images/android-34/google_apis/arm64-v8a/source.properties": "Pkg.Desc=System Image arm64-v8a with Google APIs.\nPkg.Revision=14\nPkg.Dependencies=emulator#34.2.16\nAndroidVersion.ApiLevel=34\nAndroidVersion.ExtensionLevel=7\nAndroidVersion.IsBaseSdk=true\nSystemImage.Abi=arm64-v8a\nSystemImage.TagId=google_apis\nSystemImage.TagDisplay=Google APIs\nSystemImage.GpuSupport=true\nAddon.VendorId=google\nAddon.VendorDisplay=Google Inc.\n\n"
+  }
+}

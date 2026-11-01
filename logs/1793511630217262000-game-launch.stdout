@@ -1,0 +1,7 @@
+Starting: Intent { cmp=com.hypergryph.arknights.bilibili/com.u8.sdk.U8UnityContext }
+Status: ok
+LaunchState: COLD
+Activity: com.hypergryph.arknights.bilibili/com.hypergryph.userprotocolplugin.UserProtocolNoticeActivity
+TotalTime: 1773
+WaitTime: 1776
+Complete

@@ -1,0 +1,39 @@
+{
+  "source_json": "${WORKSPACE}/results/game-cache/e2a0a73b8aae.json",
+  "source_json_sha256": "794d91b126f915afdd97b6821e5bee445bb2d859a9d41b8d53810ca7afc3f08b",
+  "raw_status": "passed_in_observed_file",
+  "status": "blocked",
+  "substantive_test": "nonempty_actual_game_cache_or_settings_persistence",
+  "reason": "The sole selected new package-private file was already zero bytes before shutdown and stayed zero bytes after reboot; no nonempty payload candidate was tested.",
+  "empty_file_creation_observation": "unchanged",
+  "selected_candidates": 1,
+  "nonempty_payload_candidates_tested": 0,
+  "requested_observation_upper_bound_seconds": 60,
+  "observation_ended_early_on_candidate": true,
+  "actual_sampling_window_seconds": null,
+  "actual_sampling_window_note": "Not instrumented in the original raw JSON; do not claim a complete 60-second observation. Total end-to-end case elapsed includes cloning, two boots, baseline hashing and cleanup.",
+  "total_case_elapsed_seconds": 62.21862030029297,
+  "baseline_eligible": 17,
+  "last_eligible": 18,
+  "closure_observation_rejections": {
+    "unreadable_or_racy": 3
+  },
+  "before_kill": {
+    "size": 0,
+    "mtime_unix_seconds": 1793512499,
+    "inode": 655806,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "after_reboot": {
+    "size": 0,
+    "mtime_unix_seconds": 1793512499,
+    "inode": 655806,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "closed_observed_to_kill_start_ms": 3.8799999747425318,
+  "cleanup_verified": true,
+  "scope": "Pre-login package-private files; no game entry, hot update or in-game setting verification.",
+  "future_gate": "Require size > 0 in both scan metadata and pre-kill stable-hash result.",
+  "offline_validation": "${WORKSPACE}/results/game-cache/nonempty-candidate-offline-validation.json",
+  "no_guest_rerun_after_gate_fix": true
+}

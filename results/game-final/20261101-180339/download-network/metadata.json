@@ -1,0 +1,16 @@
+{
+  "adb": "${WORKSPACE}/sdk/platform-tools/adb",
+  "adb_port": 22150,
+  "serial": "emulator-22160",
+  "output": "${WORKSPACE}/results/game-final/20261101-180339/download-network",
+  "interval": 5,
+  "max_seconds": 7200.0,
+  "adb_timeout": 15,
+  "route_target": "1.1.1.1",
+  "host_netstat": true,
+  "started_utc": "2026-11-01T10:04:12.193875+00:00",
+  "route_query": "ip -4 route get 1.1.1.1",
+  "interface_counter_source": "/proc/net/dev",
+  "read_only": true,
+  "attribution": "interface total only, not game UID"
+}

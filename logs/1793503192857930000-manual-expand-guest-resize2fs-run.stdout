@@ -1,0 +1,2 @@
+Filesystem at /dev/block/dm-39 is mounted on /data; on-line resizing required
+old_desc_blocks = 1, new_desc_blocks = 2
