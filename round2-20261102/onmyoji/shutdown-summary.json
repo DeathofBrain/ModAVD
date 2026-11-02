@@ -1,0 +1,11 @@
+{
+  "finished_at": "2026-11-02T22:38:44.135245+08:00",
+  "avd": "official_onmyoji_round2",
+  "sync_before_shutdown": true,
+  "stop_returncode": 0,
+  "stop_duration_s": 1.920066999970004,
+  "still_alive": false,
+  "exclusive_slot_idle_verified": true,
+  "avd_retained": true,
+  "interpretation": "The tested instance was synchronously shut down and the exclusive slot was idle; the AVD was retained."
+}

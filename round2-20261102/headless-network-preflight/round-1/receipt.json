@@ -1,0 +1,69 @@
+{
+  "round": 1,
+  "started_unix": 1793614940.484951,
+  "host_log": "<WORKSPACE>/results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-1/host_network.jsonl",
+  "guest_log": "<WORKSPACE>/results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-1/guest_network.jsonl",
+  "host": {
+    "validation": {
+      "path": "<WORKSPACE>/results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-1/host_network.jsonl",
+      "sha256": "f4373f19d3174e0b3aeeb9a7db6351fbd1cbb0280a2c5e51c35c00a5fae53bde",
+      "checked_acks": 10,
+      "recorded_window_seconds": 10.080430958,
+      "maximum_heartbeat_ack_gap_seconds": 1.054590958,
+      "checked_config": {
+        "timestamp_utc": "2026-11-02T10:22:20.490375+00:00",
+        "event": "network_config",
+        "monotonic_ns": 865199839093875,
+        "payload_framing": "line64",
+        "endpoint_ipv4": "198.18.0.10",
+        "endpoint_port": 4242,
+        "duration_seconds": 10,
+        "interval_ms": 1000,
+        "payload_bytes": 64,
+        "bulk_bytes": 0
+      },
+      "endpoint_identity_note": "Endpoint and line64 framing are checked against the probe network_config event and caller configuration. Host routing may still include FakeIP/TUN/proxy."
+    },
+    "status": "passed"
+  },
+  "guest": {
+    "returncode": 0,
+    "command_log": "<WORKSPACE>/logs/1793614940490307000-wan-guest-preflight-round-1",
+    "validation": {
+      "path": "<WORKSPACE>/results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-1/guest_network.jsonl",
+      "sha256": "fafa653f79425b5376d065c5630b7cf07e1e59b17684fdac24d3e114b21409d5",
+      "checked_acks": 10,
+      "recorded_window_seconds": 10.036820047,
+      "maximum_heartbeat_ack_gap_seconds": 1.075500834,
+      "checked_config": {
+        "event": "network_config",
+        "monotonic_ns": 97922136171,
+        "payload_framing": "line64",
+        "endpoint_ipv4": "198.18.0.10",
+        "endpoint_port": 4242,
+        "duration_seconds": 10,
+        "interval_ms": 1000,
+        "payload_bytes": 64,
+        "bulk_bytes": 0
+      },
+      "endpoint_identity_note": "Endpoint and line64 framing are checked against the probe network_config event and caller configuration. Host routing may still include FakeIP/TUN/proxy."
+    },
+    "status": "passed"
+  },
+  "resolved_ipv4": "198.18.0.10",
+  "guest_command": [
+    "shell",
+    "/data/local/tmp/official_avd_probe",
+    "tcp",
+    "198.18.0.10",
+    "4242",
+    "10",
+    "1000",
+    "64",
+    "0",
+    "line64"
+  ],
+  "status": "passed",
+  "finished_unix": 1793614950.571465,
+  "attribution_note": "Paired public-service observations; endpoint, host routing, and emulator paths all require consideration before attributing a reset."
+}

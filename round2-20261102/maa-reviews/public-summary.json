@@ -1,0 +1,35 @@
+{
+  "derived_from": "Two local independent audit reports; original MAA logs, session data and game screenshots are not published.",
+  "v6201": {
+    "status": "startup_failed",
+    "time_shanghai": "2026-11-02 16:38:42.312–16:40:20.701",
+    "infrast": "not_executed",
+    "award": "not_executed",
+    "scope": "Only the fixed v6.20.1 core/resources; does not establish a v6.21.x defect"
+  },
+  "v6211": {
+    "status": "task_chains_completed",
+    "time_shanghai": "2026-11-02 18:18:01.382–18:19:01.180",
+    "core": "v6.21.1",
+    "resource": "bundled@v6.21.1",
+    "startup": "native template match passed",
+    "infrast": {
+      "mode": 10000,
+      "collect_only": true,
+      "lmd_delta": 32500,
+      "staffing": "empty custom plan and kept-unchanged callbacks; no complete before/after operator roster",
+      "item_obtained": {
+        "name_zh": "装置",
+        "quantity": 1
+      }
+    },
+    "award": {
+      "receive_all_button_matches_and_clicks": 2,
+      "complete_reward_inventory_verified": false
+    },
+    "gui_covered": false,
+    "all_daily_goals_completed_claim": false,
+    "long_term_stability_claim": false
+  },
+  "privacy": "No raw MAA logs, account names, game account IDs, auth tokens, cookies or post-login screenshots are exported."
+}

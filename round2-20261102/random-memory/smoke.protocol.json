@@ -1,0 +1,97 @@
+{
+  "valid": true,
+  "algorithm": "chacha20-ietf",
+  "seed_hex": "f7ed3b489d8a2a69650d4f36480d074b86e589929e26bdec84d588000572c420",
+  "nonce_hex": "000000000000000000000000",
+  "initial_counter": 0,
+  "allocation_bytes": 16777216,
+  "hold_duration_seconds": 1.002546459,
+  "events": [
+    {
+      "event": "random_memory_start",
+      "monotonic_ns": 669849657319,
+      "algorithm": "chacha20-ietf",
+      "seed_hex": "f7ed3b489d8a2a69650d4f36480d074b86e589929e26bdec84d588000572c420",
+      "nonce_hex": "000000000000000000000000",
+      "initial_counter": 0,
+      "bytes": 16777216,
+      "filled_bytes": 0,
+      "verified_bytes": 0,
+      "hold_seconds": 1,
+      "seed_source": "getrandom",
+      "host_received_monotonic_ns": 857234095215166
+    },
+    {
+      "event": "random_memory_filled",
+      "monotonic_ns": 669888448152,
+      "algorithm": "chacha20-ietf",
+      "seed_hex": "f7ed3b489d8a2a69650d4f36480d074b86e589929e26bdec84d588000572c420",
+      "nonce_hex": "000000000000000000000000",
+      "initial_counter": 0,
+      "bytes": 16777216,
+      "filled_bytes": 16777216,
+      "verified_bytes": 0,
+      "host_received_monotonic_ns": 857234133859041
+    },
+    {
+      "event": "random_memory_verified",
+      "monotonic_ns": 669906454736,
+      "algorithm": "chacha20-ietf",
+      "seed_hex": "f7ed3b489d8a2a69650d4f36480d074b86e589929e26bdec84d588000572c420",
+      "nonce_hex": "000000000000000000000000",
+      "initial_counter": 0,
+      "bytes": 16777216,
+      "filled_bytes": 16777216,
+      "verified_bytes": 16777216,
+      "host_received_monotonic_ns": 857234151738958
+    },
+    {
+      "event": "random_memory_dumped",
+      "monotonic_ns": 669976619527,
+      "algorithm": "chacha20-ietf",
+      "seed_hex": "f7ed3b489d8a2a69650d4f36480d074b86e589929e26bdec84d588000572c420",
+      "nonce_hex": "000000000000000000000000",
+      "initial_counter": 0,
+      "bytes": 16777216,
+      "filled_bytes": 16777216,
+      "verified_bytes": 16777216,
+      "dumped_bytes": 16777216,
+      "dump_path": "/data/local/tmp/official_avd_round2_smoke_1793604954642367000.bin",
+      "host_received_monotonic_ns": 857234221969625
+    },
+    {
+      "event": "random_memory_hold_start",
+      "monotonic_ns": 669976632194,
+      "algorithm": "chacha20-ietf",
+      "seed_hex": "f7ed3b489d8a2a69650d4f36480d074b86e589929e26bdec84d588000572c420",
+      "nonce_hex": "000000000000000000000000",
+      "initial_counter": 0,
+      "bytes": 16777216,
+      "filled_bytes": 16777216,
+      "verified_bytes": 16777216,
+      "host_received_monotonic_ns": 857234222025500
+    },
+    {
+      "event": "random_memory_released",
+      "monotonic_ns": 670979178653,
+      "algorithm": "chacha20-ietf",
+      "seed_hex": "f7ed3b489d8a2a69650d4f36480d074b86e589929e26bdec84d588000572c420",
+      "nonce_hex": "000000000000000000000000",
+      "initial_counter": 0,
+      "bytes": 16777216,
+      "filled_bytes": 16777216,
+      "verified_bytes": 16777216,
+      "munmap_returncode": 0,
+      "host_received_monotonic_ns": 857235225882916
+    }
+  ],
+  "hold_start_host_estimate_ns": 857235221916416,
+  "hold_end_host_estimate_ns": 857234224462875,
+  "clock_mapping": {
+    "method": "minimum(host receive monotonic ns minus guest event monotonic ns)",
+    "offset_ns": 856564245284222,
+    "observed_offset_spread_ns": 1420041,
+    "hold_endpoint_guard_ns": 1000000000,
+    "limitation": "One-way event transport has unknown absolute delay. Host hold bounds are estimates with a 1-second endpoint guard; guest hold duration itself uses only the guest monotonic clock."
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "at": "2026-11-02T22:48:04.536752+08:00",
+  "onmyoji_sync_stopped": true,
+  "avd_slot_idle": true,
+  "private_adb_stop_returncode": 0,
+  "private_adb_port_idle": true,
+  "owned_caffeinate_termination_sent": true,
+  "original_sha256": "61176dab78d602ef4fa21d1c0cd1b724ee6e5a2aff7ff94acaac7eb9cd517367",
+  "onmyoji_avd_retained": true,
+  "genshin_avd_and_apk_deleted": true
+}

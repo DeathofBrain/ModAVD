@@ -1,0 +1,539 @@
+{
+  "status": "passed",
+  "input_directory": "<WORKSPACE>/results/round2/20261102-152442/random-memory",
+  "generated_utc": "2026-11-02T08:17:17.578790+00:00",
+  "source_checks": [
+    {
+      "source": "<WORKSPACE>/round2_random_memory.py",
+      "snapshot": "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/00-round2_random_memory.py",
+      "sha256": "1555febfdcca00c4398049269000156424239cc78b1bb554bc6b865f3339baaa",
+      "current_source_sha_matches": true
+    },
+    {
+      "source": "<WORKSPACE>/soak_tests.py",
+      "snapshot": "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/01-soak_tests.py",
+      "sha256": "e74122205af13a8f04eb2df8fe910b216504ec3c98c5b6fb43ceab994c46fff8",
+      "current_source_sha_matches": true
+    },
+    {
+      "source": "<WORKSPACE>/probes/avd_probe.c",
+      "snapshot": "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/02-avd_probe.c",
+      "sha256": "18627cce12e749c6dfc202a6b25da9539d608581afad095155a00093aca02492",
+      "current_source_sha_matches": true
+    },
+    {
+      "source": "<WORKSPACE>/probes/build_probe.py",
+      "snapshot": "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/03-build_probe.py",
+      "sha256": "04304a664ff0690e684ce4bfe58cb9920a481e129746c1823c403f80b62dba92",
+      "current_source_sha_matches": true
+    },
+    {
+      "source": "<WORKSPACE>/probes/build-round2-random/avd_probe",
+      "snapshot": "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/04-avd_probe",
+      "sha256": "53b369603b489612873a3a013ae56ce7ba999f589d362588347d5739b35b06a3",
+      "current_source_sha_matches": true
+    },
+    {
+      "source": "<WORKSPACE>/avd/official_clean.avd/config.ini",
+      "snapshot": "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/05-config.ini",
+      "sha256": "b998cdf98f07c834437a5c3690a5200af8ff0518f15434d564a95753457c276b",
+      "current_source_sha_matches": true
+    },
+    {
+      "source": "<WORKSPACE>/probes/build-round2-random/build_manifest.json",
+      "snapshot": "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/06-build_manifest.json",
+      "sha256": "52eb11f429526aae1e1ad7f97efc72a2bbe086b3554acf2b5623a15411e638db",
+      "current_source_sha_matches": true
+    }
+  ],
+  "binary_sha256": "53b369603b489612873a3a013ae56ce7ba999f589d362588347d5739b35b06a3",
+  "smoke": {
+    "seed_hex": "f7ed3b489d8a2a69650d4f36480d074b86e589929e26bdec84d588000572c420",
+    "dump_sha256": "f02bfc1e17f414b587bd430f3371f95b972e25f095cba8da29c0670935adf787",
+    "compression_ratio": 1.0003055334091187,
+    "unique_pages": 4096,
+    "bytes_compared_during_acquisition": 16777216,
+    "guarded_hold_interval_valid": false,
+    "timing_limitation": "Acquisition applies the same 1 s endpoint guard to the 1 s smoke hold, creating an empty/reversed estimated hold interval. Smoke timing is not used for metric windows; the raw smoke hold duration is independently validated."
+  },
+  "samples": {
+    "count": 423,
+    "interval_target_seconds": 5,
+    "interval_allowed_seconds": [
+      4,
+      6
+    ],
+    "interval_min_seconds": 4.965999999999951,
+    "interval_median_seconds": 5.0,
+    "interval_max_seconds": 5.035000000000025,
+    "max_sample_duration_ms": 421.251,
+    "host_error_samples": 0,
+    "guest_error_samples": 0,
+    "wall_clock_changes": [
+      {
+        "csv_line": 312,
+        "previous_timestamp_utc": "2026-11-02T08:01:56.072278+00:00",
+        "timestamp_utc": "2026-11-02T08:02:00.753865+00:00",
+        "previous_elapsed_seconds": 1545.005,
+        "elapsed_seconds": 1550.005,
+        "utc_interval_seconds": 4.681586980819702,
+        "monotonic_interval_seconds": 5.0,
+        "utc_minus_monotonic_interval_seconds": -0.31841301918029785,
+        "previous_sample_duration_ms": 69.525,
+        "sample_duration_ms": 60.931
+      }
+    ],
+    "csv_utc_minus_monotonic_span_seconds": -0.3200830993650925,
+    "clock_policy": "UTC is retained as a calendar label and its discontinuities are disclosed. All cadence, duration and metric-window integrity checks use monotonic clocks; UTC need not advance at the same rate.",
+    "run_utc_minus_monotonic_seconds": -0.31940129101803905
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "protocol_valid": true,
+      "observation_completed": true,
+      "sample_counts": {
+        "baseline_last_12": 12,
+        "hold_last_3": 3,
+        "release_last_12": 12
+      },
+      "metrics": {
+        "guest_MemAvailable_bytes": {
+          "baseline_median_bytes": 2634909696.0,
+          "hold_median_last_3_bytes": 1546096640,
+          "release_median_last_12_bytes": 2587592704.0,
+          "hold_minus_baseline_bytes": -1088813056.0,
+          "release_minus_hold_bytes": 1041496064.0,
+          "release_minus_baseline_bytes": -47316992.0,
+          "allocation_increment_bytes": 1088813056.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction": 0.9565425931115947
+        },
+        "host_phys_footprint_bytes": {
+          "baseline_median_bytes": 7454047696.0,
+          "hold_median_last_3_bytes": 7476420048,
+          "release_median_last_12_bytes": 7494213072.0,
+          "hold_minus_baseline_bytes": 22372352.0,
+          "release_minus_hold_bytes": 17793024.0,
+          "release_minus_baseline_bytes": 40165376.0,
+          "allocation_increment_bytes": 22372352.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction": null
+        },
+        "host_rss_bytes": {
+          "baseline_median_bytes": 289947648.0,
+          "hold_median_last_3_bytes": 378306560,
+          "release_median_last_12_bytes": 258170880.0,
+          "hold_minus_baseline_bytes": 88358912.0,
+          "release_minus_hold_bytes": -120135680.0,
+          "release_minus_baseline_bytes": -31776768.0,
+          "allocation_increment_bytes": 88358912.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction": null
+        }
+      },
+      "timing": {
+        "baseline_start_ns": 857250490574791,
+        "baseline_end_ns": 857370533282000,
+        "hold_start_host_estimate_ns": 857377478073585,
+        "hold_end_host_estimate_ns": 857435558859155,
+        "observe_start_ns": 857436703619416,
+        "guest_hold_duration_seconds": 60.08078557,
+        "clock_mapping": {
+          "method": "minimum(host receive monotonic ns minus guest event monotonic ns)",
+          "offset_ns": 856564245420615,
+          "observed_offset_spread_ns": 824970,
+          "hold_endpoint_guard_ns": 1000000000,
+          "limitation": "One-way event transport has unknown absolute delay. Host hold bounds are estimates with a 1-second endpoint guard; guest hold duration itself uses only the guest monotonic clock."
+        },
+        "observe_end_ns": 858036726677750
+      },
+      "windows": {
+        "baseline": {
+          "sample_count": 12,
+          "first_elapsed_seconds": 65.005,
+          "last_elapsed_seconds": 120.001
+        },
+        "hold": {
+          "sample_count": 3,
+          "first_elapsed_seconds": 175.005,
+          "last_elapsed_seconds": 185.005
+        },
+        "released": {
+          "sample_count": 12,
+          "first_elapsed_seconds": 730.005,
+          "last_elapsed_seconds": 785.001
+        }
+      },
+      "actual_observe_seconds": 600.023058334,
+      "seed_hex": "a77be98ad28ae985b82f5cda4204d9ff75ddf561a4733124727a9696dac57309",
+      "fill_duration_seconds": 4.697883919,
+      "verify_duration_seconds": 1.2225495
+    },
+    {
+      "round": 2,
+      "protocol_valid": true,
+      "observation_completed": true,
+      "sample_counts": {
+        "baseline_last_12": 12,
+        "hold_last_3": 3,
+        "release_last_12": 12
+      },
+      "metrics": {
+        "guest_MemAvailable_bytes": {
+          "baseline_median_bytes": 2587592704.0,
+          "hold_median_last_3_bytes": 1529872384,
+          "release_median_last_12_bytes": 2615515136.0,
+          "hold_minus_baseline_bytes": -1057720320.0,
+          "release_minus_hold_bytes": 1085642752.0,
+          "release_minus_baseline_bytes": 27922432.0,
+          "allocation_increment_bytes": 1057720320.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction": 1.0263986911020109
+        },
+        "host_phys_footprint_bytes": {
+          "baseline_median_bytes": 7494213072.0,
+          "hold_median_last_3_bytes": 7498210768,
+          "release_median_last_12_bytes": 7495966160.0,
+          "hold_minus_baseline_bytes": 3997696.0,
+          "release_minus_hold_bytes": -2244608.0,
+          "release_minus_baseline_bytes": 1753088.0,
+          "allocation_increment_bytes": 3997696.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction": null
+        },
+        "host_rss_bytes": {
+          "baseline_median_bytes": 258170880.0,
+          "hold_median_last_3_bytes": 561266688,
+          "release_median_last_12_bytes": 253935616.0,
+          "hold_minus_baseline_bytes": 303095808.0,
+          "release_minus_hold_bytes": -307331072.0,
+          "release_minus_baseline_bytes": -4235264.0,
+          "allocation_increment_bytes": 303095808.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction": 1.0139733506310982
+        }
+      },
+      "timing": {
+        "baseline_start_ns": 857976729929208,
+        "baseline_end_ns": 858036742811208,
+        "hold_start_host_estimate_ns": 858041696370972,
+        "hold_end_host_estimate_ns": 858099757070250,
+        "observe_start_ns": 858100822315583,
+        "guest_hold_duration_seconds": 60.060699278,
+        "clock_mapping": {
+          "method": "minimum(host receive monotonic ns minus guest event monotonic ns)",
+          "offset_ns": 856564245694268,
+          "observed_offset_spread_ns": 1130113,
+          "hold_endpoint_guard_ns": 1000000000,
+          "limitation": "One-way event transport has unknown absolute delay. Host hold bounds are estimates with a 1-second endpoint guard; guest hold duration itself uses only the guest monotonic clock."
+        },
+        "observe_end_ns": 858700856172166
+      },
+      "windows": {
+        "baseline": {
+          "sample_count": 12,
+          "first_elapsed_seconds": 730.005,
+          "last_elapsed_seconds": 785.001
+        },
+        "hold": {
+          "sample_count": 3,
+          "first_elapsed_seconds": 835.005,
+          "last_elapsed_seconds": 845.005
+        },
+        "released": {
+          "sample_count": 12,
+          "first_elapsed_seconds": 1395.006,
+          "last_elapsed_seconds": 1450.005
+        }
+      },
+      "actual_observe_seconds": 600.033856583,
+      "seed_hex": "5fe673e3d5e0517a01134bdbb555fa5b8d6eefb25b499ecae695c33637d72f2a",
+      "fill_duration_seconds": 2.678876501,
+      "verify_duration_seconds": 1.249807459
+    },
+    {
+      "round": 3,
+      "protocol_valid": true,
+      "observation_completed": true,
+      "sample_counts": {
+        "baseline_last_12": 12,
+        "hold_last_3": 3,
+        "release_last_12": 12
+      },
+      "metrics": {
+        "guest_MemAvailable_bytes": {
+          "baseline_median_bytes": 2615515136.0,
+          "hold_median_last_3_bytes": 1552871424,
+          "release_median_last_12_bytes": 2651994112.0,
+          "hold_minus_baseline_bytes": -1062643712.0,
+          "release_minus_hold_bytes": 1099122688.0,
+          "release_minus_baseline_bytes": 36478976.0,
+          "allocation_increment_bytes": 1062643712.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction": 1.0343285106645415
+        },
+        "host_phys_footprint_bytes": {
+          "baseline_median_bytes": 7495966160.0,
+          "hold_median_last_3_bytes": 7497620944,
+          "release_median_last_12_bytes": 7497481680.0,
+          "hold_minus_baseline_bytes": 1654784.0,
+          "release_minus_hold_bytes": -139264.0,
+          "release_minus_baseline_bytes": 1515520.0,
+          "allocation_increment_bytes": 1654784.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction": null
+        },
+        "host_rss_bytes": {
+          "baseline_median_bytes": 253935616.0,
+          "hold_median_last_3_bytes": 317538304,
+          "release_median_last_12_bytes": 338657280.0,
+          "hold_minus_baseline_bytes": 63602688.0,
+          "release_minus_hold_bytes": 21118976.0,
+          "release_minus_baseline_bytes": 84721664.0,
+          "allocation_increment_bytes": 63602688.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction": null
+        }
+      },
+      "timing": {
+        "baseline_start_ns": 858640862829333,
+        "baseline_end_ns": 858700880465500,
+        "hold_start_host_estimate_ns": 858705509720666,
+        "hold_end_host_estimate_ns": 858763582189403,
+        "observe_start_ns": 858764783555833,
+        "guest_hold_duration_seconds": 60.072468737,
+        "clock_mapping": {
+          "method": "minimum(host receive monotonic ns minus guest event monotonic ns)",
+          "offset_ns": 856564245420688,
+          "observed_offset_spread_ns": 294722,
+          "hold_endpoint_guard_ns": 1000000000,
+          "limitation": "One-way event transport has unknown absolute delay. Host hold bounds are estimates with a 1-second endpoint guard; guest hold duration itself uses only the guest monotonic clock."
+        },
+        "observe_end_ns": 859364820901625
+      },
+      "windows": {
+        "baseline": {
+          "sample_count": 12,
+          "first_elapsed_seconds": 1395.006,
+          "last_elapsed_seconds": 1450.005
+        },
+        "hold": {
+          "sample_count": 3,
+          "first_elapsed_seconds": 1500.005,
+          "last_elapsed_seconds": 1510.006
+        },
+        "released": {
+          "sample_count": 12,
+          "first_elapsed_seconds": 2055.005,
+          "last_elapsed_seconds": 2110.006
+        }
+      },
+      "actual_observe_seconds": 600.037345792,
+      "seed_hex": "51f8d35219783ec989b6498fa44d12dea70eab9a17cf29b9f65e58100b6a4baf",
+      "fill_duration_seconds": 2.384844251,
+      "verify_duration_seconds": 1.224098209
+    }
+  ],
+  "background_whole_host": {
+    "host_compressor_physical_bytes": {
+      "first": 6484164608,
+      "last": 6439436288,
+      "min": 5192499200,
+      "max": 8094826496,
+      "last_minus_first": -44728320
+    },
+    "host_compressor_uncompressed_bytes": {
+      "first": 29219733504,
+      "last": 30347149312,
+      "min": 27695792128,
+      "max": 34209038336,
+      "last_minus_first": 1127415808
+    },
+    "host_swap_used_bytes": {
+      "first": 9678482309,
+      "last": 10674965053,
+      "min": 9279048253,
+      "max": 11361320960,
+      "last_minus_first": 996482744
+    },
+    "host_swapins_pages": {
+      "first": 41503738,
+      "last": 41816630,
+      "min": 41503738,
+      "max": 41816630,
+      "last_minus_first": 312892
+    },
+    "host_swapouts_pages": {
+      "first": 56393695,
+      "last": 56767867,
+      "min": 56393695,
+      "max": 56767867,
+      "last_minus_first": 374172
+    }
+  },
+  "summary_independent_recomputation_matches": true,
+  "independent_seed_count_including_smoke": 4,
+  "inputs": {
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/progress.json": {
+      "size_bytes": 3728,
+      "sha256": "d4852c2b996e7e8ca3ff4d812096b59f585d2e94977da698aefe2d95809d33ec"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance.json": {
+      "size_bytes": 8464,
+      "sha256": "cfe439ced1a754465dd8a54c1140caa9a82b4c5cff9666474d889be8773780b0"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/00-round2_random_memory.py": {
+      "size_bytes": 33769,
+      "sha256": "1555febfdcca00c4398049269000156424239cc78b1bb554bc6b865f3339baaa"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/01-soak_tests.py": {
+      "size_bytes": 27799,
+      "sha256": "e74122205af13a8f04eb2df8fe910b216504ec3c98c5b6fb43ceab994c46fff8"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/02-avd_probe.c": {
+      "size_bytes": 16266,
+      "sha256": "18627cce12e749c6dfc202a6b25da9539d608581afad095155a00093aca02492"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/03-build_probe.py": {
+      "size_bytes": 5250,
+      "sha256": "04304a664ff0690e684ce4bfe58cb9920a481e129746c1823c403f80b62dba92"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/04-avd_probe": {
+      "size_bytes": 24206,
+      "sha256": "53b369603b489612873a3a013ae56ce7ba999f589d362588347d5739b35b06a3"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/05-config.ini": {
+      "size_bytes": 623,
+      "sha256": "b998cdf98f07c834437a5c3690a5200af8ff0518f15434d564a95753457c276b"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/provenance/06-build_manifest.json": {
+      "size_bytes": 797,
+      "sha256": "52eb11f429526aae1e1ad7f97efc72a2bbe086b3554acf2b5623a15411e638db"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/deployment.json": {
+      "size_bytes": 194,
+      "sha256": "8b6185d9b4466a42fc0d0a2294d674ca0544966eddd06b3c6f469f85142c559b"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/guest-environment.json": {
+      "size_bytes": 26418,
+      "sha256": "790d72e08c134c2c0b65159f2673432b56a2fbd4a6f31239ce942322602d24a3"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/smoke-verification.json": {
+      "size_bytes": 295867,
+      "sha256": "e263658b38d39d40c260660f65954b984ccd7b3baf0f68119a784d3b9b51dd2b"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/smoke.stdout.jsonl": {
+      "size_bytes": 1913,
+      "sha256": "59008385f93eeb87e80baa92250c1b628731a54d1734e4b0be25aa8de22a6caa"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/smoke.host-events.jsonl": {
+      "size_bytes": 2779,
+      "sha256": "a94be8e180af9bbc9e00add9b3632a62c396f20c765c31f0624e3bf312f3e2aa"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/smoke.protocol.json": {
+      "size_bytes": 3578,
+      "sha256": "bc02c24f7c63b97ec1a152c99ca01040c2ddb73411de170edd31672a12b7520c"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/smoke.execution.json": {
+      "size_bytes": 658,
+      "sha256": "ad2222adae197a5be577d35f06e6140d9b2143ae30f0e21ff035bae8d9a6fc4b"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/smoke.stderr.log": {
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/smoke-16MiB.bin": {
+      "size_bytes": 16777216,
+      "sha256": "f02bfc1e17f414b587bd430f3371f95b972e25f095cba8da29c0670935adf787"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/memory.csv": {
+      "size_bytes": 109765,
+      "sha256": "3cd4de3e010a26c638441b5203c302483d5321a2f30389fc35d3318059398f97"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_1.stdout.jsonl": {
+      "size_bytes": 1541,
+      "sha256": "1db150ade63ef580ab6f843a7e084a1263c01f4727f632d2e4b25e4331af5659"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_1.host-events.jsonl": {
+      "size_bytes": 2259,
+      "sha256": "7625e41dea8d11fa30f35654ecac67e646c506c7f3a00544553fc993f56f80e8"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_1.protocol.json": {
+      "size_bytes": 3056,
+      "sha256": "83bab07f7a43c35d8a4d0616b8f3093693325834fcc6967b676708272b80bf7f"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_1.execution.json": {
+      "size_bytes": 588,
+      "sha256": "9768fdc31130349eabc7a09a4be51456da62d4f8d267e68a972d290c21ce1f91"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_1.stderr.log": {
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_2.stdout.jsonl": {
+      "size_bytes": 1546,
+      "sha256": "7aef576052ab14dcdcc86f67c9f9247d2c4776dc40cf39cd5e436232413afc34"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_2.host-events.jsonl": {
+      "size_bytes": 2264,
+      "sha256": "1e3fc049f45b285c27dc58d8ca3a3a4a38951ac5d944e477b962161af8924e5f"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_2.protocol.json": {
+      "size_bytes": 3063,
+      "sha256": "550384513848346ae54b7bc08fb0ce79c84dfb5ed0db32cdf9e296ac024ceb6b"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_2.execution.json": {
+      "size_bytes": 588,
+      "sha256": "cd8bb50c9fedc5b46a25b6ab126e1b2453aa254f7661740ccd8e4604e7b36ded"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_2.stderr.log": {
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_3.stdout.jsonl": {
+      "size_bytes": 1546,
+      "sha256": "91a370d0efa92ae120f35701ce08844b6d59b8e61e6f2e773412137b76028348"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_3.host-events.jsonl": {
+      "size_bytes": 2264,
+      "sha256": "f912b54ff47e87aad5d57f9cc2da66183c06690cf8b4c02960fc6aaef166c73a"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_3.protocol.json": {
+      "size_bytes": 3062,
+      "sha256": "1820ce2c4404ffe458d0296e2a4dc1089704f77f3f65260a967865c7f85ae783"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_3.execution.json": {
+      "size_bytes": 588,
+      "sha256": "f397ec99d6df48052e15fe76c0b05c46be5bf133fd5b9eaeb5e9f61da32a1ec7"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/round_3.stderr.log": {
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/random-memory/summary.json": {
+      "size_bytes": 9553,
+      "sha256": "9b8dfea96ee5a888990b1f9b7b93235d4d4cb6c26bd6ad5e34fcbaa7ad0aa233"
+    }
+  },
+  "time_semantics": "CSV sample start is rounded to milliseconds relative to host monotonic origin. Hold selection uses raw guest event times plus the least-delayed receipt anchor and a 1 s guard at both ends. One-way transport delay is not independently bounded. Release observation starts only after validated probe exit.",
+  "scope": "Protocol completion and process-memory reclamation are separate results; system compressor and swap are whole-host background. This test alone cannot establish a memory leak.",
+  "report_script": {
+    "path": "<WORKSPACE>/round2_memory_report.py",
+    "sha256": "c9d59819ee6f7f6edb765f0791af27854b263dd264404b64c0ff99252811de5a"
+  },
+  "outputs": {
+    "report.md": {
+      "sha256": "f1f02e711afb91f45d9ad6cf91f23a5538818e6ae63f155e3afcb37b58cea01b",
+      "size_bytes": 7279
+    },
+    "memory-timeline.png": {
+      "sha256": "d4f54d4bdfaf7979e42979a03df46dfeaa6274b999102fc4e51c5e7623576106",
+      "size_bytes": 364799
+    },
+    "memory-timeline.svg": {
+      "sha256": "bf5c33e5619ae7e5309c61e9ecbf06dcaf2df1a39eb66001cae00b35d8a93e07",
+      "size_bytes": 84243
+    }
+  }
+}

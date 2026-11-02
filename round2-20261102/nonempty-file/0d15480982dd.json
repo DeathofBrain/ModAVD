@@ -1,0 +1,2873 @@
+{
+  "case": "0d15480982dd",
+  "test": "genuine_game_write_no_sync",
+  "status": "blocked",
+  "source_avd": "official_game",
+  "disposable_avd": "official_game_cache_disposable_0d15480982dd",
+  "package": "com.hypergryph.arknights.bilibili",
+  "started_unix": 1793627401.044798,
+  "file_scopes": [
+    "cache",
+    "files",
+    "shared_prefs"
+  ],
+  "max_file_bytes": 8388608,
+  "max_existing_baseline_files": 256,
+  "sensitive_filename_exclusion_regex": "auth|token|account|login|cookie|credential|password|passwd|session|sdk|bilibili|device.?id|(?:^|[/_.-])uid(?:$|[/_.-])|user",
+  "requested_observation_seconds": 120.0,
+  "requested_delay_after_closed_observation_ms": 0,
+  "synthetic_game_writes_performed": false,
+  "game_files_deleted_or_overwritten_by_test": false,
+  "content_exported": false,
+  "public_paths_are_opaque_hmac_ids": true,
+  "closure_observation_method": "Two successful same-UID FD and writable-mmap snapshots, matched by Linux st_dev plus inode, around stable stat/hash checks; no pathname equivalence is assumed",
+  "limitations": [
+    "Closure means no matching device/inode was observed in readable same-UID process FDs or writable mappings at two non-atomic snapshots, with stable stat/hash; no close syscall timestamp or continued closure is claimed.",
+    "Any unreadable or disappearing process identity, FD enumeration/stat, or maps read rejects the snapshot; uncertain candidates are skipped and can yield blocked rather than a closure claim.",
+    "New processes, reopened handles, later writes and races between snapshots remain possible. Processes outside the package UID are outside this observation.",
+    "Polling may miss brief or same-second same-size writes; no observed candidate means blocked, not no game writes.",
+    "Only filtered files within the stated size limit are examined; account/authentication filenames are excluded.",
+    "Existing files are sampled by most recent mtime up to max_existing_baseline_files; unhashable or unsampled existing files cannot be attributed as fresh writes.",
+    "Files can be changed by boot receivers after reboot; any mismatch needs review and is not alone proof of emulator data loss."
+  ],
+  "source_stopped_state": {
+    "avd": "official_game",
+    "stop_sync": true,
+    "stopped_unix": 1793627345.4713962,
+    "still_alive": false
+  },
+  "clone_method": "APFS cp -cR of synced stopped original; original never booted or rooted by this script",
+  "first_boot_seconds": 12.771954499999993,
+  "private_read_operations": [
+    {
+      "purpose": "root-disposable-clone",
+      "duration_seconds": 1.351668499992229,
+      "returncode": 0
+    },
+    {
+      "purpose": "wait-after-root",
+      "duration_seconds": 0.012019499903544784,
+      "returncode": 0
+    },
+    {
+      "purpose": "verify-root",
+      "duration_seconds": 0.06511762493755668,
+      "returncode": 0
+    },
+    {
+      "purpose": "package-metadata",
+      "duration_seconds": 0.10853016702458262,
+      "returncode": 0
+    },
+    {
+      "purpose": "package-uid-user-zero",
+      "duration_seconds": 0.025562457973137498,
+      "returncode": 0
+    },
+    {
+      "purpose": "verify-game-not-started",
+      "duration_seconds": 0.0351048749871552,
+      "returncode": 1
+    },
+    {
+      "purpose": "scan-file-metadata",
+      "duration_seconds": 0.09241087501868606,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03769899997860193,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.027303666924126446,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.024074875051155686,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02132866601459682,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.055702917044982314,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.0217861250275746,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.0418594169896096,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.025089750066399574,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.026076916023157537,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.050767334061674774,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.026586499996483326,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.030370666994713247,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.027755541959777474,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.03503699996508658,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021481750067323446,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03585133294109255,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.026913417037576437,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02607929101213813,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.026344292098656297,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02113504207227379,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.026845791027881205,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.028616041992790997,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.032485416042618454,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.025410708039999008,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021891625015996397,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.024560707970522344,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.050473000039346516,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.022303375066258013,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.03875824995338917,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02876204194035381,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.055533832986839116,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.024901165976189077,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.026736167026683688,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.025154624949209392,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.028523917077109218,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.025590292061679065,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.023471750086173415,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.024679750087670982,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.030040499987080693,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.024789165938273072,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02678004198241979,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.023511625011451542,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.04432516708038747,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02580141695216298,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02630387502722442,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03332433302421123,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.040124541032128036,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02888458303641528,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021698999917134643,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.031076833023689687,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.028099374962039292,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.044401332968845963,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.028538333950564265,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.028343333979137242,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03862254205159843,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.023724500089883804,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.023273583967238665,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.031551958061754704,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02487095899414271,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.025180457974784076,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020495791919529438,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02614208299200982,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03853441693354398,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.023158832918852568,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.03291195898782462,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.052530957967974246,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03303087502717972,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.023586749914102256,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.025086875073611736,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.023257915978319943,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.028904167003929615,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.027769790962338448,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.035628208075650036,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02298258407972753,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01839241699781269,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018682959023863077,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.020006999955512583,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018625125056132674,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019657791941426694,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01915241708047688,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018306666053831577,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018342124996706843,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.020830333000048995,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.022647709003649652,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.025736709008924663,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01792912499513477,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.033573040971532464,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.05007983301766217,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018177208956331015,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02303408400621265,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02081062493380159,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.019186625024303794,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01923479198012501,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01999383303336799,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.021564665948972106,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021019791951403022,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02656937495339662,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.021994541981257498,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03469837491866201,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02389416703954339,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.022964540985412896,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03705045906826854,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019405959057621658,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01980629190802574,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02652950002811849,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02129445900209248,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.03463687503244728,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018919582944363356,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01991237502079457,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.023175082984380424,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020360000082291663,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03545058309100568,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018634292064234614,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017253207974135876,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017642333987168968,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018663582974113524,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017624084022827446,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018269415944814682,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018954416969791055,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017343334038741887,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019263084046542645,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018736957921646535,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019113417016342282,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02024233399424702,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01952641608659178,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01777508296072483,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018337334040552378,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018558292067609727,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01898495899513364,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018211708054877818,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018443083041347563,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02005562500562519,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01786799996625632,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.019492125022225082,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03254995902534574,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02589579194318503,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02082312502898276,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021519624977372587,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02743366698268801,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02316887502092868,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021811958984471858,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02303599996957928,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.022784541943110526,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021507791010662913,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020650000078603625,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.023717707954347134,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.023010834003798664,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.026292583905160427,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.025276875006966293,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018922792049124837,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02121533395256847,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.033096416969783604,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.023275084095075727,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020268124993890524,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02251375000923872,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021265874966047704,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020323959062807262,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01925529190339148,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02123600000049919,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02336254098918289,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.023846124997362494,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.022161667002364993,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03020987508352846,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.022789084003306925,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020821291022002697,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01986566698178649,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.021008374984376132,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02046170795802027,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01843387505505234,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017853750032372773,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018143792054615915,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02057595900259912,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017813708051107824,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018301500007510185,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017652417067438364,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017744624987244606,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01805595902260393,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017844000016339123,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01713695900980383,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01757362496573478,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018096665968187153,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.0419529170030728,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018266125000081956,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01903987501282245,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018445209017954767,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017240083892829716,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017860042047686875,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018055542022921145,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.036460166913457215,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01829725003335625,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.019970708061009645,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01788629195652902,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017688541091047227,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.019632583018392324,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01776750001590699,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018813707982189953,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.04225850000511855,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018812374910339713,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018212583963759243,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.03886825009249151,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018194832955487072,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01775104191619903,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.037014707922935486,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018271666951477528,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018586707999929786,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.022369583952240646,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017014457960613072,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01801733300089836,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01800824992824346,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017854916979558766,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.0184443750185892,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017967083025723696,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017819374916143715,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017452333006076515,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02025120798498392,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01876762497704476,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018206332926638424,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017973207985050976,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017900040955282748,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018953374936245382,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01931895804591477,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01793958293274045,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.04268579208292067,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01934400002937764,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01991045894101262,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.036178500042296946,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.022381333052180707,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.024540250073187053,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.022312792018055916,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.023328624898567796,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.023788792081177235,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.032162333955056965,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.035416083061136305,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03935479198116809,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019973999937064946,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017776999971829355,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03472070791758597,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020312583073973656,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.0185291669331491,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019944041967391968,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03419545793440193,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.025382082909345627,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.06463520892430097,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.029968583025038242,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.03320370800793171,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.041453000041656196,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03011183300986886,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.033714417018927634,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02701970806811005,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.04509445792064071,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.022154707927256823,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.043495291960425675,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.025599416927434504,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.023281916975975037,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.024891249951906502,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02210779197048396,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.019397874944843352,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018245709012262523,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018528333050198853,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017857208964414895,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018584083998575807,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018797709024511278,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018319332972168922,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018358957953751087,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018005792051553726,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01740408397745341,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01760295801796019,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.016516124946065247,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.019628125010058284,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021415584022179246,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01860541698988527,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.019369999994523823,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02739570802077651,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02048570802435279,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.027326334035024047,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018478041980415583,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02108587499242276,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.03213912504725158,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02896629204042256,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02115225000306964,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.020283292047679424,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021393500035628676,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02221708302386105,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.021194749977439642,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02113666699733585,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018174958997406065,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.020569957909174263,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.028883583028800786,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.024481208994984627,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.020991083001717925,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017638082965277135,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017303291941061616,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017962792073376477,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021961124963127077,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.04623979202006012,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01996595796663314,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019961874932050705,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.043434959021396935,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.019328666967339814,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.0171358750667423,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017113375011831522,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017199457972310483,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.016376500017940998,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.016871624975465238,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.016605249955318868,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017423833021894097,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018058417015708983,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018982458976097405,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.04857275006361306,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018956458079628646,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01803604105953127,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017786041949875653,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01824454206507653,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01780545909423381,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018412624951452017,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019715583068318665,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017878707963973284,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019844625028781593,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018778792000375688,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02159416605718434,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017930250032804906,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01797833398450166,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01870933303143829,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.0201878750231117,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.023184292018413544,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.020406584022566676,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01834245794452727,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021187625010497868,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01758062490262091,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01749733299948275,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01931179198436439,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01809508295264095,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017480207956396043,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017940042074769735,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018232416943646967,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.016823124955408275,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01736912503838539,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.020352208986878395,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017513709026388824,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.016970291966572404,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01618020806927234,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018237916054204106,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01693800010252744,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.016526082996279,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01627095800358802,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.016456709010526538,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017055958043783903,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018235958996228874,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017174792010337114,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01908283296506852,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017078791977837682,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01754991605412215,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01767166703939438,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01757883292157203,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01697979203891009,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.016989625059068203,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018788333050906658,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017223875038325787,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.016775415977463126,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01633524999488145,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017185083008371294,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.016770416987128556,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.016876125009730458,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017982874996960163,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.016824457910843194,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017194165964610875,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01679133391007781,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017974416026845574,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01857962494250387,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.04761345800943673,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02016808290500194,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019947499968111515,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021470540901646018,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.020226125023327768,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.04015829192940146,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01714187499601394,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01651945896446705,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017161750001832843,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.04247870796825737,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01709445903543383,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017515207990072668,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017173290951177478,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.016260999953374267,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01686412503477186,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017098458018153906,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.04178612504620105,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017510707955807447,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.016812584013678133,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018809624947607517,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017412625020369887,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03371762507595122,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017830915981903672,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017232417012564838,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017620667000301182,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01630512496922165,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019311332958750427,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.042985041975043714,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01990712503902614,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018238125019706786,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018824459053575993,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.02118075010366738,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017590417061001062,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019547582953236997,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01907304208725691,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02039929199963808,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018413749989122152,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017938500037416816,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018537333933636546,
+      "returncode": 0
+    },
+    {
+      "purpose": "guest-clock-before-game-launch",
+      "duration_seconds": 0.019411457935348153,
+      "returncode": 0
+    },
+    {
+      "purpose": "resolve-game-launcher",
+      "duration_seconds": 0.019515833002515137,
+      "returncode": 0
+    },
+    {
+      "purpose": "launch-actual-game",
+      "duration_seconds": 0.9834840000839904,
+      "returncode": 0
+    },
+    {
+      "purpose": "verify-game-running",
+      "duration_seconds": 0.03775750007480383,
+      "returncode": 0
+    },
+    {
+      "purpose": "scan-file-metadata",
+      "duration_seconds": 0.05025670793838799,
+      "returncode": 0
+    },
+    {
+      "purpose": "verify-game-running",
+      "duration_seconds": 0.023824832984246314,
+      "returncode": 0
+    },
+    {
+      "purpose": "scan-file-metadata",
+      "duration_seconds": 0.03651324997190386,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017046415945515037,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01650287490338087,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.8648812079336494,
+      "returncode": 26
+    },
+    {
+      "purpose": "verify-game-running",
+      "duration_seconds": 0.03346933389548212,
+      "returncode": 0
+    },
+    {
+      "purpose": "scan-file-metadata",
+      "duration_seconds": 0.05045495799276978,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.023845541989430785,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.022066665929742157,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 4.09029141603969,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019703958998434246,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017753083957359195,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.7372323750751093,
+      "returncode": 26
+    },
+    {
+      "purpose": "verify-game-running",
+      "duration_seconds": 0.029310874990187585,
+      "returncode": 0
+    },
+    {
+      "purpose": "scan-file-metadata",
+      "duration_seconds": 0.049811291974037886,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019711000029928982,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01815999997779727,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.630556541029364,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017331999959424138,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.016242166981101036,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 4.569528457941487,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01921524992212653,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.020744916051626205,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.8860649169655517,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018555250018835068,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01667379098944366,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.5611761250765994,
+      "returncode": 26
+    },
+    {
+      "purpose": "verify-game-running",
+      "duration_seconds": 0.03538483299780637,
+      "returncode": 0
+    },
+    {
+      "purpose": "scan-file-metadata",
+      "duration_seconds": 0.04429858294315636,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020768583053722978,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.019104458042420447,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.7142229169839993,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020051290979608893,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01703416695818305,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.587271625059657,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02059762505814433,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018011916079558432,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.7293741670437157,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019377709017135203,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01751591602806002,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.5480716249439865,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018437708960846066,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01815312507096678,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.503081458969973,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018016249989159405,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01743641693610698,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.369241083972156,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018336875014938414,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017066790955141187,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.710205666953698,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018049458041787148,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01684679207392037,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.718831166974269,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020404167007654905,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.0172326669562608,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.581017749966122,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01787162502296269,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.0177485829917714,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.792904041009024,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017951249959878623,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01685599994380027,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.827653207932599,
+      "returncode": 26
+    },
+    {
+      "purpose": "verify-game-running",
+      "duration_seconds": 0.03529025008901954,
+      "returncode": 0
+    },
+    {
+      "purpose": "scan-file-metadata",
+      "duration_seconds": 0.04319350002333522,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02060899999924004,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.019208500045351684,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.4372045000782236,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01898433396127075,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01827174995560199,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.412905916920863,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020856250077486038,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017761708004400134,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 4.583532500080764,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020266040926799178,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.016926957992836833,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.071996625047177,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017858375096693635,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01690466597210616,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.7287002499215305,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01801212504506111,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017243291018530726,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.5006007499760017,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01802658394444734,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017182165989652276,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.7289065830409527,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018133291974663734,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017056833021342754,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.8031785829225555,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019851541030220687,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01743458304554224,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.062911915942095,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018842542078346014,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.0173728329828009,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.748111000051722,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018698250059969723,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018089041928760707,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.6050797080388293,
+      "returncode": 26
+    },
+    {
+      "purpose": "verify-game-running",
+      "duration_seconds": 0.03879491693805903,
+      "returncode": 0
+    },
+    {
+      "purpose": "scan-file-metadata",
+      "duration_seconds": 0.05544220900628716,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.019971582922153175,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.018503042054362595,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.523048250004649,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02542329195421189,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01825145911425352,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 5.160672000027262,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.020196332945488393,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01798783300910145,
+      "returncode": 0
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01792916690465063,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.414492166019045,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01827208395116031,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017161541967652738,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.4569672499783337,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.03093729098327458,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.020294209010899067,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.829823625041172,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.021514249965548515,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017867332906462252,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.5979001669911668,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018877833033911884,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017487374949268997,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.5545832499628887,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.018244790961034596,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017167250043712556,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.4089232080150396,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01831220800522715,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.016890666913241148,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.0522125409916043,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.02027458301745355,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017899583908729255,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.4544074159348384,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.017921791994012892,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.017568666953593493,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.4453704999759793,
+      "returncode": 26
+    },
+    {
+      "purpose": "stat-candidate",
+      "duration_seconds": 0.01863999990746379,
+      "returncode": 0
+    },
+    {
+      "purpose": "hash-candidate",
+      "duration_seconds": 0.01737808296456933,
+      "returncode": 0
+    },
+    {
+      "purpose": "check-game-uid-fds-and-writable-maps",
+      "duration_seconds": 3.554989832919091,
+      "returncode": 26
+    }
+  ],
+  "root_enabled_only_on_disposable_clone": true,
+  "root_response_class": "restart_requested",
+  "package_uid": 10192,
+  "package_uid_source": "Exact package from cmd package list packages -U --user 0, cross-checked against dumpsys appId/userId when present",
+  "client_version_name": [
+    "2.7.91"
+  ],
+  "client_version_code": [
+    "210"
+  ],
+  "baseline_filter_counts": {
+    "eligible": 136,
+    "sensitive_name_excluded": 12,
+    "too_large": 0,
+    "other_uid": 0,
+    "unparseable": 0
+  },
+  "baseline_hashed_files": 136,
+  "actual_game_launch_requested": true,
+  "write_trigger": "Launch installed real Bilibili game; no taps, login automation or synthetic file writes",
+  "guest_epoch_before_actual_launch": 1793627425,
+  "last_filter_counts": {
+    "eligible": 135,
+    "sensitive_name_excluded": 12,
+    "too_large": 0,
+    "other_uid": 0,
+    "unparseable": 0
+  },
+  "empty_payload_candidates_skipped": 75,
+  "closure_observation_rejections": {
+    "unreadable_or_racy": 40
+  },
+  "error": "No eligible nonempty genuine recent game write with observed closed FD and stable digest was confirmed",
+  "cleanup_sync_stop_of_disposable_clone": {
+    "duration_s": 1.531779917073436,
+    "returncode": 0,
+    "kill_started_monotonic": 875874.12678375,
+    "kill_finished_monotonic": 875874.142037625
+  },
+  "cleanup": {
+    "stop_attempted": true,
+    "errors": [],
+    "state_avd_before": "official_game_cache_disposable_0d15480982dd",
+    "owned_before": true,
+    "state_avd_after": "official_game_cache_disposable_0d15480982dd",
+    "owned_after": false,
+    "ports_still_occupied": [],
+    "slot_idle_verified": true
+  },
+  "finished_unix": 1793627584.208575
+}

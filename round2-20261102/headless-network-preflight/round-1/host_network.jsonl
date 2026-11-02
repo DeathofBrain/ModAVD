@@ -1,0 +1,13 @@
+{"timestamp_utc": "2026-11-02T10:22:20.490375+00:00", "event": "network_config", "monotonic_ns": 865199839093875, "payload_framing": "line64", "endpoint_ipv4": "198.18.0.10", "endpoint_port": 4242, "duration_seconds": 10, "interval_ms": 1000, "payload_bytes": 64, "bulk_bytes": 0}
+{"timestamp_utc": "2026-11-02T10:22:20.492521+00:00", "event": "connected", "monotonic_ns": 865199841143000, "sequence": 0, "elapsed_ns": 771666}
+{"timestamp_utc": "2026-11-02T10:22:21.533745+00:00", "event": "heartbeat_ack", "monotonic_ns": 865200882433583, "sequence": 0, "sent_bytes": 64, "received_bytes": 64, "elapsed_ns": 1041205459, "errno": 0}
+{"timestamp_utc": "2026-11-02T10:22:21.765138+00:00", "event": "heartbeat_ack", "monotonic_ns": 865201113819750, "sequence": 1, "sent_bytes": 64, "received_bytes": 64, "elapsed_ns": 231257334, "errno": 0}
+{"timestamp_utc": "2026-11-02T10:22:22.765525+00:00", "event": "heartbeat_ack", "monotonic_ns": 865202114256750, "sequence": 2, "sent_bytes": 64, "received_bytes": 64, "elapsed_ns": 226639875, "errno": 0}
+{"timestamp_utc": "2026-11-02T10:22:23.775793+00:00", "event": "heartbeat_ack", "monotonic_ns": 865203124566291, "sequence": 3, "sent_bytes": 64, "received_bytes": 64, "elapsed_ns": 232472292, "errno": 0}
+{"timestamp_utc": "2026-11-02T10:22:24.775503+00:00", "event": "heartbeat_ack", "monotonic_ns": 865204124321333, "sequence": 4, "sent_bytes": 64, "received_bytes": 64, "elapsed_ns": 227175084, "errno": 0}
+{"timestamp_utc": "2026-11-02T10:22:25.769557+00:00", "event": "heartbeat_ack", "monotonic_ns": 865205118419125, "sequence": 5, "sent_bytes": 64, "received_bytes": 64, "elapsed_ns": 216322292, "errno": 0}
+{"timestamp_utc": "2026-11-02T10:22:26.824071+00:00", "event": "heartbeat_ack", "monotonic_ns": 865206173010083, "sequence": 6, "sent_bytes": 64, "received_bytes": 64, "elapsed_ns": 265768417, "errno": 0}
+{"timestamp_utc": "2026-11-02T10:22:27.789630+00:00", "event": "heartbeat_ack", "monotonic_ns": 865207138598125, "sequence": 7, "sent_bytes": 64, "received_bytes": 64, "elapsed_ns": 227517833, "errno": 0}
+{"timestamp_utc": "2026-11-02T10:22:28.783859+00:00", "event": "heartbeat_ack", "monotonic_ns": 865208132852416, "sequence": 8, "sent_bytes": 64, "received_bytes": 64, "elapsed_ns": 220614375, "errno": 0}
+{"timestamp_utc": "2026-11-02T10:22:29.809738+00:00", "event": "heartbeat_ack", "monotonic_ns": 865209158774708, "sequence": 9, "sent_bytes": 64, "received_bytes": 64, "elapsed_ns": 241604917, "errno": 0}
+{"timestamp_utc": "2026-11-02T10:22:30.570454+00:00", "event": "network_complete", "monotonic_ns": 865209919524833, "sequence": 10, "elapsed_ns": 10080600042}

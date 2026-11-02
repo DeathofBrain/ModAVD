@@ -1,0 +1,11 @@
+{
+  "status": "smoke_passed",
+  "stage": "finished",
+  "started_utc": "2026-11-02T07:34:32.036419+00:00",
+  "rounds": [],
+  "smoke_only": true,
+  "updated_utc": "2026-11-02T07:34:49.186934+00:00",
+  "smoke_passed": true,
+  "finished_utc": "2026-11-02T07:34:49.187291+00:00",
+  "elapsed_seconds": 17.15089791594073
+}

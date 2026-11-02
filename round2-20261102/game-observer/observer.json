@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "started_utc": "2026-11-02T10:25:59.409972+00:00",
+  "started_monotonic_ns": 865418768191791,
+  "duration_seconds": 7230.0,
+  "sample_interval_seconds": 60.0,
+  "screenshot_interval_seconds": 300.0,
+  "package": "com.hypergryph.arknights.bilibili",
+  "expected_avd": "official_game",
+  "emulator_pid": 1811,
+  "private_screenshots": true,
+  "scope": "Sampled game main-process and resumed-activity presence. No proof of logged-in state, server reachability, gameplay, or uninterrupted presence between samples.",
+  "finished_utc": "2026-11-02T12:26:31.480708+00:00",
+  "elapsed_seconds": 7230.3414251250215,
+  "stop_reason": "duration_complete",
+  "sample_count": 122,
+  "maximum_sample_gap_seconds": 60.012644166,
+  "full_observation_window": true,
+  "main_process_missing_samples": 0,
+  "not_foreground_samples": 0,
+  "errors": [],
+  "emulator_identity_checks": {
+    "official_arm64_runtime": true,
+    "expected_avd": "official_game",
+    "headless": true,
+    "ownership_checked_each_sample": true
+  },
+  "public_export_note": "Derived summary; raw activity strings, process dumps, screenshot paths and screenshot files are not published. Sampled main-process/foreground presence is not proof of game-server continuity."
+}

@@ -1,0 +1,93 @@
+{
+  "sample_count": 1442,
+  "duration_seconds": 7205.007,
+  "metrics": {
+    "host_rss_bytes": {
+      "first": 1124663296.0,
+      "last": 1119043584.0,
+      "min": 328548352.0,
+      "max": 1528463360.0,
+      "change": -5619712.0,
+      "slope_bytes_per_hour": -67859681.87213764
+    },
+    "host_phys_footprint_bytes": {
+      "first": 7967039192.0,
+      "last": 8094605064.0,
+      "min": 7966170840.0,
+      "max": 8094670576.0,
+      "change": 127565872.0,
+      "slope_bytes_per_hour": 52221638.03832067
+    },
+    "host_compressor_physical_bytes": {
+      "first": 7299055616.0,
+      "last": 7126056960.0,
+      "min": 3813539840.0,
+      "max": 8187265024.0,
+      "change": -172998656.0,
+      "slope_bytes_per_hour": -513713901.3195904
+    },
+    "host_swap_used_bytes": {
+      "first": 10385495163.0,
+      "last": 10870985851.0,
+      "min": 9609213379.0,
+      "max": 13091932733.0,
+      "change": 485490688.0,
+      "slope_bytes_per_hour": 963532419.9233934
+    },
+    "guest_MemAvailable_bytes": {
+      "first": 1249792000.0,
+      "last": 1374199808.0,
+      "min": 1181982720.0,
+      "max": 1412935680.0,
+      "change": 124407808.0,
+      "slope_bytes_per_hour": 6811260.522532052
+    }
+  },
+  "phases": {
+    "arknights_logged_in_home_headless": {
+      "samples": 1442,
+      "elapsed_start": 0.0,
+      "elapsed_end": 7205.007,
+      "host_rss_bytes": {
+        "first": 1124663296.0,
+        "last": 1119043584.0,
+        "max": 1528463360.0,
+        "min": 328548352.0,
+        "median_last_12_samples": 954875904.0
+      },
+      "host_phys_footprint_bytes": {
+        "first": 7967039192.0,
+        "last": 8094605064.0,
+        "max": 8094670576.0,
+        "min": 7966170840.0,
+        "median_last_12_samples": 8091508488.0
+      },
+      "host_compressor_physical_bytes": {
+        "first": 7299055616.0,
+        "last": 7126056960.0,
+        "max": 8187265024.0,
+        "min": 3813539840.0,
+        "median_last_12_samples": 7125213184.0
+      },
+      "host_swap_used_bytes": {
+        "first": 10385495163.0,
+        "last": 10870985851.0,
+        "max": 13091932733.0,
+        "min": 9609213379.0,
+        "median_last_12_samples": 10912928891.0
+      },
+      "guest_MemAvailable_bytes": {
+        "first": 1249792000.0,
+        "last": 1374199808.0,
+        "max": 1412935680.0,
+        "min": 1181982720.0,
+        "median_last_12_samples": 1360031744.0
+      }
+    }
+  },
+  "reclamation_rounds": [],
+  "host_error_samples": 0,
+  "guest_error_samples": 0,
+  "note": "phys_footprint and RSS describe the emulator process; compression and swap describe the entire host. System changes cannot be attributed solely to the emulator.",
+  "minimum_host_disk_free_bytes": 91782172672
+}

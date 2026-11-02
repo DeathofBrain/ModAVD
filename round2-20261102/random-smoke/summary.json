@@ -1,0 +1,12 @@
+{
+  "status": "smoke_passed",
+  "updated_utc": "2026-11-02T07:34:49.187428+00:00",
+  "sample_count": 0,
+  "host_error_samples": 0,
+  "guest_error_samples": 0,
+  "rounds": [],
+  "completed_rounds": 0,
+  "time_semantics": "CSV elapsed_seconds is sample start relative to monitor start; sample_duration_ms includes host and guest reads. CSV phase combines allocate/fill/verify/hold. Metric hold samples are restricted to the guest-event-derived hold interval with host receive anchors; observation begins after the ADB client exits with validated munmap. Each later baseline uses the preceding observation's last 60 seconds.",
+  "metric_scope": "phys_footprint is primary emulator-process memory; RSS is supplemental. Host compressor and swap in CSV describe the entire host, not solely this emulator.",
+  "reclamation_note": "Successful protocol completion does not imply host reclamation. Fractions are raw, unclamped, and null unless the allocation increment is at least max(128 MiB, 10% of allocation) and the full observation completed."
+}

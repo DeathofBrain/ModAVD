@@ -1,0 +1,167 @@
+{
+  "schema": "public-onmyoji-export-manifest-v1",
+  "created_at": "2026-11-02T22:42:46.522886+08:00",
+  "scope": "Onmyoji installation and failed entry evidence for the tested host graphics configuration only.",
+  "privacy_review": {
+    "full_raw_logcat_included": false,
+    "apk_included": false,
+    "runner_source_included": false,
+    "screenshot_count": 1,
+    "screenshot_visually_reviewed_no_account": true,
+    "local_absolute_paths_in_exports": false,
+    "credentials_or_account_identifiers_in_exports": false
+  },
+  "hash_semantics": {
+    "source_sha256": "Hash of the private original, including content omitted from the export.",
+    "export_sha256": "Hash of the actual public file after redaction or derivation.",
+    "manifest_self_hash": "Stored separately in manifest.sha256 to avoid recursive hashing."
+  },
+  "files": [
+    {
+      "path": "installation-summary.json",
+      "export_sha256": "b02536dd63e8d92f412cae1eb0c5885bc2ea2070ba10b521262d0b7cc8f7b2b4",
+      "export_bytes": 3884,
+      "kind": "derived_json",
+      "sources": [
+        {
+          "source_name": "onmyoji.json",
+          "source_sha256": "436908fb7df508c1144be81e796122836f3fb2062af581fade77b31402fb0582"
+        },
+        {
+          "source_name": "entry-failure.json",
+          "source_sha256": "4b64abe4dc1c77a5495514ed2ec6b0df404a39fdd98eb5567ccc5888a139d24a"
+        },
+        {
+          "source_name": "abi-receipt.json",
+          "source_sha256": "890b4a564ceb4fcb6b2cd250c61b1b56f3d3c007cb55097885cdbfad9ae0aaea"
+        }
+      ],
+      "transformation": "Selected installation/runtime facts; corrected interpretation using observed failure evidence. Local paths/ports redacted; raw JSON not copied."
+    },
+    {
+      "path": "abi-receipt.json",
+      "export_sha256": "e15612ef18daa21fdb32f146f370c3cd96e31ff056ff11082bf374916a35eb24",
+      "export_bytes": 38094,
+      "kind": "derived_json",
+      "sources": [
+        {
+          "source_name": "abi-receipt.json",
+          "source_sha256": "890b4a564ceb4fcb6b2cd250c61b1b56f3d3c007cb55097885cdbfad9ae0aaea"
+        }
+      ],
+      "source_sha256": "890b4a564ceb4fcb6b2cd250c61b1b56f3d3c007cb55097885cdbfad9ae0aaea",
+      "transformation": "Only apk_path replaced with a nonlocal placeholder; publication note appended. No APK included."
+    },
+    {
+      "path": "initial-log-excerpt.txt",
+      "export_sha256": "6153798e1b233594de41cd8e6550f788f2216ceadf8e2bbcfdf6982642155445",
+      "export_bytes": 1924,
+      "kind": "selected_log_excerpt",
+      "sources": [
+        {
+          "source_name": "1793629647107942000-onmyoji-logcat.stdout",
+          "source_sha256": "6a7947d0aa94126d8f52064544b7549abd631cfab53c1f4d128e95c3f7929e21"
+        }
+      ],
+      "source_sha256": "6a7947d0aa94126d8f52064544b7549abd631cfab53c1f4d128e95c3f7929e21",
+      "transformation": "Only the listed technical lines; original LF line numbers retained; full raw logcat omitted."
+    },
+    {
+      "path": "recent-log-excerpt.txt",
+      "export_sha256": "a3ba6815d114b3e256c8ca887d69ddd68abf268f911356d93f8a3f24b23e4730",
+      "export_bytes": 1937,
+      "kind": "selected_log_excerpt",
+      "sources": [
+        {
+          "source_name": "1793629782305023000-onmyoji-failure-recent_log.stdout",
+          "source_sha256": "0280f59e4e1c3089903945499ef405992af51f62ffeb2041bfe6ece65cf6272e"
+        }
+      ],
+      "source_sha256": "0280f59e4e1c3089903945499ef405992af51f62ffeb2041bfe6ece65cf6272e",
+      "transformation": "Only the listed technical lines; original LF line numbers retained; full raw logcat omitted."
+    },
+    {
+      "path": "exit-info-summary.csv",
+      "export_sha256": "2765cf936f9666d8199387fe3f53ae16c4bd1456013436b5dcb53456f80ff617",
+      "export_bytes": 378,
+      "kind": "derived_table",
+      "sources": [
+        {
+          "source_name": "1793629782263720000-onmyoji-failure-exit_info.stdout",
+          "source_sha256": "d74642c5bb87f40feff51cf100c52cdc6fdec17c4b4a49bb8cd0e9f8c5464fe4"
+        }
+      ],
+      "source_sha256": "d74642c5bb87f40feff51cf100c52cdc6fdec17c4b4a49bb8cd0e9f8c5464fe4",
+      "transformation": "Only main-process timestamp, PID, reason and status; UIDs, isolated WebView entries and all other fields omitted."
+    },
+    {
+      "path": "shutdown-summary.json",
+      "export_sha256": "0475f9e1f64106d5e4572161e6e01c39c14c061ee675dfc78950fae4e4f9afd4",
+      "export_bytes": 402,
+      "kind": "derived_json",
+      "sources": [
+        {
+          "source_name": "final-stop.json",
+          "source_sha256": "67ce90ac34f03fcf3a48ac1e354bd6965699b3bad3bd3d39f4fc38fd7d0ee755"
+        }
+      ],
+      "source_sha256": "67ce90ac34f03fcf3a48ac1e354bd6965699b3bad3bd3d39f4fc38fd7d0ee755",
+      "transformation": "Selected safe shutdown facts only; launch identities, local paths and PID/port details omitted."
+    },
+    {
+      "path": "entry-failure.png",
+      "export_sha256": "ac4983951555b960ecd784f398da3784674cd9ba494466fd64b36245a60c8746",
+      "export_bytes": 60318,
+      "kind": "visually_reviewed_existing_image",
+      "sources": [
+        {
+          "source_name": "user-reported-entry-failure-1793629782216016000-ac6d763c.png",
+          "source_sha256": "ac4983951555b960ecd784f398da3784674cd9ba494466fd64b36245a60c8746"
+        }
+      ],
+      "source_sha256": "ac4983951555b960ecd784f398da3784674cd9ba494466fd64b36245a60c8746",
+      "transformation": "Gray/white failure frame only; visually confirmed no account or identifying text. No new screenshot captured."
+    },
+    {
+      "path": "report.md",
+      "export_sha256": "2ddc4dd92b1672f82af78802a5219cf416212d7cf856c41b02b0861b024e1e22",
+      "export_bytes": 5566,
+      "kind": "self_contained_public_report",
+      "sources": [
+        {
+          "source_name": "entry-failure-review.md",
+          "source_sha256": "1bdf93e4789ac50c0e309277f3afdbb12b591a5bd0d80e204896984b9993fe0a"
+        },
+        {
+          "source_name": "onmyoji.json",
+          "source_sha256": "436908fb7df508c1144be81e796122836f3fb2062af581fade77b31402fb0582"
+        },
+        {
+          "source_name": "entry-failure.json",
+          "source_sha256": "4b64abe4dc1c77a5495514ed2ec6b0df404a39fdd98eb5567ccc5888a139d24a"
+        },
+        {
+          "source_name": "final-stop.json",
+          "source_sha256": "67ce90ac34f03fcf3a48ac1e354bd6965699b3bad3bd3d39f4fc38fd7d0ee755"
+        },
+        {
+          "source_name": "1793629647107942000-onmyoji-logcat.stdout",
+          "source_sha256": "6a7947d0aa94126d8f52064544b7549abd631cfab53c1f4d128e95c3f7929e21"
+        },
+        {
+          "source_name": "1793629782305023000-onmyoji-failure-recent_log.stdout",
+          "source_sha256": "0280f59e4e1c3089903945499ef405992af51f62ffeb2041bfe6ece65cf6272e"
+        },
+        {
+          "source_name": "1793629782263720000-onmyoji-failure-exit_info.stdout",
+          "source_sha256": "d74642c5bb87f40feff51cf100c52cdc6fdec17c4b4a49bb8cd0e9f8c5464fe4"
+        },
+        {
+          "source_name": "1793629782286023000-onmyoji-failure-crash_log.stdout",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "transformation": "Rewritten to use only exported relative links and minimal technical evidence; private paths and raw SDK log contents omitted."
+    }
+  ]
+}

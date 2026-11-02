@@ -1,0 +1,201 @@
+{
+  "status": "completed",
+  "updated_utc": "2026-11-02T08:11:25.080683+00:00",
+  "sample_count": 423,
+  "host_error_samples": 0,
+  "guest_error_samples": 0,
+  "rounds": [
+    {
+      "round": 1,
+      "protocol_valid": true,
+      "observation_completed": true,
+      "sample_counts": {
+        "baseline_last_12": 12,
+        "hold_last_3": 3,
+        "release_last_12": 12
+      },
+      "metrics": {
+        "guest_MemAvailable_bytes": {
+          "baseline_median_bytes": 2634909696.0,
+          "hold_median_last_3_bytes": 1546096640,
+          "release_median_last_12_bytes": 2587592704.0,
+          "hold_minus_baseline_bytes": -1088813056.0,
+          "release_minus_hold_bytes": 1041496064.0,
+          "release_minus_baseline_bytes": -47316992.0,
+          "reclaimed_fraction": 0.9565425931115947,
+          "allocation_increment_bytes": 1088813056.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728
+        },
+        "host_phys_footprint_bytes": {
+          "baseline_median_bytes": 7454047696.0,
+          "hold_median_last_3_bytes": 7476420048,
+          "release_median_last_12_bytes": 7494213072.0,
+          "hold_minus_baseline_bytes": 22372352.0,
+          "release_minus_hold_bytes": 17793024.0,
+          "release_minus_baseline_bytes": 40165376.0,
+          "reclaimed_fraction": null,
+          "allocation_increment_bytes": 22372352.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction_reason": "allocation increment below declared threshold, or observation incomplete"
+        },
+        "host_rss_bytes": {
+          "baseline_median_bytes": 289947648.0,
+          "hold_median_last_3_bytes": 378306560,
+          "release_median_last_12_bytes": 258170880.0,
+          "hold_minus_baseline_bytes": 88358912.0,
+          "release_minus_hold_bytes": -120135680.0,
+          "release_minus_baseline_bytes": -31776768.0,
+          "reclaimed_fraction": null,
+          "allocation_increment_bytes": 88358912.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction_reason": "allocation increment below declared threshold, or observation incomplete"
+        }
+      },
+      "timing": {
+        "baseline_start_ns": 857250490574791,
+        "baseline_end_ns": 857370533282000,
+        "hold_start_host_estimate_ns": 857377478073585,
+        "hold_end_host_estimate_ns": 857435558859155,
+        "observe_start_ns": 857436703619416,
+        "guest_hold_duration_seconds": 60.08078557,
+        "clock_mapping": {
+          "method": "minimum(host receive monotonic ns minus guest event monotonic ns)",
+          "offset_ns": 856564245420615,
+          "observed_offset_spread_ns": 824970,
+          "hold_endpoint_guard_ns": 1000000000,
+          "limitation": "One-way event transport has unknown absolute delay. Host hold bounds are estimates with a 1-second endpoint guard; guest hold duration itself uses only the guest monotonic clock."
+        },
+        "observe_end_ns": 858036726677750
+      }
+    },
+    {
+      "round": 2,
+      "protocol_valid": true,
+      "observation_completed": true,
+      "sample_counts": {
+        "baseline_last_12": 12,
+        "hold_last_3": 3,
+        "release_last_12": 12
+      },
+      "metrics": {
+        "guest_MemAvailable_bytes": {
+          "baseline_median_bytes": 2587592704.0,
+          "hold_median_last_3_bytes": 1529872384,
+          "release_median_last_12_bytes": 2615515136.0,
+          "hold_minus_baseline_bytes": -1057720320.0,
+          "release_minus_hold_bytes": 1085642752.0,
+          "release_minus_baseline_bytes": 27922432.0,
+          "reclaimed_fraction": 1.0263986911020109,
+          "allocation_increment_bytes": 1057720320.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728
+        },
+        "host_phys_footprint_bytes": {
+          "baseline_median_bytes": 7494213072.0,
+          "hold_median_last_3_bytes": 7498210768,
+          "release_median_last_12_bytes": 7495966160.0,
+          "hold_minus_baseline_bytes": 3997696.0,
+          "release_minus_hold_bytes": -2244608.0,
+          "release_minus_baseline_bytes": 1753088.0,
+          "reclaimed_fraction": null,
+          "allocation_increment_bytes": 3997696.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction_reason": "allocation increment below declared threshold, or observation incomplete"
+        },
+        "host_rss_bytes": {
+          "baseline_median_bytes": 258170880.0,
+          "hold_median_last_3_bytes": 561266688,
+          "release_median_last_12_bytes": 253935616.0,
+          "hold_minus_baseline_bytes": 303095808.0,
+          "release_minus_hold_bytes": -307331072.0,
+          "release_minus_baseline_bytes": -4235264.0,
+          "reclaimed_fraction": 1.0139733506310982,
+          "allocation_increment_bytes": 303095808.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728
+        }
+      },
+      "timing": {
+        "baseline_start_ns": 857976729929208,
+        "baseline_end_ns": 858036742811208,
+        "hold_start_host_estimate_ns": 858041696370972,
+        "hold_end_host_estimate_ns": 858099757070250,
+        "observe_start_ns": 858100822315583,
+        "guest_hold_duration_seconds": 60.060699278,
+        "clock_mapping": {
+          "method": "minimum(host receive monotonic ns minus guest event monotonic ns)",
+          "offset_ns": 856564245694268,
+          "observed_offset_spread_ns": 1130113,
+          "hold_endpoint_guard_ns": 1000000000,
+          "limitation": "One-way event transport has unknown absolute delay. Host hold bounds are estimates with a 1-second endpoint guard; guest hold duration itself uses only the guest monotonic clock."
+        },
+        "observe_end_ns": 858700856172166
+      }
+    },
+    {
+      "round": 3,
+      "protocol_valid": true,
+      "observation_completed": true,
+      "sample_counts": {
+        "baseline_last_12": 12,
+        "hold_last_3": 3,
+        "release_last_12": 12
+      },
+      "metrics": {
+        "guest_MemAvailable_bytes": {
+          "baseline_median_bytes": 2615515136.0,
+          "hold_median_last_3_bytes": 1552871424,
+          "release_median_last_12_bytes": 2651994112.0,
+          "hold_minus_baseline_bytes": -1062643712.0,
+          "release_minus_hold_bytes": 1099122688.0,
+          "release_minus_baseline_bytes": 36478976.0,
+          "reclaimed_fraction": 1.0343285106645415,
+          "allocation_increment_bytes": 1062643712.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728
+        },
+        "host_phys_footprint_bytes": {
+          "baseline_median_bytes": 7495966160.0,
+          "hold_median_last_3_bytes": 7497620944,
+          "release_median_last_12_bytes": 7497481680.0,
+          "hold_minus_baseline_bytes": 1654784.0,
+          "release_minus_hold_bytes": -139264.0,
+          "release_minus_baseline_bytes": 1515520.0,
+          "reclaimed_fraction": null,
+          "allocation_increment_bytes": 1654784.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction_reason": "allocation increment below declared threshold, or observation incomplete"
+        },
+        "host_rss_bytes": {
+          "baseline_median_bytes": 253935616.0,
+          "hold_median_last_3_bytes": 317538304,
+          "release_median_last_12_bytes": 338657280.0,
+          "hold_minus_baseline_bytes": 63602688.0,
+          "release_minus_hold_bytes": 21118976.0,
+          "release_minus_baseline_bytes": 84721664.0,
+          "reclaimed_fraction": null,
+          "allocation_increment_bytes": 63602688.0,
+          "reclamation_fraction_minimum_increment_bytes": 134217728,
+          "reclaimed_fraction_reason": "allocation increment below declared threshold, or observation incomplete"
+        }
+      },
+      "timing": {
+        "baseline_start_ns": 858640862829333,
+        "baseline_end_ns": 858700880465500,
+        "hold_start_host_estimate_ns": 858705509720666,
+        "hold_end_host_estimate_ns": 858763582189403,
+        "observe_start_ns": 858764783555833,
+        "guest_hold_duration_seconds": 60.072468737,
+        "clock_mapping": {
+          "method": "minimum(host receive monotonic ns minus guest event monotonic ns)",
+          "offset_ns": 856564245420688,
+          "observed_offset_spread_ns": 294722,
+          "hold_endpoint_guard_ns": 1000000000,
+          "limitation": "One-way event transport has unknown absolute delay. Host hold bounds are estimates with a 1-second endpoint guard; guest hold duration itself uses only the guest monotonic clock."
+        },
+        "observe_end_ns": 859364820901625
+      }
+    }
+  ],
+  "completed_rounds": 3,
+  "time_semantics": "CSV elapsed_seconds is sample start relative to monitor start; sample_duration_ms includes host and guest reads. CSV phase combines allocate/fill/verify/hold. Metric hold samples are restricted to the guest-event-derived hold interval with host receive anchors; observation begins after the ADB client exits with validated munmap. Each later baseline uses the preceding observation's last 60 seconds.",
+  "metric_scope": "phys_footprint is primary emulator-process memory; RSS is supplemental. Host compressor and swap in CSV describe the entire host, not solely this emulator.",
+  "reclamation_note": "Successful protocol completion does not imply host reclamation. Fractions are raw, unclamped, and null unless the allocation increment is at least max(128 MiB, 10% of allocation) and the full observation completed."
+}

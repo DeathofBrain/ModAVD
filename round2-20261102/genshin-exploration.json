@@ -1,0 +1,29 @@
+{
+  "scope": "Exploratory installation and startup only; not a gameplay compatibility pass",
+  "apk_version": "7.1.0_48052158_48145775",
+  "apk_bytes": 513290344,
+  "apk_sha256": "abd3c4d59217d78745a65aaa952367872354298bff5bc1ba2faae00b8f37a9cc",
+  "apk_native_abis": [
+    "arm64-v8a"
+  ],
+  "aarch64_elf_count": 32,
+  "install": {
+    "returncode": 0,
+    "stdout": "Performing Streamed Install\nSuccess\n"
+  },
+  "selected_primary_cpu_abi": [
+    "arm64-v8a"
+  ],
+  "guest_native_bridge": "0",
+  "visual_observation": "Rendered login background observed locally; screenshot not exported",
+  "graphics_limit": "485 Unity shader-pass error lines in saved followup buffer; full graphics compatibility not established",
+  "logged_in_verified": false,
+  "gameplay_verified": false,
+  "user_switched_to_onmyoji": true,
+  "apk_and_dedicated_avd_deleted": true,
+  "original_evidence_sha256": {
+    "genshin.json": "4fec3de68895d8930934d82bd117400b8db3184d2ae4a48589bedfe1d01ea8fc",
+    "followup.json": "41e956d7e7d15126e56e288535d4a3e938fa05bc0ecf9e5843fd333cd5efedce",
+    "deletion-receipt.json": "45487ab038edea167d192c6fc9fa3f9ac939764a5c2981e03c5d39996a9fa564"
+  }
+}

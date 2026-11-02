@@ -1,0 +1,1401 @@
+{
+  "observed_at": "2026-11-02T22:20:09.139955+08:00",
+  "scope": "Read-only offline local ZIP/ELF/manifest inspection; no adb, emulator, installation, deletion, network or tool installation.",
+  "apk_path": "[LOCAL_DOWNLOAD]/onmyoji_netease_116_2.8.89_py3_small.apk",
+  "bytes": 1283793018,
+  "sha256": "eecba6fd1f550263135c840b46a5e7fb3a8c324046fdfd3078454e95f92e7990",
+  "md5": "193640442835835a4fe4280738febb5f",
+  "zip_crc_passed": true,
+  "native_elf_checks": [
+    {
+      "path": "lib/armeabi-v7a/libnetmobsec-4.4.4.so",
+      "uncompressed_bytes": 647004,
+      "compressed_bytes": 393724,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libandroidmainruns.so",
+      "uncompressed_bytes": 1167696,
+      "compressed_bytes": 618143,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libccstat.so",
+      "uncompressed_bytes": 256804,
+      "compressed_bytes": 129502,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libxxhash.so",
+      "uncompressed_bytes": 67160,
+      "compressed_bytes": 33638,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libturingmfa.so",
+      "uncompressed_bytes": 170512,
+      "compressed_bytes": 95934,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libunitrace_dumper.so",
+      "uncompressed_bytes": 769572,
+      "compressed_bytes": 378671,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libfmodevent.so",
+      "uncompressed_bytes": 370224,
+      "compressed_bytes": 162156,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libhpatchz_uf.so",
+      "uncompressed_bytes": 51056,
+      "compressed_bytes": 34476,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libCtaApiLib.so",
+      "uncompressed_bytes": 280448,
+      "compressed_bytes": 140596,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libepay-crypto.so",
+      "uncompressed_bytes": 517916,
+      "compressed_bytes": 196385,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libshared-texture.so",
+      "uncompressed_bytes": 231700,
+      "compressed_bytes": 97676,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libstidocr_stream.so",
+      "uncompressed_bytes": 2959992,
+      "compressed_bytes": 1449479,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libSPIRV-Tools-shared.so",
+      "uncompressed_bytes": 1131112,
+      "compressed_bytes": 462360,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libmedia-handle.so",
+      "uncompressed_bytes": 258340,
+      "compressed_bytes": 140016,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libstidinteractive_liveness.so",
+      "uncompressed_bytes": 1648460,
+      "compressed_bytes": 857825,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libAudioCore.so",
+      "uncompressed_bytes": 1350188,
+      "compressed_bytes": 564305,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libstidocr_stream_jni.so",
+      "uncompressed_bytes": 22108,
+      "compressed_bytes": 10661,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libMNN.so",
+      "uncompressed_bytes": 1022000,
+      "compressed_bytes": 549119,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libapkpatch.so",
+      "uncompressed_bytes": 132512,
+      "compressed_bytes": 75684,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libccffmpeg.so",
+      "uncompressed_bytes": 3990388,
+      "compressed_bytes": 1959792,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libtrimvideo.so",
+      "uncompressed_bytes": 54680,
+      "compressed_bytes": 29224,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libntunisdk.so",
+      "uncompressed_bytes": 83480,
+      "compressed_bytes": 34836,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libAndroidCrashHandler.so",
+      "uncompressed_bytes": 893016,
+      "compressed_bytes": 365952,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libccsdl.so",
+      "uncompressed_bytes": 219064,
+      "compressed_bytes": 100014,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libsec-lib.so",
+      "uncompressed_bytes": 153236,
+      "compressed_bytes": 71862,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libcpu_bound_lib.so",
+      "uncompressed_bytes": 18000,
+      "compressed_bytes": 6799,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libjni_liveness_interactive.so",
+      "uncompressed_bytes": 34396,
+      "compressed_bytes": 14377,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/librecordlib.so",
+      "uncompressed_bytes": 3340976,
+      "compressed_bytes": 1437983,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libnativeAOEAIFacelib.so",
+      "uncompressed_bytes": 1886520,
+      "compressed_bytes": 937227,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libclient.so",
+      "uncompressed_bytes": 111203464,
+      "compressed_bytes": 45078102,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libsecsdk.so",
+      "uncompressed_bytes": 505688,
+      "compressed_bytes": 248659,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libxyvodsdk.so",
+      "uncompressed_bytes": 3003808,
+      "compressed_bytes": 1442247,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libAudioCCReName.so",
+      "uncompressed_bytes": 1680864,
+      "compressed_bytes": 1067357,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libAudioEngine.so",
+      "uncompressed_bytes": 889264,
+      "compressed_bytes": 374492,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libpatcher.so",
+      "uncompressed_bytes": 82612,
+      "compressed_bytes": 35516,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libijkffmpeg.so",
+      "uncompressed_bytes": 3986152,
+      "compressed_bytes": 1950780,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libweibosdkcore.so",
+      "uncompressed_bytes": 21752,
+      "compressed_bytes": 11896,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libweconvert.so",
+      "uncompressed_bytes": 5536,
+      "compressed_bytes": 2077,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libkyctoolkit.so",
+      "uncompressed_bytes": 1366840,
+      "compressed_bytes": 655590,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libBugly_Native_idasc.so",
+      "uncompressed_bytes": 182320,
+      "compressed_bytes": 88942,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libunisec.so",
+      "uncompressed_bytes": 1045640,
+      "compressed_bytes": 423431,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libappdump_core.so",
+      "uncompressed_bytes": 3055412,
+      "compressed_bytes": 1414219,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libfmodex.so",
+      "uncompressed_bytes": 1071852,
+      "compressed_bytes": 525711,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libc++_shared.so",
+      "uncompressed_bytes": 683904,
+      "compressed_bytes": 267618,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libccplayer.so",
+      "uncompressed_bytes": 203256,
+      "compressed_bytes": 96818,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libnep.so",
+      "uncompressed_bytes": 954384,
+      "compressed_bytes": 579238,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libpharos.so",
+      "uncompressed_bytes": 4513828,
+      "compressed_bytes": 1891988,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libNgModules.so",
+      "uncompressed_bytes": 440000,
+      "compressed_bytes": 203292,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libhpatchzsingle.so",
+      "uncompressed_bytes": 66784,
+      "compressed_bytes": 37864,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libAREngine.so",
+      "uncompressed_bytes": 5391832,
+      "compressed_bytes": 2685166,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libcpp-share-id.so",
+      "uncompressed_bytes": 496528,
+      "compressed_bytes": 192801,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libNtUniSdkRoostX.so",
+      "uncompressed_bytes": 2813548,
+      "compressed_bytes": 1420024,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libYTCommonLiveness.so",
+      "uncompressed_bytes": 346060,
+      "compressed_bytes": 162750,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libccutil.so",
+      "uncompressed_bytes": 13904,
+      "compressed_bytes": 6704,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libloghelp.so",
+      "uncompressed_bytes": 9396,
+      "compressed_bytes": 5143,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/armeabi-v7a/libweyuv.so",
+      "uncompressed_bytes": 173708,
+      "compressed_bytes": 77989,
+      "elf_magic": true,
+      "declared_abi": "armeabi-v7a",
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "lib/arm64-v8a/libnetmobsec-4.4.4.so",
+      "uncompressed_bytes": 1351944,
+      "compressed_bytes": 1351944,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libandroidmainruns.so",
+      "uncompressed_bytes": 2591792,
+      "compressed_bytes": 852300,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libccstat.so",
+      "uncompressed_bytes": 463264,
+      "compressed_bytes": 463264,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libxxhash.so",
+      "uncompressed_bytes": 51024,
+      "compressed_bytes": 21184,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libturingmfa.so",
+      "uncompressed_bytes": 295760,
+      "compressed_bytes": 143264,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libunitrace_dumper.so",
+      "uncompressed_bytes": 1184024,
+      "compressed_bytes": 1184024,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libfmodevent.so",
+      "uncompressed_bytes": 436488,
+      "compressed_bytes": 436488,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libhpatchz_uf.so",
+      "uncompressed_bytes": 65960,
+      "compressed_bytes": 36414,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libCtaApiLib.so",
+      "uncompressed_bytes": 498176,
+      "compressed_bytes": 176820,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libepay-crypto.so",
+      "uncompressed_bytes": 854304,
+      "compressed_bytes": 257518,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libshared-texture.so",
+      "uncompressed_bytes": 387184,
+      "compressed_bytes": 123226,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libstidocr_stream.so",
+      "uncompressed_bytes": 3780928,
+      "compressed_bytes": 1774552,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libSPIRV-Tools-shared.so",
+      "uncompressed_bytes": 1453776,
+      "compressed_bytes": 1453776,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libmedia-handle.so",
+      "uncompressed_bytes": 341664,
+      "compressed_bytes": 141661,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libstidinteractive_liveness.so",
+      "uncompressed_bytes": 2284248,
+      "compressed_bytes": 1041971,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libAudioCore.so",
+      "uncompressed_bytes": 2010912,
+      "compressed_bytes": 2010912,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libstidocr_stream_jni.so",
+      "uncompressed_bytes": 18184,
+      "compressed_bytes": 5928,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libMNN.so",
+      "uncompressed_bytes": 1862448,
+      "compressed_bytes": 1862448,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libapkpatch.so",
+      "uncompressed_bytes": 214976,
+      "compressed_bytes": 91130,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libccffmpeg.so",
+      "uncompressed_bytes": 4947856,
+      "compressed_bytes": 4947856,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libtrimvideo.so",
+      "uncompressed_bytes": 54904,
+      "compressed_bytes": 23066,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libntunisdk.so",
+      "uncompressed_bytes": 133056,
+      "compressed_bytes": 133056,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libAndroidCrashHandler.so",
+      "uncompressed_bytes": 1349184,
+      "compressed_bytes": 1349184,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libccsdl.so",
+      "uncompressed_bytes": 379272,
+      "compressed_bytes": 379272,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libsec-lib.so",
+      "uncompressed_bytes": 284744,
+      "compressed_bytes": 99266,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libcpu_bound_lib.so",
+      "uncompressed_bytes": 18184,
+      "compressed_bytes": 2153,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libjni_liveness_interactive.so",
+      "uncompressed_bytes": 34640,
+      "compressed_bytes": 9815,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/librecordlib.so",
+      "uncompressed_bytes": 4736568,
+      "compressed_bytes": 1675388,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libnativeAOEAIFacelib.so",
+      "uncompressed_bytes": 3585048,
+      "compressed_bytes": 1463061,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libclient.so",
+      "uncompressed_bytes": 127641408,
+      "compressed_bytes": 127641408,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libsecsdk.so",
+      "uncompressed_bytes": 349040,
+      "compressed_bytes": 185979,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libxyvodsdk.so",
+      "uncompressed_bytes": 4287456,
+      "compressed_bytes": 1693474,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libAudioCCReName.so",
+      "uncompressed_bytes": 2722536,
+      "compressed_bytes": 2722536,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libAudioEngine.so",
+      "uncompressed_bytes": 1223000,
+      "compressed_bytes": 1223000,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libpatcher.so",
+      "uncompressed_bytes": 119776,
+      "compressed_bytes": 35861,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libijkffmpeg.so",
+      "uncompressed_bytes": 4943344,
+      "compressed_bytes": 2068776,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libweibosdkcore.so",
+      "uncompressed_bytes": 26136,
+      "compressed_bytes": 11026,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libweconvert.so",
+      "uncompressed_bytes": 9832,
+      "compressed_bytes": 2248,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libkyctoolkit.so",
+      "uncompressed_bytes": 2146264,
+      "compressed_bytes": 844419,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libBugly_Native_idasc.so",
+      "uncompressed_bytes": 195200,
+      "compressed_bytes": 79788,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libunisec.so",
+      "uncompressed_bytes": 1504960,
+      "compressed_bytes": 505571,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libappdump_core.so",
+      "uncompressed_bytes": 3647424,
+      "compressed_bytes": 3647424,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libfmodex.so",
+      "uncompressed_bytes": 1132328,
+      "compressed_bytes": 1132328,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libc++_shared.so",
+      "uncompressed_bytes": 1159920,
+      "compressed_bytes": 1159920,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libccplayer.so",
+      "uncompressed_bytes": 323424,
+      "compressed_bytes": 323424,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libnep.so",
+      "uncompressed_bytes": 1572880,
+      "compressed_bytes": 692837,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libpharos.so",
+      "uncompressed_bytes": 5325968,
+      "compressed_bytes": 5325968,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libNgModules.so",
+      "uncompressed_bytes": 845344,
+      "compressed_bytes": 845344,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libhpatchzsingle.so",
+      "uncompressed_bytes": 75488,
+      "compressed_bytes": 38250,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libAREngine.so",
+      "uncompressed_bytes": 7315008,
+      "compressed_bytes": 7315008,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libcpp-share-id.so",
+      "uncompressed_bytes": 853632,
+      "compressed_bytes": 251277,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libNtUniSdkRoostX.so",
+      "uncompressed_bytes": 4253280,
+      "compressed_bytes": 4253280,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libYTCommonLiveness.so",
+      "uncompressed_bytes": 694824,
+      "compressed_bytes": 239293,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libccutil.so",
+      "uncompressed_bytes": 5968,
+      "compressed_bytes": 5968,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libloghelp.so",
+      "uncompressed_bytes": 5680,
+      "compressed_bytes": 1646,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "lib/arm64-v8a/libweyuv.so",
+      "uncompressed_bytes": 264056,
+      "compressed_bytes": 94268,
+      "elf_magic": true,
+      "declared_abi": "arm64-v8a",
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    }
+  ],
+  "nonlib_so_checks": [
+    {
+      "path": "assets/libunisec2_x86.so",
+      "uncompressed_bytes": 40760,
+      "compressed_bytes": 19128,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 3
+    },
+    {
+      "path": "assets/libunisec_x86_64.so",
+      "uncompressed_bytes": 1234624,
+      "compressed_bytes": 410067,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 62
+    },
+    {
+      "path": "assets/libunisec_x86.so",
+      "uncompressed_bytes": 1251032,
+      "compressed_bytes": 426911,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 3
+    },
+    {
+      "path": "assets/libunisec2.so",
+      "uncompressed_bytes": 53192,
+      "compressed_bytes": 28011,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    }
+  ],
+  "elf_payloads_outside_lib": [
+    {
+      "path": "assets/libunisec2_x86.so",
+      "uncompressed_bytes": 40760,
+      "compressed_bytes": 19128,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 3
+    },
+    {
+      "path": "assets/libunisec_x86_64.so",
+      "uncompressed_bytes": 1234624,
+      "compressed_bytes": 410067,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 62
+    },
+    {
+      "path": "assets/libunisec_x86.so",
+      "uncompressed_bytes": 1251032,
+      "compressed_bytes": 426911,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 3
+    },
+    {
+      "path": "assets/libunisec2.so",
+      "uncompressed_bytes": 53192,
+      "compressed_bytes": 28011,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "assets/libwbsafeedit_x86",
+      "uncompressed_bytes": 17600,
+      "compressed_bytes": 7977,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 3
+    },
+    {
+      "path": "assets/libwbsafeedit",
+      "uncompressed_bytes": 17636,
+      "compressed_bytes": 10131,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 1,
+      "elf_data": 1,
+      "elf_machine": 40
+    },
+    {
+      "path": "assets/libwbsafeedit_64",
+      "uncompressed_bytes": 18024,
+      "compressed_bytes": 8248,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 183
+    },
+    {
+      "path": "assets/libwbsafeedit_x86_64",
+      "uncompressed_bytes": 18344,
+      "compressed_bytes": 8094,
+      "elf_magic": true,
+      "declared_abi": null,
+      "elf_class": 2,
+      "elf_data": 1,
+      "elf_machine": 62
+    }
+  ],
+  "elf_machine_names": {
+    "40": "ARM (32-bit)",
+    "183": "AArch64 (64-bit)",
+    "3": "i386",
+    "62": "x86-64"
+  },
+  "duplicate_zip_names": [],
+  "first_bad_crc_entry": null,
+  "zip_entries": 3148,
+  "expanded_zip_bytes": 1425165504,
+  "all_entry_prefix_scan_count": 3148,
+  "native_abis": [
+    "arm64-v8a",
+    "armeabi-v7a"
+  ],
+  "native_library_count": 112,
+  "native_library_counts_by_abi": {
+    "arm64-v8a": 56,
+    "armeabi-v7a": 56
+  },
+  "native_non_elf_entries": [],
+  "all_elf_count": 120,
+  "all_elf_class_machine_counts": {
+    "class=1,machine=3": 3,
+    "class=2,machine=62": 2,
+    "class=1,machine=40": 58,
+    "class=2,machine=183": 57
+  },
+  "elf_32_bit_or_non_aarch64_paths": [
+    "assets/libunisec2_x86.so",
+    "assets/libunisec_x86_64.so",
+    "assets/libunisec_x86.so",
+    "assets/libunisec2.so",
+    "lib/armeabi-v7a/libnetmobsec-4.4.4.so",
+    "lib/armeabi-v7a/libandroidmainruns.so",
+    "lib/armeabi-v7a/libccstat.so",
+    "lib/armeabi-v7a/libxxhash.so",
+    "lib/armeabi-v7a/libturingmfa.so",
+    "lib/armeabi-v7a/libunitrace_dumper.so",
+    "lib/armeabi-v7a/libfmodevent.so",
+    "lib/armeabi-v7a/libhpatchz_uf.so",
+    "lib/armeabi-v7a/libCtaApiLib.so",
+    "lib/armeabi-v7a/libepay-crypto.so",
+    "lib/armeabi-v7a/libshared-texture.so",
+    "lib/armeabi-v7a/libstidocr_stream.so",
+    "lib/armeabi-v7a/libSPIRV-Tools-shared.so",
+    "lib/armeabi-v7a/libmedia-handle.so",
+    "lib/armeabi-v7a/libstidinteractive_liveness.so",
+    "lib/armeabi-v7a/libAudioCore.so",
+    "lib/armeabi-v7a/libstidocr_stream_jni.so",
+    "lib/armeabi-v7a/libMNN.so",
+    "lib/armeabi-v7a/libapkpatch.so",
+    "lib/armeabi-v7a/libccffmpeg.so",
+    "lib/armeabi-v7a/libtrimvideo.so",
+    "lib/armeabi-v7a/libntunisdk.so",
+    "lib/armeabi-v7a/libAndroidCrashHandler.so",
+    "lib/armeabi-v7a/libccsdl.so",
+    "lib/armeabi-v7a/libsec-lib.so",
+    "lib/armeabi-v7a/libcpu_bound_lib.so",
+    "lib/armeabi-v7a/libjni_liveness_interactive.so",
+    "lib/armeabi-v7a/librecordlib.so",
+    "lib/armeabi-v7a/libnativeAOEAIFacelib.so",
+    "lib/armeabi-v7a/libclient.so",
+    "lib/armeabi-v7a/libsecsdk.so",
+    "lib/armeabi-v7a/libxyvodsdk.so",
+    "lib/armeabi-v7a/libAudioCCReName.so",
+    "lib/armeabi-v7a/libAudioEngine.so",
+    "lib/armeabi-v7a/libpatcher.so",
+    "lib/armeabi-v7a/libijkffmpeg.so",
+    "lib/armeabi-v7a/libweibosdkcore.so",
+    "lib/armeabi-v7a/libweconvert.so",
+    "lib/armeabi-v7a/libkyctoolkit.so",
+    "lib/armeabi-v7a/libBugly_Native_idasc.so",
+    "lib/armeabi-v7a/libunisec.so",
+    "lib/armeabi-v7a/libappdump_core.so",
+    "lib/armeabi-v7a/libfmodex.so",
+    "lib/armeabi-v7a/libc++_shared.so",
+    "lib/armeabi-v7a/libccplayer.so",
+    "lib/armeabi-v7a/libnep.so",
+    "lib/armeabi-v7a/libpharos.so",
+    "lib/armeabi-v7a/libNgModules.so",
+    "lib/armeabi-v7a/libhpatchzsingle.so",
+    "lib/armeabi-v7a/libAREngine.so",
+    "lib/armeabi-v7a/libcpp-share-id.so",
+    "lib/armeabi-v7a/libNtUniSdkRoostX.so",
+    "lib/armeabi-v7a/libYTCommonLiveness.so",
+    "lib/armeabi-v7a/libccutil.so",
+    "lib/armeabi-v7a/libloghelp.so",
+    "lib/armeabi-v7a/libweyuv.so",
+    "assets/libwbsafeedit_x86",
+    "assets/libwbsafeedit",
+    "assets/libwbsafeedit_x86_64"
+  ],
+  "embedded_archive_candidates": [
+    "assets/84852f53c3d1bbcf2784bb4c8f203b16.zip"
+  ],
+  "embedded_archive_checks": [
+    {
+      "path": "assets/84852f53c3d1bbcf2784bb4c8f203b16.zip",
+      "bytes": 70395,
+      "sha256": "cdb9111dec053067346444b49cf3bcebcf12accf775c202ab34e8b2a98b719d6",
+      "status": "inspected_zip",
+      "zip_crc_passed": true,
+      "entries": 8,
+      "expanded_bytes": 252958,
+      "elf_checks": [],
+      "nonelf_so_paths": [],
+      "further_nested_archive_candidates": []
+    }
+  ],
+  "manifest_sha256": "9e5831d0c7d88a2477ba60bfa23cafb4156f8a922173dd6e741658d3161b6e3f",
+  "manifest_identity": [
+    {
+      "tag": "manifest",
+      "attributes": {
+        "versionCode": 261014,
+        "versionName": "2.8.89",
+        "installLocation": 0,
+        "compileSdkVersion": 23,
+        "compileSdkVersionCodename": "6.0-2438415",
+        "package": "com.netease.onmyoji",
+        "platformBuildVersionCode": 30,
+        "platformBuildVersionName": 11
+      }
+    },
+    {
+      "tag": "uses-sdk",
+      "attributes": {
+        "minSdkVersion": 21,
+        "targetSdkVersion": 30
+      }
+    }
+  ],
+  "single_apk_no_split_declaration": true,
+  "arm64_only": false,
+  "arm64_only_decision": "no",
+  "limitations": [
+    "Every regular ZIP entry was CRC-checked and its first 64 bytes scanned for ELF magic; .so files anywhere and all lib/ files were explicitly classified.",
+    "Identified ZIP resources are inspected one nested level; other opaque/encrypted resources are not decoded. Explicit ARM32 ELF is sufficient to reject arm64-only.",
+    "No cryptographic APK signature or publisher identity verification was requested/performed; manifest identity is the local package declaration.",
+    "Including arm64-v8a support is distinct from being arm64-only. Mixed ABI packaging alone does not prove the arm64 runtime would fail."
+  ],
+  "source_unchanged_during_audit": true,
+  "status": "offline_abi_audit_complete",
+  "audit_script_sha256": "b240e180b8e4c09966198eb3b90e6a153c309ff4abb2849e0549d2312d785f21",
+  "publication_note": "Local path redacted. Original source SHA256 and exported SHA256 are in manifest.json. APK is not included."
+}

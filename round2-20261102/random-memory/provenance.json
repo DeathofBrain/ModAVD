@@ -1,0 +1,232 @@
+{
+  "timestamp_utc": "2026-11-02T07:35:54.404293+00:00",
+  "files": [
+    {
+      "path": "<WORKSPACE>/round2_random_memory.py",
+      "snapshot": "provenance/00-round2_random_memory.py",
+      "size_bytes": 33769,
+      "sha256": "1555febfdcca00c4398049269000156424239cc78b1bb554bc6b865f3339baaa"
+    },
+    {
+      "path": "<WORKSPACE>/soak_tests.py",
+      "snapshot": "provenance/01-soak_tests.py",
+      "size_bytes": 27799,
+      "sha256": "e74122205af13a8f04eb2df8fe910b216504ec3c98c5b6fb43ceab994c46fff8"
+    },
+    {
+      "path": "<WORKSPACE>/probes/avd_probe.c",
+      "snapshot": "provenance/02-avd_probe.c",
+      "size_bytes": 16266,
+      "sha256": "18627cce12e749c6dfc202a6b25da9539d608581afad095155a00093aca02492"
+    },
+    {
+      "path": "<WORKSPACE>/probes/build_probe.py",
+      "snapshot": "provenance/03-build_probe.py",
+      "size_bytes": 5250,
+      "sha256": "04304a664ff0690e684ce4bfe58cb9920a481e129746c1823c403f80b62dba92"
+    },
+    {
+      "path": "<WORKSPACE>/probes/build-round2-random/avd_probe",
+      "snapshot": "provenance/04-avd_probe",
+      "size_bytes": 24206,
+      "sha256": "53b369603b489612873a3a013ae56ce7ba999f589d362588347d5739b35b06a3"
+    },
+    {
+      "path": "<WORKSPACE>/avd/official_clean.avd/config.ini",
+      "snapshot": "provenance/05-config.ini",
+      "size_bytes": 623,
+      "sha256": "b998cdf98f07c834437a5c3690a5200af8ff0518f15434d564a95753457c276b"
+    },
+    {
+      "path": "<WORKSPACE>/probes/build-round2-random/build_manifest.json",
+      "snapshot": "provenance/06-build_manifest.json",
+      "size_bytes": 797,
+      "sha256": "52eb11f429526aae1e1ad7f97efc72a2bbe086b3554acf2b5623a15411e638db"
+    }
+  ],
+  "host": {
+    "uname": {
+      "command": [
+        "uname",
+        "-a"
+      ],
+      "returncode": 0,
+      "stdout": "Darwin <HOSTNAME> 25.6.0 Darwin Kernel Version 25.6.0: Fri Jul 31 19:11:03 PDT 2026; root:xnu-12377.161.14~5/RELEASE_ARM64_T8132 arm64\n",
+      "stderr": ""
+    },
+    "macos": {
+      "command": [
+        "sw_vers"
+      ],
+      "returncode": 0,
+      "stdout": "ProductName:\t\tmacOS\nProductVersion:\t\t26.6.2\nBuildVersion:\t\t25G83\n",
+      "stderr": ""
+    },
+    "memory": {
+      "command": [
+        "sysctl",
+        "hw.memsize",
+        "hw.pagesize",
+        "hw.ncpu",
+        "machdep.cpu.brand_string"
+      ],
+      "returncode": 0,
+      "stdout": "hw.memsize: 17179869184\nhw.pagesize: 16384\nhw.ncpu: 10\nmachdep.cpu.brand_string: Apple M4\n",
+      "stderr": ""
+    },
+    "swap": {
+      "command": [
+        "sysctl",
+        "vm.swapusage"
+      ],
+      "returncode": 0,
+      "stdout": "vm.swapusage: total = 10240.00M  used = 9406.19M  free = 833.81M  (encrypted)\n",
+      "stderr": ""
+    },
+    "vm_stat": {
+      "command": [
+        "vm_stat"
+      ],
+      "returncode": 0,
+      "stdout": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     7402.\nPages active:                                 234229.\nPages inactive:                               230854.\nPages speculative:                              2324.\nPages throttled:                                   0.\nPages wired down:                             164311.\nPages purgeable:                                9435.\n\"Translation faults\":                     7535988357.\nPages copy-on-write:                       178881616.\nPages zero filled:                        5845668836.\nPages reactivated:                        1275893674.\nPages purged:                              262377806.\nFile-backed pages:                            126214.\nAnonymous pages:                              341193.\nPages stored in compressor:                  1758037.\nPages occupied by compressor:                 369942.\nDecompressions:                           1276261085.\nCompressions:                             1502136467.\nPageins:                                   308206751.\nPageouts:                                   10749187.\nSwapins:                                    41492007.\nSwapouts:                                   56393695.\n",
+      "stderr": ""
+    },
+    "python": {
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "Python 3.13.5\n",
+      "stderr": ""
+    },
+    "adb_version": {
+      "command": [
+        "<WORKSPACE>/sdk/platform-tools/adb",
+        "version"
+      ],
+      "returncode": 0,
+      "stdout": "Android Debug Bridge version 1.0.41\nVersion 37.0.1-15733141\nInstalled as <WORKSPACE>/sdk/platform-tools/adb\nRunning on Darwin 25.6.0 (arm64)\n",
+      "stderr": ""
+    }
+  },
+  "identity": {
+    "state": {
+      "pid": 70567,
+      "identity": "Mon Nov  2 15:24:42 2026     <WORKSPACE>/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_clean -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window",
+      "args": [
+        "<WORKSPACE>/sdk/emulator/emulator",
+        "-avd",
+        "official_clean",
+        "-no-snapshot",
+        "-gpu",
+        "host",
+        "-memory",
+        "4096",
+        "-cores",
+        "4",
+        "-ports",
+        "22160,22161",
+        "-grpc",
+        "22162",
+        "-grpc-use-jwt",
+        "-no-audio",
+        "-no-boot-anim",
+        "-no-metrics",
+        "-verbose",
+        "-no-window"
+      ],
+      "avd": "official_clean",
+      "started_unix": 1793604282.9598742,
+      "boot_started_monotonic": 856562.306223375,
+      "log": "<WORKSPACE>/logs/emulator-1793604282539249000-official_clean.log",
+      "window": false,
+      "serial": "emulator-22160",
+      "adb_port": 22150,
+      "gpu": "host"
+    },
+    "ps_identity": {
+      "command": [
+        "ps",
+        "-p",
+        "70567",
+        "-o",
+        "lstart=",
+        "-o",
+        "command="
+      ],
+      "returncode": 0,
+      "stdout": "Mon Nov  2 15:24:42 2026     <WORKSPACE>/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_clean -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window\n",
+      "stderr": ""
+    },
+    "ps_command": {
+      "command": [
+        "ps",
+        "-p",
+        "70567",
+        "-o",
+        "command="
+      ],
+      "returncode": 0,
+      "stdout": "<WORKSPACE>/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd official_clean -no-snapshot -gpu host -memory 4096 -cores 4 -ports 22160,22161 -grpc 22162 -grpc-use-jwt -no-audio -no-boot-anim -no-metrics -verbose -no-window\n",
+      "stderr": ""
+    },
+    "adb_server": {
+      "pid": 38188,
+      "port": 22150,
+      "path": "<WORKSPACE>/sdk/platform-tools/adb",
+      "command": [
+        "<WORKSPACE>/sdk/platform-tools/adb",
+        "-L",
+        "tcp:22150",
+        "--one-device",
+        "emulator-22160",
+        "server",
+        "nodaemon"
+      ],
+      "log": "<WORKSPACE>/logs/private-adb-server.log"
+    },
+    "adb_server_process": {
+      "command": [
+        "ps",
+        "-p",
+        "38188",
+        "-o",
+        "command="
+      ],
+      "returncode": 0,
+      "stdout": "<WORKSPACE>/sdk/platform-tools/adb -L tcp:22150 --one-device emulator-22160 server nodaemon\n",
+      "stderr": ""
+    }
+  },
+  "host_disk_free_bytes": 97145049088,
+  "argv": [
+    "round2_random_memory.py",
+    "--emulator-pid",
+    "70567",
+    "--output",
+    "results/round2/20261102-152442/random-memory"
+  ],
+  "arguments": {
+    "adb": "<WORKSPACE>/sdk/platform-tools/adb",
+    "adb_port": 22150,
+    "serial": "emulator-22160",
+    "emulator_pid": 70567,
+    "output": "results/round2/20261102-152442/random-memory",
+    "probe": "<WORKSPACE>/probes/build-round2-random/avd_probe",
+    "source": "<WORKSPACE>/probes/avd_probe.c",
+    "smoke_only": false,
+    "sample_interval": 5
+  },
+  "python_executable": "/opt/homebrew/opt/python@3.13/bin/python3.13",
+  "method": {
+    "algorithm": "chacha20-ietf",
+    "smoke_bytes": 16777216,
+    "allocation_bytes": 1073741824,
+    "baseline_seconds": 120,
+    "hold_seconds": 60,
+    "observe_seconds": 600,
+    "rounds": 3,
+    "sample_interval_seconds": 5
+  }
+}

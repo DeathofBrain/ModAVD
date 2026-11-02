@@ -1,0 +1,13 @@
+{"event":"network_config","monotonic_ns":97922136171,"payload_framing":"line64","endpoint_ipv4":"198.18.0.10","endpoint_port":4242,"duration_seconds":10,"interval_ms":1000,"payload_bytes":64,"bulk_bytes":0}
+{"event":"connected","monotonic_ns":97923352880,"sequence":0,"sent_bytes":0,"received_bytes":0,"elapsed_ns":1133834,"errno":0}
+{"event":"heartbeat_ack","monotonic_ns":98953145255,"sequence":0,"sent_bytes":64,"received_bytes":64,"elapsed_ns":1029750834,"errno":0}
+{"event":"heartbeat_ack","monotonic_ns":99183018838,"sequence":1,"sent_bytes":64,"received_bytes":64,"elapsed_ns":229849125,"errno":0}
+{"event":"heartbeat_ack","monotonic_ns":100183381714,"sequence":2,"sent_bytes":64,"received_bytes":64,"elapsed_ns":228802000,"errno":0}
+{"event":"heartbeat_ack","monotonic_ns":101193975173,"sequence":3,"sent_bytes":64,"received_bytes":64,"elapsed_ns":239115583,"errno":0}
+{"event":"heartbeat_ack","monotonic_ns":102206348673,"sequence":4,"sent_bytes":64,"received_bytes":64,"elapsed_ns":251341792,"errno":0}
+{"event":"heartbeat_ack","monotonic_ns":103181747132,"sequence":5,"sent_bytes":64,"received_bytes":64,"elapsed_ns":226465042,"errno":0}
+{"event":"heartbeat_ack","monotonic_ns":104257247966,"sequence":6,"sent_bytes":64,"received_bytes":64,"elapsed_ns":301499542,"errno":0}
+{"event":"heartbeat_ack","monotonic_ns":105185780050,"sequence":7,"sent_bytes":64,"received_bytes":64,"elapsed_ns":229494833,"errno":0}
+{"event":"heartbeat_ack","monotonic_ns":106174422717,"sequence":8,"sent_bytes":64,"received_bytes":64,"elapsed_ns":218013792,"errno":0}
+{"event":"heartbeat_ack","monotonic_ns":107205485842,"sequence":9,"sent_bytes":64,"received_bytes":64,"elapsed_ns":248052125,"errno":0}
+{"event":"network_complete","monotonic_ns":107958956218,"value":10}

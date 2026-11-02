@@ -1,0 +1,99 @@
+{
+  "status": "failed",
+  "results": {
+    "host": {
+      "status": "passed",
+      "status_reasons": [],
+      "expected_duration_seconds": 7200,
+      "duration_tolerance_seconds": 2,
+      "duration_ok": true,
+      "heartbeat_coverage_ok": true,
+      "heartbeat_span_seconds": 7199.173077667,
+      "minimum_heartbeat_span_seconds": 7196.964286333,
+      "acks": 7171,
+      "connections": 1,
+      "reconnections": 0,
+      "heartbeat_errors": 0,
+      "bulk_errors": 0,
+      "connect_errors": 0,
+      "socket_errors": 0,
+      "invalid_lines": 0,
+      "window_seconds": 7200.229703167,
+      "sent_bytes": 503513088,
+      "received_bytes": 503513088,
+      "verified_received_bytes": 503513088,
+      "achieved_receive_bytes_per_second": 69930.14233678285,
+      "bulk_receive_bytes": 33554432,
+      "bulk_seconds": 0.035713667,
+      "bulk_receive_bytes_per_second": 939540372.597415,
+      "rtt_median_ms": 0.183292,
+      "rtt_p95_ms": 0.262375,
+      "rtt_max_ms": 18.440709,
+      "recovery_seconds": [],
+      "detected_error_to_ack_seconds": [],
+      "failed_request_start_to_ack_seconds": [],
+      "reconnect_handshake_seconds": [],
+      "unrecovered_outage": false,
+      "completed": true,
+      "minimum_heartbeat_ack_count": 7124,
+      "heartbeat_ack_count_fraction": 0.99,
+      "heartbeat_ack_count_ok": true,
+      "maximum_heartbeat_ack_gap_seconds": 1.141007083,
+      "heartbeat_ack_gap_threshold_seconds": 3.0,
+      "heartbeat_ack_gaps_ok": true
+    },
+    "guest": {
+      "status": "failed",
+      "status_reasons": [
+        "1 socket/connect/heartbeat/bulk errors"
+      ],
+      "expected_duration_seconds": 7200,
+      "duration_tolerance_seconds": 2,
+      "duration_ok": true,
+      "heartbeat_coverage_ok": true,
+      "heartbeat_span_seconds": 7194.637862972,
+      "minimum_heartbeat_span_seconds": 7192.260157872,
+      "acks": 7191,
+      "connections": 2,
+      "reconnections": 1,
+      "heartbeat_errors": 1,
+      "bulk_errors": 0,
+      "connect_errors": 0,
+      "socket_errors": 0,
+      "invalid_lines": 0,
+      "window_seconds": 7200.381093267,
+      "sent_bytes": 504889344,
+      "received_bytes": 504823808,
+      "verified_received_bytes": 504823808,
+      "achieved_receive_bytes_per_second": 70110.70684467735,
+      "bulk_receive_bytes": 33554432,
+      "bulk_seconds": 4.739842128,
+      "bulk_receive_bytes_per_second": 7079229.8759871265,
+      "rtt_median_ms": 11.100375,
+      "rtt_p95_ms": 14.1228125,
+      "rtt_max_ms": 524.042792,
+      "recovery_seconds": [
+        1.506772334
+      ],
+      "detected_error_to_ack_seconds": [
+        1.506772334
+      ],
+      "failed_request_start_to_ack_seconds": [
+        1.50724725
+      ],
+      "reconnect_handshake_seconds": [
+        0.000800333
+      ],
+      "unrecovered_outage": false,
+      "completed": true,
+      "minimum_heartbeat_ack_count": 7120,
+      "heartbeat_ack_count_fraction": 0.99,
+      "heartbeat_ack_count_ok": true,
+      "maximum_heartbeat_ack_gap_seconds": 2.497553668,
+      "heartbeat_ack_gap_threshold_seconds": 3.0,
+      "heartbeat_ack_gaps_ok": true
+    }
+  },
+  "network_scope": "guest NAT to host loopback echo server; WAN not covered",
+  "interpretation": "Achieved traffic at the configured offered load; this is not a link-capacity benchmark. Host and guest monotonic clocks are evaluated separately. completed means loop execution ended, not a pass. recovery_seconds is a compatibility alias for detected_error_to_ack_seconds and excludes failure-detection latency; failed_request_start_to_ack_seconds includes the failed request interval, not the unknowable exact physical outage start. Byte totals can include partial failed I/O; verified_received_bytes includes only fully checked ACK payloads."
+}

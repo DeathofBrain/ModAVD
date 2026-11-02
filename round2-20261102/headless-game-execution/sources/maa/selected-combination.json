@@ -1,0 +1,65 @@
+{
+  "prepared_at_utc": "2026-11-02T10:15:54.124486+00:00",
+  "application_version": "0.1.3",
+  "packaged_runtime": "/Applications/Maa Verge.app/Contents/Resources/runtime/maaverge-runtime",
+  "runtime_sha256": "d67d5b3f4697b855c9df4872597be234f83e101d65ae8c64418864bfedd1db93",
+  "packaged_worker": "/Applications/Maa Verge.app/Contents/Resources/runtime/maaverge-core-worker",
+  "worker_sha256": "4d5f130876d925a30ee2164ac566970e90da220f968b63804e9da0b8e0cb5a1b",
+  "build_info": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "backend": "typescript",
+    "bunVersion": "1.4.3",
+    "cppStandard": 20,
+    "applicationVersion": "0.1.3"
+  },
+  "data_root": "<WORKSPACE>/maa/data",
+  "adb_server": "tcp:127.0.0.1:22150",
+  "address": "emulator-22160",
+  "components": {
+    "core": {
+      "source": "<LOCAL_USER_DATA>/Maa Verge/MaaCore/data-241dfb25c5d38f837f2d8102ba3b56e2/generations/core-0337bf34179e43fdbe785eddec3d718c",
+      "clone": "<WORKSPACE>/maa/components/core/generations/core-0337bf34179e43fdbe785eddec3d718c",
+      "clone_method": "/bin/cp -cR (APFS copy on write)",
+      "version": "v6.21.1",
+      "installedHash": "56392b147a015dc221da7e47abbd2450e99acb4eb95e56e36bb45af7595b7dec",
+      "files": 9573,
+      "full_payload_integrity_verified": true,
+      "resource_version": {
+        "activity": {
+          "name": "时间啊，向前！",
+          "time": 1793487600
+        },
+        "gacha": {
+          "pool": "将雪投火",
+          "time": 1793487600
+        },
+        "last_updated": "2026-11-01 13:43:20.000"
+      }
+    },
+    "resource": {
+      "source": "<LOCAL_USER_DATA>/Maa Verge/MaaCore/data-241dfb25c5d38f837f2d8102ba3b56e2/generations/core-0337bf34179e43fdbe785eddec3d718c",
+      "clone": "<WORKSPACE>/maa/components/core/generations/core-0337bf34179e43fdbe785eddec3d718c",
+      "clone_method": "/bin/cp -cR (APFS copy on write)",
+      "version": "bundled@v6.21.1",
+      "installedHash": "56392b147a015dc221da7e47abbd2450e99acb4eb95e56e36bb45af7595b7dec",
+      "files": 9573,
+      "full_payload_integrity_verified": true,
+      "resource_version": {
+        "activity": {
+          "name": "时间啊，向前！",
+          "time": 1793487600
+        },
+        "gacha": {
+          "pool": "将雪投火",
+          "time": 1793487600
+        },
+        "last_updated": "2026-11-01 13:43:20.000"
+      }
+    }
+  },
+  "personal_data_imported": false,
+  "gui_tested": false,
+  "device_connected": false,
+  "upgrade_receipt": "<WORKSPACE>/results/round2/20261102-152442/maa-upgrade-v6211/receipt.json"
+}

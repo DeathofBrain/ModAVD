@@ -1,0 +1,109 @@
+{
+  "schema": "round2-onmyoji-install-entry-summary-v1",
+  "scope": "Installation and failed entry observation on one isolated ARM64 Google Android Emulator configuration.",
+  "apk": {
+    "file_name": "onmyoji_netease_116_2.8.89_py3_small.apk",
+    "bytes": 1283793018,
+    "sha256": "eecba6fd1f550263135c840b46a5e7fb3a8c324046fdfd3078454e95f92e7990",
+    "package": "com.netease.onmyoji",
+    "version_name": "2.8.89",
+    "version_code": 261014,
+    "native_library_counts_by_abi": {
+      "armeabi-v7a": 56,
+      "arm64-v8a": 56
+    },
+    "arm64_only": false,
+    "assets_elf_architectures": [
+      "ARM32",
+      "AArch64",
+      "x86",
+      "x86-64"
+    ],
+    "local_crc_abi_manifest_audit_passed": true,
+    "publisher_signature_authenticity_independently_verified": false
+  },
+  "environment": {
+    "avd": "official_onmyoji_round2",
+    "fresh_userdata_before_launch": true,
+    "system_image": "Android API34 Google APIs arm64-v8a",
+    "ram_mib": 4096,
+    "cores": 4,
+    "data_partition_capacity_gib": 32,
+    "guest_properties": {
+      "ro.product.cpu.abi": "arm64-v8a",
+      "ro.product.cpu.abilist": "arm64-v8a",
+      "ro.product.cpu.abilist64": "arm64-v8a",
+      "ro.product.cpu.abilist32": "",
+      "ro.dalvik.vm.native.bridge": "0",
+      "ro.dalvik.vm.isa.arm64": "",
+      "ro.build.version.sdk": "34",
+      "ro.build.fingerprint": "google/sdk_gphone64_arm64/emu64a:14/UE1A.230829.050/12077443:userdebug/dev-keys"
+    },
+    "selected_package_primary_cpu_abi": "arm64-v8a",
+    "selected_package_secondary_cpu_abi": "null",
+    "gpu_mode": "host",
+    "window": true,
+    "launch_argv_redacted": [
+      "[TASK_SDK]/emulator/emulator",
+      "-avd",
+      "official_onmyoji_round2",
+      "-no-snapshot",
+      "-gpu",
+      "host",
+      "-memory",
+      "4096",
+      "-cores",
+      "4",
+      "-ports",
+      "[CONSOLE_PORT],[TRANSPORT_PORT]",
+      "-grpc",
+      "[GRPC_PORT]",
+      "-grpc-use-jwt",
+      "-no-audio",
+      "-no-boot-anim",
+      "-no-metrics",
+      "-verbose"
+    ]
+  },
+  "installation": {
+    "already_installed": false,
+    "returncode": 0,
+    "stdout": "Performing Streamed Install\nSuccess\n",
+    "stderr": "",
+    "duration_s": 12.401266666012816
+  },
+  "initial_activity_start": {
+    "launcher_component": "com.netease.onmyoji/.tag0",
+    "returncode": 0,
+    "stdout": "Starting: Intent { cmp=com.netease.onmyoji/.tag0 }\nStatus: ok\nLaunchState: COLD\nActivity: com.netease.onmyoji/com.netease.ntunisdk.external.protocol.ProtocolLauncher\nTotalTime: 1143\nWaitTime: 1155\nComplete\n",
+    "stderr": ""
+  },
+  "result": {
+    "classification": "entry_failed_during_native_renderer_initialization",
+    "successful_entry": false,
+    "supported_failure_chain": [
+      "ES3.2 and ES3.1 context creation rejected",
+      "Fallback context exposes ES3.0",
+      "NeoX rejects fallback version and reports device creation failure",
+      "Same render thread reports signal 11",
+      "Application crash handler exits; system records EXIT_SELF status 1 and repeated process replacement"
+    ],
+    "exact_faulting_function_or_instruction_confirmed": false,
+    "applies_to": "This tested -gpu host configuration only",
+    "other_render_backends_tested": false,
+    "successful_server_login_verified": false,
+    "full_resource_download_verified": false,
+    "in_game_workload_tested": false,
+    "game_automation_tested": false
+  },
+  "runner_actions": {
+    "game_ui_input_performed": false,
+    "agreement_accepted": false,
+    "account_input_performed": false
+  },
+  "executed_source_sha256": {
+    "round2_onmyoji.py": "58cc54066069d795461fe00f56aba185c08a69399eafeea6659cd1fb798e72cf",
+    "avdlib.py": "007c8433474e05013c94f6d100fe0a5b5d7237389ec56562ca3a4c2ab2fc3246"
+  },
+  "privacy": "Local host paths, port numbers and process command identities omitted or replaced; no credentials/account data exported."
+}

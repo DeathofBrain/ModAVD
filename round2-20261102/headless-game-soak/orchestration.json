@@ -1,0 +1,40 @@
+{
+  "status": "failed",
+  "started_utc": "2026-11-02T10:25:59.826366+00:00",
+  "duration_seconds": 7200,
+  "workload_label": "arknights_logged_in_home_headless",
+  "memory_monitor_count": 1,
+  "groups": {
+    "local": "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak",
+    "wan": "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak/wan"
+  },
+  "preflight": {
+    "path": "<WORKSPACE>/results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-1/guest_network.jsonl",
+    "sha256": "fafa653f79425b5376d065c5630b7cf07e1e59b17684fdac24d3e114b21409d5",
+    "checked_acks": 10,
+    "recorded_window_seconds": 10.036820047,
+    "maximum_heartbeat_ack_gap_seconds": 1.075500834,
+    "checked_config": {
+      "event": "network_config",
+      "monotonic_ns": 97922136171,
+      "payload_framing": "line64",
+      "endpoint_ipv4": "198.18.0.10",
+      "endpoint_port": 4242,
+      "duration_seconds": 10,
+      "interval_ms": 1000,
+      "payload_bytes": 64,
+      "bulk_bytes": 0
+    },
+    "endpoint_identity_note": "Endpoint and line64 framing are checked against the probe network_config event and caller configuration. Host routing may still include FakeIP/TUN/proxy."
+  },
+  "finished_utc": "2026-11-02T12:26:08.316677+00:00",
+  "elapsed_seconds": 7206.7610880830325,
+  "execution_completed": true,
+  "network_statuses": {
+    "local": "failed",
+    "wan": "failed"
+  },
+  "memory_sample_count": 1442,
+  "memory_host_error_samples": 0,
+  "memory_guest_error_samples": 0
+}

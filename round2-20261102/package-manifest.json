@@ -1,0 +1,1380 @@
+{
+  "schema_version": 1,
+  "scope": "This topic manifest covers memory, headless, observer, MAA-review and nonempty-file exports. Root supplements and onmyoji/ are covered by publication-manifest.json.",
+  "source_hash_policy": "source_sha256 always hashes original local bytes; export_sha256 hashes the sanitized/derived public bytes. Historical hashes embedded in copied reports describe original local evidence, not sanitized exports.",
+  "exclusions": [
+    "APK/AVD/disks/keys/binaries/random dumps",
+    "all post-login screenshots",
+    "private activity dumps and screenshot receipts",
+    "raw MAA logs/session data",
+    "private game-cache path mapping",
+    "raw adb-log directory and full device contents beyond selected environment metadata"
+  ],
+  "files": [
+    {
+      "export": "random-memory/deployment.json",
+      "export_sha256": "8b6185d9b4466a42fc0d0a2294d674ca0544966eddd06b3c6f469f85142c559b",
+      "export_bytes": 194,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/deployment.json",
+          "source_sha256": "8b6185d9b4466a42fc0d0a2294d674ca0544966eddd06b3c6f469f85142c559b",
+          "source_bytes": 194
+        }
+      ]
+    },
+    {
+      "export": "random-memory/guest-environment.json",
+      "export_sha256": "e6d8664f0b1caad1ede8cecfa8c09c93a29e82ad3ba97a7daf6312867d438b72",
+      "export_bytes": 26432,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/guest-environment.json",
+          "source_sha256": "790d72e08c134c2c0b65159f2673432b56a2fbd4a6f31239ce942322602d24a3",
+          "source_bytes": 26418
+        }
+      ]
+    },
+    {
+      "export": "random-memory/memory.csv",
+      "export_sha256": "3cd4de3e010a26c638441b5203c302483d5321a2f30389fc35d3318059398f97",
+      "export_bytes": 109765,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/memory.csv",
+          "source_sha256": "3cd4de3e010a26c638441b5203c302483d5321a2f30389fc35d3318059398f97",
+          "source_bytes": 109765
+        }
+      ]
+    },
+    {
+      "export": "random-memory/progress.json",
+      "export_sha256": "d4852c2b996e7e8ca3ff4d812096b59f585d2e94977da698aefe2d95809d33ec",
+      "export_bytes": 3728,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/progress.json",
+          "source_sha256": "d4852c2b996e7e8ca3ff4d812096b59f585d2e94977da698aefe2d95809d33ec",
+          "source_bytes": 3728
+        }
+      ]
+    },
+    {
+      "export": "random-memory/provenance.json",
+      "export_sha256": "ce37ffd72eeb8a64e00d0070bcd15f8ab2bac757207951bd1b68bda8040cf020",
+      "export_bytes": 8261,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/provenance.json",
+          "source_sha256": "cfe439ced1a754465dd8a54c1140caa9a82b4c5cff9666474d889be8773780b0",
+          "source_bytes": 8464
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_1.execution.json",
+      "export_sha256": "459f7caf7f308fa590fab70b69ad415da643684b44b5cd68d6055524c19a90d7",
+      "export_bytes": 579,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_1.execution.json",
+          "source_sha256": "9768fdc31130349eabc7a09a4be51456da62d4f8d267e68a972d290c21ce1f91",
+          "source_bytes": 588
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_1.host-events.jsonl",
+      "export_sha256": "7625e41dea8d11fa30f35654ecac67e646c506c7f3a00544553fc993f56f80e8",
+      "export_bytes": 2259,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_1.host-events.jsonl",
+          "source_sha256": "7625e41dea8d11fa30f35654ecac67e646c506c7f3a00544553fc993f56f80e8",
+          "source_bytes": 2259
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_1.protocol.json",
+      "export_sha256": "83bab07f7a43c35d8a4d0616b8f3093693325834fcc6967b676708272b80bf7f",
+      "export_bytes": 3056,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_1.protocol.json",
+          "source_sha256": "83bab07f7a43c35d8a4d0616b8f3093693325834fcc6967b676708272b80bf7f",
+          "source_bytes": 3056
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_1.stderr.log",
+      "export_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "export_bytes": 0,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_1.stderr.log",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_bytes": 0
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_1.stdout.jsonl",
+      "export_sha256": "1db150ade63ef580ab6f843a7e084a1263c01f4727f632d2e4b25e4331af5659",
+      "export_bytes": 1541,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_1.stdout.jsonl",
+          "source_sha256": "1db150ade63ef580ab6f843a7e084a1263c01f4727f632d2e4b25e4331af5659",
+          "source_bytes": 1541
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_2.execution.json",
+      "export_sha256": "e2ad8c445a04b5b3a663db6ef59c58bccad402ebcc57e0544453eabe987a7366",
+      "export_bytes": 579,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_2.execution.json",
+          "source_sha256": "cd8bb50c9fedc5b46a25b6ab126e1b2453aa254f7661740ccd8e4604e7b36ded",
+          "source_bytes": 588
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_2.host-events.jsonl",
+      "export_sha256": "1e3fc049f45b285c27dc58d8ca3a3a4a38951ac5d944e477b962161af8924e5f",
+      "export_bytes": 2264,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_2.host-events.jsonl",
+          "source_sha256": "1e3fc049f45b285c27dc58d8ca3a3a4a38951ac5d944e477b962161af8924e5f",
+          "source_bytes": 2264
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_2.protocol.json",
+      "export_sha256": "550384513848346ae54b7bc08fb0ce79c84dfb5ed0db32cdf9e296ac024ceb6b",
+      "export_bytes": 3063,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_2.protocol.json",
+          "source_sha256": "550384513848346ae54b7bc08fb0ce79c84dfb5ed0db32cdf9e296ac024ceb6b",
+          "source_bytes": 3063
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_2.stderr.log",
+      "export_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "export_bytes": 0,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_2.stderr.log",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_bytes": 0
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_2.stdout.jsonl",
+      "export_sha256": "7aef576052ab14dcdcc86f67c9f9247d2c4776dc40cf39cd5e436232413afc34",
+      "export_bytes": 1546,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_2.stdout.jsonl",
+          "source_sha256": "7aef576052ab14dcdcc86f67c9f9247d2c4776dc40cf39cd5e436232413afc34",
+          "source_bytes": 1546
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_3.execution.json",
+      "export_sha256": "838e1c1fc568dfadc48806664747689d6ef80488c123fd0bc02174a31841ad8a",
+      "export_bytes": 579,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_3.execution.json",
+          "source_sha256": "f397ec99d6df48052e15fe76c0b05c46be5bf133fd5b9eaeb5e9f61da32a1ec7",
+          "source_bytes": 588
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_3.host-events.jsonl",
+      "export_sha256": "f912b54ff47e87aad5d57f9cc2da66183c06690cf8b4c02960fc6aaef166c73a",
+      "export_bytes": 2264,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_3.host-events.jsonl",
+          "source_sha256": "f912b54ff47e87aad5d57f9cc2da66183c06690cf8b4c02960fc6aaef166c73a",
+          "source_bytes": 2264
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_3.protocol.json",
+      "export_sha256": "1820ce2c4404ffe458d0296e2a4dc1089704f77f3f65260a967865c7f85ae783",
+      "export_bytes": 3062,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_3.protocol.json",
+          "source_sha256": "1820ce2c4404ffe458d0296e2a4dc1089704f77f3f65260a967865c7f85ae783",
+          "source_bytes": 3062
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_3.stderr.log",
+      "export_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "export_bytes": 0,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_3.stderr.log",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_bytes": 0
+        }
+      ]
+    },
+    {
+      "export": "random-memory/round_3.stdout.jsonl",
+      "export_sha256": "91a370d0efa92ae120f35701ce08844b6d59b8e61e6f2e773412137b76028348",
+      "export_bytes": 1546,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/round_3.stdout.jsonl",
+          "source_sha256": "91a370d0efa92ae120f35701ce08844b6d59b8e61e6f2e773412137b76028348",
+          "source_bytes": 1546
+        }
+      ]
+    },
+    {
+      "export": "random-memory/smoke-verification.json",
+      "export_sha256": "7357cfb16d3e5a693a323a9224909c0c6af32c83414134594946123c365955c8",
+      "export_bytes": 295858,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/smoke-verification.json",
+          "source_sha256": "e263658b38d39d40c260660f65954b984ccd7b3baf0f68119a784d3b9b51dd2b",
+          "source_bytes": 295867
+        }
+      ]
+    },
+    {
+      "export": "random-memory/smoke.execution.json",
+      "export_sha256": "3a3da17e9ebd29f263486a546a7fc585182cda8e70c9e066a86bf29711815bc3",
+      "export_bytes": 649,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/smoke.execution.json",
+          "source_sha256": "ad2222adae197a5be577d35f06e6140d9b2143ae30f0e21ff035bae8d9a6fc4b",
+          "source_bytes": 658
+        }
+      ]
+    },
+    {
+      "export": "random-memory/smoke.host-events.jsonl",
+      "export_sha256": "a94be8e180af9bbc9e00add9b3632a62c396f20c765c31f0624e3bf312f3e2aa",
+      "export_bytes": 2779,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/smoke.host-events.jsonl",
+          "source_sha256": "a94be8e180af9bbc9e00add9b3632a62c396f20c765c31f0624e3bf312f3e2aa",
+          "source_bytes": 2779
+        }
+      ]
+    },
+    {
+      "export": "random-memory/smoke.protocol.json",
+      "export_sha256": "bc02c24f7c63b97ec1a152c99ca01040c2ddb73411de170edd31672a12b7520c",
+      "export_bytes": 3578,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/smoke.protocol.json",
+          "source_sha256": "bc02c24f7c63b97ec1a152c99ca01040c2ddb73411de170edd31672a12b7520c",
+          "source_bytes": 3578
+        }
+      ]
+    },
+    {
+      "export": "random-memory/smoke.stderr.log",
+      "export_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "export_bytes": 0,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/smoke.stderr.log",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_bytes": 0
+        }
+      ]
+    },
+    {
+      "export": "random-memory/smoke.stdout.jsonl",
+      "export_sha256": "59008385f93eeb87e80baa92250c1b628731a54d1734e4b0be25aa8de22a6caa",
+      "export_bytes": 1913,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/smoke.stdout.jsonl",
+          "source_sha256": "59008385f93eeb87e80baa92250c1b628731a54d1734e4b0be25aa8de22a6caa",
+          "source_bytes": 1913
+        }
+      ]
+    },
+    {
+      "export": "random-memory/summary.json",
+      "export_sha256": "9b8dfea96ee5a888990b1f9b7b93235d4d4cb6c26bd6ad5e34fcbaa7ad0aa233",
+      "export_bytes": 9553,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/summary.json",
+          "source_sha256": "9b8dfea96ee5a888990b1f9b7b93235d4d4cb6c26bd6ad5e34fcbaa7ad0aa233",
+          "source_bytes": 9553
+        }
+      ]
+    },
+    {
+      "export": "random-memory/provenance/00-round2_random_memory.py",
+      "export_sha256": "1555febfdcca00c4398049269000156424239cc78b1bb554bc6b865f3339baaa",
+      "export_bytes": 33769,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/provenance/00-round2_random_memory.py",
+          "source_sha256": "1555febfdcca00c4398049269000156424239cc78b1bb554bc6b865f3339baaa",
+          "source_bytes": 33769
+        }
+      ]
+    },
+    {
+      "export": "random-memory/provenance/01-soak_tests.py",
+      "export_sha256": "a4a41c585bbd8619c9d84b89da01b05eca8b8f2c44a0ec527723035013550af7",
+      "export_bytes": 27790,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/provenance/01-soak_tests.py",
+          "source_sha256": "e74122205af13a8f04eb2df8fe910b216504ec3c98c5b6fb43ceab994c46fff8",
+          "source_bytes": 27799
+        }
+      ]
+    },
+    {
+      "export": "random-memory/provenance/02-avd_probe.c",
+      "export_sha256": "18627cce12e749c6dfc202a6b25da9539d608581afad095155a00093aca02492",
+      "export_bytes": 16266,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/provenance/02-avd_probe.c",
+          "source_sha256": "18627cce12e749c6dfc202a6b25da9539d608581afad095155a00093aca02492",
+          "source_bytes": 16266
+        }
+      ]
+    },
+    {
+      "export": "random-memory/provenance/03-build_probe.py",
+      "export_sha256": "04304a664ff0690e684ce4bfe58cb9920a481e129746c1823c403f80b62dba92",
+      "export_bytes": 5250,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/provenance/03-build_probe.py",
+          "source_sha256": "04304a664ff0690e684ce4bfe58cb9920a481e129746c1823c403f80b62dba92",
+          "source_bytes": 5250
+        }
+      ]
+    },
+    {
+      "export": "random-memory/provenance/05-config.ini",
+      "export_sha256": "b998cdf98f07c834437a5c3690a5200af8ff0518f15434d564a95753457c276b",
+      "export_bytes": 623,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/provenance/05-config.ini",
+          "source_sha256": "b998cdf98f07c834437a5c3690a5200af8ff0518f15434d564a95753457c276b",
+          "source_bytes": 623
+        }
+      ]
+    },
+    {
+      "export": "random-memory/provenance/06-build_manifest.json",
+      "export_sha256": "edb49e33890b460fc421222802fc9ee257bf1743c9a5c1643673b8b28bf63501",
+      "export_bytes": 779,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory/provenance/06-build_manifest.json",
+          "source_sha256": "52eb11f429526aae1e1ad7f97efc72a2bbe086b3554acf2b5623a15411e638db",
+          "source_bytes": 797
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/deployment.json",
+      "export_sha256": "9b114168a45b079d1751dc148d8257e72d31008db6a59ef2f9d2151a9b6fa50c",
+      "export_bytes": 194,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/deployment.json",
+          "source_sha256": "9b114168a45b079d1751dc148d8257e72d31008db6a59ef2f9d2151a9b6fa50c",
+          "source_bytes": 194
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/guest-environment.json",
+      "export_sha256": "c34949b45c6d67875bf7d3cd16043ff5be5e97ddea43cda2045b18ce52930a2a",
+      "export_bytes": 26433,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/guest-environment.json",
+          "source_sha256": "895d08f8046c602c914da3168107b5626306a2a9f9df0fd4264bbc62f576c56a",
+          "source_bytes": 26419
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/progress.json",
+      "export_sha256": "f56b95a2667f217c54cb3bf9c60c65915b86c0d85638a59ce32281be88372cb2",
+      "export_bytes": 316,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/progress.json",
+          "source_sha256": "f56b95a2667f217c54cb3bf9c60c65915b86c0d85638a59ce32281be88372cb2",
+          "source_bytes": 316
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/provenance.json",
+      "export_sha256": "136337c14be130f53460ca65722f89c0073b2a5db353cdd6016a9c2547b993dd",
+      "export_bytes": 8280,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/provenance.json",
+          "source_sha256": "590519f663dfaefed63adc0782f2826f32159a39410eeb00802360965a785223",
+          "source_bytes": 8483
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/smoke-verification.json",
+      "export_sha256": "17c38a9d8f0235265a4f695c98f3e0a7f01d0836eecde85d19a713b004e37742",
+      "export_bytes": 295857,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/smoke-verification.json",
+          "source_sha256": "383270e88510eeb29bc9e97490594287c25423132b1143ed89ee9f1ee8083729",
+          "source_bytes": 295866
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/smoke.execution.json",
+      "export_sha256": "1e9aed87b33d6d2bee1ef93ee8e165837ab982d14fce7199bb167d7b19785466",
+      "export_bytes": 649,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/smoke.execution.json",
+          "source_sha256": "1d914379cba7c06bfe9e28ff5fec5826c6d529eb88bc9ba5e4a7cf6398e43c21",
+          "source_bytes": 658
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/smoke.host-events.jsonl",
+      "export_sha256": "b21d921e7d99e8bc2b698354a7697de19ba2e2f76b8c31936b29172bda947c1b",
+      "export_bytes": 2779,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/smoke.host-events.jsonl",
+          "source_sha256": "b21d921e7d99e8bc2b698354a7697de19ba2e2f76b8c31936b29172bda947c1b",
+          "source_bytes": 2779
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/smoke.protocol.json",
+      "export_sha256": "fc692876f24531abb914b42f8643ff877b075f6416b3b01165a877fddaf8dd80",
+      "export_bytes": 3577,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/smoke.protocol.json",
+          "source_sha256": "fc692876f24531abb914b42f8643ff877b075f6416b3b01165a877fddaf8dd80",
+          "source_bytes": 3577
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/smoke.stderr.log",
+      "export_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "export_bytes": 0,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/smoke.stderr.log",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_bytes": 0
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/smoke.stdout.jsonl",
+      "export_sha256": "1cc40dcb34e40db66a325e7fb2bec88228ad062482cc9f7d99fb63495029ee9a",
+      "export_bytes": 1913,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/smoke.stdout.jsonl",
+          "source_sha256": "1cc40dcb34e40db66a325e7fb2bec88228ad062482cc9f7d99fb63495029ee9a",
+          "source_bytes": 1913
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/summary.json",
+      "export_sha256": "ceed14cfefdce94a3a35b98d7a4076e907ddf4f8da87c016f409c695b1d125cf",
+      "export_bytes": 1042,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/summary.json",
+          "source_sha256": "ceed14cfefdce94a3a35b98d7a4076e907ddf4f8da87c016f409c695b1d125cf",
+          "source_bytes": 1042
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/provenance/00-round2_random_memory.py",
+      "export_sha256": "1555febfdcca00c4398049269000156424239cc78b1bb554bc6b865f3339baaa",
+      "export_bytes": 33769,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/provenance/00-round2_random_memory.py",
+          "source_sha256": "1555febfdcca00c4398049269000156424239cc78b1bb554bc6b865f3339baaa",
+          "source_bytes": 33769
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/provenance/01-soak_tests.py",
+      "export_sha256": "a4a41c585bbd8619c9d84b89da01b05eca8b8f2c44a0ec527723035013550af7",
+      "export_bytes": 27790,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/provenance/01-soak_tests.py",
+          "source_sha256": "e74122205af13a8f04eb2df8fe910b216504ec3c98c5b6fb43ceab994c46fff8",
+          "source_bytes": 27799
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/provenance/02-avd_probe.c",
+      "export_sha256": "18627cce12e749c6dfc202a6b25da9539d608581afad095155a00093aca02492",
+      "export_bytes": 16266,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/provenance/02-avd_probe.c",
+          "source_sha256": "18627cce12e749c6dfc202a6b25da9539d608581afad095155a00093aca02492",
+          "source_bytes": 16266
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/provenance/03-build_probe.py",
+      "export_sha256": "04304a664ff0690e684ce4bfe58cb9920a481e129746c1823c403f80b62dba92",
+      "export_bytes": 5250,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/provenance/03-build_probe.py",
+          "source_sha256": "04304a664ff0690e684ce4bfe58cb9920a481e129746c1823c403f80b62dba92",
+          "source_bytes": 5250
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/provenance/05-config.ini",
+      "export_sha256": "b998cdf98f07c834437a5c3690a5200af8ff0518f15434d564a95753457c276b",
+      "export_bytes": 623,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/provenance/05-config.ini",
+          "source_sha256": "b998cdf98f07c834437a5c3690a5200af8ff0518f15434d564a95753457c276b",
+          "source_bytes": 623
+        }
+      ]
+    },
+    {
+      "export": "random-smoke/provenance/06-build_manifest.json",
+      "export_sha256": "edb49e33890b460fc421222802fc9ee257bf1743c9a5c1643673b8b28bf63501",
+      "export_bytes": 779,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-smoke/provenance/06-build_manifest.json",
+          "source_sha256": "52eb11f429526aae1e1ad7f97efc72a2bbe086b3554acf2b5623a15411e638db",
+          "source_bytes": 797
+        }
+      ]
+    },
+    {
+      "export": "random-memory-report/audit.json",
+      "export_sha256": "d18da922b64843ef1b9fd20f1a77df0e8563d19a6d7ba875f108922b66154ae7",
+      "export_bytes": 23570,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory-report/audit.json",
+          "source_sha256": "6763eca6303c9770a7b544b6398cce3603718da7327e97e1e46015baa7ca1653",
+          "source_bytes": 24029
+        }
+      ]
+    },
+    {
+      "export": "random-memory-report/memory-timeline.png",
+      "export_sha256": "d4f54d4bdfaf7979e42979a03df46dfeaa6274b999102fc4e51c5e7623576106",
+      "export_bytes": 364799,
+      "transformation": "unchanged generated memory chart; no game screenshots",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory-report/memory-timeline.png",
+          "source_sha256": "d4f54d4bdfaf7979e42979a03df46dfeaa6274b999102fc4e51c5e7623576106",
+          "source_bytes": 364799
+        }
+      ]
+    },
+    {
+      "export": "random-memory-report/memory-timeline.svg",
+      "export_sha256": "bf5c33e5619ae7e5309c61e9ecbf06dcaf2df1a39eb66001cae00b35d8a93e07",
+      "export_bytes": 84243,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory-report/memory-timeline.svg",
+          "source_sha256": "bf5c33e5619ae7e5309c61e9ecbf06dcaf2df1a39eb66001cae00b35d8a93e07",
+          "source_bytes": 84243
+        }
+      ]
+    },
+    {
+      "export": "random-memory-report/report.md",
+      "export_sha256": "55b0065420340ad2f944c780afb59168e902d162e7e916d6b06077978b892a01",
+      "export_bytes": 7270,
+      "transformation": "sanitized audit; links rewritten to exported files or marked local source not published; account balance totals omitted",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/random-memory-report/report.md",
+          "source_sha256": "f1f02e711afb91f45d9ad6cf91f23a5538818e6ae63f155e3afcb37b58cea01b",
+          "source_bytes": 7279
+        }
+      ]
+    },
+    {
+      "export": "random-memory-report/round2_memory_report.py",
+      "export_sha256": "c9d59819ee6f7f6edb765f0791af27854b263dd264404b64c0ff99252811de5a",
+      "export_bytes": 42335,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "round2_memory_report.py",
+          "source_sha256": "c9d59819ee6f7f6edb765f0791af27854b263dd264404b64c0ff99252811de5a",
+          "source_bytes": 42335
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/guest_network.csv",
+      "export_sha256": "dde0b73985bf69b406935a8c515b6bf80593c7c85c0e8075ceda4ec7871f52fb",
+      "export_bytes": 439957,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/guest_network.csv",
+          "source_sha256": "dde0b73985bf69b406935a8c515b6bf80593c7c85c0e8075ceda4ec7871f52fb",
+          "source_bytes": 439957
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/guest_network.jsonl",
+      "export_sha256": "fd36ae76f5bc007c58e9b07f63b3064f80c369f6880b7e65f9a2cef9082b3606",
+      "export_bytes": 1110509,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/guest_network.jsonl",
+          "source_sha256": "fd36ae76f5bc007c58e9b07f63b3064f80c369f6880b7e65f9a2cef9082b3606",
+          "source_bytes": 1110509
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/guest_network.stderr.log",
+      "export_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "export_bytes": 0,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/guest_network.stderr.log",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_bytes": 0
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/host_network.csv",
+      "export_sha256": "5404e526548750d06496635781d109a3e745dedcb49e8d19e67fae6f32541966",
+      "export_bytes": 687605,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/host_network.csv",
+          "source_sha256": "5404e526548750d06496635781d109a3e745dedcb49e8d19e67fae6f32541966",
+          "source_bytes": 687605
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/host_network.jsonl",
+      "export_sha256": "ac1df1320bfb47dbc33be21711f2a0bd50dacd52cf2c0d0352e950889f756d36",
+      "export_bytes": 1617532,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/host_network.jsonl",
+          "source_sha256": "ac1df1320bfb47dbc33be21711f2a0bd50dacd52cf2c0d0352e950889f756d36",
+          "source_bytes": 1617532
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/memory.csv",
+      "export_sha256": "d49308263050c671a216e9b91e99320e47db35015361e352e7abfeefc7b38c2b",
+      "export_bytes": 387010,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/memory.csv",
+          "source_sha256": "d49308263050c671a216e9b91e99320e47db35015361e352e7abfeefc7b38c2b",
+          "source_bytes": 387010
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/memory_summary.json",
+      "export_sha256": "4cd137b8d24e3ff0356abb48c625dedbd38a61acc14b006f758a4657a021d70b",
+      "export_bytes": 2723,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/memory_summary.json",
+          "source_sha256": "4cd137b8d24e3ff0356abb48c625dedbd38a61acc14b006f758a4657a021d70b",
+          "source_bytes": 2723
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/metadata.json",
+      "export_sha256": "7a8fbf3aaefa4f910fd4ea7d810cecb0821ae0dc887af2a49270dd18e2f533a4",
+      "export_bytes": 2295,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/metadata.json",
+          "source_sha256": "be3db3d78271cb5c6f2ae7749b06b08e68ce4329e3f8a010d6bb885c2e1c0bb3",
+          "source_bytes": 2349
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/network_summary.json",
+      "export_sha256": "491d68117340d72470fde769a5fa71b84b3588f05d0cad08bc11bee754ab2a74",
+      "export_bytes": 3761,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/network_summary.json",
+          "source_sha256": "491d68117340d72470fde769a5fa71b84b3588f05d0cad08bc11bee754ab2a74",
+          "source_bytes": 3761
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/orchestration.json",
+      "export_sha256": "16816e31c25c396d6d8388dd45ee28a036f2c4b1f95150f0979db76aa15a652f",
+      "export_bytes": 1514,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/orchestration.json",
+          "source_sha256": "2c0ebc82d576bd4114b8c47690d048c0c91d0e372081d9a581a09b9e24a8a09a",
+          "source_bytes": 1541
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/validation.json",
+      "export_sha256": "10eae0fb3eebaff5e87641dcbe2cb96cb065d9329f5d6329022d4894d4ddba9d",
+      "export_bytes": 9860,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/validation.json",
+          "source_sha256": "6b5b990ab35f3e6da9ab0c0c912e405193cfba2a20a0cc1cc36410aeb4ff60e7",
+          "source_bytes": 16183
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/wan/guest_network.csv",
+      "export_sha256": "a1c8e3bf1f1bd058a3ca63a85ee7a25049af1ea50d81fed47b3bbed72714a1d8",
+      "export_bytes": 269370,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/wan/guest_network.csv",
+          "source_sha256": "a1c8e3bf1f1bd058a3ca63a85ee7a25049af1ea50d81fed47b3bbed72714a1d8",
+          "source_bytes": 269370
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/wan/guest_network.jsonl",
+      "export_sha256": "995c5c9907560ae7694eee58c5b68c4266274697d4fa4a2a0cb1f6bce60e00fd",
+      "export_bytes": 717716,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/wan/guest_network.jsonl",
+          "source_sha256": "995c5c9907560ae7694eee58c5b68c4266274697d4fa4a2a0cb1f6bce60e00fd",
+          "source_bytes": 717716
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/wan/guest_network.stderr.log",
+      "export_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "export_bytes": 0,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/wan/guest_network.stderr.log",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_bytes": 0
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/wan/host_network.csv",
+      "export_sha256": "c93f6f3c925930d3b87e8f5c8615d357679c9e89d36e099dc37a31772950a26a",
+      "export_bytes": 442835,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/wan/host_network.csv",
+          "source_sha256": "c93f6f3c925930d3b87e8f5c8615d357679c9e89d36e099dc37a31772950a26a",
+          "source_bytes": 442835
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/wan/host_network.jsonl",
+      "export_sha256": "4c7faba94a85167f56f4a493fa7cc98c70c273a9eab99d47d495a8ec7c6f6a80",
+      "export_bytes": 1040369,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/wan/host_network.jsonl",
+          "source_sha256": "4c7faba94a85167f56f4a493fa7cc98c70c273a9eab99d47d495a8ec7c6f6a80",
+          "source_bytes": 1040369
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/wan/metadata.json",
+      "export_sha256": "50220ee41df2cac57228b9223ef571a9958868afeba8da4d769fc9a9182e134a",
+      "export_bytes": 2410,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/wan/metadata.json",
+          "source_sha256": "fdea797e12fe9a2cb3bdf1ef64aa8262faa26d07c9bc0227d034df32d98ac282",
+          "source_bytes": 2464
+        }
+      ]
+    },
+    {
+      "export": "headless-game-soak/wan/network_summary.json",
+      "export_sha256": "2a30df6741013d1e08d3c77bc8702c15e164816940fdf514cd9e7438be70fcb6",
+      "export_bytes": 25259,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-soak/wan/network_summary.json",
+          "source_sha256": "2a30df6741013d1e08d3c77bc8702c15e164816940fdf514cd9e7438be70fcb6",
+          "source_bytes": 25259
+        }
+      ]
+    },
+    {
+      "export": "headless-game-execution/execution.json",
+      "export_sha256": "b43efd93a972726419f9c709b7201460a6e4edd2689183ba3214eb3299789cc8",
+      "export_bytes": 2056,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-execution/execution.json",
+          "source_sha256": "36c5aa196cd805c3d745a7831ca41af93c8605950b618120c70eca1d995499a8",
+          "source_bytes": 2209
+        }
+      ]
+    },
+    {
+      "export": "headless-game-execution/sources.json",
+      "export_sha256": "bffa97094ce607cfcd1dbc796acb0fd49ec0b1a84033af27d671d3bec46b0e48",
+      "export_bytes": 570,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-execution/sources.json",
+          "source_sha256": "bffa97094ce607cfcd1dbc796acb0fd49ec0b1a84033af27d671d3bec46b0e48",
+          "source_bytes": 570
+        }
+      ]
+    },
+    {
+      "export": "headless-game-execution/sources/maa/selected-combination.json",
+      "export_sha256": "efd2403fdf3b9ff570af13783928623c70e8680c3ee32cc22e2cdc4a600ea7ab",
+      "export_bytes": 2563,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-execution/sources/maa/selected-combination.json",
+          "source_sha256": "01dccd4e0cb41f75505143eb32d98f88c6c93c9f0ec5c171e44feab97ad8a07e",
+          "source_bytes": 2645
+        }
+      ]
+    },
+    {
+      "export": "headless-game-execution/sources/round2_game_soak_validate.py",
+      "export_sha256": "a1d70c7748ca2f8ca935ad9f7ef15e612acccbb6fc4eac59802dae9b5310385e",
+      "export_bytes": 24732,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-execution/sources/round2_game_soak_validate.py",
+          "source_sha256": "a1d70c7748ca2f8ca935ad9f7ef15e612acccbb6fc4eac59802dae9b5310385e",
+          "source_bytes": 24732
+        }
+      ]
+    },
+    {
+      "export": "headless-game-execution/sources/round2_game_workload_observer.py",
+      "export_sha256": "4cd9f848dc1220950b5a0fcb0036ceb66c0852f233ca3acaf5eabd1f9e5f3d5d",
+      "export_bytes": 14425,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-execution/sources/round2_game_workload_observer.py",
+          "source_sha256": "4cd9f848dc1220950b5a0fcb0036ceb66c0852f233ca3acaf5eabd1f9e5f3d5d",
+          "source_bytes": 14425
+        }
+      ]
+    },
+    {
+      "export": "headless-game-execution/sources/run_soak.py",
+      "export_sha256": "8854fbd505ed5b308cb1d7daea3506318d2e8998cceaf9ad56d8ff1c281385a8",
+      "export_bytes": 9483,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-execution/sources/run_soak.py",
+          "source_sha256": "835f86a0d56b35db79f02fa044dc56dd0bf9cbf308da3ef7e625b809ea549e3d",
+          "source_bytes": 9492
+        }
+      ]
+    },
+    {
+      "export": "headless-game-execution/sources/soak_tests.py",
+      "export_sha256": "a4a41c585bbd8619c9d84b89da01b05eca8b8f2c44a0ec527723035013550af7",
+      "export_bytes": 27790,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-execution/sources/soak_tests.py",
+          "source_sha256": "e74122205af13a8f04eb2df8fe910b216504ec3c98c5b6fb43ceab994c46fff8",
+          "source_bytes": 27799
+        }
+      ]
+    },
+    {
+      "export": "headless-game-execution/sources/state.json",
+      "export_sha256": "9caeacbd21931cfd62cfafbf71111de1a09855f782c8bef44897df9cd94ff561",
+      "export_bytes": 929,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-execution/sources/state.json",
+          "source_sha256": "a3f14fef3aa156d69b228af3aa1da7b0b70d49b4d207d96e9c8345d0baecb7a1",
+          "source_bytes": 956
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-1/guest_network.jsonl",
+      "export_sha256": "fafa653f79425b5376d065c5630b7cf07e1e59b17684fdac24d3e114b21409d5",
+      "export_bytes": 1761,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-1/guest_network.jsonl",
+          "source_sha256": "fafa653f79425b5376d065c5630b7cf07e1e59b17684fdac24d3e114b21409d5",
+          "source_bytes": 1761
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-1/guest_network.stderr.log",
+      "export_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "export_bytes": 0,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-1/guest_network.stderr.log",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_bytes": 0
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-1/host_network.jsonl",
+      "export_sha256": "f4373f19d3174e0b3aeeb9a7db6351fbd1cbb0280a2c5e51c35c00a5fae53bde",
+      "export_bytes": 2637,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-1/host_network.jsonl",
+          "source_sha256": "f4373f19d3174e0b3aeeb9a7db6351fbd1cbb0280a2c5e51c35c00a5fae53bde",
+          "source_bytes": 2637
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-1/receipt.json",
+      "export_sha256": "daa44f1a2be8375ddcdd47c5a413af143096bf6ec733d715fb7b176485281414",
+      "export_bytes": 2770,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-1/receipt.json",
+          "source_sha256": "2054e8775e6cb2c562f5d374fa0ae908398428858efcbf2bc5719850e4e1fbe7",
+          "source_bytes": 2815
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-2/guest_network.jsonl",
+      "export_sha256": "34a63843b132381424a00993bb5ff671cb1d3952bc7bb42dc38b71f82c510951",
+      "export_bytes": 1763,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-2/guest_network.jsonl",
+          "source_sha256": "34a63843b132381424a00993bb5ff671cb1d3952bc7bb42dc38b71f82c510951",
+          "source_bytes": 1763
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-2/guest_network.stderr.log",
+      "export_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "export_bytes": 0,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-2/guest_network.stderr.log",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_bytes": 0
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-2/host_network.jsonl",
+      "export_sha256": "230f1764f2d00f54f95c95bde95bff557061a07c90a76513b2f919f4c7c41487",
+      "export_bytes": 2637,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-2/host_network.jsonl",
+          "source_sha256": "230f1764f2d00f54f95c95bde95bff557061a07c90a76513b2f919f4c7c41487",
+          "source_bytes": 2637
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-2/receipt.json",
+      "export_sha256": "810bd645ed8400b69d3914523615c1ae3b36035b4036e93792e33d7bb0ff3494",
+      "export_bytes": 2770,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-2/receipt.json",
+          "source_sha256": "ed9b445832c074667a9de2f45cdbb695fb19605348f764a930b07771ff48895c",
+          "source_bytes": 2815
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-3/guest_network.jsonl",
+      "export_sha256": "2becc378a03c80e6c450532f907e5dcce39061339432b5764e81d14e0bf0ba51",
+      "export_bytes": 1763,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-3/guest_network.jsonl",
+          "source_sha256": "2becc378a03c80e6c450532f907e5dcce39061339432b5764e81d14e0bf0ba51",
+          "source_bytes": 1763
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-3/guest_network.stderr.log",
+      "export_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "export_bytes": 0,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-3/guest_network.stderr.log",
+          "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_bytes": 0
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-3/host_network.jsonl",
+      "export_sha256": "e37e0d87a3cf5b4095b346450bc4490eec343ad45ff988da0d6150a6747f6f97",
+      "export_bytes": 2636,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-3/host_network.jsonl",
+          "source_sha256": "e37e0d87a3cf5b4095b346450bc4490eec343ad45ff988da0d6150a6747f6f97",
+          "source_bytes": 2636
+        }
+      ]
+    },
+    {
+      "export": "headless-network-preflight/round-3/receipt.json",
+      "export_sha256": "b6fada574edb3b9e9608e8fa4ad52818104e1ab4443783077ef72b6cd9b0bb98",
+      "export_bytes": 2767,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/soak-preparation/remote-preflight-retests/round-3/receipt.json",
+          "source_sha256": "62179d1784395a960de1431985199feaab5ce41ab2976ffea1762d98bde531be",
+          "source_bytes": 2812
+        }
+      ]
+    },
+    {
+      "export": "reviews/headless-game-audit.md",
+      "export_sha256": "cf469e4b5f00e461fab8803f7613530b140710704c476086492b4ee44d9b5965",
+      "export_bytes": 7945,
+      "transformation": "sanitized audit; links rewritten to exported files or marked local source not published; account balance totals omitted",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-game-audit.md",
+          "source_sha256": "f5faab99251711723d4dd27864263de6ada8ce7ca45a4343608a66682dff7879",
+          "source_bytes": 8305
+        }
+      ]
+    },
+    {
+      "export": "reviews/headless-network-diagnosis.md",
+      "export_sha256": "2811b9a08e282e9a4ac30d510cd40c66b932cc643d9639c0b8f7fb987b81ce86",
+      "export_bytes": 3502,
+      "transformation": "sanitized audit; links rewritten to exported files or marked local source not published; account balance totals omitted",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/headless-network-diagnosis.md",
+          "source_sha256": "2811b9a08e282e9a4ac30d510cd40c66b932cc643d9639c0b8f7fb987b81ce86",
+          "source_bytes": 3502
+        }
+      ]
+    },
+    {
+      "export": "reviews/memory-interpretation-review.md",
+      "export_sha256": "3d37112bf8d995ffe039f58af054f7e59737992a8e33eba017a976016c5b9500",
+      "export_bytes": 9609,
+      "transformation": "sanitized audit; links rewritten to exported files or marked local source not published; account balance totals omitted",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/interpretation-review.md",
+          "source_sha256": "3bc2083a7faa4e0256a46e0d0e63a46e394f9df5ffa6336112b93fc6ce0ec3dd",
+          "source_bytes": 10024
+        }
+      ]
+    },
+    {
+      "export": "reviews/nonempty-file-review.md",
+      "export_sha256": "22f38e7a59c1eb9052e0031ce1d47aefc9bb1481970c4887e55f8ec0103c18af",
+      "export_bytes": 1408,
+      "transformation": "sanitized audit; links rewritten to exported files or marked local source not published; account balance totals omitted",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/nonempty-file-review.md",
+          "source_sha256": "2fdc92c405b3386815b8b42bb1caa6806f242dc138f563bebb94f5d60032b0e6",
+          "source_bytes": 1431
+        }
+      ]
+    },
+    {
+      "export": "maa-reviews/arknights-daily-v6211-review.md",
+      "export_sha256": "06f08535458dff2c2b38e959e858f9c536fbe6b7ebf5126763448f8b63929935",
+      "export_bytes": 8819,
+      "transformation": "sanitized audit; links rewritten to exported files or marked local source not published; account balance totals omitted",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/arknights-daily-v6211-review.md",
+          "source_sha256": "fbbac52287727ad67e7cb0deff75d2903afaa07957151dbc7ccb9a3dc5fea30f",
+          "source_bytes": 9849
+        }
+      ]
+    },
+    {
+      "export": "maa-reviews/arknights-daily-attempt1-review.md",
+      "export_sha256": "d61a9b6566fcc4f8c4e0fe247fc3a7eebd83635075cb39342a9f2c63468c471e",
+      "export_bytes": 8180,
+      "transformation": "sanitized audit; links rewritten to exported files or marked local source not published; account balance totals omitted",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/arknights-daily-attempt1-review.md",
+          "source_sha256": "9374e07e76b47a01143383a2092e764925076842562ba3edcbf4c7dce79d79c4",
+          "source_bytes": 8890
+        }
+      ]
+    },
+    {
+      "export": "nonempty-file/0d15480982dd.json",
+      "export_sha256": "e61fdb70258db99db2c691c44de3329bffbb94a2158e1ccd4a3df7729c2fc81f",
+      "export_bytes": 70541,
+      "transformation": "JSON sanitized local paths/host identity; private observer receipts removed from validation only",
+      "sources": [
+        {
+          "source": "results/game-cache/0d15480982dd.json",
+          "source_sha256": "e61fdb70258db99db2c691c44de3329bffbb94a2158e1ccd4a3df7729c2fc81f",
+          "source_bytes": 70541
+        }
+      ]
+    },
+    {
+      "export": "nonempty-file/actual_game_cache_test.py",
+      "export_sha256": "19b07538c9233adad0ad0dd7f0f6117e88d189444697d1eb0811aaea63bfef84",
+      "export_bytes": 27802,
+      "transformation": "text sanitized local paths/host identity/emulator serial",
+      "sources": [
+        {
+          "source": "actual_game_cache_test.py",
+          "source_sha256": "19b07538c9233adad0ad0dd7f0f6117e88d189444697d1eb0811aaea63bfef84",
+          "source_bytes": 27802
+        }
+      ]
+    },
+    {
+      "export": "game-observer/observer.json",
+      "export_sha256": "b57f221aaf8142ca4c4e6c76ef76a84a32703abbef6e431ea21d06837b7b53c6",
+      "export_bytes": 1254,
+      "transformation": "allowlisted summary; process/ADB command identities removed",
+      "sources": [
+        {
+          "source": "LOCAL_PRIVATE_OBSERVER_NOT_PUBLISHED",
+          "source_sha256": "85d3967f296312c005e57645fc35c8952f1db0cd14f0425b5e57d8b304e60f5c",
+          "source_bytes": 1322
+        }
+      ]
+    },
+    {
+      "export": "game-observer/samples.csv",
+      "export_sha256": "327e0c0e11eb0a5a9134aebcf754dc85ff45f69951a5a37189bb1adf6ace05c9",
+      "export_bytes": 10824,
+      "transformation": "derived 122 samples; no PID, cmdline, activity raw text, screenshot path, account identity, or screenshot receipt",
+      "sources": [
+        {
+          "source": "LOCAL_PRIVATE_OBSERVER_NOT_PUBLISHED",
+          "source_sha256": "1c353b06822b2c071458fe68374e47eb98166fc1e3bab877a8ea49ba5c57dec8",
+          "source_bytes": 88009
+        }
+      ]
+    },
+    {
+      "export": "maa-reviews/public-summary.json",
+      "export_sha256": "645cfe0dc4dc5c992b9141d5f8acbef9ee4274ed11f6e1d9e5f9aa48319e6e7b",
+      "export_bytes": 1274,
+      "transformation": "derived public audit summary; original MAA runtime evidence intentionally excluded",
+      "sources": [
+        {
+          "source": "results/round2/20261102-152442/arknights-daily-attempt1-review.md",
+          "source_sha256": "9374e07e76b47a01143383a2092e764925076842562ba3edcbf4c7dce79d79c4",
+          "source_bytes": 8890
+        },
+        {
+          "source": "results/round2/20261102-152442/arknights-daily-v6211-review.md",
+          "source_sha256": "fbbac52287727ad67e7cb0deff75d2903afaa07957151dbc7ccb9a3dc5fea30f",
+          "source_bytes": 9849
+        }
+      ]
+    },
+    {
+      "export": "verify_public.py",
+      "export_sha256": "acebb35975723b34a5e8c5c7842321836592471269c670e504c923352e2b3d49",
+      "export_bytes": 4472,
+      "transformation": "generated offline verification script; no original evidence counterpart",
+      "sources": []
+    }
+  ],
+  "verification_limitations": "Public exports omit private evidence, binaries and the random smoke dump. Source/validator scripts are retained for review; original-data validators may require unpublished originals and original paths. verify_public.py verifies the sanitized exports. This package does not claim an independent public replay of MAA game-state interpretation or screenshot semantics."
+}

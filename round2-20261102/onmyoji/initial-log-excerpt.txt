@@ -1,0 +1,18 @@
+Public excerpt: 1793629647107942000-onmyoji-logcat.stdout
+Original full-file SHA256: 6a7947d0aa94126d8f52064544b7549abd631cfab53c1f4d128e95c3f7929e21
+Line numbering: original file, 1-based LF newlines only.
+Selection: renderer capability/device failure -> signal 11 -> application exit.
+Full raw logcat is intentionally not published.
+
+L0459: 11-02 22:27:26.511  6917  7122 E EGL_emulation: eglCreateContext: EGL_BAD_CONFIG: no ES 3.2 support
+L0473: 11-02 22:27:26.511  6917  7122 E EGL_emulation: eglCreateContext: EGL_BAD_CONFIG: no ES 3.1 support
+L0588: 11-02 22:27:26.526  6917  7122 I [22:27:26.526] M: [INFO] "GLESDevice: context info — " "CurrentVersion=300, GL_VERSION=\"OpenGL ES 3.0 (4.1 Metal - 90.5)\", " "GL_RENDERER=\"Android Emulator OpenGL ES Translator (Apple M4)\", GL_VENDOR=\"Google (Apple)\", " "EGL=1.4"
+L0591: 11-02 22:27:26.526  6917  7122 E [22:27:26.526] M: DoInitialize: "GLESDevice only support version above OpenGLES 310 on Mobile"
+L0595: 11-02 22:27:26.526  6917  7122 E [22:27:26.526] M [RENDER]: Failed to create NeoX Device
+L0602: 11-02 22:27:26.528  6917  7122 E EGL_emulation: eglCreateContext: EGL_BAD_CONFIG: no ES 3.2 support
+L0615: 11-02 22:27:26.528  6917  7122 E EGL_emulation: eglCreateContext: EGL_BAD_CONFIG: no ES 3.1 support
+L0728: 11-02 22:27:26.544  6917  7122 I [22:27:26.543] M: [INFO] "GLESDevice: context info — " "CurrentVersion=300, GL_VERSION=\"OpenGL ES 3.0 (4.1 Metal - 90.5)\", " "GL_RENDERER=\"Android Emulator OpenGL ES Translator (Apple M4)\", GL_VENDOR=\"Google (Apple)\", " "EGL=1.4"
+L0731: 11-02 22:27:26.544  6917  7122 E [22:27:26.544] M: DoInitialize: "GLESDevice only support version above OpenGLES 310 on Mobile"
+L0820: 11-02 22:27:26.677  6917  7122 I trace   : JNI [doingCrashSignal] start 1 sig=11
+L0908: 11-02 22:27:26.983  6917  7122 D trace   : JNI [exitProcess]
+L0935: 11-02 22:27:27.026   352   352 I Zygote  : Process 6917 exited cleanly (1)

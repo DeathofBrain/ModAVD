@@ -1,0 +1,26 @@
+{
+  "command": [
+    "<WORKSPACE>/sdk/platform-tools/adb",
+    "-H",
+    "127.0.0.1",
+    "-P",
+    "22150",
+    "-s",
+    "emulator-22160",
+    "shell",
+    "/data/local/tmp/official_avd_probe_round2",
+    "memory-random",
+    "16777216",
+    "1",
+    "/data/local/tmp/official_avd_round2_smoke_1793604872602007000.bin"
+  ],
+  "started_utc": "2026-11-02T07:34:32.602593+00:00",
+  "host_start_monotonic_ns": 857152039408166,
+  "timeout_seconds": 180,
+  "finished_utc": "2026-11-02T07:34:34.225236+00:00",
+  "host_end_monotonic_ns": 857153662092333,
+  "returncode": 0,
+  "reader_failures": [],
+  "reader_stopped": true,
+  "received_event_lines": 6
+}

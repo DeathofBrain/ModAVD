@@ -1,0 +1,265 @@
+{
+  "status": "failed",
+  "validated_utc": "2026-11-02T12:26:31.650563+00:00",
+  "soak_directory": "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak",
+  "observer_directory": "<LOCAL_SOURCE_NOT_PUBLISHED>",
+  "expected_avd": "official_game",
+  "expected_package": "com.hypergryph.arknights.bilibili",
+  "duration_seconds": 7200.0,
+  "checks": {
+    "orchestration": {
+      "status": "failed",
+      "utc_span_seconds": 7208.4903111457825,
+      "elapsed_seconds": 7206.7610880830325,
+      "utc_minus_monotonic_elapsed_seconds": 1.729223062749952,
+      "workload_label": "arknights_logged_in_home_headless"
+    },
+    "network": {
+      "status": "failed",
+      "clients": {
+        "local.host": {
+          "window_seconds": 7200.229703167,
+          "acks": 7171,
+          "maximum_ack_gap_seconds": 1.141007083,
+          "clock_residuals": {
+            "utc_minus_monotonic_delta_min_seconds": -0.1736343352822587,
+            "utc_minus_monotonic_delta_max_seconds": 1.7563428930006921,
+            "over_one_second_residual_indices_first_20": [
+              4506,
+              4507,
+              4508,
+              4509,
+              4510,
+              4511,
+              4512,
+              4513,
+              4514,
+              4515,
+              4516,
+              4517,
+              4518,
+              4519,
+              4520,
+              4521,
+              4522,
+              4523,
+              4524,
+              4525
+            ]
+          }
+        },
+        "local.guest": {
+          "window_seconds": 7200.381093267,
+          "acks": 7191,
+          "maximum_ack_gap_seconds": 2.497553668
+        },
+        "wan.host": {
+          "window_seconds": 7205.606734667,
+          "acks": 4114,
+          "maximum_ack_gap_seconds": 3.070708666,
+          "clock_residuals": {
+            "utc_minus_monotonic_delta_min_seconds": -0.1736175196710974,
+            "utc_minus_monotonic_delta_max_seconds": 1.7563708627130836,
+            "over_one_second_residual_indices_first_20": [
+              3990,
+              3991,
+              3992,
+              3993,
+              3994,
+              3995,
+              3996,
+              3997,
+              3998,
+              3999,
+              4000,
+              4001,
+              4002,
+              4003,
+              4004,
+              4005,
+              4006,
+              4007,
+              4008,
+              4009
+            ]
+          }
+        },
+        "wan.guest": {
+          "window_seconds": 7204.343041769,
+          "acks": 4131,
+          "maximum_ack_gap_seconds": 2.098410751
+        }
+      }
+    },
+    "monotonic_reference": {
+      "status": "passed",
+      "host_window_start": 865419.184767666,
+      "host_window_finish": 872624.7992125,
+      "earliest_orchestration_start": 865418.038124417,
+      "latest_orchestration_finish": 872625.9458557491,
+      "monitor_origin_offset_upper_bound": 1.146643249085173,
+      "timebase": "Host monotonic seconds; guest monotonic clocks are not aligned",
+      "basis": "Source lifecycle ordering bounds the unrecorded orchestration and memory-monitor origins. UTC is diagnostic only."
+    },
+    "memory": {
+      "status": "passed",
+      "sample_count": 1442,
+      "span_seconds": 7205.007,
+      "maximum_gap_seconds": 5.010000000000218,
+      "first_sample_after_orchestration_start_upper_bound_seconds": 1.146643249085173,
+      "orchestration_finish_after_last_sample_upper_bound_seconds": 1.7540880830329115,
+      "monitor_origin_offset_upper_bound_seconds": 1.146643249085173,
+      "boundary_basis": "Relative monitor elapsed plus conservative host-network lifecycle bounds; no absolute memory timestamp was recorded",
+      "utc_first_sample_after_orchestration_start_seconds": 0.00023293495178222656,
+      "utc_orchestration_finish_after_last_sample_seconds": 1.7543270587921143,
+      "missing_or_invalid_metrics_first_20": [],
+      "error_rows_first_20": [],
+      "wrong_phase_rows_first_20": [],
+      "clock_residuals": {
+        "utc_minus_monotonic_delta_min_seconds": -0.1736818599702019,
+        "utc_minus_monotonic_delta_max_seconds": 1.7566081752775062,
+        "over_one_second_residual_indices_first_20": [
+          802,
+          803,
+          804,
+          805,
+          806,
+          807,
+          808,
+          809,
+          810,
+          811,
+          812,
+          813,
+          814,
+          815,
+          816,
+          817,
+          818,
+          819,
+          820,
+          821
+        ]
+      }
+    },
+    "game_workload": {
+      "status": "passed",
+      "sample_count": 122,
+      "sample_span_seconds": 7230.010684750043,
+      "maximum_gap_seconds": 60.01264416601043,
+      "private_screenshot_count": 26,
+      "first_sample_after_orchestration_start_upper_bound_seconds": 0.7360624989960343,
+      "orchestration_finish_after_last_sample_upper_bound_seconds": -22.8390159169212,
+      "utc_first_sample_after_orchestration_start_seconds": -0.41031599044799805,
+      "utc_orchestration_finish_after_last_sample_seconds": -22.838644981384277,
+      "clock_residuals": {
+        "utc_minus_monotonic_delta_min_seconds": -0.17158866405952722,
+        "utc_minus_monotonic_delta_max_seconds": 1.75583579367958,
+        "over_one_second_residual_indices_first_20": [
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86
+        ]
+      }
+    }
+  },
+  "failure_reasons": [
+    "Original orchestration did not pass",
+    "Original network groups did not both pass",
+    "local: original network summary did not pass",
+    "local.guest: original result did not pass",
+    "local.guest: raw TCP errors exist",
+    "wan: original network summary did not pass",
+    "wan.host: original result did not pass",
+    "wan.host: heartbeat_coverage_ok is not true",
+    "wan.host: heartbeat_ack_count_ok is not true",
+    "wan.host: heartbeat_ack_gaps_ok is not true",
+    "wan.host: raw TCP errors exist",
+    "wan.host: raw ACK gap is invalid or over 3 seconds",
+    "wan.guest: original result did not pass",
+    "wan.guest: heartbeat_coverage_ok is not true",
+    "wan.guest: heartbeat_ack_count_ok is not true",
+    "wan.guest: raw TCP errors exist"
+  ],
+  "criteria": {
+    "memory_minimum_span_seconds": 7195.0,
+    "memory_maximum_gap_seconds": 10.0,
+    "memory_interval_seconds": 5.0,
+    "memory_core_metrics": [
+      "host_rss_bytes",
+      "host_phys_footprint_bytes",
+      "host_compressor_physical_bytes",
+      "host_compressor_uncompressed_bytes",
+      "host_swap_used_bytes",
+      "guest_MemTotal_bytes",
+      "guest_MemAvailable_bytes",
+      "host_disk_free_bytes"
+    ],
+    "first_memory_boundary_tolerance_seconds": 5.0,
+    "last_memory_boundary_tolerance_seconds": 6.0,
+    "network_window_tolerance_seconds": 0.1,
+    "memory_elapsed_serialization_tolerance_seconds": 0.001,
+    "utc_policy": "Labels and residual diagnostics only; all elapsed, gap, and cross-stream coverage gates use monotonic evidence"
+  },
+  "evidence_files": {
+    "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak/orchestration.json": {
+      "bytes": 1541,
+      "sha256": "2c0ebc82d576bd4114b8c47690d048c0c91d0e372081d9a581a09b9e24a8a09a"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak/metadata.json": {
+      "bytes": 2349,
+      "sha256": "be3db3d78271cb5c6f2ae7749b06b08e68ce4329e3f8a010d6bb885c2e1c0bb3"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak/network_summary.json": {
+      "bytes": 3761,
+      "sha256": "491d68117340d72470fde769a5fa71b84b3588f05d0cad08bc11bee754ab2a74"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak/host_network.jsonl": {
+      "bytes": 1617532,
+      "sha256": "ac1df1320bfb47dbc33be21711f2a0bd50dacd52cf2c0d0352e950889f756d36"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak/guest_network.jsonl": {
+      "bytes": 1110509,
+      "sha256": "fd36ae76f5bc007c58e9b07f63b3064f80c369f6880b7e65f9a2cef9082b3606"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak/wan/metadata.json": {
+      "bytes": 2464,
+      "sha256": "fdea797e12fe9a2cb3bdf1ef64aa8262faa26d07c9bc0227d034df32d98ac282"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak/wan/network_summary.json": {
+      "bytes": 25259,
+      "sha256": "2a30df6741013d1e08d3c77bc8702c15e164816940fdf514cd9e7438be70fcb6"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak/wan/host_network.jsonl": {
+      "bytes": 1040369,
+      "sha256": "4c7faba94a85167f56f4a493fa7cc98c70c273a9eab99d47d495a8ec7c6f6a80"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak/wan/guest_network.jsonl": {
+      "bytes": 717716,
+      "sha256": "995c5c9907560ae7694eee58c5b68c4266274697d4fa4a2a0cb1f6bce60e00fd"
+    },
+    "<WORKSPACE>/results/round2/20261102-152442/headless-game-soak/memory.csv": {
+      "bytes": 387010,
+      "sha256": "d49308263050c671a216e9b91e99320e47db35015361e352e7abfeefc7b38c2b"
+    }
+  },
+  "interpretation": "Evidence acquisition and sampled game presence/foreground validation. TCP clients are auxiliary controls, not game UID traffic. No memory-leak threshold or game server continuity is established. Private screenshots require separate game-state interpretation.",
+  "public_export_note": "Sanitized derivative. Private observer/screenshots evidence receipts omitted; original status and failure reasons retained. Original-source hashes are in package-manifest.json. Network attribution: invalidated_by_user_network_change (user-confirmed environment change); raw failed is unchanged."
+}
